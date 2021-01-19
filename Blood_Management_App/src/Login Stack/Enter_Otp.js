@@ -13,7 +13,7 @@ import { TextInput } from 'react-native-gesture-handler';
 
 import Feather from 'react-native-vector-icons/Feather';
 
-const LoginScreen = ({navigation}) => {
+const enterotp = ({navigation}) => {
     return(
         <SafeAreaView style={styles.container}>
             <View style={styles.header}>
@@ -27,45 +27,32 @@ const LoginScreen = ({navigation}) => {
                     </TouchableOpacity >
             </View>
             <View style={styles.body}>
-                <Text style={styles.titlefont}>Login</Text>
+                <Text style={styles.titlefont}>Find The Code</Text>
+
+                <Text style={styles.titlefontdesc}>Check your mailbox for One-Time-Password sent for verification</Text>
                 
                 <TextInput
-                    keyboardType="email-address" 
+                    keyboardType="numeric"
                     style={[styles.input, {marginTop:30}]} 
-                    placeholder='Email'
+                    placeholder='Code'
                     />
 
-                <TextInput
-                    keyboardType='default' 
-                    style={styles.input} 
-                    placeholder='password'
-                    secureTextEntry={true}
-                    />
+               
 
-                    <TouchableOpacity onPress={() =>navigation.navigate("FindAccount")}>
-                        <Text style={{fontWeight:'bold'}}>
-                            Forgot Password?
-                        </Text>
-                    </TouchableOpacity>
+                    
 
                     <View style= {styles.button}>
                     <TouchableOpacity
                     style={styles.signIn}
-                    onPress={() =>{navigation.navigate("LoginScreen")}}
+                    onPress={() =>{navigation.navigate("ResetPassword")}}
                     >
                     
-                        <Text style={[styles.textSign, {color:"white"},]} >Login</Text> 
+                        <Text style={[styles.textSign, {color:"white"},]} >Next</Text> 
                     
                     </TouchableOpacity>
                     </View>
 
-                    <TouchableOpacity 
-                    style={{alignItems:'center', marginTop:20}}
-                    onPress={() =>navigation.navigate("SplashScreen")}>
-                        <Text style={{fontSize:20, fontWeight:'bold'}}>
-                            New user? Register Now
-                        </Text>
-                    </TouchableOpacity>
+                   
 
             </View>
 
@@ -104,6 +91,10 @@ const styles = StyleSheet.create({
         fontSize:40,
         fontWeight:'bold'
     },
+    titlefontdesc:{
+        fontSize:20,
+        fontWeight:'500'
+    },
     input:{
         
         borderColor:"#FB5959",
@@ -138,4 +129,4 @@ const styles = StyleSheet.create({
 });
 
 
-export default LoginScreen
+export default enterotp

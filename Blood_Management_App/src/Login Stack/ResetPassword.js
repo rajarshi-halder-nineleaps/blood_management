@@ -13,7 +13,7 @@ import { TextInput } from 'react-native-gesture-handler';
 
 import Feather from 'react-native-vector-icons/Feather';
 
-const LoginScreen = ({navigation}) => {
+const resetpassword = ({navigation}) => {
     return(
         <SafeAreaView style={styles.container}>
             <View style={styles.header}>
@@ -27,26 +27,25 @@ const LoginScreen = ({navigation}) => {
                     </TouchableOpacity >
             </View>
             <View style={styles.body}>
-                <Text style={styles.titlefont}>Login</Text>
+                <Text style={styles.titlefont}>Reset Password</Text>
+
+                <Text style={styles.titlefontdesc}>Please create a new password below</Text>
                 
                 <TextInput
-                    keyboardType="email-address" 
+                    keyboardType='default'
                     style={[styles.input, {marginTop:30}]} 
-                    placeholder='Email'
+                    placeholder='Password'
                     />
 
                 <TextInput
-                    keyboardType='default' 
-                    style={styles.input} 
-                    placeholder='password'
-                    secureTextEntry={true}
+                    keyboardType='default'
+                    style={[styles.input, {marginTop:30}]} 
+                    placeholder='Confirm Password'
                     />
 
-                    <TouchableOpacity onPress={() =>navigation.navigate("FindAccount")}>
-                        <Text style={{fontWeight:'bold'}}>
-                            Forgot Password?
-                        </Text>
-                    </TouchableOpacity>
+               
+
+                    
 
                     <View style= {styles.button}>
                     <TouchableOpacity
@@ -54,18 +53,12 @@ const LoginScreen = ({navigation}) => {
                     onPress={() =>{navigation.navigate("LoginScreen")}}
                     >
                     
-                        <Text style={[styles.textSign, {color:"white"},]} >Login</Text> 
+                        <Text style={[styles.textSign, {color:"white"},]} >Set Password</Text> 
                     
                     </TouchableOpacity>
                     </View>
 
-                    <TouchableOpacity 
-                    style={{alignItems:'center', marginTop:20}}
-                    onPress={() =>navigation.navigate("SplashScreen")}>
-                        <Text style={{fontSize:20, fontWeight:'bold'}}>
-                            New user? Register Now
-                        </Text>
-                    </TouchableOpacity>
+                   
 
             </View>
 
@@ -104,6 +97,10 @@ const styles = StyleSheet.create({
         fontSize:40,
         fontWeight:'bold'
     },
+    titlefontdesc:{
+        fontSize:20,
+        fontWeight:'500'
+    },
     input:{
         
         borderColor:"#FB5959",
@@ -138,4 +135,4 @@ const styles = StyleSheet.create({
 });
 
 
-export default LoginScreen
+export default resetpassword
