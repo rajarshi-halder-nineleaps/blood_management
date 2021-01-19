@@ -1,0 +1,2 @@
+export const UPDATE_INPUT_STATE = "UPDATE_INPUT_STATE";
+export const INPUT_FOCUS_OUT = "INPUT_FOCUS_OUT";
