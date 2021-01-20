@@ -19,7 +19,7 @@ const LoginScreen = ({navigation}) => {
             <View style={styles.header}>
                     <TouchableOpacity onPress={()=>navigation.goBack()}>
                         <Feather
-                            name= "chevron-left"
+                            name= "arrow-left-circle"
                             color= 'black'
                             size= {30} 
                             style={{}}
