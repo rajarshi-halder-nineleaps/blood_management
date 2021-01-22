@@ -13,55 +13,51 @@ import RegisterSelectScreen from './Register Stack/RegisterSelectScreen'
 import RegisterBbScreen from './Register Stack/RegisterBbScreen'
 import RegisterHosScreen from './Register Stack/RegisterHosScreen'
 import RegisterIndScreen from './Register Stack/RegisterIndScreen'
-import {checkUserLogin} from "../redux/isLoggedIn/actions";
+// import {checkUserLogin} from "../redux/isLoggedIn/actions";
 import {View, ActivityIndicator, Alert} from 'react-native';
 import {AuthContext} from "../components/context"
 
 
 const RootStack = createStackNavigator();
 
+  const initialLoginState = {
+    isLoggedIn: false,
+    userToken: '',
+    isLoading: false,
+  };
 
+const loginReducer = (prevState, action) => {
+  switch (action.type) {
+    case 'RETRIEVE_TOKEN':
+      return {
+        ...prevState,
+        userToken: action.token,
+        isLoading: false,
+      };
+    case 'LOGIN':
+      return {
+        ...prevState,
+        userToken: action.token,
+        isLoading: false,
+      };
+    case 'LOGOUT':
+      return {
+        ...prevState,
+        userToken: null,
+        isLoading: false,
+      };
+    case 'REGISTER':
+      return {
+        ...prevState,
+        userToken: action.token,
+        isLoading: false,
+      };
+  }
+};
 
 const config = () => {
 
-  const initialLoginState = {
-isLoggedIn: false,
-    userToken: "",
-    isLoading:false,
-  }
-
-
 const[loginState, dispatch] = useReducer(loginReducer, initialLoginState);
-
-
-const loginReducer = (prevState, action) => {
-    switch (action.type) {
-      case 'RETRIEVE_TOKEN':
-        return {
-          ...prevState,
-          userToken:action.token,
-          isLoading:false,
-        };
-      case 'LOGIN':
-        return {
-          ...prevState,
-          userToken: action.token,
-          isLoading:false,
-        };
-      case 'LOGOUT':
-        return {
-          ...prevState,
-          userToken: null,
-          isLoading:false,
-        };
-      case 'REGISTER':
-        return {
-          ...prevState,
-          userToken: action.token,
-          isLoading:false,
-        };
-    }
-  };
 
 
   const authContext = React.useMemo(() => ({
