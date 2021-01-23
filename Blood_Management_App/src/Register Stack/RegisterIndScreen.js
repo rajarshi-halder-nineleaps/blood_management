@@ -275,7 +275,7 @@ const showDatepicker = () => {
         <TouchableOpacity onPress={showDatepicker} >
           <Text> Select Date of Birth {regFormState.inputValues.dob.toLocaleDateString()}</Text>
           </TouchableOpacity>
-          {!regFormState.inputValidity.dob && !regFormState.isTouched.dob && <Text style = {styles.errorMsg}>You are not of legal age</Text>}
+          {!regFormState.inputValidity.dob && regFormState.isTouched.dob && <Text style = {styles.errorMsg}>You are not of legal age</Text>}
         {show && (
         <DateTimePicker
           testID="dateTimePicker"
@@ -373,7 +373,7 @@ const showDatepicker = () => {
         />
 
         <Input
-          // secureTextEntry={true}
+          secureTextEntry={true}
           label="Password"
           error="Please enter a stronger password"
           returnKeyType="next"
@@ -384,7 +384,7 @@ const showDatepicker = () => {
           onBlur = {() =>{blurListener("password")}}
         />
         <Input
-          // secureTextEntry={true}
+          secureTextEntry={true}
           label="Confirm Password"
           error="Password mismatch!"
           returnKeyType="next"

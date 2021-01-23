@@ -18,33 +18,16 @@ import {Picker} from '@react-native-picker/picker';
 import CheckBox from '@react-native-community/checkbox';
 import Feather from 'react-native-vector-icons/Feather';
 
-let phoneCount = 0;
+let phoneCount = 1;
 const UPDATE_FIELDS_REG = 'UPDATE_FIELDS';
 const BLUR_FIELDS_REG = 'BLUR_FIELDS';
+const ADD_PHONE_STATE = 'ADD_PHONE_STATE';
+const PHONE_STATE_SET = 'PHONE_STATE_SET';
+const PHONE_TOUCH_SET = 'PHONE_TOUCH_SET';
 
 const regReducer = (state, action) => {
   switch (action.type) {
     case UPDATE_FIELDS_REG: {
-      if (action.fieldId.includes('phone')) {
-        const currPhoneIdx = +action.fieldId.charAt(action.fieldId.length - 1);
-        const phoneValArray = [...state.inputValues.phone];
-        const phoneIsValidArray = [...state.inputValidity.phone];
-        phoneValArray[currPhoneIdx] = action.val;
-        phoneIsValidArray[currPhoneIdx] = action.isValid;
-
-        const newInputValue = {...state.inputValues, phone: phoneValArray};
-        const newInputValidity = {
-          ...state.inputValidity,
-          phone: phoneIsValidArray,
-        };
-
-        return {
-          ...state,
-          inputValues: newInputValue,
-          inputValidity: newInputValidity,
-        };
-      }
-
       const newInputValue = {
         ...state.inputValues,
         [action.fieldId]: action.val,
@@ -53,10 +36,31 @@ const regReducer = (state, action) => {
         ...state.inputValidity,
         [action.fieldId]: action.isValid,
       };
+
+      ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+      //todo check every phone number in new final form state
+      let newFinalFormState = true;
+
+      for (const key in newInputValidity.phone) {
+        console.log('new input validity: ', newInputValidity.phone[key]);
+        newFinalFormState = newFinalFormState && newInputValidity.phone[key];
+      }
+
+      for (const key in newInputValidity) {
+        if (typeof newInputValidity[key] === 'boolean') {
+          newFinalFormState = newFinalFormState && newInputValidity[key];
+        }
+      }
+
+      console.log(newFinalFormState);
+
+      ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
       return {
         ...state,
         inputValues: newInputValue,
         inputValidity: newInputValidity,
+        finalFormState: newFinalFormState,
       };
     }
 
@@ -64,6 +68,73 @@ const regReducer = (state, action) => {
       const newInputIsTouched = {...state.isTouched, [action.fieldId]: true};
       return {...state, isTouched: newInputIsTouched};
     }
+
+    case ADD_PHONE_STATE: {
+      const newValPhoneState = [...state.inputValues.phone, ''];
+      const newisValidPhoneState = [...state.inputValidity.phone, false];
+      const newisTouchedPhoneState = [...state.isTouched.phone, false];
+      return {
+        ...state,
+        inputValues: {...state.inputValues, phone: newValPhoneState},
+        inputValidity: {...state.inputValidity, phone: newisValidPhoneState},
+        isTouched: {...state.isTouched, phone: newisTouchedPhoneState},
+      };
+    }
+
+    case PHONE_STATE_SET: {
+      const newValPhoneState = [...state.inputValues.phone];
+      const newisValidPhoneState = [...state.inputValidity.phone];
+      const phoneRegex = /^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/;
+
+      if (!phoneRegex.test(String(action.val))) {
+        newisValidPhoneState[action.idx] = false;
+      } else {
+        newisValidPhoneState[action.idx] = true;
+      }
+
+      newValPhoneState[action.idx] = action.val;
+
+      const newInputValidity = {
+        ...state.inputValidity,
+        phone: newisValidPhoneState,
+      };
+
+      ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+      //todo check every phone number in new final form state
+
+      let newFinalFormState = true;
+
+      for (const key in newInputValidity.phone) {
+        console.log('new input validity: ', newInputValidity.phone[key]);
+        newFinalFormState = newFinalFormState && newInputValidity.phone[key];
+      }
+
+      for (const key in newInputValidity) {
+        if (typeof newInputValidity[key] === 'object') {
+          newFinalFormState = newFinalFormState && newInputValidity[key];
+        }
+      }
+
+      ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+      return {
+        ...state,
+        inputValues: {...state.inputValues, phone: newValPhoneState},
+        inputValidity: newInputValidity,
+        finalFormState: newFinalFormState,
+      };
+    }
+
+    case PHONE_TOUCH_SET: {
+      const newisTouchedPhoneState = [...state.isTouched.phone];
+      newisTouchedPhoneState[action.idx] = true;
+      return {
+        ...state,
+        isTouched: {...state.isTouched, phone: newisTouchedPhoneState},
+      };
+    }
+
     default:
       return state;
   }
@@ -81,11 +152,11 @@ const RegisterHosScreen = ({navigation}) => {
     inputValues: {
       name: '',
       email: '',
-      phone: ['', '', '', '', ''],
+      phone: [''],
       license: '',
       address: '',
       selectedState: '',
-      district: '',
+      selectedDistrict: '',
       pincode: '',
       password: '',
       cpassword: '',
@@ -94,11 +165,11 @@ const RegisterHosScreen = ({navigation}) => {
     inputValidity: {
       name: false,
       email: false,
-      phone: [false, false, false, false, false],
+      phone: [false],
       license: false,
       address: false,
       selectedState: false,
-      district: false,
+      selectedDistrict: false,
       pincode: false,
       password: false,
       cpassword: false,
@@ -107,7 +178,7 @@ const RegisterHosScreen = ({navigation}) => {
     isTouched: {
       name: false,
       email: false,
-      phone: [false, false, false, false, false],
+      phone: [false],
       license: false,
       address: false,
       selectedState: false,
@@ -117,24 +188,8 @@ const RegisterHosScreen = ({navigation}) => {
       cpassword: false,
       tnc: false,
     },
+    finalFormState: false,
   });
-
-  const [items, setItems] = useState([
-    <Input
-      label="Phone#1"
-      error="Invalid phone!"
-      key="0"
-      returnKeyType="next"
-      keyboardType="phone-pad"
-      onChangeText={(val) => checkValidity(val, 'phone0')}
-      onBlur={() => {
-        blurListener('phone0');
-      }}
-      inputIsValid={regFormState.inputValidity.phone[0]}
-      inputIsTouched={regFormState.isTouched.phone[0]}
-      value={regFormState.inputValues.phone[0]}
-    />,
-  ]);
 
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   //? FUNCTION TO CHECK IF THE CURRENT FIELD IS TOUCHED OR NOT
@@ -158,7 +213,7 @@ const RegisterHosScreen = ({navigation}) => {
     }
 
     if (fieldId.includes('phone') && !phoneRegex.test(String(val))) {
-      console.log('ok');
+      console.log('phone clicked');
       isValid = false;
     }
 
@@ -206,30 +261,31 @@ const RegisterHosScreen = ({navigation}) => {
 
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-  const phoneNumberAdder = () => {
-    phoneCount += 1;
-    if (phoneCount <= 4) {
-      setItems((prevState) => [
-        ...prevState,
-        <Input
-          label={'Phone#' + (phoneCount + 1) + ''}
-          key={phoneCount}
-          error="Invalid phone!"
-          returnKeyType="next"
-          keyboardType="phone-pad"
-          onChangeText={(val) => checkValidity(val, 'phone' + phoneCount + '')}
-          onBlur={() => {
-            blurListener('phone' + phoneCount + '');
-          }}
-          inputIsValid={regFormState.inputValidity.phone[phoneCount]}
-          inputIsTouched={regFormState.isTouched.phone[phoneCount]}
-          value={regFormState.inputValues.phone[phoneCount]}
-        />,
-      ]);
+  const phoneAdder = () => {
+    if (regFormState.inputValues.phone.length < 5) {
+      formDispatch({type: ADD_PHONE_STATE});
     } else {
       Alert.alert(
         'Maximum limit reached',
-        'You have reached the maximum limit of phone numbers',
+        'You have added the maximum possible phone number fields.',
+        [{text: 'Okay'}],
+      );
+    }
+  };
+
+  ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+  //? SUBMIT HANDLER
+
+  const sumbitHandler = () => {
+    console.log(regFormState);
+    console.log(regFormState.inputValidity);
+    if (regFormState.finalFormState) {
+      Alert.alert('Registration Successful', 'Success', [{text: 'Okay'}]);
+    } else {
+      Alert.alert(
+        'Invalid Input',
+        'Please check all the inputs before proceeding.',
         [{text: 'Okay'}],
       );
     }
@@ -244,9 +300,8 @@ const RegisterHosScreen = ({navigation}) => {
       </View>
       <View style={styles.board}>
         <View style={styles.titleBoard}>
-          <Text style={styles.heading}>Register: Hospital</Text>
+          <Text style={styles.heading}>Register: Hospiatls</Text>
         </View>
-
         <Input
           label="Name of the institution"
           error="Invalid name!"
@@ -259,7 +314,6 @@ const RegisterHosScreen = ({navigation}) => {
             blurListener('name');
           }}
         />
-
         <Input
           label="Email"
           error="Invalid email!"
@@ -274,15 +328,33 @@ const RegisterHosScreen = ({navigation}) => {
           }}
         />
 
-        {
-          //? Phone number array
-          items
-        }
+        {regFormState.inputValues.phone.map((val, idx) => {
+          return (
+            <Input
+              label={'Phone #' + (idx + 1)}
+              key={idx}
+              error="Invalid phone!"
+              returnKeyType="next"
+              keyboardType="phone-pad"
+              value={val}
+              inputIsValid={regFormState.inputValidity.phone[idx]}
+              inputIsTouched={regFormState.isTouched.phone[idx]}
+              onChangeText={(newText) => {
+                formDispatch({type: PHONE_STATE_SET, val: newText, idx: idx});
+              }}
+              onBlur={() => {
+                formDispatch({type: PHONE_TOUCH_SET, idx: idx});
+              }}
+            />
+          );
+        })}
 
         <View style={styles.addPhoneView}>
           <TouchableOpacity
             style={styles.addPhoneTouch}
-            onPress={() => phoneNumberAdder()}>
+            onPress={() => {
+              phoneAdder();
+            }}>
             <Feather name="plus" color="white" size={20} />
             <Text style={styles.addPhoneText}>Add new number</Text>
           </TouchableOpacity>
@@ -300,7 +372,6 @@ const RegisterHosScreen = ({navigation}) => {
             blurListener('license');
           }}
         />
-
         <Input
           label="Registered Address"
           error="This field is required"
@@ -315,7 +386,6 @@ const RegisterHosScreen = ({navigation}) => {
           }}
           returnKeyType="next"
         />
-
         <Picker
           selectedValue={regFormState.inputValues.selectedState}
           onValueChange={(val, itemIndex) => {
@@ -327,12 +397,10 @@ const RegisterHosScreen = ({navigation}) => {
             <Picker.Item label={item.state} value={item.state} key={id} />
           ))}
         </Picker>
-
         {!regFormState.inputValidity.selectedState &&
           regFormState.isTouched.selectedState && (
             <Text style={styles.errorMsg}>Please select your state</Text>
           )}
-
         <Picker
           enabled={distEnb}
           selectedValue={regFormState.inputValues.selectedDistrict}
@@ -348,7 +416,6 @@ const RegisterHosScreen = ({navigation}) => {
           regFormState.isTouched.selectedDistrict && (
             <Text style={styles.errorMsg}>Please select your district</Text>
           )}
-
         <Input
           label="Pin code"
           error="Please enter valid pincode"
@@ -362,9 +429,8 @@ const RegisterHosScreen = ({navigation}) => {
             blurListener('pincode');
           }}
         />
-
         <Input
-          // secureTextEntry={true}
+          secureTextEntry={true}
           label="Password"
           error="Please enter a stronger password"
           returnKeyType="next"
@@ -377,7 +443,7 @@ const RegisterHosScreen = ({navigation}) => {
           }}
         />
         <Input
-          // secureTextEntry={true}
+          secureTextEntry={true}
           label="Confirm Password"
           error="Password mismatch!"
           returnKeyType="next"
@@ -389,7 +455,6 @@ const RegisterHosScreen = ({navigation}) => {
             blurListener('cpassword');
           }}
         />
-
         <View>
           <View
             style={{
@@ -412,12 +477,11 @@ const RegisterHosScreen = ({navigation}) => {
             <Text>Please accept our terms and conditions.</Text>
           )}
         </View>
-
         <View style={styles.btnHolder}>
           <View style={styles.loginCircle}>
             <TouchableOpacity
               style={styles.loginPress}
-              onPress={() => console.log(word)}>
+              onPress={() => sumbitHandler()}>
               <Feather name="check" size={25} style={styles.icon} />
             </TouchableOpacity>
           </View>
