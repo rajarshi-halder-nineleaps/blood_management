@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {useState} from 'react'
 import {
     View,
     Text,
@@ -14,6 +14,36 @@ import { TextInput } from 'react-native-gesture-handler';
 import Feather from 'react-native-vector-icons/Feather';
 
 const enterotp = ({navigation}) => {
+
+    const [otp,setOtp] = useState("")
+    const [isValidOtp,setisValidOtp]= useState(true)
+
+    const handleOTP = (val) => {
+        let reg =  /^\d{4}$/;
+        if (reg.test(val) == true){
+            setOtp(val);
+            setisValidOtp(true)
+            
+        } else{
+            setOtp(val);
+            setisValidOtp(false)
+        }
+    }
+
+    const handleSubmit = () => {
+        if(otp ==""){
+            setisValidOtp(false)
+        }else{
+            if (isValidOtp==true){
+                navigation.navigate("ResetPassword")
+            }
+        }
+        
+    }
+
+
+
+
     return(
         <SafeAreaView style={styles.container}>
             <View style={styles.header}>
@@ -35,7 +65,13 @@ const enterotp = ({navigation}) => {
                     keyboardType="numeric"
                     style={[styles.input, {marginTop:30}]} 
                     placeholder='Code'
+                    onChangeText={(val)=>handleOTP(val)}
                     />
+                    {isValidOtp?
+                    null:
+                    <Text style={styles.errorMsg} >Should be  Valid OTP</Text>
+
+                    }
 
                
 
@@ -44,7 +80,7 @@ const enterotp = ({navigation}) => {
                     <View style= {styles.button}>
                     <TouchableOpacity
                     style={styles.signIn}
-                    onPress={() =>{navigation.navigate("ResetPassword")}}
+                    onPress={() =>handleSubmit()}
                     >
                     
                         <Text style={[styles.textSign, {color:"white"},]} >Next</Text> 
