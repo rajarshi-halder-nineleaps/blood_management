@@ -23,16 +23,17 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
   },
   formInput: {
-    color: colors.additional1,
+    paddingVertical: 15,
+    borderRadius: 100,
+    backgroundColor: colors.accent,
     fontSize: 18,
-    fontFamily: "qs-reg",
-    borderBottomWidth: 0.5,
-    padding: 10,
-    borderColor: colors.additional1,
+    fontFamily: 'sans-serif-condensed',
+    paddingHorizontal: 30,
+    color: 'black',
   },
   errorMsg: {
     color: colors.primary,
-    fontFamily: "qs-reg",
+    fontFamily: 'qs-reg',
   },
 });
 
