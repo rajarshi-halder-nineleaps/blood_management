@@ -1,4 +1,4 @@
-import React, {useState, useReducer, useEffect} from 'react';
+import React, {useState, useReducer, useEffect, useContext} from 'react';
 import {
   View,
   Text,
@@ -17,6 +17,9 @@ import * as places from '../../assets/places.json';
 import {Picker} from '@react-native-picker/picker';
 import CheckBox from '@react-native-community/checkbox';
 import Feather from 'react-native-vector-icons/Feather';
+
+//* IMPORTING THE AUTH CONTEXT FOR THE signUp FUNCTION.
+import {AuthContext} from '../../components/context';
 
 let phoneCount = 1;
 const UPDATE_FIELDS_REG = 'UPDATE_FIELDS';
@@ -141,6 +144,9 @@ const regReducer = (state, action) => {
 };
 
 const RegisterHosScreen = ({navigation}) => {
+  //* GETTING THE signUp FUNCTION USING useContext HOOK FROM AuthContext.
+  const {signUp} = useContext(AuthContext);
+
   const [selectedState, setSelectedState] = useState('');
   const [selectedStateindex, setselectedStateindex] = useState(0);
   const [distEnb, setdistEnb] = useState(false);
@@ -281,7 +287,9 @@ const RegisterHosScreen = ({navigation}) => {
     console.log(regFormState);
     console.log(regFormState.inputValidity);
     if (regFormState.finalFormState) {
-      Alert.alert('Registration Successful', 'Success', [{text: 'Okay'}]);
+      console.log('Registration Successful');
+      //* HERE WE SEND DATA TO THE signUp FUNCTION.
+      signUp(regFormState);
     } else {
       Alert.alert(
         'Invalid Input',
