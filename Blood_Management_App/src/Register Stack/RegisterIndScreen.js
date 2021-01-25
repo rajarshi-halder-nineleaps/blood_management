@@ -1,4 +1,4 @@
-import React, {useState, useReducer, useEffect} from 'react';
+import React, {useState, useReducer, useEffect, useContext} from 'react';
 import {
   View,
   Text,
@@ -20,6 +20,8 @@ import CheckBox from '@react-native-community/checkbox';
 import Feather from 'react-native-vector-icons/Feather';
 import DateTimePicker from '@react-native-community/datetimepicker';
 
+//* IMPORTING THE AUTH CONTEXT FOR THE signUp FUNCTION.
+import {AuthContext} from '../../components/context';
 let phoneCount = 0;
 const UPDATE_FIELDS_REG = 'UPDATE_FIELDS';
 const BLUR_FIELDS_REG = 'BLUR_FIELDS';
@@ -59,6 +61,9 @@ const regReducer = (state, action) => {
 };
 
 const RegisterBbScreen = ({navigation}) => {
+  //* GETTING THE signUp FUNCTION USING useContext HOOK FROM AuthContext.
+  const {signUp} = useContext(AuthContext);
+
   const [selectedState, setSelectedState] = useState('');
   const [selectedStateindex, setselectedStateindex] = useState(0);
   const [distEnb, setdistEnb] = useState(false);
@@ -223,7 +228,10 @@ const RegisterBbScreen = ({navigation}) => {
     console.log(regFormState.finalFormState);
     console.log(regFormState.inputValidity);
     if (regFormState.finalFormState) {
-      Alert.alert('Registration Successful', 'Success', [{text: 'Okay'}]);
+      console.log('Registration Successful');
+
+      //* HERE WE SEND DATA TO THE signUp FUNCTION.
+      signUp(regFormState);
     } else {
       Alert.alert(
         'Invalid Input',
@@ -290,8 +298,13 @@ const RegisterBbScreen = ({navigation}) => {
             <TouchableOpacity
               onPress={showDatepicker}
               style={styles.pickerView}>
-              <Text style={{fontSize: 18, fontFamily: 'sans-serif-condensed', paddingVertical: 15}}>
-                Date of birth:   
+              <Text
+                style={{
+                  fontSize: 18,
+                  fontFamily: 'sans-serif-condensed',
+                  paddingVertical: 15,
+                }}>
+                Date of birth:
                 {regFormState.inputValues.dob.toLocaleDateString()}
               </Text>
             </TouchableOpacity>
