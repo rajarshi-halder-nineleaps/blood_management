@@ -67,6 +67,7 @@ const enterotp = ({navigation}) => {
             {isValidOtp ? null : (
               <Text style={styles.errMsg}>Should be Valid OTP</Text>
             )}
+            <Text style={{color: colors.secondary}}>Resend OTP</Text>
 
             <View style={styles.button}>
               <TouchableOpacity

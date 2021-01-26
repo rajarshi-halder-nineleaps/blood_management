@@ -1,0 +1,6 @@
+export const UPDATE_FIELDS_REG = 'UPDATE_FIELDS';
+export const BLUR_FIELDS_REG = 'BLUR_FIELDS';
+export const ADD_PHONE_STATE = 'ADD_PHONE_STATE';
+export const PHONE_STATE_SET = 'PHONE_STATE_SET';
+export const PHONE_TOUCH_SET = 'PHONE_TOUCH_SET';
+export const STATE_CLEANUP = 'STATE_CLEANUP';
