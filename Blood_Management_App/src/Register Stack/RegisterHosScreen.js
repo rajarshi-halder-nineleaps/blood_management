@@ -1,4 +1,3 @@
-import React, {useState, useReducer, useEffect, useContext} from 'react';
 import {
   View,
   Text,
@@ -11,137 +10,26 @@ import {
   SafeAreaView,
   Alert,
 } from 'react-native';
+import {
+  updateFields,
+  blurFields,
+  addPhoneState,
+  phoneStateSet,
+  phoneTouchSet,
+  stateCleanup
+} from '../../redux/register/actions';
+import React, {useState, useContext, useEffect} from 'react';
+import {useDispatch, useSelector} from 'react-redux';
+import {Picker} from '@react-native-picker/picker';
+import {emailRegex, passwordRegex, phoneRegex} from '../../constants/Regexes';
 import colors from '../../constants/Colors';
 import Input from '../../components/Input';
 import * as places from '../../assets/places.json';
-import {Picker} from '@react-native-picker/picker';
 import CheckBox from '@react-native-community/checkbox';
 import Feather from 'react-native-vector-icons/Feather';
 
 //* IMPORTING THE AUTH CONTEXT FOR THE signUp FUNCTION.
 import {AuthContext} from '../../components/context';
-
-let phoneCount = 1;
-const UPDATE_FIELDS_REG = 'UPDATE_FIELDS';
-const BLUR_FIELDS_REG = 'BLUR_FIELDS';
-const ADD_PHONE_STATE = 'ADD_PHONE_STATE';
-const PHONE_STATE_SET = 'PHONE_STATE_SET';
-const PHONE_TOUCH_SET = 'PHONE_TOUCH_SET';
-
-const regReducer = (state, action) => {
-  switch (action.type) {
-    case UPDATE_FIELDS_REG: {
-      const newInputValue = {
-        ...state.inputValues,
-        [action.fieldId]: action.val,
-      };
-      const newInputValidity = {
-        ...state.inputValidity,
-        [action.fieldId]: action.isValid,
-      };
-
-      ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-      //todo check every phone number in new final form state
-      let newFinalFormState = true;
-
-      for (const key in newInputValidity.phone) {
-        console.log('new input validity: ', newInputValidity.phone[key]);
-        newFinalFormState = newFinalFormState && newInputValidity.phone[key];
-      }
-
-      for (const key in newInputValidity) {
-        if (typeof newInputValidity[key] === 'boolean') {
-          newFinalFormState = newFinalFormState && newInputValidity[key];
-        }
-      }
-
-      console.log(newFinalFormState);
-
-      ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-      return {
-        ...state,
-        inputValues: newInputValue,
-        inputValidity: newInputValidity,
-        finalFormState: newFinalFormState,
-      };
-    }
-
-    case BLUR_FIELDS_REG: {
-      const newInputIsTouched = {...state.isTouched, [action.fieldId]: true};
-      return {...state, isTouched: newInputIsTouched};
-    }
-
-    case ADD_PHONE_STATE: {
-      const newValPhoneState = [...state.inputValues.phone, ''];
-      const newisValidPhoneState = [...state.inputValidity.phone, false];
-      const newisTouchedPhoneState = [...state.isTouched.phone, false];
-      return {
-        ...state,
-        inputValues: {...state.inputValues, phone: newValPhoneState},
-        inputValidity: {...state.inputValidity, phone: newisValidPhoneState},
-        isTouched: {...state.isTouched, phone: newisTouchedPhoneState},
-      };
-    }
-
-    case PHONE_STATE_SET: {
-      const newValPhoneState = [...state.inputValues.phone];
-      const newisValidPhoneState = [...state.inputValidity.phone];
-      const phoneRegex = /^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/;
-
-      if (!phoneRegex.test(String(action.val))) {
-        newisValidPhoneState[action.idx] = false;
-      } else {
-        newisValidPhoneState[action.idx] = true;
-      }
-
-      newValPhoneState[action.idx] = action.val;
-
-      const newInputValidity = {
-        ...state.inputValidity,
-        phone: newisValidPhoneState,
-      };
-
-      ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-      //todo check every phone number in new final form state
-
-      let newFinalFormState = true;
-
-      for (const key in newInputValidity.phone) {
-        console.log('new input validity: ', newInputValidity.phone[key]);
-        newFinalFormState = newFinalFormState && newInputValidity.phone[key];
-      }
-
-      for (const key in newInputValidity) {
-        if (typeof newInputValidity[key] === 'object') {
-          newFinalFormState = newFinalFormState && newInputValidity[key];
-        }
-      }
-
-      ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-      return {
-        ...state,
-        inputValues: {...state.inputValues, phone: newValPhoneState},
-        inputValidity: newInputValidity,
-        finalFormState: newFinalFormState,
-      };
-    }
-
-    case PHONE_TOUCH_SET: {
-      const newisTouchedPhoneState = [...state.isTouched.phone];
-      newisTouchedPhoneState[action.idx] = true;
-      return {
-        ...state,
-        isTouched: {...state.isTouched, phone: newisTouchedPhoneState},
-      };
-    }
-
-    default:
-      return state;
-  }
-};
 
 const RegisterHosScreen = ({navigation}) => {
   //* GETTING THE signUp FUNCTION USING useContext HOOK FROM AuthContext.
@@ -154,61 +42,20 @@ const RegisterHosScreen = ({navigation}) => {
   const [selectedDistrict, setSelectedDistrict] = useState('');
   const word = places.states;
 
-  const [regFormState, formDispatch] = useReducer(regReducer, {
-    inputValues: {
-      name: '',
-      email: '',
-      phone: [''],
-      license: '',
-      address: '',
-      selectedState: '',
-      selectedDistrict: '',
-      pincode: '',
-      password: '',
-      cpassword: '',
-      tnc: false,
-    },
-    inputValidity: {
-      name: false,
-      email: false,
-      phone: [false],
-      license: false,
-      address: false,
-      selectedState: false,
-      selectedDistrict: false,
-      pincode: false,
-      password: false,
-      cpassword: false,
-      tnc: false,
-    },
-    isTouched: {
-      name: false,
-      email: false,
-      phone: [false],
-      license: false,
-      address: false,
-      selectedState: false,
-      district: false,
-      pincode: false,
-      password: false,
-      cpassword: false,
-      tnc: false,
-    },
-    finalFormState: false,
-  });
+  const dispatch = useDispatch();
+  const regFormState = useSelector((state) => state.regFormState);
 
-  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-  //? FUNCTION TO CHECK IF THE CURRENT FIELD IS TOUCHED OR NOT
+  //* cleans up the state on first render.
+  useEffect(() => {
+    dispatch(stateCleanup());
+  }, []);
+
   const blurListener = (fieldId) => {
-    formDispatch({type: BLUR_FIELDS_REG, fieldId: fieldId});
+    dispatch(blurFields(fieldId));
   };
-  //? FUNCTION TO CHECK VALIDITY.
   const checkValidity = (val, fieldId) => {
     console.log(fieldId);
     let isValid = true;
-    const emailRegex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-    const passwordRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9])(?!.*\s).{8,50}$/;
-    const phoneRegex = /^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/;
 
     if (fieldId === 'name' && val.trim().length < 3) {
       isValid = false;
@@ -257,19 +104,12 @@ const RegisterHosScreen = ({navigation}) => {
       isValid = false;
     }
 
-    formDispatch({
-      type: UPDATE_FIELDS_REG,
-      val: val,
-      fieldId: fieldId,
-      isValid: isValid,
-    });
+    dispatch(updateFields(val, fieldId, isValid));
   };
-
-  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
   const phoneAdder = () => {
     if (regFormState.inputValues.phone.length < 5) {
-      formDispatch({type: ADD_PHONE_STATE});
+      dispatch(addPhoneState());
     } else {
       Alert.alert(
         'Maximum limit reached',
@@ -278,10 +118,6 @@ const RegisterHosScreen = ({navigation}) => {
       );
     }
   };
-
-  ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-  //? SUBMIT HANDLER
 
   const sumbitHandler = () => {
     console.log(regFormState);
@@ -350,14 +186,10 @@ const RegisterHosScreen = ({navigation}) => {
                   inputIsValid={regFormState.inputValidity.phone[idx]}
                   inputIsTouched={regFormState.isTouched.phone[idx]}
                   onChangeText={(newText) => {
-                    formDispatch({
-                      type: PHONE_STATE_SET,
-                      val: newText,
-                      idx: idx,
-                    });
+                    dispatch(phoneStateSet(newText, idx));
                   }}
                   onBlur={() => {
-                    formDispatch({type: PHONE_TOUCH_SET, idx: idx});
+                    dispatch(phoneTouchSet(idx));
                   }}
                 />
               );

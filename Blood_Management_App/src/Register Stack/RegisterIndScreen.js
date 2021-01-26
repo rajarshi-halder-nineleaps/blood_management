@@ -1,4 +1,4 @@
-import React, {useState, useReducer, useEffect, useContext} from 'react';
+import React, {useState, useEffect, useContext} from 'react';
 import {
   View,
   Text,
@@ -14,6 +14,13 @@ import {
 } from 'react-native';
 import colors from '../../constants/Colors';
 import Input from '../../components/Input';
+import {useDispatch, useSelector} from 'react-redux';
+import {emailRegex, passwordRegex, phoneRegex} from '../../constants/Regexes';
+import {
+  updateFields,
+  blurFields,
+  stateCleanup,
+} from '../../redux/registerInd/actions';
 import * as places from '../../assets/places.json';
 import {Picker} from '@react-native-picker/picker';
 import CheckBox from '@react-native-community/checkbox';
@@ -22,43 +29,6 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 
 //* IMPORTING THE AUTH CONTEXT FOR THE signUp FUNCTION.
 import {AuthContext} from '../../components/context';
-let phoneCount = 0;
-const UPDATE_FIELDS_REG = 'UPDATE_FIELDS';
-const BLUR_FIELDS_REG = 'BLUR_FIELDS';
-
-const regReducer = (state, action) => {
-  switch (action.type) {
-    case UPDATE_FIELDS_REG: {
-      const newInputValue = {
-        ...state.inputValues,
-        [action.fieldId]: action.val,
-      };
-      const newInputValidity = {
-        ...state.inputValidity,
-        [action.fieldId]: action.isValid,
-      };
-
-      let newFinalFormState = true;
-      for (const key in newInputValidity) {
-        newFinalFormState = newFinalFormState && newInputValidity[key];
-      }
-
-      return {
-        ...state,
-        inputValues: newInputValue,
-        inputValidity: newInputValidity,
-        finalFormState: newFinalFormState,
-      };
-    }
-
-    case BLUR_FIELDS_REG: {
-      const newInputIsTouched = {...state.isTouched, [action.fieldId]: true};
-      return {...state, isTouched: newInputIsTouched};
-    }
-    default:
-      return state;
-  }
-};
 
 const RegisterBbScreen = ({navigation}) => {
   //* GETTING THE signUp FUNCTION USING useContext HOOK FROM AuthContext.
@@ -71,7 +41,12 @@ const RegisterBbScreen = ({navigation}) => {
   const [selectedDistrict, setSelectedDistrict] = useState('');
   const word = places.states;
 
-  //liscence
+  const dispatch = useDispatch();
+  const regFormState = useSelector((state) => state.regIndFormState);
+
+  useEffect(() => {
+    dispatch(stateCleanup());
+  }, []);
 
   const [mode, setMode] = useState('date');
   const [show, setShow] = useState(false);
@@ -91,64 +66,14 @@ const RegisterBbScreen = ({navigation}) => {
     showMode('date');
   };
 
-  const [regFormState, formDispatch] = useReducer(regReducer, {
-    inputValues: {
-      name: '',
-      email: '',
-      phone: '',
-      dob: new Date(),
-      bloodgroup: '',
-      address: '',
-      selectedState: '',
-      selectedDistrict: '',
-      pincode: '',
-      password: '',
-      cpassword: '',
-      tnc: false,
-    },
-    inputValidity: {
-      name: false,
-      email: false,
-      phone: false,
-      dob: false,
-      bloodgroup: false,
-      address: false,
-      selectedState: false,
-      selectedDistrict: false,
-      pincode: false,
-      password: false,
-      cpassword: false,
-      tnc: false,
-    },
-    isTouched: {
-      name: false,
-      email: false,
-      phone: false,
-      dob: false,
-      bloodgroup: false,
-      address: false,
-      selectedState: false,
-      selectedDistrict: false,
-      pincode: false,
-      password: false,
-      cpassword: false,
-      tnc: false,
-    },
-    finalFormState: false,
-  });
-
-  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   //? FUNCTION TO CHECK IF THE CURRENT FIELD IS TOUCHED OR NOT
   const blurListener = (fieldId) => {
-    formDispatch({type: BLUR_FIELDS_REG, fieldId: fieldId});
+    dispatch(blurFields(fieldId));
   };
   //? FUNCTION TO CHECK VALIDITY.
   const checkValidity = (val, fieldId) => {
     console.log(fieldId);
     let isValid = true;
-    const emailRegex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-    const passwordRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9])(?!.*\s).{8,50}$/;
-    const phoneRegex = /^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/;
 
     if (fieldId === 'name' && val.trim().length < 3) {
       isValid = false;
@@ -211,16 +136,8 @@ const RegisterBbScreen = ({navigation}) => {
     if (fieldId === 'tnc' && val === false) {
       isValid = false;
     }
-
-    formDispatch({
-      type: UPDATE_FIELDS_REG,
-      val: val,
-      fieldId: fieldId,
-      isValid: isValid,
-    });
+    dispatch(updateFields(val, fieldId, isValid));
   };
-
-  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
   //? SUBMIT HANDLER
 

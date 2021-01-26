@@ -1,0 +1,3 @@
+export const UPDATE_FIELDS = 'UPDATE_FIELDS';
+export const BLUR_FIELDS = 'BLUR_FIELDS';
+export const STATE_CLEANUP = 'STATE_CLEANUP';

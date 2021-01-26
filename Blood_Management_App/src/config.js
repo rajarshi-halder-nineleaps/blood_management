@@ -3,8 +3,8 @@ import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
 import {createMaterialBottomTabNavigator} from '@react-navigation/material-bottom-tabs';
 import axios from 'axios';
-// import {Provider} from 'react-redux';
-// import store from '../redux/store';
+import {Provider} from 'react-redux';
+import store from '../redux/store';
 
 import SplashScreen from './Login Stack/SplashScreen';
 import LoginScreen from './Login Stack/LoginScreen';
@@ -78,7 +78,7 @@ const config = () => {
         dispatch({type: 'LOGOUT'});
       },
       signUp: (userDetails) => {
-        let userToken = "";
+        let userToken = '';
         //* HERE, WE POST REGISTRATION DATA.
         axios
           .post('', userDetails)
@@ -114,50 +114,61 @@ const config = () => {
   }
 
   return (
-    <AuthContext.Provider value={authContext}>
-      <NavigationContainer>
-        {loginState.userToken != null ? (
-          <Tab.Navigator
-            barStyle={{backgroundColor: colors.primary, height: 65, paddingTop: 5}}
-            initialRouteName="home">
-            <Tab.Screen
-              name=" home "
-              component={Home}
-              options={{
-                tabBarLabel: 'Home',
-                tabBarIcon: ({color}) => (
-                  <Feather name="home" color={color} size={20} />
-                ),
+    <Provider store={store}>
+      <AuthContext.Provider value={authContext}>
+        <NavigationContainer>
+          {loginState.userToken != null ? (
+            <Tab.Navigator
+              barStyle={{
+                backgroundColor: colors.primary,
+                height: 65,
+                paddingTop: 5,
               }}
-            />
-            
-          </Tab.Navigator>
-        ) : (
-          <RootStack.Navigator
-            headerMode="none"
-            initialRouteName="SplashScreen">
-            <RootStack.Screen name="SplashScreen" component={SplashScreen} />
-            <RootStack.Screen name="LoginScreen" component={LoginScreen} />
-            <RootStack.Screen name="FindAccount" component={findaccount} />
-            <RootStack.Screen name="EnterOTP" component={enterotp} />
-            <RootStack.Screen name="ResetPassword" component={resetpassword} />
-            <RootStack.Screen
-              name="RegisterScreen"
-              component={RegisterSelectScreen}
-            />
-            <RootStack.Screen name="RegisterBb" component={RegisterBbScreen} />
-            <RootStack.Screen
-              name="RegisterInd"
-              component={RegisterIndScreen}
-            />
-            <RootStack.Screen
-              name="RegisterHos"
-              component={RegisterHosScreen}
-            />
-          </RootStack.Navigator>
-        )}
-      </NavigationContainer>
-    </AuthContext.Provider>
+              initialRouteName="home">
+              <Tab.Screen
+                name=" home "
+                component={Home}
+                options={{
+                  tabBarLabel: 'Home',
+                  tabBarIcon: ({color}) => (
+                    <Feather name="home" color={color} size={20} />
+                  ),
+                }}
+              />
+            </Tab.Navigator>
+          ) : (
+            <RootStack.Navigator
+              headerMode="none"
+              initialRouteName="SplashScreen">
+              <RootStack.Screen name="SplashScreen" component={SplashScreen} />
+              <RootStack.Screen name="LoginScreen" component={LoginScreen} />
+              <RootStack.Screen name="FindAccount" component={findaccount} />
+              <RootStack.Screen name="EnterOTP" component={enterotp} />
+              <RootStack.Screen
+                name="ResetPassword"
+                component={resetpassword}
+              />
+              <RootStack.Screen
+                name="RegisterScreen"
+                component={RegisterSelectScreen}
+              />
+              <RootStack.Screen
+                name="RegisterBb"
+                component={RegisterBbScreen}
+              />
+              <RootStack.Screen
+                name="RegisterInd"
+                component={RegisterIndScreen}
+              />
+              <RootStack.Screen
+                name="RegisterHos"
+                component={RegisterHosScreen}
+              />
+            </RootStack.Navigator>
+          )}
+        </NavigationContainer>
+      </AuthContext.Provider>
+    </Provider>
   );
 };
 
