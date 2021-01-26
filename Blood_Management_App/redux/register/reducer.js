@@ -66,7 +66,6 @@ const regIndReducer = (state = initialState, action) => {
       let newFinalFormState = true;
 
       for (const key in newInputValidity.phone) {
-        console.log('new input validity: ', newInputValidity.phone[key]);
         newFinalFormState = newFinalFormState && newInputValidity.phone[key];
       }
 
@@ -85,9 +84,7 @@ const regIndReducer = (state = initialState, action) => {
     }
 
     case BLUR_FIELDS_REG: {
-      console.log('ok blurred');
       const newInputIsTouched = {...state.isTouched, [action.fieldId]: true};
-      console.log(newInputIsTouched);
       return {...state, isTouched: newInputIsTouched};
     }
 
@@ -123,7 +120,6 @@ const regIndReducer = (state = initialState, action) => {
       let newFinalFormState = true;
 
       for (const key in newInputValidity.phone) {
-        console.log('new input validity: ', newInputValidity.phone[key]);
         newFinalFormState = newFinalFormState && newInputValidity.phone[key];
       }
 

@@ -12,28 +12,23 @@ import {
   Alert,
   Platform,
 } from 'react-native';
-import colors from '../../constants/Colors';
-import Input from '../../components/Input';
-import {useDispatch, useSelector} from 'react-redux';
-import {emailRegex, passwordRegex, phoneRegex} from '../../constants/Regexes';
 import {
   updateFields,
   blurFields,
   stateCleanup,
 } from '../../redux/registerInd/actions';
+import colors from '../../constants/Colors';
+import Input from '../../components/Input';
+import {regUserUp} from '../../redux/auth/actions';
+import {useDispatch, useSelector} from 'react-redux';
+import {emailRegex, passwordRegex, phoneRegex} from '../../constants/Regexes';
 import * as places from '../../assets/places.json';
 import {Picker} from '@react-native-picker/picker';
 import CheckBox from '@react-native-community/checkbox';
 import Feather from 'react-native-vector-icons/Feather';
 import DateTimePicker from '@react-native-community/datetimepicker';
 
-//* IMPORTING THE AUTH CONTEXT FOR THE signUp FUNCTION.
-import {AuthContext} from '../../components/context';
-
 const RegisterBbScreen = ({navigation}) => {
-  //* GETTING THE signUp FUNCTION USING useContext HOOK FROM AuthContext.
-  const {signUp} = useContext(AuthContext);
-
   const [selectedState, setSelectedState] = useState('');
   const [selectedStateindex, setselectedStateindex] = useState(0);
   const [distEnb, setdistEnb] = useState(false);
@@ -142,13 +137,9 @@ const RegisterBbScreen = ({navigation}) => {
   //? SUBMIT HANDLER
 
   const sumbitHandler = () => {
-    console.log(regFormState.finalFormState);
-    console.log(regFormState.inputValidity);
     if (regFormState.finalFormState) {
+      dispatch(regUserUp({...regFormState.inputValues, userType: 1}));
       console.log('Registration Successful');
-
-      //* HERE WE SEND DATA TO THE signUp FUNCTION.
-      signUp(regFormState);
     } else {
       Alert.alert(
         'Invalid Input',
