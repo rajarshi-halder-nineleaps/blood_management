@@ -15,17 +15,28 @@ import RegisterSelectScreen from './Register Stack/RegisterSelectScreen';
 import RegisterBbScreen from './Register Stack/RegisterBbScreen';
 import RegisterHosScreen from './Register Stack/RegisterHosScreen';
 import RegisterIndScreen from './Register Stack/RegisterIndScreen';
-// import {checkUserLogin} from "../redux/isLoggedIn/actions";
 import {View, ActivityIndicator, Alert} from 'react-native';
 import {AuthContext} from '../components/context';
 import Home from './MainStack/Home';
 
 import Feather from 'react-native-vector-icons/Feather';
 import colors from '../constants/Colors';
+
+import {useSelector, useDispatch} from 'react-redux';
+
 const RootStack = createStackNavigator();
 const Tab = createMaterialBottomTabNavigator();
 
 const config = () => {
+  // const authState = useSelector(state => state.authState)
+  ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+  // if (!authState.loading) {
+
+  //     }
+
+  ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
   const initialLoginState = {
     isLoggedIn: false,
     userToken: '',
@@ -126,7 +137,7 @@ const config = () => {
               }}
               initialRouteName="home">
               <Tab.Screen
-                name=" home "
+                name="home"
                 component={Home}
                 options={{
                   tabBarLabel: 'Home',

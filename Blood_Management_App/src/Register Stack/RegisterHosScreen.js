@@ -16,8 +16,9 @@ import {
   addPhoneState,
   phoneStateSet,
   phoneTouchSet,
-  stateCleanup
+  stateCleanup,
 } from '../../redux/register/actions';
+import {regUserUp} from '../../redux/auth/actions';
 import React, {useState, useContext, useEffect} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import {Picker} from '@react-native-picker/picker';
@@ -28,13 +29,7 @@ import * as places from '../../assets/places.json';
 import CheckBox from '@react-native-community/checkbox';
 import Feather from 'react-native-vector-icons/Feather';
 
-//* IMPORTING THE AUTH CONTEXT FOR THE signUp FUNCTION.
-import {AuthContext} from '../../components/context';
-
 const RegisterHosScreen = ({navigation}) => {
-  //* GETTING THE signUp FUNCTION USING useContext HOOK FROM AuthContext.
-  const {signUp} = useContext(AuthContext);
-
   const [selectedState, setSelectedState] = useState('');
   const [selectedStateindex, setselectedStateindex] = useState(0);
   const [distEnb, setdistEnb] = useState(false);
@@ -120,12 +115,10 @@ const RegisterHosScreen = ({navigation}) => {
   };
 
   const sumbitHandler = () => {
-    console.log(regFormState);
-    console.log(regFormState.inputValidity);
     if (regFormState.finalFormState) {
+      dispatch(regUserUp({...regFormState.inputValues, userType: 2}));
       console.log('Registration Successful');
-      //* HERE WE SEND DATA TO THE signUp FUNCTION.
-      signUp(regFormState);
+      //* now we can either edirect to hone screen or show errors (if any).
     } else {
       Alert.alert(
         'Invalid Input',

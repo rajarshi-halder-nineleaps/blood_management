@@ -1,6 +1,14 @@
 import React from 'react';
+import Feather from 'react-native-vector-icons/Feather';
+import colors from '../../constants/Colors';
 import {useState, useContext, useEffect} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
+import {emailRegex, passwordRegex} from '../../constants/Regexes';
+import {TextInput} from 'react-native-gesture-handler';
+//* setting up the actions for auth.
+import {
+  logUserIn,
+} from '../../redux/auth/actions';
 import {
   View,
   Text,
@@ -12,48 +20,47 @@ import {
   TouchableOpacity,
   Alert,
 } from 'react-native';
-import {emailRegex, passwordRegex} from '../../constants/Regexes';
 import {
   updateFields,
   blurFields,
   stateCleanup,
 } from '../../redux/login/actions.js';
-import {TextInput} from 'react-native-gesture-handler';
-import Feather from 'react-native-vector-icons/Feather';
-import {AuthContext} from '../../components/context';
-import colors from '../../constants/Colors';
 
 const LoginScreen = ({navigation}) => {
-  const {signIn} = useContext(AuthContext);
-
   const dispatch = useDispatch();
   const loginFormState = useSelector((state) => state.loginFormState);
+  const authState = useSelector((state) => state.authState);
+
+  //? state cleanup useEffect on first render.
   useEffect(() => {
     dispatch(stateCleanup());
   }, []);
 
+  //? login touch submit handler.
   const onSubmitHandler = () => {
     if (
       loginFormState.inputValidity.email &&
       loginFormState.inputValidity.password
     ) {
-      signIn(
-        loginFormState.inputValues.email,
-        loginFormState.inputValues.password,
-      );
+      console.log('All fields validated');
+      dispatch(logUserIn(loginFormState.inputValues));
+      console.log("ok", authState)
+      //* the log in and all the checks are now happening via redux thunk. All we have to do now is to redirect the user based on the state.
     } else {
       Alert.alert(
-        'Invalid Credentials',
-        'Entered Email or Password is Incorrect',
+        'Invalid inputs',
+        'Please check your inputs before proceeding',
         [{text: 'Okay'}],
       );
     }
   };
 
+  //? blur listener to set field isTouched state.
   const blurListener = (fieldId) => {
     dispatch(blurFields(fieldId));
   };
 
+  //? validations
   const checkValidity = (val, fieldId) => {
     let isValid = true;
     if (fieldId === 'email' && !emailRegex.test(String(val).toLowerCase())) {
