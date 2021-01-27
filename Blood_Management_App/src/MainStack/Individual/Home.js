@@ -5,7 +5,7 @@ import {
     TouchableOpacity
 
 } from 'react-native'
-import {AuthContext} from '../../components/context'
+import {AuthContext} from '../../../components/context'
 
 const Home = ({navigation}) => {
     const {signOut} = React.useContext(AuthContext);
