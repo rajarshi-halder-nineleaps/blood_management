@@ -44,7 +44,7 @@ const LoginScreen = ({navigation}) => {
     ) {
       console.log('All fields validated');
       dispatch(logUserIn(loginFormState.inputValues));
-      console.log("ok", authState)
+      // console.log("ok", authState)
       //* the log in and all the checks are now happening via redux thunk. All we have to do now is to redirect the user based on the state.
     } else {
       Alert.alert(

@@ -50,6 +50,7 @@ const RegisterBbScreen = ({navigation}) => {
     const currentDate = selectedDate;
     setShow(Platform.OS === 'ios');
     checkValidity(selectedDate, 'dob');
+    dispatch(blurFields('dob'));
   };
 
   const showMode = (currentMode) => {
@@ -83,10 +84,9 @@ const RegisterBbScreen = ({navigation}) => {
       isValid = false;
     }
 
-    //todo check this
     if (fieldId === 'dob') {
       console.log(val);
-      const age = new Date().getFullYear() - val.getFullYear();
+      let age = new Date().getFullYear() - val.getFullYear();
       const m = new Date().getMonth() - val.getMonth();
       if (m < 0 || (m === 0 && new Date().getDate() < val.getDate())) {
         age--;
@@ -227,6 +227,7 @@ const RegisterBbScreen = ({navigation}) => {
                 is24Hour={true}
                 display="default"
                 onChange={onChange}
+                
               />
             )}
 

@@ -1,99 +1,136 @@
 import axios from 'axios';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
 import {
   RETRIEVE_TOKEN,
-  LOGIN_REQ,
-  LOGIN_SUCCESS,
-  LOGIN_FAILURE,
-  REGISTER_REQ,
-  REGISTER_SUCCESS,
-  REGISTER_FAILURE,
+  REQ,
+  REQ_SUCCESS,
+  REQ_FAILURE,
   LOGOUT,
 } from './actionTypes';
 
-export const loginReq = () => ({
-  type: LOGIN_REQ,
+export const req = () => ({
+  type: REQ,
 });
 
-export const loginSuccess = (response) => ({
-  type: LOGIN_SUCCESS,
-  payload: response,
+export const reqSuccess = (userId, userToken) => ({
+  type: REQ_SUCCESS,
+  userId: userId,
+  userToken: userToken,
 });
 
-export const loginFailure = (error) => ({
-  type: LOGIN_FAILURE,
-  payload: error,
+export const reqFailure = (error) => ({
+  type: REQ_FAILURE,
+  error: error,
 });
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 export const logUserIn = (loginData) => {
   return async (dispatch) => {
-    dispatch(loginReq());
-    console.log("login works");
+    dispatch(req());
+    console.log('login works');
     try {
       const response = await axios.post(
-        'https://jsonplaceholder.typicode.com/posts',
+        'http://192.168.43.89:5000/login',
         loginData,
       );
-      //*coordinate with back end about this structure of response.
-      if (response.error) {
-        dispatch(loginFailure(response.error));
+      console.log('COMPLETE RESPONSE DATA: ', response.data);
+
+      if (response.data.error) {
+        dispatch(reqFailure(response.data.error));
+        console.log(response.data.error);
       } else {
-        //todo change this from response.data to response or based on the strucure of response.
-        dispatch(loginSuccess(response.data));
+        //? SAVING USER DATA TO ASYNC STORAGE ON SUCCESSFUL LOGIN.
+        const userData = JSON.stringify({
+          userToken: response.data.userToken,
+          userId: response.data.userId,
+        });
+        await AsyncStorage.setItem('redBankAuthObj', userData);
+        console.log('Saved data to async storage!');
+
+        dispatch(reqSuccess(response.data.userId, response.data.userToken));
       }
     } catch (err) {
-      dispatch(loginFailure(err.message));
+      console.log(err.message);
+      dispatch(reqFailure(err.message));
+
     }
   };
 };
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-export const registerReq = () => ({
-  type: REGISTER_REQ,
-});
-
-export const registerSuccess = (response) => ({
-  type: REGISTER_SUCCESS,
-  payload: response,
-});
-
-export const registerFailure = (error) => ({
-  type: REGISTER_FAILURE,
-  payload: error,
-});
-
 export const regUserUp = (regData) => {
-  console.log('called');
   return async (dispatch) => {
-    dispatch(registerReq());
+    dispatch(req());
+    console.log('regsiter works');
     try {
       const response = await axios.post(
-        'https://jsonplaceholder.typicode.com/posts',
+        'http://192.168.43.89:5000/login',
         regData,
       );
-      //*coordinate with back end about this structure of response.
-      //* IN CASE OF REGISTER, THIS IS USED TO SHOW ERRORS LIKE EMAIL ALREADY EXISTS AND THINGS LIKE THAT.
-      if (response.error) {
-        dispatch(registerFailure(response.error));
+      console.log('COMPLETE RESPONSE DATA: ', response.data);
+      if (response.data.error) {
+        dispatch(reqFailure(response.data.error));
+        console.log(response.data.error);
       } else {
-        //todo change this from response.data to response or based on the strucure of response.
-        dispatch(registerSuccess(response.data));
+        const userData = JSON.stringify({
+          userToken: response.data.userToken,
+          userId: response.data.userId,
+        });
+        await AsyncStorage.setItem('redBankAuthObj', userData);
+        console.log('Saved data to async storage!');
+        dispatch(reqSuccess(response.data.userId, response.data.userToken));
       }
     } catch (err) {
-      dispatch(registerFailure(err.message));
+      console.log(err.message);
+      dispatch(reqFailure(err.message));
     }
   };
 };
 
-//////////////////////////////////////////////////// todo req, success and failure action creators /////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-export const logout = () => ({
-  type: LOGOUT,
-});
+//* this will give out either the user details or null. to be called at the begining of code execution to check if user is logged in or not.
+export const tokenRetriever = () => {
+  return async (dispatch) => {
+    dispatch(req());
+    try {
+      const userData = await AsyncStorage.getItem('redBankAuthObj');
+      const loggedData = userData != null ? JSON.parse(userData) : null;
+      if (loggedData != null) {
+        //? user already logged in.
+        dispatch(reqSuccess(loggedData.userId, loggedData.userToken));
+      } else {
+        //? USER NOT LOGGED IN.
+        //TODO REDIRECT TO LOGIN PAGE AND SET LOADING TO FALSE.
+      }
+    } catch (err) {
+      //? ERROR RETRIEVING ASYNC STORAGE DATA.
+      //TODO DOUBT: SHOULD WE REDIRECT TO LOGIN FROM HERE AS WELL?
+      console.log('token retriever error: ', err.message);
+      //? here, the loginFailure action sets the loading to false automatically.
+      dispatch(reqFailure(err.message));
+    }
+  };
+};
 
-export const retrieveToken = (token) => ({
-  type: RETRIEVE_TOKEN,
-  token: token,
-});
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+export const logUserOut = () => {
+  return async (dispatch) => {
+    dispatch(req());
+    try {
+      await AsyncStorage.removeItem('redBankAuthObj');
+      dispatch(reqSuccess('', ''));
+      console.log('Async Storage emptied!');
+      //TODO REDIRECT TO LOGIN PAGE AND SET LOADING TO FALSE.
+    } catch (err) {
+      //? ERROR RETRIEVING ASYNC STORAGE DATA.
+      console.log('unable to logout: ', err.message);
+      //? here, the loginFailure action sets the loading to false automatically.
+      dispatch(reqFailure(err.message));
+    }
+  };
+};
