@@ -5,9 +5,6 @@ import {
   REQ,
   REQ_SUCCESS,
   REQ_FAILURE,
-  REGISTER_REQ,
-  REGISTER_SUCCESS,
-  REGISTER_FAILURE,
   LOGOUT,
 } from './actionTypes';
 
@@ -41,7 +38,7 @@ const authReducer = (state = initialState, action) => {
 
     case REQ_FAILURE: {
       //* here, we are getting the payload data.
-      Alert.alert("Error", action.error);
+      Alert.alert('Error', action.error);
       console.log(action.error);
       console.log('loading: false');
       return {
@@ -55,6 +52,10 @@ const authReducer = (state = initialState, action) => {
 
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+    case LOGOUT: {
+      console.log('logout request at reducer');
+      return {...state, isLoggedIn: false};
+    }
     default:
       return state;
   }

@@ -1,10 +1,8 @@
+/* eslint-disable prettier/prettier */
 import React, {useEffect, useReducer, useContext} from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
-import {createMaterialBottomTabNavigator} from '@react-navigation/material-bottom-tabs';
-import axios from 'axios';
-import {Provider} from 'react-redux';
-import store from '../redux/store';
+// import {createMaterialBottomTabNavigator} from '@react-navigation/material-bottom-tabs';
 
 import IndividualStack from './MainStack/IndividualStack';
 
@@ -17,108 +15,27 @@ import RegisterSelectScreen from './Register Stack/RegisterSelectScreen';
 import RegisterBbScreen from './Register Stack/RegisterBbScreen';
 import RegisterHosScreen from './Register Stack/RegisterHosScreen';
 import RegisterIndScreen from './Register Stack/RegisterIndScreen';
-import {View, ActivityIndicator, Alert} from 'react-native';
-import {AuthContext} from '../components/context';
+import {View, ActivityIndicator} from 'react-native';
 
-
-import Feather from 'react-native-vector-icons/Feather';
 import colors from '../constants/Colors';
 
 import {useSelector, useDispatch} from 'react-redux';
+import {tokenRetriever} from '../redux/auth/actions';
 
 const RootStack = createStackNavigator();
-const Tab = createMaterialBottomTabNavigator();
 
-const config = () => {
-  // const authState = useSelector(state => state.authState)
-  ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+const Config = () => {
+  const dispatch = useDispatch();
+  const authState = useSelector((state) => state.authState);
 
-  // if (!authState.loading) {
+  console.log(authState);
+  useEffect(() => {
+    dispatch(tokenRetriever());
+  }, [dispatch]);
 
-  //     }
+  console.log(authState);
 
-  ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-  const initialLoginState = {
-    isLoggedIn: false,
-    userToken: '',
-    isLoading: false,
-  };
-
-  const loginReducer = (prevState, action) => {
-    switch (action.type) {
-      case 'RETRIEVE_TOKEN':
-        return {
-          ...prevState,
-          userToken: action.token,
-          isLoading: false,
-        };
-      case 'LOGIN':
-        return {
-          ...prevState,
-          userToken: action.token,
-          isLoading: false,
-        };
-      case 'LOGOUT':
-        return {
-          ...prevState,
-          userToken: null,
-          isLoading: false,
-        };
-      case 'REGISTER':
-        return {
-          ...prevState,
-          userToken: action.token,
-          isLoading: false,
-        };
-    }
-  };
-  const [loginState, dispatch] = useReducer(loginReducer, initialLoginState);
-
-  const authContext = React.useMemo(
-    () => ({
-      signIn: (userName, password) => {
-        var userToken = userName;
-
-        dispatch({type: 'LOGIN', token: userToken});
-      },
-      signOut: async () => {
-        try {
-          console.log('removed');
-        } catch (e) {
-          console.log(e);
-        }
-        dispatch({type: 'LOGOUT'});
-      },
-      signUp: (userDetails) => {
-        let userToken = '';
-        //* HERE, WE POST REGISTRATION DATA.
-        axios
-          .post('', userDetails)
-          .then(function (response) {
-            console.log(response);
-            if (response.status == true) {
-              console.log(response.data);
-              userToken = response.data.user_id;
-              console.log(userToken);
-              setToken(userToken);
-              Alert.alert('Alert', response.data.massage);
-              // dispatch({type: 'LOGIN', id: email, token: userToken});
-            } else {
-              console.log(response.data);
-              console.log(response.data.massage);
-              Alert.alert('Alert', response.data.massage);
-            }
-          })
-          .catch(function (error) {
-            console.log(error);
-          });
-      },
-    }),
-    [],
-  );
-
-  if (loginState.isLoading) {
+  if (authState.isLoading) {
     return (
       <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
         <ActivityIndicator color={colors.primary} size="large" />
@@ -127,45 +44,27 @@ const config = () => {
   }
 
   return (
-    <Provider store={store}>
-      <AuthContext.Provider value={authContext}>
-        <NavigationContainer>
-          {loginState.userToken != null ? (
-            <IndividualStack />
-          ) : (
-            <RootStack.Navigator
-              headerMode="none"
-              initialRouteName="SplashScreen">
-              <RootStack.Screen name="SplashScreen" component={SplashScreen} />
-              <RootStack.Screen name="LoginScreen" component={LoginScreen} />
-              <RootStack.Screen name="FindAccount" component={findaccount} />
-              <RootStack.Screen name="EnterOTP" component={enterotp} />
-              <RootStack.Screen
-                name="ResetPassword"
-                component={resetpassword}
-              />
-              <RootStack.Screen
-                name="RegisterScreen"
-                component={RegisterSelectScreen}
-              />
-              <RootStack.Screen
-                name="RegisterBb"
-                component={RegisterBbScreen}
-              />
-              <RootStack.Screen
-                name="RegisterInd"
-                component={RegisterIndScreen}
-              />
-              <RootStack.Screen
-                name="RegisterHos"
-                component={RegisterHosScreen}
-              />
-            </RootStack.Navigator>
-          )}
-        </NavigationContainer>
-      </AuthContext.Provider>
-    </Provider>
+    <NavigationContainer>
+      {authState.isLoggedIn ? (
+        <IndividualStack />
+      ) : (
+        <RootStack.Navigator headerMode="none" initialRouteName="SplashScreen">
+          <RootStack.Screen name="SplashScreen" component={SplashScreen} />
+          <RootStack.Screen name="LoginScreen" component={LoginScreen} />
+          <RootStack.Screen name="FindAccount" component={findaccount} />
+          <RootStack.Screen name="EnterOTP" component={enterotp} />
+          <RootStack.Screen name="ResetPassword" component={resetpassword} />
+          <RootStack.Screen
+            name="RegisterScreen"
+            component={RegisterSelectScreen}
+          />
+          <RootStack.Screen name="RegisterBb" component={RegisterBbScreen} />
+          <RootStack.Screen name="RegisterInd" component={RegisterIndScreen} />
+          <RootStack.Screen name="RegisterHos" component={RegisterHosScreen} />
+        </RootStack.Navigator>
+      )}
+    </NavigationContainer>
   );
 };
 
-export default config;
+export default Config;

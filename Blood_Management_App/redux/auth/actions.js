@@ -54,7 +54,6 @@ export const logUserIn = (loginData) => {
     } catch (err) {
       console.log(err.message);
       dispatch(reqFailure(err.message));
-
     }
   };
 };
@@ -100,15 +99,14 @@ export const tokenRetriever = () => {
       const userData = await AsyncStorage.getItem('redBankAuthObj');
       const loggedData = userData != null ? JSON.parse(userData) : null;
       if (loggedData != null) {
-        //? user already logged in.
         dispatch(reqSuccess(loggedData.userId, loggedData.userToken));
       } else {
-        //? USER NOT LOGGED IN.
-        //TODO REDIRECT TO LOGIN PAGE AND SET LOADING TO FALSE.
+        //TODO MAKE AN ACTION TO SET LOADING STATE TO FALSE.
+        reqFailure("ok");
       }
     } catch (err) {
       //? ERROR RETRIEVING ASYNC STORAGE DATA.
-      //TODO DOUBT: SHOULD WE REDIRECT TO LOGIN FROM HERE AS WELL?
+      //TODO DOUBT: SHOULD WE REDIRECT TO LOGIN FROM HERE AS WELL? YES.
       console.log('token retriever error: ', err.message);
       //? here, the loginFailure action sets the loading to false automatically.
       dispatch(reqFailure(err.message));
@@ -118,14 +116,18 @@ export const tokenRetriever = () => {
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+export const logout = () => ({type: LOGOUT});
+
 export const logUserOut = () => {
+  console.log('logging out');
   return async (dispatch) => {
     dispatch(req());
     try {
       await AsyncStorage.removeItem('redBankAuthObj');
       dispatch(reqSuccess('', ''));
+      dispatch(logout());
       console.log('Async Storage emptied!');
-      //TODO REDIRECT TO LOGIN PAGE AND SET LOADING TO FALSE.
+      //TODO SET ISLOGGEDIN TO FALSE AS WELL.
     } catch (err) {
       //? ERROR RETRIEVING ASYNC STORAGE DATA.
       console.log('unable to logout: ', err.message);
