@@ -6,6 +6,8 @@ import axios from 'axios';
 import {Provider} from 'react-redux';
 import store from '../redux/store';
 
+import IndividualStack from './MainStack/IndividualStack';
+
 import SplashScreen from './Login Stack/SplashScreen';
 import LoginScreen from './Login Stack/LoginScreen';
 import findaccount from './Login Stack/Find_account';
@@ -17,7 +19,7 @@ import RegisterHosScreen from './Register Stack/RegisterHosScreen';
 import RegisterIndScreen from './Register Stack/RegisterIndScreen';
 import {View, ActivityIndicator, Alert} from 'react-native';
 import {AuthContext} from '../components/context';
-import Home from './MainStack/Home';
+
 
 import Feather from 'react-native-vector-icons/Feather';
 import colors from '../constants/Colors';
@@ -129,24 +131,7 @@ const config = () => {
       <AuthContext.Provider value={authContext}>
         <NavigationContainer>
           {loginState.userToken != null ? (
-            <Tab.Navigator
-              barStyle={{
-                backgroundColor: colors.primary,
-                height: 65,
-                paddingTop: 5,
-              }}
-              initialRouteName="home">
-              <Tab.Screen
-                name="home"
-                component={Home}
-                options={{
-                  tabBarLabel: 'Home',
-                  tabBarIcon: ({color}) => (
-                    <Feather name="home" color={color} size={20} />
-                  ),
-                }}
-              />
-            </Tab.Navigator>
+            <IndividualStack />
           ) : (
             <RootStack.Navigator
               headerMode="none"
