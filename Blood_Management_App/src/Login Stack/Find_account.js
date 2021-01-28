@@ -1,42 +1,48 @@
-import React, {useState} from 'react';
+/* eslint-disable prettier/prettier */
+import React, {useEffect} from 'react';
 import {
   View,
   Text,
   SafeAreaView,
   ScrollView,
   StyleSheet,
-  Dimensions,
-  Image,
+  Alert,
   TouchableOpacity,
 } from 'react-native';
+import {updateFields, blurFields} from '../../redux/forgotpassword/actions';
+import {useDispatch, useSelector} from 'react-redux';
+import {emailRegex} from '../../constants/Regexes';
 import {TextInput} from 'react-native-gesture-handler';
+import {postEmail, resetDoneState} from '../../redux/forgotpassword/actions';
 import colors from '../../constants/Colors';
 
 import Feather from 'react-native-vector-icons/Feather';
 
-const findaccount = ({navigation}) => {
-  const [email, setEmail] = useState('');
-  const [isValidEmail, setisValidEmail] = useState(true);
+const Findaccount = ({navigation}) => {
+  const dispatch = useDispatch();
+  const forgotState = useSelector((state) => state.forgotState);
 
-  const handleEmail = (val) => {
-    let reg = /^\w+([\.-]?\w+)@\w+([\.-]?\w+)(\.\w{2,3})+$/;
+  useEffect(() => {
+    dispatch(resetDoneState('emailSent'));
+    console.log('emailSent set to false');
+  }, [dispatch]);
 
-    if (reg.test(val) == true) {
-      setEmail(val);
-      setisValidEmail(true);
-    } else {
-      setEmail(val);
-      setisValidEmail(false);
+  const handleEmail = (val, fieldId) => {
+    let isValid = true;
+    if (emailRegex.test(val) !== true) {
+      isValid = false;
     }
+    dispatch(updateFields(val, fieldId, isValid));
   };
 
-  const handleSubmit = () => {
-    if (email == '') {
-      setisValidEmail(false);
-    } else {
-      if (isValidEmail == true) {
+  const submitHandler = () => {
+    if (forgotState.inputValidity.email) {
+      dispatch(postEmail(forgotState.inputValues.email));
+      if (forgotState.emailSent) {
         navigation.navigate('EnterOTP');
       }
+    } else {
+      Alert.alert('Invalid email', 'Please enter a valid email address!');
     }
   };
 
@@ -60,17 +66,22 @@ const findaccount = ({navigation}) => {
             <TextInput
               keyboardType="email-address"
               style={[styles.input, {marginTop: 30}]}
+              value={forgotState.inputValues.email}
               placeholder="Email"
-              onChangeText={(val) => handleEmail(val)}
+              onChangeText={(val) => handleEmail(val, 'email')}
+              onBlur={() => {
+                dispatch(blurFields('email'));
+              }}
             />
-            {isValidEmail ? null : (
-              <Text style={styles.errMsg}>Invalid email!</Text>
-            )}
+            {!forgotState.inputValidity.email &&
+              forgotState.isTouched.email && (
+                <Text style={styles.errMsg}>Invalid email!</Text>
+              )}
 
             <View style={styles.button}>
               <TouchableOpacity
                 style={styles.signIn}
-                onPress={() => handleSubmit()}>
+                onPress={() => submitHandler()}>
                 <Feather name="arrow-right" size={30} color="white" />
               </TouchableOpacity>
             </View>
@@ -80,10 +91,6 @@ const findaccount = ({navigation}) => {
     </SafeAreaView>
   );
 };
-
-const {height} = Dimensions.get('screen');
-const height_logo = height * 0.2;
-const WIDTH = Dimensions.get('window').width;
 
 const styles = StyleSheet.create({
   container: {
@@ -139,8 +146,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     paddingVertical: 10,
-    justifyContent: 'center',
-    alignItems: 'center',
     borderRadius: 100,
     backgroundColor: colors.primary,
     width: 50,
@@ -153,4 +158,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default findaccount;
+export default Findaccount;

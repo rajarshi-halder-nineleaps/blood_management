@@ -1,41 +1,48 @@
-import React, {useState} from 'react';
+/* eslint-disable prettier/prettier */
+import React, {useEffect} from 'react';
 import {
   View,
   Text,
   SafeAreaView,
   ScrollView,
   StyleSheet,
-  Dimensions,
-  Image,
+  Platform,
+  Alert,
   TouchableOpacity,
-  KeyboardAvoidingView
+  KeyboardAvoidingView,
 } from 'react-native';
 import {TextInput} from 'react-native-gesture-handler';
 import colors from '../../constants/Colors';
 import Feather from 'react-native-vector-icons/Feather';
+import {updateFields, blurFields} from '../../redux/forgotpassword/actions';
+import {useDispatch, useSelector} from 'react-redux';
+import {postOTP, resetDoneState} from '../../redux/forgotpassword/actions';
 
-const enterotp = ({navigation}) => {
-  const [otp, setOtp] = useState('');
-  const [isValidOtp, setisValidOtp] = useState(true);
+const Enterotp = ({navigation}) => {
+  const dispatch = useDispatch();
+  const forgotState = useSelector((state) => state.forgotState);
 
-  const handleOTP = (val) => {
-    let reg = /^\d{4}$/;
-    if (reg.test(val) == true) {
-      setOtp(val);
-      setisValidOtp(true);
-    } else {
-      setOtp(val);
-      setisValidOtp(false);
+  useEffect(() => {
+    dispatch(resetDoneState('otpVerified'));
+    console.log('otpVerified set to false');
+  }, [dispatch]);
+
+  const handleOTP = (val, fieldId) => {
+    let isValid = true;
+    if (val.trim().length !== 6) {
+      isValid = false;
     }
+    dispatch(updateFields(val, fieldId, isValid));
   };
 
   const handleSubmit = () => {
-    if (otp == '') {
-      setisValidOtp(false);
-    } else {
-      if (isValidOtp == true) {
+    if (forgotState.inputValidity.otp) {
+      dispatch(postOTP(forgotState.inputValues.otp));
+      if (forgotState.emailSent) {
         navigation.navigate('ResetPassword');
       }
+    } else {
+      Alert.alert('Invalid OTP', 'Please enter a valid OTP');
     }
   };
 
@@ -55,17 +62,22 @@ const enterotp = ({navigation}) => {
           </View>
           <View style={styles.body}>
             <Text style={styles.titlefontdesc}>
-              Check your mailbox for One-Time-Password sent for verification
+              If your provided email matches with any of the accounts registered
+              with us, we will send you an OTP.
             </Text>
 
             <TextInput
               keyboardType="numeric"
+              value={forgotState.inputValues.otp}
               style={[styles.input, {marginTop: 30}]}
               placeholder="Code"
-              onChangeText={(val) => handleOTP(val)}
+              onChangeText={(val) => handleOTP(val, 'otp')}
+              onBlur={() => {
+                dispatch(blurFields('otp'));
+              }}
             />
-            {isValidOtp ? null : (
-              <Text style={styles.errMsg}>Should be Valid OTP</Text>
+            {!forgotState.inputValidity.otp && forgotState.isTouched.otp && (
+              <Text style={styles.errMsg}>Inavlid OTP!</Text>
             )}
             <Text style={{color: colors.secondary}}>Resend OTP</Text>
 
@@ -82,10 +94,6 @@ const enterotp = ({navigation}) => {
     </SafeAreaView>
   );
 };
-
-const {height} = Dimensions.get('screen');
-const height_logo = height * 0.2;
-const WIDTH = Dimensions.get('window').width;
 
 const styles = StyleSheet.create({
   container: {
@@ -141,8 +149,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     paddingVertical: 10,
-    justifyContent: 'center',
-    alignItems: 'center',
     borderRadius: 100,
     backgroundColor: colors.primary,
     width: 50,
@@ -155,4 +161,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default enterotp;
+export default Enterotp;

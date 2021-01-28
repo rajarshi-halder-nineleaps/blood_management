@@ -1,17 +1,13 @@
+/* eslint-disable prettier/prettier */
 import {Alert} from 'react-native';
 
-import {
-  RETRIEVE_TOKEN,
-  REQ,
-  REQ_SUCCESS,
-  REQ_FAILURE,
-  LOGOUT,
-} from './actionTypes';
+import {REQ, REQ_SUCCESS, REQ_FAILURE, LOGOUT} from './actionTypes';
 
 const initialState = {
   isLoggedIn: false,
   userId: '',
   userToken: '',
+  userType: '',
   loading: false,
   error: '',
 };
@@ -31,6 +27,7 @@ const authReducer = (state = initialState, action) => {
         loading: false,
         userId: action.userId,
         userToken: action.userToken,
+        userType: action.userType,
         isLoggedIn: true,
         error: '',
       };
@@ -47,6 +44,7 @@ const authReducer = (state = initialState, action) => {
         error: action.error,
         userId: '',
         userToken: '',
+        userType: '',
       };
     }
 

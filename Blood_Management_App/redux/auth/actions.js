@@ -1,22 +1,18 @@
+/* eslint-disable prettier/prettier */
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-import {
-  RETRIEVE_TOKEN,
-  REQ,
-  REQ_SUCCESS,
-  REQ_FAILURE,
-  LOGOUT,
-} from './actionTypes';
+import {REQ, REQ_SUCCESS, REQ_FAILURE, LOGOUT} from './actionTypes';
 
 export const req = () => ({
   type: REQ,
 });
 
-export const reqSuccess = (userId, userToken) => ({
+export const reqSuccess = (userId, userToken, userType) => ({
   type: REQ_SUCCESS,
   userId: userId,
   userToken: userToken,
+  userType: userType,
 });
 
 export const reqFailure = (error) => ({
@@ -40,16 +36,29 @@ export const logUserIn = (loginData) => {
       if (response.data.error) {
         dispatch(reqFailure(response.data.error));
         console.log(response.data.error);
-      } else {
+      } else if (response.data.success) {
         //? SAVING USER DATA TO ASYNC STORAGE ON SUCCESSFUL LOGIN.
         const userData = JSON.stringify({
           userToken: response.data.userToken,
           userId: response.data.userId,
+          userType: response.data.userType,
         });
         await AsyncStorage.setItem('redBankAuthObj', userData);
         console.log('Saved data to async storage!');
 
-        dispatch(reqSuccess(response.data.userId, response.data.userToken));
+        dispatch(
+          reqSuccess(
+            response.data.userId,
+            response.data.userToken,
+            response.data.userType,
+          ),
+        );
+      } else {
+        dispatch(
+          reqFailure(
+            "Something's not right! Please try again after some time.",
+          ),
+        );
       }
     } catch (err) {
       console.log(err.message);
@@ -73,14 +82,27 @@ export const regUserUp = (regData) => {
       if (response.data.error) {
         dispatch(reqFailure(response.data.error));
         console.log(response.data.error);
-      } else {
+      } else if (response.data.success) {
         const userData = JSON.stringify({
           userToken: response.data.userToken,
           userId: response.data.userId,
+          userType: response.data.userType,
         });
         await AsyncStorage.setItem('redBankAuthObj', userData);
         console.log('Saved data to async storage!');
-        dispatch(reqSuccess(response.data.userId, response.data.userToken));
+        dispatch(
+          reqSuccess(
+            response.data.userId,
+            response.data.userToken,
+            response.data.userType,
+          ),
+        );
+      } else {
+        dispatch(
+          reqFailure(
+            "Something's not right! Please try again after some time.",
+          ),
+        );
       }
     } catch (err) {
       console.log(err.message);
@@ -99,14 +121,19 @@ export const tokenRetriever = () => {
       const userData = await AsyncStorage.getItem('redBankAuthObj');
       const loggedData = userData != null ? JSON.parse(userData) : null;
       if (loggedData != null) {
-        dispatch(reqSuccess(loggedData.userId, loggedData.userToken));
+        dispatch(
+          reqSuccess(
+            loggedData.userId,
+            loggedData.userToken,
+            loggedData.userType,
+          ),
+        );
       } else {
         //TODO MAKE AN ACTION TO SET LOADING STATE TO FALSE.
-        reqFailure("ok");
+        reqFailure('ok');
       }
     } catch (err) {
       //? ERROR RETRIEVING ASYNC STORAGE DATA.
-      //TODO DOUBT: SHOULD WE REDIRECT TO LOGIN FROM HERE AS WELL? YES.
       console.log('token retriever error: ', err.message);
       //? here, the loginFailure action sets the loading to false automatically.
       dispatch(reqFailure(err.message));
@@ -127,7 +154,6 @@ export const logUserOut = () => {
       dispatch(reqSuccess('', ''));
       dispatch(logout());
       console.log('Async Storage emptied!');
-      //TODO SET ISLOGGEDIN TO FALSE AS WELL.
     } catch (err) {
       //? ERROR RETRIEVING ASYNC STORAGE DATA.
       console.log('unable to logout: ', err.message);

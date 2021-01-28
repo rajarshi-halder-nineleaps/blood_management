@@ -7,6 +7,7 @@
       {  
          "state":"Andhra Pradesh",
          "districts":[  
+            "Select district",
             "Anantapur",
             "Chittoor",
             "East Godavari",
@@ -25,6 +26,7 @@
       {  
          "state":"Arunachal Pradesh",
          "districts":[  
+            "Select district",
             "Tawang",
             "West Kameng",
             "East Kameng",
@@ -51,6 +53,7 @@
       {  
          "state":"Assam",
          "districts":[  
+            "Select district",
             "Baksa",
             "Barpeta",
             "Biswanath",
@@ -89,6 +92,7 @@
       {  
          "state":"Bihar",
          "districts":[  
+            "Select district",
             "Araria",
             "Arwal",
             "Aurangabad",
@@ -132,12 +136,14 @@
       {  
          "state":"Chandigarh (UT)",
          "districts":[  
+            "Select district",
             "Chandigarh"
          ]
       },
       {  
          "state":"Chhattisgarh",
          "districts":[  
+            "Select district",
             "Balod",
             "Baloda Bazar",
             "Balrampur",
@@ -170,12 +176,14 @@
       {  
          "state":"Dadra and Nagar Haveli (UT)",
          "districts":[  
+            "Select district",
             "Dadra & Nagar Haveli"
          ]
       },
       {  
          "state":"Daman and Diu (UT)",
          "districts":[  
+            "Select district",
             "Daman",
             "Diu"
          ]
@@ -183,6 +191,7 @@
       {  
          "state":"Delhi (NCT)",
          "districts":[  
+            "Select district",
             "Central Delhi",
             "East Delhi",
             "New Delhi",
@@ -199,6 +208,7 @@
       {  
          "state":"Goa",
          "districts":[  
+            "Select district",
             "North Goa",
             "South Goa"
          ]
@@ -206,6 +216,7 @@
       {  
          "state":"Gujarat",
          "districts":[  
+            "Select district",
             "Ahmedabad",
             "Amreli",
             "Anand",
@@ -244,6 +255,7 @@
       {  
          "state":"Haryana",
          "districts":[  
+            "Select district",
             "Ambala",
             "Bhiwani",
             "Charkhi Dadri",
@@ -271,6 +283,7 @@
       {  
          "state":"Himachal Pradesh",
          "districts":[  
+            "Select district",
             "Bilaspur",
             "Chamba",
             "Hamirpur",
@@ -288,6 +301,7 @@
       {  
          "state":"Jammu and Kashmir",
          "districts":[  
+            "Select district",
             "Anantnag",
             "Bandipore",
             "Baramulla",
@@ -315,6 +329,7 @@
       {  
          "state":"Jharkhand",
          "districts":[  
+            "Select district",
             "Bokaro",
             "Chatra",
             "Deoghar",
@@ -344,6 +359,7 @@
       {  
          "state":"Karnataka",
          "districts":[  
+            "Select district",
             "Bagalkot",
             "Ballari (Bellary)",
             "Belagavi (Belgaum)",
@@ -379,6 +395,7 @@
       {  
          "state":"Kerala",
          "districts":[  
+            "Select district",
             "Alappuzha",
             "Ernakulam",
             "Idukki",
@@ -398,6 +415,7 @@
       {  
          "state":"Lakshadweep (UT)",
          "districts":[  
+            "Select district",
             "Agatti",
             "Amini",
             "Androth",
@@ -413,6 +431,7 @@
       {  
          "state":"Madhya Pradesh",
          "districts":[  
+            "Select district",
             "Agar Malwa",
             "Alirajpur",
             "Anuppur",
@@ -469,6 +488,7 @@
       {  
          "state":"Maharashtra",
          "districts":[  
+            "Select district",
             "Ahmednagar",
             "Akola",
             "Amravati",
@@ -510,6 +530,7 @@
       {  
          "state":"Manipur",
          "districts":[  
+            "Select district",
             "Bishnupur",
             "Chandel",
             "Churachandpur",
@@ -531,6 +552,7 @@
       {  
          "state":"Meghalaya",
          "districts":[  
+            "Select district",
             "East Garo Hills",
             "East Jaintia Hills",
             "East Khasi Hills",
@@ -547,6 +569,7 @@
       {  
          "state":"Mizoram",
          "districts":[  
+            "Select district",
             "Aizawl",
             "Champhai",
             "Kolasib",
@@ -560,6 +583,7 @@
       {  
          "state":"Nagaland",
          "districts":[  
+            "Select district",
             "Dimapur",
             "Kiphire",
             "Kohima",
@@ -576,6 +600,7 @@
       {  
          "state":"Odisha",
          "districts":[  
+            "Select district",
             "Angul",
             "Balangir",
             "Balasore",
@@ -611,6 +636,7 @@
       {  
          "state":"Puducherry (UT)",
          "districts":[  
+            "Select district",
             "Karaikal",
             "Mahe",
             "Pondicherry",
@@ -620,6 +646,7 @@
       {  
          "state":"Punjab",
          "districts":[  
+            "Select district",
             "Amritsar",
             "Barnala",
             "Bathinda",
@@ -647,6 +674,7 @@
       {  
          "state":"Rajasthan",
          "districts":[  
+            "Select district",
             "Ajmer",
             "Alwar",
             "Banswara",
@@ -685,6 +713,7 @@
       {  
          "state":"Sikkim",
          "districts":[  
+            "Select district",
             "East Sikkim",
             "North Sikkim",
             "South Sikkim",
@@ -694,6 +723,7 @@
       {  
          "state":"Tamil Nadu",
          "districts":[  
+            "Select district",
             "Ariyalur",
             "Chennai",
             "Coimbatore",
@@ -731,6 +761,7 @@
       {  
          "state":"Telangana",
          "districts":[  
+            "Select district",
             "Adilabad",
             "Bhadradri Kothagudem",
             "Hyderabad",
@@ -767,6 +798,7 @@
       {  
          "state":"Tripura",
          "districts":[  
+            "Select district",
             "Dhalai",
             "Gomati",
             "Khowai",
@@ -780,6 +812,7 @@
       {  
          "state":"Uttarakhand",
          "districts":[  
+            "Select district",
             "Almora",
             "Bageshwar",
             "Chamoli",
@@ -798,6 +831,7 @@
       {  
          "state":"Uttar Pradesh",
          "districts":[  
+            "Select district",
             "Agra",
             "Aligarh",
             "Allahabad",
@@ -878,6 +912,7 @@
       {  
          "state":"West Bengal",
          "districts":[  
+            "Select district",
             "Alipurduar",
             "Bankura",
             "Birbhum",

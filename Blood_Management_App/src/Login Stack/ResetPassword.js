@@ -1,52 +1,56 @@
-import React, {useState} from 'react';
+/* eslint-disable prettier/prettier */
+import React, {useEffect} from 'react';
 import {
   View,
   Text,
   SafeAreaView,
   StyleSheet,
   ScrollView,
-  Dimensions,
-  Image,
+  Alert,
   TouchableOpacity,
 } from 'react-native';
 import {TextInput} from 'react-native-gesture-handler';
 import colors from '../../constants/Colors';
 import Feather from 'react-native-vector-icons/Feather';
+import {updateFields, blurFields} from '../../redux/forgotpassword/actions';
+import {useDispatch, useSelector} from 'react-redux';
+import {passwordRegex} from '../../constants/Regexes';
+import {
+  postResetPassword,
+  resetDoneState,
+} from '../../redux/forgotpassword/actions';
 
-const resetpassword = ({navigation}) => {
-  const [password, setPassword] = useState('');
-  const [cpassword, setcPassword] = useState('');
-  const [isValidpassword, setisValidP] = useState(true);
-  const [isValidcpass, setisValidCP] = useState(true);
+const Resetpassword = ({navigation}) => {
+  const dispatch = useDispatch();
+  const forgotState = useSelector((state) => state.forgotState);
 
-  const handlepassword = (val) => {
-    let reg = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9])(?!.*\s).{8,50}$/;
-    if (reg.test(val) == true) {
-      setPassword(val);
-      setisValidP(true);
-    } else {
-      setPassword(val);
-      setisValidP(false);
+  useEffect(() => {
+    dispatch(resetDoneState('passwordReset'));
+    console.log('passwordReset set to false');
+  }, [dispatch]);
+
+  const handlepassword = (val, fieldId) => {
+    let isValid = true;
+    if (passwordRegex.test(val) !== true) {
+      isValid = false;
     }
+    dispatch(updateFields(val, fieldId, isValid));
   };
 
-  const handlecpassword = (val) => {
-    if (val == password) {
-      setcPassword(val);
-      setisValidCP(true);
-    } else {
-      setcPassword(val);
-      setisValidCP(false);
-    }
-  };
   const handleSubmit = () => {
-    if (password == '' && cpassword == '') {
-      setisValidP(false);
-      setisValidCP(false);
-    } else {
-      if (isValidpassword == true && isValidcpass == true) {
+    if (
+      forgotState.inputValidity.password &&
+      forgotState.inputValidity.cpassword
+    ) {
+      dispatch(postResetPassword(forgotState.inputValues.password));
+      if (forgotState.passwordReset) {
         navigation.navigate('LoginScreen');
       }
+    } else {
+      Alert.alert(
+        'Invalid Inputs',
+        'Please check all the inputs before proceeding.',
+      );
     }
   };
 
@@ -59,33 +63,48 @@ const resetpassword = ({navigation}) => {
           </TouchableOpacity>
         </View>
         <View style={styles.colorView}>
-          <Text style={styles.titlefont}>Find Your Account</Text>
+          <Text style={styles.titlefont}>Set new password</Text>
         </View>
         <View style={styles.body}>
           <Text style={styles.titlefontdesc}>Enter a new password</Text>
+          <Text style={{marginTop: 20}}>
+            Password must be at least 8 characters long and must contain at
+            least 1 number, 1 special character, 1 uppercase and 1 lowercase
+            alphabet.
+          </Text>
 
           <TextInput
             secureTextEntry={true}
             keyboardType="default"
+            value={forgotState.inputValues.password}
             style={[styles.input, {marginTop: 30}]}
             placeholder="Password"
-            onChangeText={(val) => handlepassword(val)}
+            onChangeText={(val) => handlepassword(val, 'passsword')}
+            onBlur={() => {
+              dispatch(blurFields('password'));
+            }}
           />
 
-          {isValidpassword ? null : (
-            <Text style={styles.errMsg}>Enter a Valid Password</Text>
-          )}
+          {!forgotState.inputValidity.password &&
+            forgotState.isTouched.password && (
+              <Text style={styles.errMsg}>Invalid password format!</Text>
+            )}
 
           <TextInput
             secureTextEntry={true}
             keyboardType="default"
+            value={forgotState.inputValues.cpassword}
             style={[styles.input, {marginTop: 30}]}
             placeholder="Confirm Password"
-            onChangeText={(val) => handlecpassword(val)}
+            onChangeText={(val) => handlepassword(val, 'cpassword')}
+            onBlur={() => {
+              dispatch(blurFields('cpassword'));
+            }}
           />
-          {isValidcpass ? null : (
-            <Text style={styles.errMsg}>Password doesn't match</Text>
-          )}
+          {!forgotState.inputValidity.cpassword &&
+            forgotState.isTouched.cpassword && (
+              <Text style={styles.errMsg}>Password mismatch!</Text>
+            )}
 
           <View style={styles.button}>
             <TouchableOpacity
@@ -101,10 +120,6 @@ const resetpassword = ({navigation}) => {
     </SafeAreaView>
   );
 };
-
-const {height} = Dimensions.get('screen');
-const height_logo = height * 0.2;
-const WIDTH = Dimensions.get('window').width;
 
 const styles = StyleSheet.create({
   container: {
@@ -172,4 +187,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default resetpassword;
+export default Resetpassword;
