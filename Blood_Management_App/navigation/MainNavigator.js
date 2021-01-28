@@ -15,7 +15,12 @@ const Tab = createMaterialBottomTabNavigator();
 const MainNavigator = () => {
   return (
     <Tab.Navigator
-      barStyle={{backgroundColor: colors.primary, height: 65, paddingTop: 5}}
+      barStyle={{
+        backgroundColor: colors.primary,
+        height: 65,
+        paddingTop: 5,
+        elevation: 5,
+      }}
       initialRouteName="home"
       activeColor="white"
       inactiveColor={colors.darkPrimary}>

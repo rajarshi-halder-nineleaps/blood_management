@@ -23,23 +23,32 @@ const Config = () => {
 
   console.log(authState);
 
-  if (authState.isLoading) {
-    return (
-      <View style={styles.loading}>
-        <ActivityIndicator color={colors.primary} size="large" />
-      </View>
-    );
-  }
-
   return (
-    <NavigationContainer>
-      {authState.isLoggedIn ? <MainNavigator /> : <RootStackNavigator />}
-    </NavigationContainer>
+    <>
+      {authState.isLoading ? (
+        <View style={styles.loading}>
+          <ActivityIndicator
+            animating={true}
+            color={colors.primary}
+            size="large"
+          />
+        </View>
+      ) : (
+        <NavigationContainer>
+          {authState.isLoggedIn ? <MainNavigator /> : <RootStackNavigator />}
+        </NavigationContainer>
+      )}
+    </>
   );
 };
 
 const styles = StyleSheet.create({
-  loading: {flex: 1, justifyContent: 'center', alignItems: 'center'},
+  loading: {
+    flex: 1,
+    width: '100%',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
 });
 
 export default Config;

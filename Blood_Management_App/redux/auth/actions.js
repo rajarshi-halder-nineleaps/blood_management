@@ -28,7 +28,7 @@ export const logUserIn = (loginData) => {
     console.log('login works');
     try {
       const response = await axios.post(
-        'http://192.168.43.89:5000/login',
+        'http://API URI HERE:5000/login',
         loginData,
       );
       console.log('COMPLETE RESPONSE DATA: ', response.data);
@@ -75,7 +75,7 @@ export const regUserUp = (regData) => {
     console.log('regsiter works');
     try {
       const response = await axios.post(
-        'http://192.168.43.89:5000/login',
+        'http://API URI HERE:5000/login',
         regData,
       );
       console.log('COMPLETE RESPONSE DATA: ', response.data);
