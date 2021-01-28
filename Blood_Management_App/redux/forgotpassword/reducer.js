@@ -59,6 +59,8 @@ const forgotReducer = (state = initialState, action) => {
       return {...state, isTouched: newInputIsTouched};
     }
     case STATE_CLEANUP_FORGOT: {
+      Alert.alert('Success', 'New password set successfully!');
+      console.log('flushing state');
       return initialState;
     }
 
@@ -68,7 +70,13 @@ const forgotReducer = (state = initialState, action) => {
       return {...state, loading: true};
     }
     case FORGOT_REQ_SUCCESS: {
-      console.log('forgotpassword success!');
+      console.log('forgotpassword success response recieved!');
+      console.log({
+        ...state,
+        loading: false,
+        error: '',
+        [action.successReq]: true,
+      });
       return {...state, loading: false, error: '', [action.successReq]: true};
     }
     case FORGOT_REQ_FAILURE: {
@@ -77,7 +85,12 @@ const forgotReducer = (state = initialState, action) => {
     }
 
     case RESET_DONE_STATE: {
-      return {...state, [action.resettable]: false};
+      return {
+        ...state,
+        emailSent: false,
+        otpVerified: false,
+        passwordReset: false,
+      };
     }
 
     default:

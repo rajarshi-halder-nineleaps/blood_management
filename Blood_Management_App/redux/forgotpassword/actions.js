@@ -50,9 +50,12 @@ export const postEmail = (email) => {
   return async (dispatch) => {
     dispatch(forgotReq());
     try {
-      const response = await axios.post('api to post recovery email', {
-        recoveryEmail: email,
-      });
+      const response = await axios.post(
+        'http://192.168.43.89:5000/forgotpassword',
+        {
+          recoveryEmail: email,
+        },
+      );
       if (response.data.error) {
         dispatch(forgotReqFailure(response.data.error));
         console.log('Error while posting recovery email', response.data.error);
@@ -75,7 +78,7 @@ export const postOTP = (otp) => {
   return async (dispatch) => {
     dispatch(forgotReq());
     try {
-      const response = await axios.post('api to post validate otp', {
+      const response = await axios.post('http://192.168.43.89:5000/otp', {
         otp: otp,
       });
       if (response.data.error) {
@@ -100,7 +103,7 @@ export const postResetPassword = (password) => {
   return async (dispatch) => {
     dispatch(forgotReq());
     try {
-      const response = await axios.post('api to post reset password', {
+      const response = await axios.post('http://192.168.43.89:5000/resetpwd', {
         password: password,
       });
       if (response.data.error) {

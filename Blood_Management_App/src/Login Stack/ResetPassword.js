@@ -18,6 +18,7 @@ import {passwordRegex} from '../../constants/Regexes';
 import {
   postResetPassword,
   resetDoneState,
+  stateCleanup,
 } from '../../redux/forgotpassword/actions';
 
 const Resetpassword = ({navigation}) => {
@@ -28,6 +29,13 @@ const Resetpassword = ({navigation}) => {
     dispatch(resetDoneState('passwordReset'));
     console.log('passwordReset set to false');
   }, [dispatch]);
+
+  useEffect(() => {
+    if (forgotState.passwordReset) {
+      dispatch(stateCleanup());
+      navigation.navigate('LoginScreen');
+    }
+  }, [dispatch, forgotState.passwordReset, navigation]);
 
   const handlepassword = (val, fieldId) => {
     let isValid = true;
@@ -43,9 +51,6 @@ const Resetpassword = ({navigation}) => {
       forgotState.inputValidity.cpassword
     ) {
       dispatch(postResetPassword(forgotState.inputValues.password));
-      if (forgotState.passwordReset) {
-        navigation.navigate('LoginScreen');
-      }
     } else {
       Alert.alert(
         'Invalid Inputs',
@@ -79,7 +84,7 @@ const Resetpassword = ({navigation}) => {
             value={forgotState.inputValues.password}
             style={[styles.input, {marginTop: 30}]}
             placeholder="Password"
-            onChangeText={(val) => handlepassword(val, 'passsword')}
+            onChangeText={(val) => handlepassword(val, 'password')}
             onBlur={() => {
               dispatch(blurFields('password'));
             }}

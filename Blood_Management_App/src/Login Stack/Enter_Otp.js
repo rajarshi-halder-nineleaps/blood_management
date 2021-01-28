@@ -27,6 +27,12 @@ const Enterotp = ({navigation}) => {
     console.log('otpVerified set to false');
   }, [dispatch]);
 
+  useEffect(() => {
+    if (forgotState.otpVerified) {
+      navigation.navigate('ResetPassword');
+    }
+  }, [forgotState.otpVerified, navigation]);
+
   const handleOTP = (val, fieldId) => {
     let isValid = true;
     if (val.trim().length !== 6) {
@@ -38,9 +44,6 @@ const Enterotp = ({navigation}) => {
   const handleSubmit = () => {
     if (forgotState.inputValidity.otp) {
       dispatch(postOTP(forgotState.inputValues.otp));
-      if (forgotState.emailSent) {
-        navigation.navigate('ResetPassword');
-      }
     } else {
       Alert.alert('Invalid OTP', 'Please enter a valid OTP');
     }

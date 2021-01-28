@@ -27,6 +27,12 @@ const Findaccount = ({navigation}) => {
     console.log('emailSent set to false');
   }, [dispatch]);
 
+  useEffect(() => {
+    if (forgotState.emailSent) {
+      navigation.navigate('EnterOTP');
+    }
+  }, [forgotState.emailSent, navigation]);
+
   const handleEmail = (val, fieldId) => {
     let isValid = true;
     if (emailRegex.test(val) !== true) {
@@ -38,9 +44,6 @@ const Findaccount = ({navigation}) => {
   const submitHandler = () => {
     if (forgotState.inputValidity.email) {
       dispatch(postEmail(forgotState.inputValues.email));
-      if (forgotState.emailSent) {
-        navigation.navigate('EnterOTP');
-      }
     } else {
       Alert.alert('Invalid email', 'Please enter a valid email address!');
     }
