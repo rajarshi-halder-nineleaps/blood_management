@@ -1,19 +1,21 @@
-import React from "react";
-import { View, Text, TextInput, ScrollView, StyleSheet } from "react-native";
-import colors from "../constants/Colors";
+import React from 'react';
+import {View, Text, TextInput, ScrollView, StyleSheet} from 'react-native';
+import colors from '../constants/Colors';
 
 const Input = (props) => {
   return (
     <View>
       <View style={styles.inputView}>
         <TextInput
-        { ...props }
+          {...props}
           style={styles.formInput}
           placeholder={props.label}
           placeholderTextColor={colors.grayishblack}
         />
       </View>
-      {!props.inputIsValid && props.inputIsTouched && <Text style={styles.errorMsg}>{props.error}</Text>}
+      {!props.inputIsValid && props.inputIsTouched && (
+        <Text style={styles.errorMsg}>{props.error}</Text>
+      )}
     </View>
   );
 };

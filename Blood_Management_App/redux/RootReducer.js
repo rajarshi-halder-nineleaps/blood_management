@@ -8,6 +8,7 @@ import regIndReducer from './registerInd/reducer';
 import authReducer from './auth/reducer';
 import forgotReducer from './forgotpassword/reducer';
 import myDrivesReducer from './myDrives/reducer';
+import upcomingDrivesReducer from './upcomingDrives/reducer';
 
 const rootReducer = combineReducers({
   loginFormState: loginReducer,
@@ -16,6 +17,7 @@ const rootReducer = combineReducers({
   authState: authReducer,
   forgotState: forgotReducer,
   myDrivesState: myDrivesReducer,
+  upcomingDrivesState: upcomingDrivesReducer,
 });
 
 export default rootReducer;

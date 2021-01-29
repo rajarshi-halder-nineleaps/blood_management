@@ -39,7 +39,7 @@ export const getDriveData = (userToken) => {
     dispatch(fetchDrivesReq());
     try {
       console.log('sending axios get request!');
-      const response = await axios.get('http://API URI HERE:5000/mydrives', {
+      const response = await axios.get('http://192.168.43.89:5000/mydrives', {
         headers: {Authorization: userToken},
       });
 
@@ -78,7 +78,7 @@ export const doubleDataPoster = (userToken, driveId, donorId) => {
       dispatch(fetchDrivesReq());
       console.log("posting updated data to current user's records");
       const response = await axios.post(
-        'http://API URI HERE:5000/mydrives',
+        'http://192.168.43.89:5000/mydrives',
         {driveId, donorId},
         {
           headers: {Authorization: userToken},
@@ -90,12 +90,17 @@ export const doubleDataPoster = (userToken, driveId, donorId) => {
         //* coordinate with back end team to fixate on this response with the same name.
         dispatch(fetchDriveSuccess(response.data.driveData));
       } else if (response.data.error) {
-        fetchDriveFailure(response.data.error);
+        dispatch(fetchDriveFailure(response.data.error));
       } else {
+        //* Anandhu: This is the place where misplacing a single curly bracket crashed my whole App. Took me 4 hours to figure it out.
+        dispatch(
+          fetchDriveFailure(
+            "Something's not right! Please try after some time.",
+          ),
+        );
       }
-      fetchDriveFailure("Something's not right! Please try after some time.");
     } catch (err) {
-      fetchDriveFailure(err.message);
+      dispatch(fetchDriveFailure(err.message));
       console.log(
         'Error caught while double data posting in my donation drives.',
         err.message,

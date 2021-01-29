@@ -67,13 +67,15 @@ const Services = ({navigation}) => {
             <TouchTabs
               label="Upcoming Drives"
               imgSrc="../assets/images/servicesScreen/findDonors.png"
+              touchHandler={() => navigation.navigate('upcomingDrives')}
             />
           </>
         ) : (
           <>
             <TouchTabs
-              label="Conduct A Drive"
+              label="Organize a Drive"
               imgSrc="../assets/images/servicesScreen/findDonors.png"
+              touchHandler={() => navigation.navigate('driveOrganizer')}
             />
             <TouchTabs
               label="My Donation Drives"

@@ -22,7 +22,12 @@ import {regUserUp} from '../../redux/auth/actions';
 import React, {useState, useEffect} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import {Picker} from '@react-native-picker/picker';
-import {emailRegex, passwordRegex, phoneRegex} from '../../constants/Regexes';
+import {
+  emailRegex,
+  passwordRegex,
+  phoneRegex,
+  pincodeRegex,
+} from '../../constants/Regexes';
 import colors from '../../constants/Colors';
 import Input from '../../components/Input';
 import * as places from '../../assets/places.json';
@@ -81,7 +86,7 @@ const RegisterHosScreen = ({navigation}) => {
       isValid = false;
     }
 
-    if (fieldId === 'pincode' && val.trim().length !== 6) {
+    if (fieldId === 'pincode' && !pincodeRegex.test(String(val.trim()))) {
       isValid = false;
     }
 

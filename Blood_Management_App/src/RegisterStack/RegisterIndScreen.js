@@ -22,7 +22,12 @@ import colors from '../../constants/Colors';
 import Input from '../../components/Input';
 import {regUserUp} from '../../redux/auth/actions';
 import {useDispatch, useSelector} from 'react-redux';
-import {emailRegex, passwordRegex, phoneRegex} from '../../constants/Regexes';
+import {
+  emailRegex,
+  passwordRegex,
+  phoneRegex,
+  pincodeRegex,
+} from '../../constants/Regexes';
 import * as places from '../../assets/places.json';
 import {Picker} from '@react-native-picker/picker';
 import CheckBox from '@react-native-community/checkbox';
@@ -110,7 +115,7 @@ const RegisterBbScreen = ({navigation}) => {
       isValid = false;
     }
 
-    if (fieldId === 'pincode' && val.trim().length !== 6) {
+    if (fieldId === 'pincode' && !pincodeRegex.test(String(val.trim()))) {
       isValid = false;
     }
 

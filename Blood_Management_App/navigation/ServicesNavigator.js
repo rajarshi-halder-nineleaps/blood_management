@@ -6,6 +6,8 @@ import {createStackNavigator} from '@react-navigation/stack';
 import Services from '../src/MainTabs/ServicesStack/Services';
 import MyDrives from '../src/MainTabs/ServicesStack/MyDrives';
 import DriveDonorList from '../src/MainTabs/ServicesStack/DriveDonorList';
+import UpcomingDrives from '../src/MainTabs/ServicesStack/UpcomingDrives';
+import DriveOrganizer from '../src/MainTabs/ServicesStack/DriveOrganizer';
 
 const ServicesNavigator = createStackNavigator();
 
@@ -25,6 +27,20 @@ const ServicesStackNavigator = () => {
         component={DriveDonorList}
         options={{
           headerTitle: 'List of accepted donors',
+        }}
+      />
+      <ServicesNavigator.Screen
+        name="upcomingDrives"
+        component={UpcomingDrives}
+        options={{
+          headerTitle: 'Upcoming donation drives',
+        }}
+      />
+      <ServicesNavigator.Screen
+        name="driveOrganizer"
+        component={DriveOrganizer}
+        options={{
+          headerTitle: 'Organize a drive',
         }}
       />
     </ServicesNavigator.Navigator>

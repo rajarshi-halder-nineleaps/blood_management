@@ -15,6 +15,7 @@ import {
   doubleDataPoster,
 } from '../../../redux/myDrives/actions';
 import colors from '../../../constants/Colors';
+import Feather from 'react-native-vector-icons/Feather';
 
 const DriveDonorList = ({route, navigation}) => {
   const myDrivesState = useSelector((state) => state.myDrivesState);
@@ -23,11 +24,12 @@ const DriveDonorList = ({route, navigation}) => {
 
   const {driveId} = route.params;
 
+  let acceptedDonors = [];
+
   const currDrive = myDrivesState.myDrivesData.filter(
     (val) => val.driveId === driveId,
   )[0];
-
-  const acceptedDonors = currDrive.acceptedDonors;
+  acceptedDonors = [...currDrive.acceptedDonors];
 
   const bloodDonationHandler = (drive, donor) => {
     console.log('thunk action creator for posting myDriveDetails data started');
@@ -58,7 +60,7 @@ const DriveDonorList = ({route, navigation}) => {
               <View
                 style={styles.completedDonationTouchDonated}
                 onPress={() => bloodDonationHandler(driveId, item.donorId)}>
-                <Text style={styles.completedDonationText}>Donated</Text>
+                <Feather name="check-square" color={colors.additional2} size={20} />
               </View>
             )}
           </View>
