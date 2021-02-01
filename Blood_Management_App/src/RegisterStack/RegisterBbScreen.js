@@ -23,7 +23,12 @@ import {regUserUp} from '../../redux/auth/actions';
 import React, {useState, useEffect} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import {Picker} from '@react-native-picker/picker';
-import {emailRegex, passwordRegex, phoneRegex} from '../../constants/Regexes';
+import {
+  emailRegex,
+  passwordRegex,
+  phoneRegex,
+  pincodeRegex,
+} from '../../constants/Regexes';
 import colors from '../../constants/Colors';
 import Input from '../../components/Input';
 import * as places from '../../assets/places.json';
@@ -82,7 +87,7 @@ const RegisterBbScreen = ({navigation}) => {
       isValid = false;
     }
 
-    if (fieldId === 'pincode' && val.trim().length !== 6) {
+    if (fieldId === 'pincode' && !pincodeRegex.test(String(val.trim()))) {
       isValid = false;
     }
 
@@ -116,7 +121,7 @@ const RegisterBbScreen = ({navigation}) => {
   const sumbitHandler = () => {
     if (regFormState.finalFormState) {
       console.log('Registration Successful');
-      dispatch(regUserUp({...regFormState.inputValues, userType: 3}));
+      dispatch(regUserUp({formData: regFormState.inputValues, userType: 3}));
       //* now we can either edirect to hone screen or show errors (if any).
     } else {
       Alert.alert(

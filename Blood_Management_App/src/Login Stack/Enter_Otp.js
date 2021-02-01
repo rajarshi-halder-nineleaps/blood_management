@@ -17,6 +17,7 @@ import Feather from 'react-native-vector-icons/Feather';
 import {updateFields, blurFields} from '../../redux/forgotpassword/actions';
 import {useDispatch, useSelector} from 'react-redux';
 import {postOTP, resetDoneState} from '../../redux/forgotpassword/actions';
+import {otpRegex} from '../../constants/Regexes';
 
 const Enterotp = ({navigation}) => {
   const dispatch = useDispatch();
@@ -35,7 +36,7 @@ const Enterotp = ({navigation}) => {
 
   const handleOTP = (val, fieldId) => {
     let isValid = true;
-    if (val.trim().length !== 6) {
+    if (!otpRegex.test(String(val.trim()))) {
       isValid = false;
     }
     dispatch(updateFields(val, fieldId, isValid));

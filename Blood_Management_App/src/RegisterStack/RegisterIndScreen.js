@@ -22,7 +22,12 @@ import colors from '../../constants/Colors';
 import Input from '../../components/Input';
 import {regUserUp} from '../../redux/auth/actions';
 import {useDispatch, useSelector} from 'react-redux';
-import {emailRegex, passwordRegex, phoneRegex} from '../../constants/Regexes';
+import {
+  emailRegex,
+  passwordRegex,
+  phoneRegex,
+  pincodeRegex,
+} from '../../constants/Regexes';
 import * as places from '../../assets/places.json';
 import {Picker} from '@react-native-picker/picker';
 import CheckBox from '@react-native-community/checkbox';
@@ -110,7 +115,7 @@ const RegisterBbScreen = ({navigation}) => {
       isValid = false;
     }
 
-    if (fieldId === 'pincode' && val.trim().length !== 6) {
+    if (fieldId === 'pincode' && !pincodeRegex.test(String(val.trim()))) {
       isValid = false;
     }
 
@@ -136,7 +141,7 @@ const RegisterBbScreen = ({navigation}) => {
 
   const sumbitHandler = () => {
     if (regFormState.finalFormState) {
-      dispatch(regUserUp({...regFormState.inputValues, userType: 1}));
+      dispatch(regUserUp({formData: regFormState.inputValues, userType: 1}));
       console.log('Registration Successful');
     } else {
       Alert.alert(
@@ -242,14 +247,14 @@ const RegisterBbScreen = ({navigation}) => {
                   blurListener('bloodgroup');
                 }}>
                 <Picker.Item label="Blood Group" value="0" />
-                <Picker.Item label="B+" value="b+" />
-                <Picker.Item label="A+" value="a+" />
-                <Picker.Item label="B-" value="b-" />
-                <Picker.Item label="A-" value="a-" />
-                <Picker.Item label="O+" value="o+" />
-                <Picker.Item label="O-" value="o-" />
-                <Picker.Item label="AB+" value="ab+" />
-                <Picker.Item label="AB-" value="ab-" />
+                <Picker.Item label="B+" value="B+" />
+                <Picker.Item label="A+" value="A+" />
+                <Picker.Item label="B-" value="B-" />
+                <Picker.Item label="A-" value="A-" />
+                <Picker.Item label="O+" value="O+" />
+                <Picker.Item label="O-" value="O-" />
+                <Picker.Item label="AB+" value="AB+" />
+                <Picker.Item label="AB-" value="AB-" />
               </Picker>
             </View>
             {!regFormState.inputValidity.bloodgroup &&

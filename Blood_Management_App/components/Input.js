@@ -1,19 +1,22 @@
-import React from "react";
-import { View, Text, TextInput, ScrollView, StyleSheet } from "react-native";
-import colors from "../constants/Colors";
+/* eslint-disable prettier/prettier */
+import React from 'react';
+import {View, Text, TextInput, StyleSheet} from 'react-native';
+import colors from '../constants/Colors';
 
 const Input = (props) => {
   return (
     <View>
       <View style={styles.inputView}>
         <TextInput
-        { ...props }
+          {...props}
           style={styles.formInput}
           placeholder={props.label}
           placeholderTextColor={colors.grayishblack}
         />
       </View>
-      {!props.inputIsValid && props.inputIsTouched && <Text style={styles.errorMsg}>{props.error}</Text>}
+      {!props.inputIsValid && props.inputIsTouched && (
+        <Text style={styles.errorMsg}>{props.error}</Text>
+      )}
     </View>
   );
 };
@@ -24,8 +27,10 @@ const styles = StyleSheet.create({
   },
   formInput: {
     paddingVertical: 15,
-    borderRadius: 100,
-    backgroundColor: colors.accent,
+    borderRadius: 0,
+    backgroundColor: 'transparent',
+    borderColor: colors.accent,
+    borderBottomWidth: 1,
     fontSize: 18,
     fontFamily: 'sans-serif-condensed',
     paddingHorizontal: 30,

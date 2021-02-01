@@ -1,0 +1,7 @@
+/* eslint-disable prettier/prettier */
+export const FETCH_DRIVES_REQ = 'FETCH_DRIVE_REQ';
+export const FETCH_DRIVES_SUCCESS = 'FETCH_DRIVE_SUCCESS';
+export const FETCH_DRIVES_FAILURE = 'FETCH_DRIVE_FAILURE';
+export const BLOOD_DONATED = 'BLOOD_DONATED';
+export const DONATION_VERIFICATION = 'DONATION_VERIFICATION';
+export const RESET_DONE_STATE = 'RESET_DONE_STATE';
