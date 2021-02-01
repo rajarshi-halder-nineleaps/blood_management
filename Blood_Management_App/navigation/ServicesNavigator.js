@@ -7,7 +7,9 @@ import Services from '../src/MainTabs/ServicesStack/Services';
 import MyDrives from '../src/MainTabs/ServicesStack/MyDrives';
 import DriveDonorList from '../src/MainTabs/ServicesStack/DriveDonorList';
 import UpcomingDrives from '../src/MainTabs/ServicesStack/UpcomingDrives';
+import UpcomingDrivesSearch from '../src/MainTabs/ServicesStack/UpcomingDrivesSearch';
 import DriveOrganizer from '../src/MainTabs/ServicesStack/DriveOrganizer';
+import Commitments from '../src/MainTabs/ServicesStack/Commitments';
 
 const ServicesNavigator = createStackNavigator();
 
@@ -30,6 +32,13 @@ const ServicesStackNavigator = () => {
         }}
       />
       <ServicesNavigator.Screen
+        name="upcomingDrivesSearch"
+        component={UpcomingDrivesSearch}
+        options={{
+          headerTitle: 'Upcoming donation drives',
+        }}
+      />
+      <ServicesNavigator.Screen
         name="upcomingDrives"
         component={UpcomingDrives}
         options={{
@@ -41,6 +50,13 @@ const ServicesStackNavigator = () => {
         component={DriveOrganizer}
         options={{
           headerTitle: 'Organize a drive',
+        }}
+      />
+      <ServicesNavigator.Screen
+        name="commitments"
+        component={Commitments}
+        options={{
+          headerTitle: 'My Commitments',
         }}
       />
     </ServicesNavigator.Navigator>

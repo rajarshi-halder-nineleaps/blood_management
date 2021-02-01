@@ -121,7 +121,7 @@ const RegisterBbScreen = ({navigation}) => {
   const sumbitHandler = () => {
     if (regFormState.finalFormState) {
       console.log('Registration Successful');
-      dispatch(regUserUp({...regFormState.inputValues, userType: 3}));
+      dispatch(regUserUp({formData: regFormState.inputValues, userType: 3}));
       //* now we can either edirect to hone screen or show errors (if any).
     } else {
       Alert.alert(

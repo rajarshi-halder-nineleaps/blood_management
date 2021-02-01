@@ -1,5 +1,6 @@
+/* eslint-disable prettier/prettier */
 import React from 'react';
-import {View, Text, TextInput, ScrollView, StyleSheet} from 'react-native';
+import {View, Text, TextInput, StyleSheet} from 'react-native';
 import colors from '../constants/Colors';
 
 const Input = (props) => {
@@ -26,8 +27,10 @@ const styles = StyleSheet.create({
   },
   formInput: {
     paddingVertical: 15,
-    borderRadius: 100,
-    backgroundColor: colors.accent,
+    borderRadius: 0,
+    backgroundColor: 'transparent',
+    borderColor: colors.accent,
+    borderBottomWidth: 1,
     fontSize: 18,
     fontFamily: 'sans-serif-condensed',
     paddingHorizontal: 30,

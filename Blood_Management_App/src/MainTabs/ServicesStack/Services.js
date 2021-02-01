@@ -11,6 +11,7 @@ import {useSelector, useDispatch} from 'react-redux';
 import TouchTabs from '../../../components/TouchTabs';
 import colors from '../../../constants/Colors';
 import {getDriveData, resetDoneState} from '../../../redux/myDrives/actions';
+import {fetchCommitments} from '../../../redux/commitments/actions';
 
 const Services = ({navigation}) => {
   const authState = useSelector((state) => state.authState);
@@ -33,6 +34,11 @@ const Services = ({navigation}) => {
   const myDrivesHandler = () => {
     dispatch(getDriveData(authState.userToken));
     navigation.navigate('myDrives');
+  };
+
+  const myCommitmentsHandler = () => {
+    dispatch(fetchCommitments(authState.userToken));
+    navigation.navigate('commitments');
   };
 
   return (
@@ -63,11 +69,12 @@ const Services = ({navigation}) => {
             <TouchTabs
               label="My Commitments"
               imgSrc="../assets/images/servicesScreen/findDonors.png"
+              touchHandler={() => myCommitmentsHandler()}
             />
             <TouchTabs
               label="Upcoming Drives"
               imgSrc="../assets/images/servicesScreen/findDonors.png"
-              touchHandler={() => navigation.navigate('upcomingDrives')}
+              touchHandler={() => navigation.navigate('upcomingDrivesSearch')}
             />
           </>
         ) : (

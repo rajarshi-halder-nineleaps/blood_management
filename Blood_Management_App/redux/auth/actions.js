@@ -74,9 +74,13 @@ export const regUserUp = (regData) => {
     dispatch(req());
     console.log('regsiter works');
     try {
+      if (regData.formData.dob) {
+        regData.formData.dob = regData.formData.dob.toLocaleDateString();
+      }
+      console.log('USER TYPE: ', regData.userType);
       const response = await axios.post(
         'http://192.168.43.89:5000/login',
-        regData,
+        regData.formData,
       );
       console.log('COMPLETE RESPONSE DATA: ', response.data);
       if (response.data.error) {
