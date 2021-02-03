@@ -7,10 +7,7 @@ const TouchTabs = (props) => {
   return (
     <View style={styles.touchboard}>
       <TouchableOpacity style={styles.touch} onPress={props.touchHandler}>
-        <Image
-          style={styles.image}
-          source={require('../assets/images/servicesScreen/findDonors.png')}
-        />
+        <Image {...props} style={styles.image} />
         <View style={styles.labelBoard}>
           <Text style={styles.label}>{props.label}</Text>
         </View>

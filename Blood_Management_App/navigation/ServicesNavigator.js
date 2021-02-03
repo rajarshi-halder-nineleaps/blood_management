@@ -10,6 +10,8 @@ import UpcomingDrives from '../src/MainTabs/ServicesStack/UpcomingDrives';
 import UpcomingDrivesSearch from '../src/MainTabs/ServicesStack/UpcomingDrivesSearch';
 import DriveOrganizer from '../src/MainTabs/ServicesStack/DriveOrganizer';
 import Commitments from '../src/MainTabs/ServicesStack/Commitments';
+import Inventory from '../src/MainTabs/ServicesStack/Inventory';
+import Sales from '../src/MainTabs/ServicesStack/Sales';
 
 const ServicesNavigator = createStackNavigator();
 
@@ -57,6 +59,22 @@ const ServicesStackNavigator = () => {
         component={Commitments}
         options={{
           headerTitle: 'My Commitments',
+        }}
+      />
+
+      <ServicesNavigator.Screen
+        name="inventory"
+        component={Inventory}
+        options={{
+          headerTitle: 'My Inventory',
+        }}
+      />
+
+      <ServicesNavigator.Screen
+        name="sales"
+        component={Sales}
+        options={{
+          headerTitle: 'My Sales',
         }}
       />
     </ServicesNavigator.Navigator>

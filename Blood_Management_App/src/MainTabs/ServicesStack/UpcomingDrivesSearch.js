@@ -6,6 +6,7 @@ import {
   StyleSheet,
   Image,
   TouchableOpacity,
+  ImageBackground,
   FlatList,
   Alert,
   ActivityIndicator,
@@ -32,7 +33,7 @@ const UpcomingDrivesSearch = ({navigation}) => {
       pincode: '',
     },
     inputValidity: {
-      selectedState: false,
+      selectedState: true, //?set to false if needed to make it mandatory
       selectedDistrict: true,
       pincode: true,
     },
@@ -85,11 +86,11 @@ const UpcomingDrivesSearch = ({navigation}) => {
         isValid = false;
       }
 
-      if (fieldId === 'selectedState' && val === 'Select state') {
-        isValid = false;
-        setdistEnb(false);
-        setselectedStateindex(0);
-      }
+      // if (fieldId === 'selectedState' && val === 'Select state') {
+      //   isValid = false;
+      //   setdistEnb(false);
+      //   setselectedStateindex(0);
+      // }
       const newInputValidity = {...prevState.inputValidity, [fieldId]: isValid};
 
       return {
@@ -110,9 +111,7 @@ const UpcomingDrivesSearch = ({navigation}) => {
               style={styles.image}
               resizeMode="center"
             />
-            <Text style={{color: colors.primary}}>
-              Please input your desired search filters below
-            </Text>
+            <Text style={{color: colors.primary}}>All fields are optional</Text>
           </View>
           <View style={styles.pickerView}>
             <Picker
@@ -164,8 +163,12 @@ const UpcomingDrivesSearch = ({navigation}) => {
             <TouchableOpacity
               style={styles.finderTouch}
               onPress={() => searchSubmitHandler()}>
-              <Feather name="search" color={colors.additional2} size={20} />
-              <Text style={styles.finderTouchText}>Find donation drives</Text>
+              <ImageBackground
+                style={styles.imgBtnBkg}
+                source={require('../../../assets/images/invBkg.png')}>
+                <Feather name="search" color={colors.additional2} size={20} />
+                <Text style={styles.finderTouchText}>Find donation drives</Text>
+              </ImageBackground>
             </TouchableOpacity>
           </View>
         </View>
@@ -215,18 +218,23 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   finderTouch: {
-    flexDirection: 'row',
     backgroundColor: colors.primary,
-    alignItems: 'center',
-    justifyContent: 'space-around',
-    padding: 10,
     elevation: 5,
     borderRadius: 100,
+    overflow: 'hidden',
     width: 200,
     height: 50,
   },
+  imgBtnBkg: {
+    width: '100%',
+    height: '100%',
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
   finderTouchText: {
     color: colors.additional2,
+    paddingLeft: 10,
   },
   errorMsg: {
     color: colors.primary,

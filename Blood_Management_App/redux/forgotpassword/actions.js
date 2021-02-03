@@ -103,7 +103,8 @@ export const postResetPassword = (password) => {
   return async (dispatch) => {
     dispatch(forgotReq());
     try {
-      const response = await axios.post('http://API URI HERE:5000/resetpwd', {
+      //*axios put request
+      const response = await axios.put('http://API URI HERE:5000/resetpwd', {
         password: password,
       });
       if (response.data.error) {

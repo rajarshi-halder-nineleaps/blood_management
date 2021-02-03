@@ -56,9 +56,13 @@ export const organizeDriveConfirm = (userToken, newDriveData) => {
   return async (dispatch) => {
     try {
       dispatch(organizeReq());
-      const response = await axios.post('API URI', newDriveData, {
-        headers: {Authorization: userToken},
-      });
+      const response = await axios.post(
+        'http://192.168.43.89:5000/orgdrive',
+        newDriveData,
+        {
+          headers: {Authorization: userToken},
+        },
+      );
 
       if (response.data.success) {
         console.log('response is success!');

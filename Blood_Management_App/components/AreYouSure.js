@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import React, {useState} from 'react';
 import {
   Alert,
@@ -28,9 +29,7 @@ const AreYouSure = (props) => {
               style={styles.image}
               source={require('../assets/logonobk.png')}
             />
-            <Text style={styles.modalText}>
-              Are you sure you wish to conduct this drive?
-            </Text>
+            <Text style={styles.modalText}>{props.message}</Text>
 
             <View style={styles.touchBoard}>
               <TouchableHighlight
@@ -38,7 +37,10 @@ const AreYouSure = (props) => {
                 onPress={() => {
                   props.visibleStateChanger(!props.visibleState);
                   dispatch(
-                    props.dispatchable(authState.userToken, props.dispatchData),
+                    props.dispatchable(
+                      authState.userToken,
+                      props.dispatchData ? props.dispatchData : null,
+                    ),
                   );
                 }}>
                 <Text style={styles.textStyle}>Yes</Text>

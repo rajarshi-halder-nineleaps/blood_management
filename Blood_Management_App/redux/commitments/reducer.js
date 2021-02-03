@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import {
   COMMITMENTS_REQ,
   COMMITMENTS_SUCCESS,

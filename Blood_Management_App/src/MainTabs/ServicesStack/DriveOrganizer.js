@@ -124,6 +124,7 @@ const DriveOrganizer = ({navigation}) => {
           visibleStateChanger={setRusure}
           dispatchable={organizeDriveConfirm}
           dispatchData={driveOrganizerState.inputValues}
+          message="Are you sure you wish to conduct this drive?"
         />
         {/* //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// */}
         {/* todo start data start time end date end time */}

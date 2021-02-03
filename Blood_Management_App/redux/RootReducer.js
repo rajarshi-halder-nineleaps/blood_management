@@ -11,6 +11,10 @@ import myDrivesReducer from './myDrives/reducer';
 import upcomingDrivesReducer from './upcomingDrives/reducer';
 import driveOrganizerReducer from './driveOrganizer/reducer';
 import commitmentsReducer from './commitments/reducer';
+import inventoryReducer from './inventory/reducer';
+import salesReducer from './sales/reducer';
+import aboutReducer from './about/reducer';
+import profileReducer from './profile/reducer';
 
 const rootReducer = combineReducers({
   loginFormState: loginReducer,
@@ -22,6 +26,10 @@ const rootReducer = combineReducers({
   upcomingDrivesState: upcomingDrivesReducer,
   driveOrganizerState: driveOrganizerReducer,
   commitmentsState: commitmentsReducer,
+  inventoryState: inventoryReducer,
+  salesState: salesReducer,
+  aboutState: aboutReducer,
+  profileState: profileReducer,
 });
 
 export default rootReducer;
