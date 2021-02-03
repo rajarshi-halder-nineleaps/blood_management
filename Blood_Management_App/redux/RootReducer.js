@@ -15,6 +15,8 @@ import inventoryReducer from './inventory/reducer';
 import salesReducer from './sales/reducer';
 import aboutReducer from './about/reducer';
 import profileReducer from './profile/reducer';
+import finddonorReducer from './finddonors/reducer';
+import buybloodReducer from './buyblood/reducer';
 
 const rootReducer = combineReducers({
   loginFormState: loginReducer,
@@ -30,6 +32,8 @@ const rootReducer = combineReducers({
   salesState: salesReducer,
   aboutState: aboutReducer,
   profileState: profileReducer,
+  finddonorFormState: finddonorReducer,
+  buybloodFormState: buybloodReducer,
 });
 
 export default rootReducer;
