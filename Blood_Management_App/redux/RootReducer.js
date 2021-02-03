@@ -11,8 +11,12 @@ import myDrivesReducer from './myDrives/reducer';
 import upcomingDrivesReducer from './upcomingDrives/reducer';
 import driveOrganizerReducer from './driveOrganizer/reducer';
 import commitmentsReducer from './commitments/reducer';
-import finddonorReducer from './finddonors/reducer'
-import buybloodReducer from './buyblood/reducer'
+import inventoryReducer from './inventory/reducer';
+import salesReducer from './sales/reducer';
+import aboutReducer from './about/reducer';
+import profileReducer from './profile/reducer';
+import finddonorReducer from './finddonors/reducer';
+import buybloodReducer from './buyblood/reducer';
 
 const rootReducer = combineReducers({
   loginFormState: loginReducer,
@@ -24,9 +28,12 @@ const rootReducer = combineReducers({
   upcomingDrivesState: upcomingDrivesReducer,
   driveOrganizerState: driveOrganizerReducer,
   commitmentsState: commitmentsReducer,
-  finddonorFormState:finddonorReducer,
-  buybloodFormState:buybloodReducer
-
+  inventoryState: inventoryReducer,
+  salesState: salesReducer,
+  aboutState: aboutReducer,
+  profileState: profileReducer,
+  finddonorFormState: finddonorReducer,
+  buybloodFormState: buybloodReducer,
 });
 
 export default rootReducer;

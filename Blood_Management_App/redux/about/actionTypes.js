@@ -1,0 +1,6 @@
+export const UPDATE_FIELDS = 'UPDATE_FIELDS';
+export const BLUR_FIELDS = 'BLUR_FIELDS';
+export const CONTACT_REQ = 'CONTACT_REQ';
+export const CONTACT_SUCCESS = 'CONTACT_SUCCESS';
+export const CONTACT_FAILURE = 'CONTACT_FAILURE';
+export const STATE_CLEANUP = 'STATE_CLEANUP';

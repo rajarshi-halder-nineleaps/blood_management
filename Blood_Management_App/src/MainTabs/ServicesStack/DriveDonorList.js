@@ -7,6 +7,7 @@ import {
   Image,
   StyleSheet,
   TouchableOpacity,
+  ImageBackground,
   ActivityIndicator,
 } from 'react-native';
 import {useSelector, useDispatch} from 'react-redux';
@@ -50,17 +51,30 @@ const DriveDonorList = ({route, navigation}) => {
             <Text style={styles.label}>
               Blood group :<Text style={styles.content}>{item.bloodGroup}</Text>
             </Text>
+
             {!item.hasGivenBlood ? (
               <TouchableOpacity
                 style={styles.completedDonationTouch}
                 onPress={() => bloodDonationHandler(driveId, item.donorId)}>
-                <Text style={styles.completedDonationText}>Donated blood</Text>
+                <ImageBackground
+                  style={styles.imgBtnBkg}
+                  source={require('../../../assets/images/invBkg.png')}>
+                  <View style={styles.completedDonationTouchTextView}>
+                    <Text style={styles.completedDonationText}>
+                      Donated blood
+                    </Text>
+                  </View>
+                </ImageBackground>
               </TouchableOpacity>
             ) : (
               <View
                 style={styles.completedDonationTouchDonated}
                 onPress={() => bloodDonationHandler(driveId, item.donorId)}>
-                <Feather name="check-square" color={colors.additional2} size={20} />
+                <Feather
+                  name="check-square"
+                  color={colors.additional2}
+                  size={20}
+                />
               </View>
             )}
           </View>
@@ -143,6 +157,11 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     elevation: 5,
   },
+  imgBtnBkg: {
+    width: '100%',
+    resizeMode: 'cover',
+    justifyContent: 'center',
+  },
   label: {
     padding: 2,
     color: colors.primary,
@@ -165,12 +184,14 @@ const styles = StyleSheet.create({
     fontFamily: 'sans-serif-light',
   },
   completedDonationTouch: {
-    backgroundColor: colors.primary,
     borderRadius: 5,
-    padding: 10,
     alignItems: 'center',
     marginTop: 10,
     elevation: 5,
+    overflow: 'hidden',
+  },
+  completedDonationTouchTextView: {
+    padding: 10,
   },
   completedDonationTouchDisabled: {
     backgroundColor: colors.accent,

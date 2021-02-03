@@ -12,6 +12,8 @@ import TouchTabs from '../../../components/TouchTabs';
 import colors from '../../../constants/Colors';
 import {getDriveData, resetDoneState} from '../../../redux/myDrives/actions';
 import {fetchCommitments} from '../../../redux/commitments/actions';
+import {getInventory} from '../../../redux/inventory/actions';
+import {fetchSalesData} from '../../../redux/sales/actions';
 
 const Services = ({navigation}) => {
   const authState = useSelector((state) => state.authState);
@@ -41,12 +43,27 @@ const Services = ({navigation}) => {
     navigation.navigate('commitments');
   };
 
+  const inventoryHandler = () => {
+    dispatch(getInventory(authState.userToken));
+    navigation.navigate('inventory');
+  };
+
+  const salesHandler = () => {
+    dispatch(fetchSalesData(authState.userToken));
+    navigation.navigate('sales');
+  };
+
   return (
     <View style={styles.container}>
       <ScrollView style={styles.scroll}>
         <View style={styles.row}>
           <TouchTabs
             label="Buy Blood"
+            source={require('../../../assets/images/servicesScreen/findDonors.png')}
+          />
+          <TouchTabs
+            label="Find Donors"
+            source={require('../../../assets/images/servicesScreen/findDonors.png')}
             imgSrc="../assets/images/servicesScreen/findDonors.png"
             touchHandler={() => navigation.navigate('Buy Blood')}
           />
@@ -58,24 +75,24 @@ const Services = ({navigation}) => {
         </View>
         <View style={styles.row}>
           <TouchTabs
-            label="Active Donor Request"
-            imgSrc="../assets/images/servicesScreen/findDonors.png"
+            label="Donor Requests"
+            source={require('../../../assets/images/servicesScreen/findDonors.png')}
           />
           <TouchTabs
             label="My Purchases"
-            imgSrc="../assets/images/servicesScreen/findDonors.png"
+            source={require('../../../assets/images/servicesScreen/findDonors.png')}
           />
         </View>
-        {userType === 0 ? (
+        {userType === 1 ? (
           <>
             <TouchTabs
               label="My Commitments"
-              imgSrc="../assets/images/servicesScreen/findDonors.png"
+              source={require('../../../assets/images/servicesScreen/findDonors.png')}
               touchHandler={() => myCommitmentsHandler()}
             />
             <TouchTabs
               label="Upcoming Drives"
-              imgSrc="../assets/images/servicesScreen/findDonors.png"
+              source={require('../../../assets/images/servicesScreen/findDonors.png')}
               touchHandler={() => navigation.navigate('upcomingDrivesSearch')}
             />
           </>
@@ -83,19 +100,30 @@ const Services = ({navigation}) => {
           <>
             <TouchTabs
               label="Organize a Drive"
-              imgSrc="../assets/images/servicesScreen/findDonors.png"
+              source={require('../../../assets/images/servicesScreen/findDonors.png')}
               touchHandler={() => navigation.navigate('driveOrganizer')}
             />
             <TouchTabs
               label="My Donation Drives"
+              source={require('../../../assets/images/servicesScreen/findDonors.png')}
               touchHandler={() => myDrivesHandler()}
             />
             <TouchTabs
               label="My Inventory"
-              imgSrc="../assets/images/servicesScreen/findDonors.png"
+              source={require('../../../assets/images/servicesScreen/inventory.png')}
+              touchHandler={() => {
+                inventoryHandler();
+              }}
             />
           </>
         )}
+        {userType === 3 ? (
+          <TouchTabs
+            label="My Sales"
+            source={require('../../../assets/images/servicesScreen/sales.png')}
+            touchHandler={() => salesHandler()}
+          />
+        ) : null}
       </ScrollView>
     </View>
   );

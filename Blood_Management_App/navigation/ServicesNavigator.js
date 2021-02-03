@@ -10,17 +10,19 @@ import UpcomingDrives from '../src/MainTabs/ServicesStack/UpcomingDrives';
 import UpcomingDrivesSearch from '../src/MainTabs/ServicesStack/UpcomingDrivesSearch';
 import DriveOrganizer from '../src/MainTabs/ServicesStack/DriveOrganizer';
 import Commitments from '../src/MainTabs/ServicesStack/Commitments';
-import FindDonors from '../src/Service Stack/FindDonors/FindDonors'
+import Inventory from '../src/MainTabs/ServicesStack/Inventory';
+import Sales from '../src/MainTabs/ServicesStack/Sales';
+import FindDonors from '../src/Service Stack/FindDonors/FindDonors';
 import DonorList from '../src/Service Stack/FindDonors/DonorList';
-import BuyBlood from '../src/Service Stack/BuyBlood/BuyBlood'
-import BuyBloodList from '../src/Service Stack/BuyBlood/BuyBloodList'
-import ConfirmBuy from '../src/Service Stack/BuyBlood/ConfirmBuy'
+import BuyBlood from '../src/Service Stack/BuyBlood/BuyBlood';
+import BuyBloodList from '../src/Service Stack/BuyBlood/BuyBloodList';
+import ConfirmBuy from '../src/Service Stack/BuyBlood/ConfirmBuy';
 
 const ServicesNavigator = createStackNavigator();
 
 const ServicesStackNavigator = () => {
   return (
-    <ServicesNavigator.Navigator headerMode='float'>
+    <ServicesNavigator.Navigator headerMode="float">
       <ServicesNavigator.Screen name="Services" component={Services} />
       <ServicesNavigator.Screen
         name="myDrives"
@@ -64,10 +66,29 @@ const ServicesStackNavigator = () => {
           headerTitle: 'My Commitments',
         }}
       />
+
+      <ServicesNavigator.Screen
+        name="inventory"
+        component={Inventory}
+        options={{
+          headerTitle: 'My Inventory',
+        }}
+      />
+
+      <ServicesNavigator.Screen
+        name="sales"
+        component={Sales}
+        options={{
+          headerTitle: 'My Sales',
+        }}
+      />
       <ServicesNavigator.Screen name="Find Donors" component={FindDonors} />
       <ServicesNavigator.Screen name="Donor List" component={DonorList} />
       <ServicesNavigator.Screen name="Buy Blood" component={BuyBlood} />
-      <ServicesNavigator.Screen name="Buy Blood List" component={BuyBloodList} />
+      <ServicesNavigator.Screen
+        name="Buy Blood List"
+        component={BuyBloodList}
+      />
       <ServicesNavigator.Screen name="Confirm Buy" component={ConfirmBuy} />
     </ServicesNavigator.Navigator>
   );

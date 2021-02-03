@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import {UPDATE_FIELDS, BLUR_FIELDS, STATE_CLEANUP} from './actionTypes';
 
 export const updateFields = (val, fieldId, isValid) => ({

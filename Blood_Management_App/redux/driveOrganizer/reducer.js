@@ -87,6 +87,7 @@ const driveOrganizerReducer = (state = initialState, action) => {
       return {...state, loading: true};
     }
     case ORGANIZE_SUCCESS: {
+      Alert.alert('Success', 'Drive organized successfully');
       return {...state, loading: false, driveId: action.driveId, error: ''};
     }
     case ORGANIZE_FAILURE: {

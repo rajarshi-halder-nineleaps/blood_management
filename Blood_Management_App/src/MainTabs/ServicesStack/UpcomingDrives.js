@@ -63,7 +63,7 @@ const UpcomingDrives = ({navigation}) => {
             <FlatList
               style={styles.scroll}
               data={upcomingDrivesState.upcomingDrivesList}
-              renderItem={(item) => (
+              renderItem={({item}) => (
                 <UpcomingDrivesCard
                   item={item}
                   registerUserForDrive={registerUserForDrive}
@@ -83,6 +83,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: colors.additional2,
+    paddingVertical: 20,
   },
   indicatorView: {
     flex: 1,
@@ -108,6 +109,9 @@ const styles = StyleSheet.create({
   emptyInfo: {
     color: colors.primary,
     fontSize: 10,
+  },
+  scroll: {
+    paddingHorizontal: 10,
   },
 });
 

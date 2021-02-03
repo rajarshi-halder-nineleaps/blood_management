@@ -1,14 +1,13 @@
+/* eslint-disable prettier/prettier */
 import React from 'react';
 import Feather from 'react-native-vector-icons/Feather';
 import colors from '../../constants/Colors';
-import {useState, useContext, useEffect} from 'react';
+import {useEffect} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import {emailRegex, passwordRegex} from '../../constants/Regexes';
 import {TextInput} from 'react-native-gesture-handler';
 //* setting up the actions for auth.
-import {
-  logUserIn,
-} from '../../redux/auth/actions';
+import {logUserIn} from '../../redux/auth/actions';
 import {
   View,
   Text,

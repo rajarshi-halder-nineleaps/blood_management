@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import {Alert} from 'react-native';
 import {
   DRIVE_FIND_REQ,

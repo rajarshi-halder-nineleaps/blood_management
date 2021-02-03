@@ -7,7 +7,8 @@ import Feather from 'react-native-vector-icons/Feather';
 import Home from '../src/MainTabs/Individual/Home';
 import About from '../src/MainTabs/About';
 import Notification from '../src/MainTabs/Individual/Notification';
-import Profile from '../src/MainTabs/Individual/Profile';
+import Profile from '../src/MainTabs/ProfileStack/Profile';
+import ProfileStackNavigator from './ProfileNavigator';
 import ServicesStackNavigator from './ServicesNavigator';
 
 const Tab = createMaterialBottomTabNavigator();
@@ -36,7 +37,7 @@ const MainNavigator = () => {
       />
       <Tab.Screen
         name=" profile "
-        component={Profile}
+        component={ProfileStackNavigator}
         options={{
           tabBarLabel: 'Profile',
           tabBarIcon: ({color}) => (
@@ -70,7 +71,7 @@ const MainNavigator = () => {
         options={{
           tabBarLabel: 'About',
           tabBarIcon: ({color}) => (
-            <Feather name="alert-circle" color={color} size={20} />
+            <Feather name="info" color={color} size={20} />
           ),
         }}
       />
