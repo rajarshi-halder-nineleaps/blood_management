@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import {
     View,
     Text,
@@ -7,86 +7,88 @@ import {
     Modal,
     TouchableHighlight
 } from 'react-native'
+import { FlatList } from 'react-native-gesture-handler';
 import {useDispatch, useSelector} from 'react-redux';
 import colors from '../../../constants/Colors'
+import {
+  getmypurchasesList
+} from "../../../redux/mypurchases/actions"
 import Feather from 'react-native-vector-icons/Feather';
 
-const ConfirmBuy = ({route, navigation}) => {
+const Item = ({ item, onPress, style }) => (
+    <TouchableOpacity onPress={onPress} style={[styles.item, style]}>
+     <View style={{flexDirection:'row'}}>
+        <Text style={[styles.title,{fontWeight:'bold'}]}>Name:</Text>
+        <Text style={styles.title}>  {item.name}</Text>
+      </View>
+      <View style={{flexDirection:'row'}}>
+        <Text style={[styles.title,{fontWeight:'bold'}]}>Contact No:</Text>
+        <Text style={styles.title}>  {item.contact}</Text>
+      </View>
+      <View style={{flexDirection:'row'}}>
+        <Text style={[styles.title,{fontWeight:'bold'}]}>Date of Purchase:</Text>
+        <Text style={styles.title}>  {item.dop}</Text>
+      </View>
+      <View style={{flexDirection:'row'}}>
+        <Text style={[styles.title,{fontWeight:'bold'}]}>Blood Group:</Text>
+        <Text style={styles.title}>  {item.blood_group}</Text>
+      </View>
+      <View style={{flexDirection:'row'}}>
+        <Text style={[styles.title,{fontWeight:'bold'}]}>Component:</Text>
+        <Text style={styles.title}>  {item.component}</Text>
+      </View>
+      <View style={{flexDirection:'row'}}>
+        <Text style={[styles.title,{fontWeight:'bold'}]}>Units:</Text>
+        <Text style={styles.title}>  {item.units}</Text>
+      </View>
+      <View style={{flexDirection:'row'}}>
+        <Text style={[styles.title,{fontWeight:'bold'}]}>Total:</Text>
+        <Text style={styles.title}> Rs {item.total}</Text>
+      </View>
+    </TouchableOpacity>
+  );
 
-    const { itemname } = route.params;
-    const buybloodFormState = useSelector((state) => state.buybloodFormState);
+const MyPurchases = ({navigation}) => {
+
+    const dispatch = useDispatch();
+    
+    const mypurchasesFormState = useSelector((state) => state.mypurchasesFormState);
     const [modalVisible, setModalVisible] = useState(false);
+
+
+    useEffect(() => {
+        dispatch(getmypurchasesList());
+      }, [dispatch]);
+
+      const renderItem = ({ item }) => {
+        const backgroundColor =  "white";
+    
+        return (
+          <Item
+            item={item}
+            
+            style={{ backgroundColor }}
+          />
+        );
+      };
 
     return(
         <View style={styles.container}>
-
-        <Modal
-        animationType="slide"
-        transparent={true}
-        visible={modalVisible}
-        onRequestClose={() => {
-          Alert.alert("Modal has been closed.");
-        }}
-      >
-        <View style={styles.centeredView}>
-          <View style={styles.modalView}>
-            <Text style={styles.modalText}>Purchase Confirmed!</Text>
-            <Text style={styles.modalTextmore}> Check "My Purchases" for more info</Text>
-
-            <TouchableHighlight
-              style={{ ...styles.openButton, backgroundColor: colors.primary }}
-              onPress={() => {
-                setModalVisible(!modalVisible);
-                navigation.navigate("Services")
-              }}
-            >
-              <Text style={styles.textStyle}>OK!</Text>
-            </TouchableHighlight>
-          </View>
-        </View>
-      </Modal>
-      <View style={styles.header}>
+          <View style={styles.header}>
       <TouchableOpacity onPress={() => navigation.goBack()}>
               <Feather name="chevron-left" color="white" size={30} />
       </TouchableOpacity>
-      <Text  style={styles.headertitle}>Confirm Buy</Text>
-      <Text style={styles.header2}>{itemname}</Text>
+      <Text  style={styles.headertitle}>My Purchases</Text>
+      
       </View>
+            <FlatList
+        data={mypurchasesFormState.list}
+        renderItem={renderItem}
+        keyExtractor={(item) => item.id}
+        
+      />
             
-            
-            
-            <View style={styles.infobox}>
-            <View style ={styles.inforow}>
-                <Text style={styles.texts}>Blood Group :</Text>
-                <Text style={styles.text}>{buybloodFormState.inputValues.blood_group}</Text>
-            </View>
-
-            
-            <View style ={styles.inforow}>
-                <Text style={styles.texts}>Components :</Text>
-                <Text style={styles.text}>{buybloodFormState.inputValues.blood_component}</Text>
-            </View>
-
-            <View style ={styles.inforow}>
-                <Text style={styles.texts}>Units Required :</Text>
-                <Text style={styles.text}>{buybloodFormState.inputValues.units}</Text>
-            </View>
-            
-            </View>
-            <View style={{justifyContent:'center', alignItems:'center', marginTop:30}}>
-            <View style ={styles.inforow}>
-                <Text style={styles.texts}>Total Amount:</Text>
-            </View>
-
-            <View style ={styles.inforow}>
-                <Text style={styles.texts}>Rs 10,000</Text>
-            </View>
-            <TouchableOpacity onPress={()=> setModalVisible(true)} style={styles.invite}>
-            <Text style={styles.invitebutton}>
-                Confirm Buy
-            </Text>
-            </TouchableOpacity>
-            </View>
+           
             
         </View>
     );
@@ -99,18 +101,19 @@ const styles= StyleSheet.create({
         marginVertical: 8,
         paddingHorizontal:30,
         marginHorizontal:20,
-        borderRadius:20
+        borderRadius:20,
+        elevation:10,
+        paddingHorizontal:50
       },
       title: {
-        fontSize: 18,
+        fontSize: 20,
         
       },
       header:{
         marginBottom:20,
         backgroundColor:colors.primary,
         paddingHorizontal:30,
-        paddingTop:10,
-        
+        paddingTop:10,    
     },
     headertitle:{
       fontSize:50,
@@ -118,7 +121,8 @@ const styles= StyleSheet.create({
         backgroundColor:colors.primary,
         fontFamily: 'sans-serif-condensed',      
         paddingTop:10,
-        color:'white'
+        color:'white',
+        paddingBottom:20
     },
     header2:{
       fontSize:50,
@@ -126,9 +130,7 @@ const styles= StyleSheet.create({
       marginBottom:20,
       backgroundColor:colors.primary,
       fontFamily: 'sans-serif-condensed',      
-      color:'white'
-        
-        
+      color:'white'  
     },
     container:{
         flex:1
@@ -208,4 +210,4 @@ const styles= StyleSheet.create({
       }
 })
 
-export default ConfirmBuy
+export default MyPurchases

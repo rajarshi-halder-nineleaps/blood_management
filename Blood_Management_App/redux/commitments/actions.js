@@ -25,7 +25,7 @@ export const fetchCommitments = (userToken) => {
       console.log('Fetching list of commitments.');
       dispatch(commitmentsReq());
       const response = await axios.get(
-        'http://192.168.43.89:5000/commitments',
+        'http://10.0.2.2:8000/commitments',
         {
           headers: {Authorization: userToken},
         },
