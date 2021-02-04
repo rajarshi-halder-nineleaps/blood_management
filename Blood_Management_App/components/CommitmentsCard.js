@@ -11,98 +11,149 @@ import {
   ImageBackground,
 } from 'react-native';
 import colors from '../constants/Colors';
+import {
+  Collapse,
+  CollapseHeader,
+  CollapseBody,
+} from 'accordion-collapse-react-native';
 
-//TODO conditionally render the drive dates field
 const CommitmentsCard = ({item}) => {
   return (
-    <View style={styles.touchboard}>
-      <ImageBackground
-        style={styles.imgBkg}
-        source={require('../assets/images/invBkg.png')}>
-        <View style={styles.touch}>
-          <View style={styles.header}>
+    <Collapse>
+      <CollapseHeader style={styles.touchboard}>
+        <View style={styles.typeView}>
+          <Text style={styles.headerContent}>{item.commitmentType}</Text>
+        </View>
+        <View style={styles.headerDetailsView}>
+          <View style={styles.nameView}>
+            <Text style={styles.nameText}>{item.recipientName}</Text>
+          </View>
+          <View style={styles.miniAddressView}>
+            <Text style={styles.miniAddressContent}>
+              {item.district + ', '}
+            </Text>
+            <Text style={styles.miniAddressContent}>{item.state}</Text>
+          </View>
+        </View>
+        <View style={styles.headerIndicatorView}>
+          {item.compeleted ? (
+            <View style={styles.yesnoView}>
+              <Text style={styles.yes}>DONE</Text>
+            </View>
+          ) : (
+            <View style={styles.yesnoView}>
+              <Text style={styles.no}>TODO</Text>
+            </View>
+          )}
+        </View>
+      </CollapseHeader>
+      <CollapseBody style={styles.collBody}>
+        <View style={styles.bodyHeader}>
+          {item.driveId ? (
+            <Text style={styles.bodyLabel}>
+              Drive ID : {'  '}
+              <Text style={styles.bodyContent}>{item.driveId}</Text>
+            </Text>
+          ) : (
+            <Text style={styles.bodyLabel}>
+              DonationId ID : {'  '}
+              <Text style={styles.bodyContent}>{item.donationId}</Text>
+            </Text>
+          )}
+        </View>
+
+        <View style={styles.detailsBoard}>
+          <View style={styles.contentView}>
             <Text style={styles.label}>
-              <View style={styles.typeView}>
-                <Text style={styles.headerContent}>{item.commitmentType}</Text>
-              </View>
+              Commitment made on: {'  '}
+              <Text style={styles.content}>
+                {item.commitmentDate} at {item.commitmentTime}
+              </Text>
             </Text>
 
-            <View style={styles.commitmentInfo}>
-              {item.driveId ? (
-                <Text style={styles.label}>
-                  Drive ID : {'  '}
-                  <Text style={styles.content}>{item.driveId}</Text>
-                </Text>
-              ) : (
-                <Text style={styles.label}>
-                  DonationId ID : {'  '}
-                  <Text style={styles.content}>{item.donationId}</Text>
-                </Text>
-              )}
-
-              <Text style={styles.label}>
-                Commitment made on: {'  '}
-                <Text style={styles.content}>
-                  {item.commitmentDate} at {item.commitmentTime}
-                </Text>
-              </Text>
-            </View>
-          </View>
-
-          <View style={styles.contentBoard}>
             <View style={styles.addressView}>
-              <Text style={styles.addressLabel}>Address:</Text>
+              <Text style={styles.addressLabel}>Drive details:</Text>
               <View style={styles.addressContentView}>
-                <Text style={styles.addressContent}>{item.address}</Text>
-                <Text style={styles.addressContent}>{item.district}</Text>
-                <View style={styles.statePincodeView}>
-                  <Text style={styles.addressContent}>{item.state + ' '}</Text>
-                  <Text style={styles.addressContent}>({item.pincode})</Text>
+                <View style={styles.addressInsideView}>
+                  <Text style={styles.addressInsideLabel}>Address: </Text>
+                  <View style={styles.addressRightView}>
+                    <Text style={styles.addressContent}>
+                      {item.address}, {item.district}, {'\n'}
+                      {item.state} [{item.pincode}]
+                    </Text>
+                  </View>
                 </View>
               </View>
             </View>
-            <View style={styles.detailsView}>
-              <Text style={styles.addressLabel}>Details: </Text>
-              <View style={styles.addressContentView}>
-                <Text style={styles.recipientLabel}>
-                  Recipient name:{' '}
-                  <Text style={styles.recipientContent}>
+          </View>
+          <View style={styles.detailsView}>
+            <View style={styles.addressContentView}>
+              <View style={styles.addressInsideView}>
+                <Text style={styles.addressInsideLabel}>Recipient name:</Text>
+                <View style={styles.addressRightView}>
+                  <Text style={styles.addressContent}>
                     {item.recipientName}
                   </Text>
+                </View>
+              </View>
+              <View style={styles.addressInsideView}>
+                <Text style={styles.addressInsideLabel}>Recipient Email:</Text>
+                <View style={styles.addressRightView}>
+                  <Text style={styles.addressContent}>
+                    {item.recipientEmail}
+                  </Text>
+                </View>
+              </View>
+
+              <View style={styles.addressInsideView}>
+                <Text style={styles.addressInsideLabel}>
+                  Recipient Contact:
                 </Text>
-                <Text style={styles.recipientLabel}>
-                  Recipient contact:{' '}
-                  <Text style={styles.recipientContent}>
+                <View style={styles.addressRightView}>
+                  <Text style={styles.addressContent}>
                     {item.recipientContact}
                   </Text>
-                </Text>
-                {item.driveId ? (
-                  <Text style={styles.recipientLabel}>
-                    Drive dates:{' '}
-                    <Text style={styles.recipientContent}>
-                      {item.driveDates}
-                    </Text>
-                  </Text>
-                ) : null}
+                </View>
               </View>
+
+              {item.driveId ? (
+                <>
+                  <View style={styles.addressInsideView}>
+                    <Text style={styles.addressInsideLabel}>From:</Text>
+                    <View style={styles.addressRightView}>
+                      <Text style={styles.addressContent}>
+                        {item.startDate} at
+                        {'  ' + item.startTime}
+                      </Text>
+                    </View>
+                  </View>
+                  <View style={styles.addressInsideView}>
+                    <Text style={styles.addressInsideLabel}>To:</Text>
+                    <View style={styles.addressRightView}>
+                      <Text style={styles.addressContent}>
+                        {item.endDate} at
+                        {'  ' + item.endTime}
+                      </Text>
+                    </View>
+                  </View>
+                </>
+              ) : null}
             </View>
           </View>
-
-          <View style={styles.footer}>
-            <Text style={styles.label}>Compeleted: {'  '}</Text>
+          <View style={styles.headerIndicatorView}>
             {item.compeleted ? (
-              <View style={styles.yes}>
-                <Text style={styles.yesnocontent}>YES</Text>
+              <View style={styles.yesnoView}>
+                <Text style={styles.yes}>COMPLETED</Text>
               </View>
             ) : (
-              <View style={styles.no}>
-                <Text style={styles.content}>NO</Text>
+              <View style={styles.yesnoView}>
+                <Text style={styles.no}>INCOMPLETE</Text>
               </View>
             )}
           </View>
         </View>
-      </ImageBackground>
-    </View>
+      </CollapseBody>
+    </Collapse>
   );
 };
 
@@ -110,11 +161,15 @@ const styles = StyleSheet.create({
   touchboard: {
     flex: 1,
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'flex-start',
     margin: 10,
-    elevation: 5,
-    borderRadius: 10,
+    borderRadius: 5,
+    borderColor: colors.accent,
+    borderWidth: 0.5,
     overflow: 'hidden',
+    backgroundColor: colors.additional2,
+    flexDirection: 'row',
+    padding: 10,
   },
   touch: {
     flex: 1,
@@ -122,87 +177,118 @@ const styles = StyleSheet.create({
     backgroundColor: 'transparent',
     overflow: 'hidden',
   },
-  imgBkg: {
-    flex: 1,
-    resizeMode: 'cover',
-    justifyContent: 'center',
-    width: '100%',
-    height: '100%',
-    overflow: 'hidden',
-  },
-  header: {
-    padding: 20,
-  },
-  commitmentInfo: {
-    marginTop: 20,
-  },
-  label: {
-    padding: 2,
-    color: colors.additional2,
-    fontSize: 14,
-    fontWeight: 'bold',
-    fontFamily: 'sans-serif-light',
-  },
-  contentBoard: {
-    backgroundColor: colors.additional2,
-    paddingHorizontal: 20,
-    borderRadius: 10,
-    elevation: 5,
-  },
-  content: {
-    color: colors.additional2,
-  },
   typeView: {
-    backgroundColor: colors.additional2,
+    backgroundColor: colors.grayishblack,
+    width: 80,
     alignItems: 'center',
     justifyContent: 'center',
+    paddingVertical: 10,
     borderRadius: 10,
-    paddingHorizontal: 10,
-    marginLeft: 10,
+    marginRight: 30,
   },
-  headerContent: {
-    color: colors.primary,
-    fontWeight: 'bold',
-    fontSize: 18,
+  headerDetailsView: {
+    flex: 1,
+    overflow: 'hidden',
   },
-  footer: {
-    padding: 20,
+  nameView: {},
+  nameText: {
+    fontFamily: 'Montserrat-Bold',
+    color: colors.grayishblack,
+  },
+  miniAddressView: {
     flexDirection: 'row',
+    fontFamily: 'Montserrat-Regular',
   },
+  miniAddressContent: {
+    fontFamily: 'Montserrat-Re',
+    color: colors.additional1,
+  },
+  headerIndicatorView: {},
+  yesnoView: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    padding: 10,
+    justifyContent: 'flex-end',
+  },
+
   yes: {
-    backgroundColor: 'green',
-    paddingHorizontal: 10,
-    paddingVertical: 5,
-    borderRadius: 5,
+    fontFamily: 'Montserrat-Bold',
+    fontSize: 12,
+    color: 'green',
   },
   no: {
-    backgroundColor: 'red',
-    paddingHorizontal: 10,
-    paddingVertical: 5,
-    borderRadius: 5,
+    fontFamily: 'Montserrat-Bold',
+    fontSize: 12,
+    color: 'red',
   },
-  yesnocontent: {
-    fontWeight: 'bold',
-    fontFamily: 'sans-serif',
+  headerContent: {
+    fontFamily: 'Montserrat-Regular',
     color: colors.additional2,
   },
-  addressBoard: {},
-  addressLabel: {
-    fontSize: 20,
-    color: colors.primary,
-    paddingTop: 10,
+  collBody: {
+    backgroundColor: colors.additional2,
+    marginHorizontal: 10,
+    borderRadius: 5,
+    borderColor: colors.accent,
+    borderWidth: 0.5,
   },
-  addressContentView: {
+  bodyHeader: {
+    backgroundColor: colors.accent,
+    padding: 10,
+  },
+  bodyLabel: {
+    fontFamily: 'Montserrat-Bold',
+    color: colors.primary,
+  },
+  bodyContent: {
+    fontFamily: 'Montserrat-Regular',
+    color: colors.primary,
+  },
+  detailsBoard: {
+    padding: 10,
+  },
+  label: {
+    fontFamily: 'Montserrat-Bold',
+  },
+  content: {
+    fontFamily: 'Montserrat-Regular',
+  },
+  addressView: {
     paddingVertical: 20,
   },
-  addressContent: {
-    color: colors.additional1,
-    fontFamily: 'sans-serif',
-    fontSize: 15,
+  addressLabel: {
+    fontFamily: 'Montserrat-Bold',
+    fontSize: 18,
+    color: 'green',
+    marginBottom: 10,
   },
-  detailsView: {},
-  recipientLabel: {},
-  recipientContent: {},
+  addressInsideView: {
+    flexDirection: 'row',
+    borderBottomWidth: 0.5,
+    borderColor: colors.grayishblack,
+    padding: 10,
+    justifyContent: 'space-between',
+  },
+  addressInsideLabel: {
+    fontFamily: 'Montserrat-Bold',
+  },
+  addressRightView: {
+    flex: 1,
+    marginLeft: 10,
+  },
+  addressContent: {
+    fontFamily: 'Montserrat-Regular',
+    alignItems: 'flex-end',
+    textAlign: 'right',
+  },
+  recipientLabel: {
+    fontFamily: 'Montserrat-Regular',
+    color: colors.additional1,
+  },
+  recipientContent: {
+    fontFamily: 'Montserrat-Regular',
+    color: colors.additional1,
+  },
 });
 
 export default CommitmentsCard;

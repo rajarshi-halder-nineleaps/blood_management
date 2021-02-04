@@ -1,172 +1,102 @@
 /* eslint-disable prettier/prettier */
 import React from 'react';
 import {View, Image, ImageBackground, Text, StyleSheet} from 'react-native';
-import {useDispatch} from 'react-redux';
+import {useSelector, useDispatch} from 'react-redux';
 import {updateFields} from '../redux/inventory/actions';
 import InventoryInput from './InventoryInput';
 import colors from '../constants/Colors';
 import {numbersOnlyRegex} from '../constants/Regexes';
 
 const InventoryCard = (props) => {
+  const {cardData} = props;
+  const inventoryState = useSelector((state) => state.inventoryState);
   const dispatch = useDispatch();
-
   return (
     <View style={styles.card}>
-      <ImageBackground
-        style={styles.imageBkg}
-        source={require('../assets/images/invBkg.png')}>
-        <View style={styles.groupView}>
-          <Text style={styles.groupText}>
-            Blood group: {' ' + props.cardData.bloodGroup}
-          </Text>
+      <View style={styles.header}>
+        <Text style={styles.headerText}>Component : {cardData.comp}</Text>
+        <View style={styles.tableHead}>
+          <Text style={styles.tableHeadLeft}>Group</Text>
+          <Text style={styles.tableHeadText}>Units</Text>
+          <Text style={styles.tableHeadText}>Price Per Unit (₹)</Text>
         </View>
-        <View style={styles.inputView}>
-          <View style={styles.subGroup}>
-            <Text style={styles.subHead}>Blood: </Text>
-            <View style={styles.miniGroup}>
-              <View style={styles.labelView}>
-                <Text style={styles.label}>Price per unit: </Text>
-              </View>
-              <InventoryInput
-                value={props.cardData.blood.price + ''}
-                onChangeText={(newVal) => {
-                  dispatch(updateFields(newVal, 'blood', 'price', props.id));
-                }}
-              />
-            </View>
-            <View style={styles.miniGroup}>
-              <View style={styles.labelView}>
-                <Text style={styles.label}>Units in stock: </Text>
-              </View>
-              <InventoryInput
-                value={props.cardData.blood.units + ''}
-                onChangeText={(newVal) => {
-                  dispatch(updateFields(newVal, 'blood', 'units', props.id));
-                }}
-              />
-            </View>
+      </View>
+      {props.cardData.data.map((val, idx) => (
+        <View key={idx} style={styles.insideView}>
+          <View style={styles.subHead}>
+            <Text style={styles.subHeadText}>{val.group}</Text>
           </View>
-
-          <View style={styles.subGroup}>
-            <Text style={styles.subHead}>Plasma: </Text>
-            <View style={styles.miniGroup}>
-              <View style={styles.labelView}>
-                <Text style={styles.label}>Price per unit: </Text>
-              </View>
-              <InventoryInput
-                value={props.cardData.plasma.price + ''}
-                onChangeText={(newVal) => {
-                  dispatch(updateFields(newVal, 'plasma', 'price', props.id));
-                }}
-              />
-            </View>
-            <View style={styles.miniGroup}>
-              <View style={styles.labelView}>
-                <Text style={styles.label}>Units in stock: </Text>
-              </View>
-              <InventoryInput
-                value={props.cardData.plasma.units + ''}
-                onChangeText={(newVal) => {
-                  dispatch(updateFields(newVal, 'plasma', 'units', props.id));
-                }}
-              />
-            </View>
-          </View>
-
-          <View style={styles.subGroup}>
-            <Text style={styles.subHead}>Platelets: </Text>
-            <View style={styles.miniGroup}>
-              <View style={styles.labelView}>
-                <Text style={styles.label}>Price per unit: </Text>
-              </View>
-              <InventoryInput
-                value={props.cardData.platelets.price + ''}
-                onChangeText={(newVal) => {
-                  dispatch(
-                    updateFields(newVal, 'platelets', 'price', props.id),
-                  );
-                }}
-              />
-            </View>
-            <View style={styles.miniGroup}>
-              <View style={styles.labelView}>
-                <Text style={styles.label}>Units in stock: </Text>
-              </View>
-              <InventoryInput
-                value={props.cardData.platelets.units + ''}
-                onChangeText={(newVal) => {
-                  dispatch(
-                    updateFields(newVal, 'platelets', 'units', props.id),
-                  );
-                }}
-              />
-            </View>
-          </View>
+          <InventoryInput
+            style={styles.inventoryInput}
+            value={inventoryState.invData[props.id].data[idx].units + ''}
+            onChangeText={(newVal) => {
+              dispatch(updateFields(newVal, idx, 'units', props.id));
+            }}
+          />
+          <InventoryInput
+            style={styles.inventoryInput}
+            value={inventoryState.invData[props.id].data[idx].price + ''}
+            onChangeText={(newVal) => {
+              dispatch(updateFields(newVal, idx, 'price', props.id));
+            }}
+          />
         </View>
-      </ImageBackground>
+      ))}
     </View>
   );
 };
 
 const styles = StyleSheet.create({
   card: {
-    borderTopLeftRadius: 50,
+    borderRadius: 5,
     marginVertical: 10,
     overflow: 'hidden',
     elevation: 5,
-    backgroundColor: colors.primary,
-    borderBottomRightRadius: 30,
+    backgroundColor: colors.additional2,
   },
-  imageBkg: {
-    flex: 1,
-    resizeMode: 'cover',
-    justifyContent: 'center',
-    paddingBottom: 30,
-    width: '100%',
-    height: '100%',
+  header: {
+    padding: 20,
+    backgroundColor: colors.grayishblack,
   },
-  groupView: {
-    padding: 15,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  groupText: {
+  headerText: {
     fontSize: 18,
-    fontWeight: 'bold',
-    fontFamily: 'sans-serif-light',
+    fontFamily: 'Montserrat-Bold',
     color: colors.additional2,
   },
-  inputView: {
-    paddingHorizontal: 20,
-    backgroundColor: colors.additional2,
-    borderTopLeftRadius: 50,
-    borderBottomRightRadius: 50,
-    elevation: 5,
+  tableHead: {
+    flexDirection: 'row',
+    marginTop: 10,
   },
-  subGroup: {
-    padding: 20,
+  tableHeadLeft: {
+    color: colors.additional2,
+    fontFamily: 'Montserrat-Bold',
+    marginRight: 10,
+  },
+  tableHeadText: {
+    color: colors.additional2,
+    fontFamily: 'Montserrat-Bold',
+    textAlign: 'center',
+    flex: 1,
+  },
+  insideView: {
+    padding: 10,
     borderBottomWidth: 0.5,
-    borderColor: colors.primary,
+    borderColor: colors.accent,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
   },
   subHead: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    paddingHorizontal: 20,
-    paddingVertical: 10,
-    color: colors.secondary,
-  },
-  miniGroup: {
-    flexDirection: 'row',
-    paddingHorizontal: 20,
-    marginVertical: 5,
-  },
-  labelView: {
-    justifyContent: 'center',
     alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: 100,
+    width: 50,
+    backgroundColor: colors.dutchred,
+    padding: 7,
   },
-  label: {
-    fontSize: 16,
-    color: colors.primary,
+  subHeadText: {
+    fontFamily: 'Montserrat-Regular',
+    color: colors.additional2,
   },
 });
 

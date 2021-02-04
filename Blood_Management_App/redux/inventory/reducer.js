@@ -35,7 +35,7 @@ const inventoryReducer = (state = initialState, action) => {
 
     case INV_CHANGE: {
       const currGroup = state.invData[action.idx];
-      currGroup[action.comp][action.label] = action.val;
+      currGroup.data[action.groupIdx][action.label] = action.val;
       const newInvData = [...state.invData];
       newInvData[action.idx] = currGroup;
 

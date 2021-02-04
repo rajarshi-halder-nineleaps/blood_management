@@ -6,6 +6,7 @@ import {
   FETCH_DRIVES_FAILURE,
   DONATION_VERIFICATION,
   RESET_DONE_STATE,
+  DRIVE_CANCEL_SUCCESS,
 } from './actionTypes';
 
 const initialState = {
