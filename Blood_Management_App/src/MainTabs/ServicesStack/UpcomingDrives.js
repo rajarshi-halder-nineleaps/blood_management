@@ -82,7 +82,7 @@ const UpcomingDrives = ({navigation}) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: colors.additional2,
+    backgroundColor: '#eee',
     paddingVertical: 20,
   },
   indicatorView: {
@@ -111,7 +111,7 @@ const styles = StyleSheet.create({
     fontSize: 10,
   },
   scroll: {
-    paddingHorizontal: 10,
+    paddingHorizontal: 5,
   },
 });
 

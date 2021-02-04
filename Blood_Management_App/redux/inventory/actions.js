@@ -14,10 +14,10 @@ export const invFailure = (error) => ({type: INV_FAILURE, error});
 
 export const invSuccess = (invData) => ({type: INV_SUCCESS, invData});
 
-export const updateFields = (val, comp, label, idx) => ({
+export const updateFields = (val, groupIdx, label, idx) => ({
   type: INV_CHANGE,
   val,
-  comp,
+  groupIdx,
   label,
   idx,
 });

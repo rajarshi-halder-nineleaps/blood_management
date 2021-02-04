@@ -165,7 +165,7 @@ const styles = StyleSheet.create({
   },
   titlefont: {
     fontSize: 40,
-    fontFamily: 'sans-serif-light',
+    fontFamily: 'Montserrat-Regular',
     color: colors.additional2,
     marginBottom: 20,
   },
@@ -197,8 +197,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     paddingVertical: 10,
-    justifyContent: 'center',
-    alignItems: 'center',
     borderRadius: 100,
     backgroundColor: colors.primary,
     width: 50,

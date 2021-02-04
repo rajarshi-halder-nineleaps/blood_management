@@ -1,7 +1,7 @@
+/* eslint-disable prettier/prettier */
 import React from 'react';
 import {View, Text, TouchableOpacity} from 'react-native';
 const Home = ({navigation}) => {
-
   return (
     <View
       style={{
@@ -10,8 +10,7 @@ const Home = ({navigation}) => {
         alignContent: 'center',
         alignItems: 'center',
       }}>
-      <Text>Home</Text>
-      
+      <Text style={{fontFamily: 'Montserrat-Regular'}}>Home</Text>
     </View>
   );
 };

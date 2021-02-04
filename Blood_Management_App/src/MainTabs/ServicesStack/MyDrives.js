@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import React, {useEffect} from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   View,
   ScrollView,
@@ -12,15 +12,27 @@ import {
   ActivityIndicator,
 } from 'react-native';
 import {useSelector, useDispatch} from 'react-redux';
-import {getDriveData, resetDoneState} from '../../../redux/myDrives/actions';
+import {
+  getDriveData,
+  resetDoneState,
+  driveCancellation,
+} from '../../../redux/myDrives/actions';
 import colors from '../../../constants/Colors';
 import Feather from 'react-native-vector-icons/Feather';
+import {
+  Collapse,
+  CollapseHeader,
+  CollapseBody,
+} from 'accordion-collapse-react-native';
+import AreYouSure from '../../../components/AreYouSure';
 
 const MyDrives = ({navigation}) => {
   const authState = useSelector((state) => state.authState);
   const myDrivesState = useSelector((state) => state.myDrivesState);
   const dispatch = useDispatch();
 
+  const [rusure, setRusure] = useState(false);
+  const [cancelId, setCancelId] = useState('');
   // useEffect(() => {
   //   console.log('dispatching initial get action');
   //   dispatch(getDriveData(authState.userToken));
@@ -33,50 +45,78 @@ const MyDrives = ({navigation}) => {
 
   const renderItem = ({item}) => {
     return (
-      <View style={styles.touchboard}>
-        <View style={styles.touch}>
-          <ImageBackground
-            style={styles.imgBkg}
-            source={require('../../../assets/images/invBkg.png')}>
-            <View>
-              <View style={styles.header}>
-                <View style={styles.titleView}>
-                  <Text style={styles.headerText}>Drive ID :</Text>
-                  <View style={styles.idView}>
-                    <Text style={styles.headerContent}>{item.driveId}</Text>
-                  </View>
-                </View>
-                <View style={styles.dateTimeView}>
-                  <Text style={styles.dateTimeLabel}>
-                    FROM:{'  '}
-                    <Text style={styles.dateTimeContent}>
-                      {item.startDate} at {item.startTime}
-                    </Text>
-                  </Text>
-                  <Text style={styles.dateTimeLabel}>
-                    TO:{'  '}
-                    <Text style={styles.dateTimeContent}>
-                      {item.endDate} at {item.endTime}
-                    </Text>
-                  </Text>
-                </View>
-              </View>
+      <Collapse>
+        <CollapseHeader style={styles.touchboard}>
+          <View style={styles.headerDetailsView}>
+            <View style={styles.nameView}>
+              <Text style={styles.nameText}>{item.driveId}</Text>
             </View>
+            <View style={styles.miniAddressView}>
+              <Text style={styles.miniAddressContent}>
+                From: {'  '}
+                <Text style={styles.miniDateTimeContent}>
+                  {item.startDate} at {item.startTime}
+                </Text>
+              </Text>
+            </View>
+            <View style={styles.miniAddressView}>
+              <Text style={styles.miniAddressContent}>
+                To: {'  '}
+                <Text style={styles.miniDateTimeContent}>
+                  {item.endDate} at {item.endTime}
+                </Text>
+              </Text>
+            </View>
+          </View>
 
-            <View style={styles.contentBoard}>
+          <View style={styles.headerIndicatorView}>
+            <TouchableOpacity
+              style={styles.donorListTouch}
+              onPress={() => {
+                console.log('navigating to the list of accepted donors screen');
+                navigation.navigate('driveDonorList', {
+                  driveId: item.driveId,
+                });
+              }}>
+              <View style={styles.touchContainerView}>
+                <Text style={styles.touchText}>Donors</Text>
+                <View style={styles.iconView}>
+                  <Feather
+                    name="chevrons-right"
+                    color={colors.additional2}
+                    size={20}
+                  />
+                </View>
+              </View>
+            </TouchableOpacity>
+          </View>
+        </CollapseHeader>
+        <CollapseBody style={styles.collBody}>
+          <View style={styles.bodyHeader}>
+            <Text style={styles.bodyLabel}>
+              Drive ID : {'  '}
+              <Text style={styles.bodyContent}>{item.driveId}</Text>
+            </Text>
+          </View>
+          <View style={styles.detailsBoard}>
+            <View style={styles.contentView}>
               <View style={styles.addressView}>
-                <Text style={styles.label}>Address:</Text>
+                <Text style={styles.addressLabel}>Drive details:</Text>
                 <View style={styles.addressContentView}>
-                  <Text style={styles.content}>{item.address}</Text>
-                  <Text style={styles.content}>{item.district}</Text>
-                  <View style={styles.statePincodeView}>
-                    <Text style={styles.content}>{item.state + ' '}</Text>
-                    <Text style={styles.content}>({item.pincode})</Text>
+                  <View style={styles.addressInsideView}>
+                    <Text style={styles.addressInsideLabel}>Address: </Text>
+                    <View style={styles.addressRightView}>
+                      <Text style={styles.addressContent}>
+                        {item.address}, {item.district}, {'\n'}
+                        {item.state} [{item.pincode}]
+                      </Text>
+                    </View>
                   </View>
                 </View>
               </View>
-              <View style={styles.groupsView}>
-                <Text style={styles.label}>Blood groups invited:</Text>
+
+              <View style={styles.addressView}>
+                <Text style={styles.addressLabel}>Blood groups invited:</Text>
                 <View style={styles.groupsContentView}>
                   {item.bloodGroupsInvited.map((val) => {
                     return (
@@ -87,37 +127,20 @@ const MyDrives = ({navigation}) => {
                   })}
                 </View>
               </View>
-              <View style={styles.donorListTouchView}>
+              <View style={styles.cancelDriveView}>
                 <TouchableOpacity
-                  style={styles.donorListTouch}
+                  style={styles.cancelDriveTouch}
                   onPress={() => {
-                    console.log(
-                      'navigating to the list of accepted donors screen',
-                    );
-                    navigation.navigate('driveDonorList', {
-                      driveId: item.driveId,
-                    });
+                    setCancelId(item.driveId);
+                    setRusure(true);
                   }}>
-                  <ImageBackground
-                    style={styles.imgBtnBkg}
-                    source={require('../../../assets/images/invBkg.png')}>
-                    <View style={styles.touchContainerView}>
-                      <Text style={styles.touchText}>Accepted donors</Text>
-                      <View style={styles.iconView}>
-                        <Feather
-                          name="chevrons-right"
-                          color={colors.additional2}
-                          size={20}
-                        />
-                      </View>
-                    </View>
-                  </ImageBackground>
+                  <Text style={styles.cancelDriveText}>Cancel This drive</Text>
                 </TouchableOpacity>
               </View>
             </View>
-          </ImageBackground>
-        </View>
-      </View>
+          </View>
+        </CollapseBody>
+      </Collapse>
     );
   };
 
@@ -150,6 +173,13 @@ const MyDrives = ({navigation}) => {
           keyExtractor={(item) => item.driveId}
         />
       )}
+      <AreYouSure
+        visibleState={rusure}
+        visibleStateChanger={setRusure}
+        dispatchable={driveCancellation}
+        dispatchData={cancelId}
+        message="Are you sure you wish to cancel this drive?"
+      />
     </View>
   );
 };
@@ -207,7 +237,7 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
   },
   scroll: {
-    paddingHorizontal: 20,
+    paddingHorizontal: 5,
   },
   suchEmpty: {
     flex: 1,
@@ -226,91 +256,145 @@ const styles = StyleSheet.create({
   touchboard: {
     flex: 1,
     alignItems: 'center',
-    justifyContent: 'center',
-    elevation: 5,
-    overflow: 'hidden',
+    justifyContent: 'flex-start',
     margin: 10,
-  },
-  touch: {
-    flex: 1,
-    width: '100%',
-    backgroundColor: colors.additional2,
-    borderRadius: 10,
+    borderRadius: 5,
+    borderColor: colors.accent,
+    borderWidth: 0.5,
     overflow: 'hidden',
-  },
-  contentBoard: {
-    paddingHorizontal: 20,
-    paddingTop: 20,
     backgroundColor: colors.additional2,
-    borderTopLeftRadius: 20,
-    borderTopRightRadius: 20,
-  },
-  donorListTouchView: {
-    flexDirection: 'row',
-    width: '100%',
-    padding: 20,
-    justifyContent: 'center',
-  },
-  donorListTouch: {
-    marginTop: 10,
-    elevation: 5,
-    borderRadius: 100,
-    flexDirection: 'row',
-    overflow: 'hidden',
-  },
-  touchContainerView: {
     flexDirection: 'row',
     padding: 10,
-    paddingHorizontal: 20,
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    width: '100%',
   },
-  imgBtnBkg: {
-    width: '100%',
+
+  headerDetailsView: {
+    flex: 1,
+    overflow: 'hidden',
+    marginLeft: 15,
+    paddingVertical: 10,
+  },
+  nameView: {
+    marginBottom: 5,
+  },
+  nameText: {
+    fontFamily: 'Montserrat-Bold',
+    color: colors.primary,
+  },
+  miniAddressView: {
+    alignItems: 'flex-start',
+    justifyContent: 'center',
+  },
+  miniAddressContent: {
+    fontFamily: 'Montserrat-Regular',
+  },
+  miniDateTimeContent: {
+    fontFamily: 'Montserrat-Regular',
+  },
+  donorListTouch: {
+    backgroundColor: colors.grayishblack,
+    borderRadius: 5,
+    padding: 10,
+    alignItems: 'center',
+    flexDirection: 'row',
+    marginLeft: 10,
+    elevation: 5,
+    overflow: 'hidden',
   },
   touchText: {
     color: colors.additional2,
-    fontFamily: 'sans-serif-light',
+    fontFamily: 'Montserrat-Regular',
   },
   iconView: {
     alignItems: 'center',
     justifyContent: 'center',
   },
-  addressView: {},
-  groupsView: {},
-  label: {
-    fontSize: 20,
-    color: colors.primary,
-    paddingTop: 10,
+  collBody: {
+    backgroundColor: colors.additional2,
+    marginHorizontal: 10,
+    borderRadius: 5,
+    borderColor: colors.accent,
+    borderWidth: 0.5,
   },
-  addressContentView: {
+  bodyHeader: {
+    backgroundColor: colors.accent,
+    padding: 10,
+  },
+  bodyLabel: {
+    fontFamily: 'Montserrat-Bold',
+    color: colors.primary,
+  },
+  bodyContent: {
+    fontFamily: 'Montserrat-Regular',
+    color: colors.primary,
+  },
+  detailsBoard: {
+    padding: 10,
+  },
+  label: {
+    fontFamily: 'Montserrat-Bold',
+  },
+  addressView: {
     paddingVertical: 20,
+    marginBottom: 10,
+  },
+  addressLabel: {
+    fontFamily: 'Montserrat-Bold',
+    fontSize: 18,
+    color: 'green',
+    marginBottom: 10,
+  },
+  addressInsideView: {
+    flexDirection: 'row',
+    borderBottomWidth: 0.5,
+    borderColor: colors.grayishblack,
+    padding: 10,
+    justifyContent: 'space-between',
+  },
+  addressInsideLabel: {
+    fontFamily: 'Montserrat-Bold',
+  },
+  addressRightView: {
+    flex: 1,
+    alignItems: 'flex-end',
+    marginLeft: 10,
+  },
+  addressContent: {
+    fontFamily: 'Montserrat-Regular',
+    textAlign: 'right',
   },
   groupsContentView: {
     paddingVertical: 20,
     flexDirection: 'row',
   },
   indGroup: {
-    backgroundColor: colors.primary,
+    backgroundColor: colors.grayishblack,
     width: 34,
     alignItems: 'center',
     justifyContent: 'center',
     borderRadius: 100,
     marginHorizontal: 2,
-    padding: 5,
+    paddingVertical: 5,
   },
   indGroupContent: {
+    fontFamily: 'Montserrat-Regular',
     color: colors.additional2,
     fontSize: 12,
   },
-  content: {
-    color: colors.additional1,
-    fontFamily: 'sans-serif',
-    fontSize: 15,
+  cancelDriveView: {
+    width: '100%',
+    paddingHorizontal: 20,
   },
-  statePincodeView: {
-    flexDirection: 'row',
+  cancelDriveTouch: {
+    backgroundColor: colors.grayishblack,
+    padding: 10,
+    borderRadius: 5,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginBottom: 10,
+  },
+  cancelDriveText: {
+    color: colors.additional2,
+    fontFamily: 'Montserrat-Regular',
   },
 });
 

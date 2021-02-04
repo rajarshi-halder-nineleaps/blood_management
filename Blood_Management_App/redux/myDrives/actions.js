@@ -5,6 +5,7 @@ import {
   FETCH_DRIVES_FAILURE,
   DONATION_VERIFICATION,
   RESET_DONE_STATE,
+  DRIVE_CANCEL_SUCCESS,
 } from './actionTypes';
 import axios from 'axios';
 
@@ -30,6 +31,10 @@ export const donationVerification = (drive, donor) => ({
 
 export const resetDoneState = () => ({
   type: RESET_DONE_STATE,
+});
+
+export const driveCancelSuccess = () => ({
+  type: DRIVE_CANCEL_SUCCESS,
 });
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -93,6 +98,43 @@ export const doubleDataPoster = (userToken, driveId, donorId) => {
         dispatch(fetchDriveFailure(response.data.error));
       } else {
         //* Anandhu: This is the place where misplacing a single curly bracket crashed my whole App. Took me 4 hours to figure it out.
+        dispatch(
+          fetchDriveFailure(
+            "Something's not right! Please try after some time.",
+          ),
+        );
+      }
+    } catch (err) {
+      dispatch(fetchDriveFailure(err.message));
+      console.log(
+        'Error caught while double data posting in my donation drives.',
+        err.message,
+      );
+    }
+  };
+};
+
+export const driveCancellation = (userToken, driveId) => {
+  return async (dispatch) => {
+    console.log('drive cancellation started!');
+    try {
+      dispatch(fetchDrivesReq());
+      console.log("posting updated data to current user's records");
+      const response = await axios.post(
+        'http://192.168.43.89:5000/canceldrive',
+        {driveId},
+        {
+          headers: {Authorization: userToken},
+        },
+      );
+
+      if (response.data.success) {
+        console.log('drive cancellation successful');
+        //* coordinate with back end team to fixate on this response with the same name.
+        dispatch(fetchDriveSuccess(response.data.driveData));
+      } else if (response.data.error) {
+        dispatch(fetchDriveFailure(response.data.error));
+      } else {
         dispatch(
           fetchDriveFailure(
             "Something's not right! Please try after some time.",

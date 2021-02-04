@@ -10,258 +10,260 @@ import {
 import colors from '../constants/Colors';
 import {useSelector, useDispatch} from 'react-redux';
 import Feather from 'react-native-vector-icons/Feather';
+import {
+  Collapse,
+  CollapseHeader,
+  CollapseBody,
+} from 'accordion-collapse-react-native';
 
 const UpcomingDrivesCard = (props) => {
+  const {item} = props;
   const dispatch = useDispatch();
   console.log('ID', props.item.driveId);
   return (
-    <View style={styles.touchboard}>
-      <View style={styles.touch}>
-        <ImageBackground
-          style={styles.imgBkg}
-          source={require('../assets/images/invBkg.png')}>
-          <View>
-            <View style={styles.header}>
-              <View style={styles.titleView}>
-                <Text style={styles.headerText}>Drive ID :</Text>
-                <View style={styles.idView}>
-                  <Text style={styles.headerContent}>{props.item.driveId}</Text>
-                </View>
-              </View>
-              <View style={styles.dateTimeView}>
-                <Text style={styles.dateTimeLabel}>
-                  FROM:{'  '}
-                  <Text style={styles.dateTimeContent}>
-                    {props.item.startDate} at {props.item.startTime}
-                  </Text>
-                </Text>
-                <Text style={styles.dateTimeLabel}>
-                  TO:{'  '}
-                  <Text style={styles.dateTimeContent}>
-                    {props.item.endDate} at {props.item.endTime}
-                  </Text>
-                </Text>
+    <Collapse>
+      <CollapseHeader style={styles.touchboard}>
+        <View style={styles.headerDetailsView}>
+          <View style={styles.nameView}>
+            <Text style={styles.nameText}>{item.orgName}</Text>
+          </View>
+          <View style={styles.miniAddressView}>
+            <Text style={styles.miniAddressContent}>
+              From:{'  '}
+              <Text style={styles.miniDateTimeContent}>
+                {item.startDate} at {item.startTime}
+              </Text>
+            </Text>
+            <Text style={styles.miniAddressContent}>
+              To:{'  '}
+              <Text style={styles.miniDateTimeContent}>
+                {item.endDate} at {item.endTime}
+              </Text>
+            </Text>
+          </View>
+        </View>
+
+        <View style={styles.headerIndicatorView}>
+          <TouchableOpacity
+            style={styles.donorListTouch}
+            onPress={() => {
+              console.log(
+                'initiated user registration for drive',
+                props.item.driveId,
+              );
+              dispatch(
+                props.registerUserForDrive(props.userToken, props.item.driveId),
+              );
+            }}>
+            <View style={styles.touchContainerView}>
+              <Text style={styles.touchText}>Register</Text>
+              <View style={styles.iconView}>
+                <Feather
+                  name="chevrons-right"
+                  color={colors.additional2}
+                  size={20}
+                />
               </View>
             </View>
+          </TouchableOpacity>
+        </View>
+      </CollapseHeader>
+      <CollapseBody style={styles.collBody}>
+        <View style={styles.bodyHeader}>
+          {item.driveId ? (
+            <Text style={styles.bodyLabel}>
+              Drive ID : {'  '}
+              <Text style={styles.bodyContent}>{item.driveId}</Text>
+            </Text>
+          ) : (
+            <Text style={styles.bodyLabel}>
+              DonationId ID : {'  '}
+              <Text style={styles.bodyContent}>{item.donationId}</Text>
+            </Text>
+          )}
+        </View>
 
-            <View style={styles.contentBoard}>
-              <View style={styles.addressView}>
-                <Text style={styles.label}>Address:</Text>
-                <View style={styles.addressContentView}>
-                  <Text style={styles.content}>{props.item.address},</Text>
-                  <Text style={styles.content}>{props.item.district},</Text>
-                  <View style={styles.statePincodeView}>
-                    <Text style={styles.content}>{props.item.state + ' '}</Text>
-                    <Text style={styles.content}>({props.item.pincode})</Text>
-                  </View>
-                </View>
-              </View>
-              <View style={styles.groupsView}>
-                <Text style={styles.label}>Blood groups invited:</Text>
-                <View style={styles.groupsContentView}>
-                  {props.item.bloodGroupsInvited.map((val) => {
-                    return (
-                      <View key={val} style={styles.indGroup}>
-                        <Text style={styles.indGroupContent}>{val}</Text>
-                      </View>
-                    );
-                  })}
-                </View>
-              </View>
-
-              <View style={styles.orgDetails}>
-                <View style={styles.addressView}>
-                  <Text style={styles.label}>Organizer details:</Text>
-                  <View style={styles.detailsView}>
-                    <Text style={styles.content}>
-                      {props.item.orgName || 'DUMMY NAME'},
+        <View style={styles.detailsBoard}>
+          <View style={styles.contentView}>
+            <View style={styles.addressView}>
+              <Text style={styles.addressLabel}>Drive details:</Text>
+              <View style={styles.addressContentView}>
+                <View style={styles.addressInsideView}>
+                  <Text style={styles.addressInsideLabel}>Address: </Text>
+                  <View style={styles.addressRightView}>
+                    <Text style={styles.addressContent}>
+                      {item.address}, {item.district}, {'\n'}
+                      {item.state} [{item.pincode}]
                     </Text>
                   </View>
-                  <View style={styles.addressContentView}>
-                    <Text style={styles.content}>{props.item.address},,</Text>
-                    <Text style={styles.content}>{props.item.district},,</Text>
-                    <View style={styles.statePincodeView}>
-                      <Text style={styles.content}>
-                        {props.item.state + ' '}
-                      </Text>
-                      <Text style={styles.content}>({props.item.pincode})</Text>
-                    </View>
+                </View>
+                <View style={styles.addressInsideView}>
+                  <Text style={styles.addressInsideLabel}>Organizer Name:</Text>
+                  <View style={styles.addressRightView}>
+                    <Text style={styles.addressContent}>{item.orgName}</Text>
+                  </View>
+                </View>
+                <View style={styles.addressInsideView}>
+                  <Text style={styles.addressInsideLabel}>Email:</Text>
+                  <View style={styles.addressRightView}>
+                    <Text style={styles.addressContent}>{item.orgEmail}</Text>
+                  </View>
+                </View>
+
+                <View style={styles.addressInsideView}>
+                  <Text style={styles.addressInsideLabel}>Contact:</Text>
+                  <View style={styles.addressRightView}>
+                    <Text style={styles.addressContent}>{item.orgContact}</Text>
                   </View>
                 </View>
               </View>
-
-              <TouchableOpacity
-                style={styles.donorListTouch}
-                onPress={() => {
-                  console.log(
-                    'initiated user registration for drive',
-                    props.item.driveId,
-                  );
-                  dispatch(
-                    props.registerUserForDrive(
-                      props.userToken,
-                      props.item.driveId,
-                    ),
-                  );
-                }}>
-                <ImageBackground
-                  style={styles.imgBtnBkg}
-                  source={require('../assets/images/invBkg.png')}>
-                  <View style={styles.touchContainerView}>
-                    <Text style={styles.touchText}>
-                      Register for this drive
-                    </Text>
-                    <View style={styles.iconView}>
-                      <Feather
-                        name="chevrons-right"
-                        color={colors.additional2}
-                        size={20}
-                      />
-                    </View>
-                  </View>
-                </ImageBackground>
-              </TouchableOpacity>
             </View>
           </View>
-        </ImageBackground>
-      </View>
-    </View>
+
+          <View style={styles.addressContentView}>
+            <View style={styles.addressView}>
+              <Text style={styles.addressLabel}>Blood groups invited:</Text>
+              <View style={styles.groupsContentView}>
+                {props.item.bloodGroupsInvited.map((val) => {
+                  return (
+                    <View key={val} style={styles.indGroup}>
+                      <Text style={styles.indGroupContent}>{val}</Text>
+                    </View>
+                  );
+                })}
+              </View>
+            </View>
+          </View>
+        </View>
+      </CollapseBody>
+    </Collapse>
   );
 };
 
 const styles = StyleSheet.create({
   touchboard: {
     flex: 1,
-    borderRadius: 10,
-    elevation: 5,
-    overflow: 'hidden',
-    margin: 20,
-  },
-  touch: {
-    flex: 1,
-    width: '100%',
-    overflow: 'hidden',
-  },
-  subLabel: {
-    color: colors.secondary,
-    fontSize: 18,
-  },
-  miniLabel: {
-    color: colors.grayishblack,
-    fontWeight: 'bold',
-  },
-  imgBkg: {
-    flex: 1,
-    resizeMode: 'cover',
-    justifyContent: 'center',
-    width: '100%',
-    overflow: 'hidden',
-    height: '100%',
-  },
-
-  header: {
-    paddingTop: 50,
-    padding: 20,
-  },
-  titleView: {
-    flexDirection: 'row',
-  },
-  headerText: {
-    color: colors.additional2,
-    fontWeight: 'bold',
-    fontSize: 18,
     alignItems: 'center',
-    justifyContent: 'center',
-  },
-  idView: {
+    justifyContent: 'flex-start',
+    margin: 10,
+    borderRadius: 5,
+    borderColor: colors.accent,
+    borderWidth: 0.5,
+    overflow: 'hidden',
     backgroundColor: colors.additional2,
-    alignItems: 'center',
+    flexDirection: 'row',
+    padding: 10,
+  },
+  headerDetailsView: {
+    flex: 1,
+    overflow: 'hidden',
+    marginLeft: 15,
+    paddingVertical: 10,
+  },
+  nameView: {},
+  nameText: {
+    fontFamily: 'Montserrat-Bold',
+    color: colors.grayishblack,
+  },
+  miniAddressView: {
+    alignItems: 'flex-start',
     justifyContent: 'center',
-    borderRadius: 10,
-    paddingHorizontal: 10,
-    marginLeft: 10,
   },
-  headerContent: {
-    color: colors.primary,
-    fontWeight: 'bold',
-    fontSize: 18,
+  miniAddressContent: {
+    fontFamily: 'Montserrat-Regular',
   },
-  dateTimeView: {
-    paddingTop: 10,
-  },
-  dateTimeLabel: {
-    color: colors.additional2,
-    fontWeight: 'bold',
-  },
-  dateTimeContent: {
-    color: colors.additional2,
-    fontWeight: '100',
-  },
-  imgBtnBkg: {
-    width: '100%',
+  miniDateTimeContent: {
+    fontFamily: 'Montserrat-Regular',
   },
   donorListTouch: {
-    backgroundColor: colors.primary,
+    backgroundColor: colors.grayishblack,
     borderRadius: 5,
+    padding: 10,
     alignItems: 'center',
+    flexDirection: 'row',
     marginTop: 10,
     elevation: 5,
     overflow: 'hidden',
   },
   touchText: {
     color: colors.additional2,
-    fontFamily: 'sans-serif-light',
+    fontFamily: 'Montserrat-Regular',
   },
   iconView: {
     alignItems: 'center',
     justifyContent: 'center',
   },
-  contentBoard: {
-    padding: 20,
+  collBody: {
     backgroundColor: colors.additional2,
-    borderTopLeftRadius: 20,
-    borderTopRightRadius: 20,
+    marginHorizontal: 10,
+    borderRadius: 5,
+    borderColor: colors.accent,
+    borderWidth: 0.5,
+  },
+  bodyHeader: {
+    backgroundColor: colors.accent,
+    padding: 10,
+  },
+  bodyLabel: {
+    fontFamily: 'Montserrat-Bold',
+    color: colors.primary,
+  },
+  bodyContent: {
+    fontFamily: 'Montserrat-Regular',
+    color: colors.primary,
+  },
+  detailsBoard: {
+    padding: 10,
   },
   label: {
-    fontSize: 20,
-    color: colors.primary,
-    paddingTop: 10,
+    fontFamily: 'Montserrat-Bold',
   },
-  addressContentView: {
+  addressView: {
     paddingVertical: 20,
+    marginBottom: 10,
+  },
+  addressLabel: {
+    fontFamily: 'Montserrat-Bold',
+    fontSize: 18,
+    color: 'green',
+    marginBottom: 10,
+  },
+  addressInsideView: {
+    flexDirection: 'row',
+    borderBottomWidth: 0.5,
+    borderColor: colors.grayishblack,
+    padding: 10,
+    justifyContent: 'space-between',
+  },
+  addressInsideLabel: {
+    fontFamily: 'Montserrat-Bold',
+  },
+  addressRightView: {
+    flex: 1,
+    alignItems: 'flex-end',
+    marginLeft: 10,
+  },
+  addressContent: {
+    fontFamily: 'Montserrat-Regular',
+    textAlign: 'right',
   },
   groupsContentView: {
-    paddingVertical: 20,
+    paddingTop: 20,
     flexDirection: 'row',
   },
   indGroup: {
-    backgroundColor: colors.primary,
+    backgroundColor: colors.grayishblack,
     width: 34,
     alignItems: 'center',
     justifyContent: 'center',
     borderRadius: 100,
     marginHorizontal: 2,
-    padding: 5,
+    paddingVertical: 5,
   },
   indGroupContent: {
+    fontFamily: 'Montserrat-Regular',
     color: colors.additional2,
     fontSize: 12,
-  },
-  content: {
-    color: colors.additional1,
-    fontFamily: 'sans-serif',
-    fontSize: 15,
-  },
-  statePincodeView: {
-    flexDirection: 'row',
-  },
-  touchContainerView: {
-    flexDirection: 'row',
-    padding: 10,
-    paddingHorizontal: 20,
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    width: '100%',
   },
 });
 
