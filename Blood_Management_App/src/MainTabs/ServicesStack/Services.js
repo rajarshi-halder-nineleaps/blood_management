@@ -14,6 +14,7 @@ import {getDriveData, resetDoneState} from '../../../redux/myDrives/actions';
 import {fetchCommitments} from '../../../redux/commitments/actions';
 import {getInventory} from '../../../redux/inventory/actions';
 import {fetchSalesData} from '../../../redux/sales/actions';
+import {fetchInvitesList} from '../../../redux/invites/actions';
 
 const Services = ({navigation}) => {
   const authState = useSelector((state) => state.authState);
@@ -53,9 +54,17 @@ const Services = ({navigation}) => {
     navigation.navigate('sales');
   };
 
+  const donationRequestsHandler = () => {
+    dispatch(fetchInvitesList(authState.userToken));
+    navigation.navigate('donationRequests');
+  };
+
   return (
     <View style={styles.container}>
       <ScrollView style={styles.scroll}>
+        <View style={styles.headingView}>
+          <Text style={styles.headingText}>Services</Text>
+        </View>
         <View style={styles.row}>
           <TouchTabs
             label="Buy Blood"
@@ -71,7 +80,7 @@ const Services = ({navigation}) => {
         </View>
         <View style={styles.row}>
           <TouchTabs
-            label="Donor Requests"
+            label="My Blood Requests"
             source={require('../../../assets/images/servicesScreen/findDonors.png')}
           />
           <TouchTabs
@@ -92,8 +101,9 @@ const Services = ({navigation}) => {
               touchHandler={() => navigation.navigate('upcomingDrivesSearch')}
             />
             <TouchTabs
-              label="Donation requests"
+              label="Invites"
               source={require('../../../assets/images/servicesScreen/findDonors.png')}
+              touchHandler={() => donationRequestsHandler()}
             />
           </>
         ) : (
@@ -111,9 +121,7 @@ const Services = ({navigation}) => {
             <TouchTabs
               label="My Inventory"
               source={require('../../../assets/images/servicesScreen/inventory.png')}
-              touchHandler={() => {
-                inventoryHandler();
-              }}
+              touchHandler={() => inventoryHandler()}
             />
           </>
         )}
@@ -146,6 +154,14 @@ const styles = StyleSheet.create({
   },
   row: {
     flexDirection: 'row',
+  },
+  headingView: {
+    padding: 20,
+  },
+  headingText: {
+    fontFamily: 'Montserrat-Bold',
+    color: colors.additional2,
+    fontSize: 30,
   },
 });
 

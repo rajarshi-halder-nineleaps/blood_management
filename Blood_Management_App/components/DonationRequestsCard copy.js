@@ -1,28 +1,36 @@
 /* eslint-disable prettier/prettier */
-import React, {useEffect} from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   View,
   ScrollView,
   Text,
   StyleSheet,
+  TouchableOpacity,
   Image,
   FlatList,
   ActivityIndicator,
   ImageBackground,
 } from 'react-native';
 import colors from '../constants/Colors';
+import {useSelector, useDispatch} from 'react-redux';
 import {
   Collapse,
   CollapseHeader,
   CollapseBody,
 } from 'accordion-collapse-react-native';
+import AreYouSure from './AreYouSure';
+import {updateInvitesList} from '../redux/invites/actions';
 
-const CommitmentsCard = ({item}) => {
+const DonationRequestsCard = ({item}) => {
+  
+  const authState = useSelector((state) => state.authState);
+  const dispatch = useDispatch();
+
   return (
     <Collapse>
       <CollapseHeader style={styles.touchboard}>
         <View style={styles.typeView}>
-          <Text style={styles.headerContent}>{item.commitmentType}</Text>
+          <Text style={styles.headerContent}>{item.requestType}</Text>
         </View>
         <View style={styles.headerDetailsView}>
           <View style={styles.nameView}>
@@ -36,13 +44,17 @@ const CommitmentsCard = ({item}) => {
           </View>
         </View>
         <View style={styles.headerIndicatorView}>
-          {item.compeleted ? (
+          {item.status === 1 ? (
             <View style={styles.yesnoView}>
-              <Text style={styles.yes}>DONE</Text>
+              <Text style={styles.yes}>ACCEPTED</Text>
+            </View>
+          ) : item.status === 0 ? (
+            <View style={styles.yesnoView}>
+              <Text style={styles.no}>REJECTED</Text>
             </View>
           ) : (
             <View style={styles.yesnoView}>
-              <Text style={styles.no}>TODO</Text>
+              <Text style={styles.pending}>PENDING</Text>
             </View>
           )}
         </View>
@@ -65,9 +77,9 @@ const CommitmentsCard = ({item}) => {
         <View style={styles.detailsBoard}>
           <View style={styles.contentView}>
             <Text style={styles.label}>
-              Commitment made on: {'  '}
+              Request date: {'  '}
               <Text style={styles.content}>
-                {item.commitmentDate} at {item.commitmentTime}
+                {item.inviteDate} at {item.inviteTime}
               </Text>
             </Text>
 
@@ -140,16 +152,31 @@ const CommitmentsCard = ({item}) => {
               ) : null}
             </View>
           </View>
-          <View style={styles.headerIndicatorView}>
-            {item.compeleted ? (
-              <View style={styles.yesnoView}>
-                <Text style={styles.yes}>COMPLETED</Text>
-              </View>
-            ) : (
-              <View style={styles.yesnoView}>
-                <Text style={styles.no}>INCOMPLETE</Text>
-              </View>
-            )}
+          <View style={styles.optionsView}>
+            <TouchableOpacity
+              style={styles.accept}
+              onPress={() => {
+                console.log('pressed');
+                const updateObj = item.driveId
+                  ? {driveId: item.driveId, status: 1}
+                  : {donationId: item.donationId, status: 1};
+
+                dispatch(updateInvitesList(authState.userToken, updateObj));
+              }}>
+              <Text style={styles.optionsTouchText}>Accept</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.reject}
+              onPress={() => {
+                console.log('pressed');
+                const updateObj = item.driveId
+                  ? {driveId: item.driveId, status: 0}
+                  : {donationId: item.donationId, status: 0};
+
+                dispatch(updateInvitesList(authState.userToken, updateObj));
+              }}>
+              <Text style={styles.optionsTouchText}>Reject</Text>
+            </TouchableOpacity>
           </View>
         </View>
       </CollapseBody>
@@ -219,11 +246,16 @@ const styles = StyleSheet.create({
   no: {
     fontFamily: 'Montserrat-Bold',
     fontSize: 12,
-    color: 'red',
+    color: colors.dutchred,
+  },
+  pending: {
+    fontFamily: 'Montserrat-Bold',
+    fontSize: 12,
+    color: colors.coolblue,
   },
   headerContent: {
     fontFamily: 'Montserrat-Regular',
-    color: colors.additional2,
+    color: colors.secondary,
   },
   collBody: {
     backgroundColor: colors.additional2,
@@ -289,6 +321,46 @@ const styles = StyleSheet.create({
     fontFamily: 'Montserrat-Regular',
     color: colors.additional1,
   },
+  optionsView: {
+    flexDirection: 'row',
+    padding: 20,
+    justifyContent: 'center',
+  },
+  accept: {
+    backgroundColor: 'green',
+    paddingHorizontal: 20,
+    paddingVertical: 10,
+    borderRadius: 5,
+    marginHorizontal: 10,
+  },
+  reject: {
+    backgroundColor: colors.dutchred,
+    paddingHorizontal: 20,
+    paddingVertical: 10,
+    borderRadius: 5,
+    marginHorizontal: 10,
+  },
+  optionsTouchText: {
+    fontFamily: 'Montserrat-Bold',
+    color: colors.additional2,
+  },
 });
 
-export default CommitmentsCard;
+export default DonationRequestsCard;
+
+/* <AreYouSure
+        visibleState={true}
+        // visibleStateChanger={setRusurea}
+        // dispatchable={}
+        dispatchData={item.driveId ? item.driveId : item.donationId}
+        message="Are you sure you wish to accept this request?"
+      />
+      {/* <AreYouSure
+        visibleState={rusurer}
+        visibleStateChanger={setRusurer}
+        // dispatchable={}
+        dispatchData={item.driveId ? item.driveId : item.donationId}
+        message="Are you sure you wish to reject this request?"
+      /> */
+//   const [rusurea, setRusurea] = useState(false);
+//   const [rusurer, setRusurer] = useState(false);

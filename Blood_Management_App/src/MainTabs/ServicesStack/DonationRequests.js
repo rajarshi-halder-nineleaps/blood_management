@@ -1,0 +1,92 @@
+/* eslint-disable prettier/prettier */
+import {
+  View,
+  ScrollView,
+  Text,
+  StyleSheet,
+  Image,
+  FlatList,
+  ActivityIndicator,
+} from 'react-native';
+import React from 'react';
+import {useSelector, useDispatch} from 'react-redux';
+import colors from '../../../constants/Colors';
+import {registerUserForDrive} from '../../../redux/upcomingDrives/actions';
+import DonationRequestsCard from '../../../components/DonationRequestsCard';
+
+//TODO replace commitments state with donation requests state
+
+const DonationRequests = ({navigation}) => {
+  const authState = useSelector((state) => state.authState);
+  const invitesState = useSelector((state) => state.invitesState);
+
+  return (
+    <View style={styles.container}>
+      {invitesState.loading ? (
+        <ActivityIndicator
+          visible={invitesState.loading}
+          textContent={'Loading...'}
+          textStyle={styles.spinnerTextStyle}
+          animating={true}
+          color={colors.primary}
+          size="large"
+        />
+      ) : invitesState.invitesList.length === 0 ? (
+        <View style={styles.suchEmpty}>
+          <Image
+            style={styles.suchEmptyImg}
+            source={require('../../../assets/images/empty.png')}
+          />
+          <Text style={styles.emptyInfo}>
+            You don't have any donation requests yet.
+          </Text>
+        </View>
+      ) : (
+        <FlatList
+          style={styles.scroll}
+          data={invitesState.invitesList}
+          renderItem={({item}) => <DonationRequestsCard item={item} />}
+          keyExtractor={(item) => item.driveId || item.donationId}
+        />
+      )}
+    </View>
+  );
+};
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+  },
+  scroll: {
+    paddingHorizontal: 0,
+  },
+  suchEmpty: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: colors.additional2,
+  },
+  suchEmptyImg: {
+    height: 150,
+    width: 150,
+  },
+  emptyInfo: {
+    color: colors.primary,
+    fontSize: 10,
+  },
+  donorListTouch: {
+    backgroundColor: colors.primary,
+    borderRadius: 5,
+    padding: 10,
+    alignItems: 'center',
+    marginTop: 10,
+    elevation: 5,
+  },
+  touchText: {
+    color: colors.additional2,
+    fontFamily: 'sans-serif-light',
+  },
+});
+
+export default DonationRequests;
