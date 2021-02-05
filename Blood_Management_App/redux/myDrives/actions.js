@@ -83,7 +83,7 @@ export const doubleDataPoster = (userToken, driveId, donorId) => {
       dispatch(fetchDrivesReq());
       console.log("posting updated data to current user's records");
       const response = await axios.post(
-        'http://192.168.43.89:5000/mydrives',
+        'http://10.0.2.2:8000/mydrives',
         {driveId, donorId},
         {
           headers: {Authorization: userToken},

@@ -1,6 +1,7 @@
 import React, {useState, useEffect} from 'react'
 import axios from 'axios'
 import {useDispatch, useSelector} from 'react-redux';
+import Feather from 'react-native-vector-icons/Feather';
 
 
 import {
@@ -83,24 +84,9 @@ const FindDonors = ({navigation}) => {
   const sumbitHandler = () => {
     console.log(buybloodFormState.inputValues)
     if (buybloodFormState.inputValidity.blood_group) {
-      if(buybloodFormState.inputValidity.blood_component){
-        if(buybloodFormState.inputValidity.units){
-          dispatch(getBuyBloodList({...buybloodFormState.inputValues}));
+      dispatch(getBuyBloodList({...buybloodFormState.inputValues}));
           navigation.navigate("Buy Blood List")
-        }else {
-          Alert.alert(
-            'Invalid Input',
-            'Please select Units Required to continue',
-            [{text: 'Okay'}],
-          );
-        }
-      } else {
-        Alert.alert(
-          'Invalid Input',
-          'Please select Blood Component Required to continue',
-          [{text: 'Okay'}],
-        );
-      }
+      
        
       
       // console.log('Registration Successful');
@@ -118,7 +104,13 @@ const FindDonors = ({navigation}) => {
 
     return(
     <ScrollView style={styles.container}>
-        <Text style={styles.header}>Buy Blood</Text>
+      <View style={styles.header}>
+      <TouchableOpacity onPress={() => navigation.goBack()}>
+              <Feather name="chevron-left" color="white" size={30} />
+      </TouchableOpacity>
+      <Text  style={styles.headertitle}>Buy Blood</Text>
+      </View>
+        
         <View style={{marginHorizontal:30}}>
         <View style={styles.pickerView}>
               <Picker
@@ -259,13 +251,19 @@ const styles= StyleSheet.create({
 
     },
     header:{
-        fontSize:50,
+        marginBottom:20,
+        backgroundColor:colors.primary,
+        paddingHorizontal:30,
+        paddingTop:10,
+        
+    },
+    headertitle:{
+      fontSize:50,
         fontWeight:'bold',
         marginBottom:20,
         backgroundColor:colors.primary,
-        fontFamily: 'sans-serif-condensed',
-        paddingHorizontal:30,
-        paddingVertical:30,
+        fontFamily: 'sans-serif-condensed',      
+        paddingTop:10,
         color:'white'
     },
     pickerView: {
@@ -306,7 +304,13 @@ const styles= StyleSheet.create({
       buttontext:{
         fontSize:20,
         fontWeight:'bold'
-      }
+      },
+      backbutton:{
+        backgroundColor: colors.primary
+      },
+      icon: {
+        color: colors.additional2,
+      },
 })
 
 export default FindDonors

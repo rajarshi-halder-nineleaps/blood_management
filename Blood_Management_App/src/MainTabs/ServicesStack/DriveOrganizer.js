@@ -12,6 +12,7 @@ import {
   ActivityIndicator,
   Modal,
   Alert,
+  Button
 } from 'react-native';
 import {useSelector, useDispatch} from 'react-redux';
 import * as places from '../../../assets/places.json';
@@ -51,6 +52,52 @@ const DriveOrganizer = ({navigation}) => {
     setSelectedGroups([]);
     dispatch(stateCleanup());
   }, [dispatch]);
+
+  const [startdate, setstartDate] = useState(new Date(1598051730000));
+  const [startmode, setstartMode] = useState('date');
+  const [startshow, setstartShow] = useState(false);
+
+  const [enddate, setendDate] = useState(new Date(1598051730000));
+  const [endmode, setendMode] = useState('date');
+  const [endshow, setendShow] = useState(false);
+
+  const onChangestart = (event, selectedDate) => {
+    const currentDate = selectedDate || date;
+    setstartShow(Platform.OS === 'ios');
+    setstartDate(currentDate);
+  };
+
+  const showstartMode = (currentMode) => {
+    setstartShow(true);
+    setstartMode(currentMode);
+  };
+
+  const showstartDatepicker = () => {
+    showstartMode('date');
+  };
+
+  const showstartTimepicker = () => {
+    showstartMode('time');
+  };
+
+  const onChangeend = (event, selectedDate) => {
+    const currentDate = selectedDate || date;
+    setendShow(Platform.OS === 'ios');
+    setendDate(currentDate);
+  };
+
+  const showendMode = (currentMode) => {
+    setendShow(true);
+    setendMode(currentMode);
+  };
+
+  const showendDatepicker = () => {
+    showendMode('date');
+  };
+
+  const showendTimepicker = () => {
+    showendMode('time');
+  };
 
   const itemClickHandler = (item) => {
     setSelectedGroups((prevState) => {
@@ -98,6 +145,13 @@ const DriveOrganizer = ({navigation}) => {
       isValid = false;
     }
 
+    if (fieldId === 'date'){
+      isValid = false
+    }
+    if (fieldId === 'starttime'){
+      isValid = false
+    }
+
     dispatch(updateFields(val, fieldId, isValid));
   };
 
@@ -128,6 +182,67 @@ const DriveOrganizer = ({navigation}) => {
         />
         {/* //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// */}
         {/* todo start data start time end date end time */}
+
+
+      <View>
+      <View style={styles.datepicker}>
+        <TouchableOpacity style={styles.datepickerbutton} onPress={showstartDatepicker}>
+          <Text style={styles.datepickerttext}>Set Start Date</Text>
+        </TouchableOpacity>
+        <Text style={styles.datepickerttextoutput}>
+          {startdate.toDateString()}
+        </Text>
+      </View>
+      <View style={styles.datepicker}>
+        <TouchableOpacity style={styles.datepickerbutton} onPress={showstartTimepicker}>
+          <Text style={styles.datepickerttext}>Set Start Time</Text>
+        </TouchableOpacity>
+        <Text style={styles.datepickerttextoutput}>
+          {startdate.toLocaleTimeString()}
+        </Text>
+        
+      </View>
+      {startshow && (
+        <DateTimePicker
+          testID="dateTimePicker"
+          value={startdate}
+          mode={startmode}
+          is24Hour={true}
+          display="default"
+          onChange={onChangestart}
+        />
+      )}
+    </View>
+
+    <View>
+      <View style={styles.datepicker}>
+        <TouchableOpacity style={styles.datepickerbutton} onPress={showendDatepicker}>
+          <Text style={styles.datepickerttext}>Set End Date</Text>
+        </TouchableOpacity>
+        <Text style={styles.datepickerttextoutput}>
+          {enddate.toDateString()}
+        </Text>
+      </View>
+      <View style={styles.datepicker}>
+        <TouchableOpacity style={styles.datepickerbutton} onPress={showendTimepicker}>
+          <Text style={styles.datepickerttext}>Set End Time</Text>
+        </TouchableOpacity>
+        <Text style={styles.datepickerttextoutput}>
+          {enddate.toLocaleTimeString()}
+        </Text>
+        
+      </View>
+      {endshow && (
+        <DateTimePicker
+          testID="dateTimePicker"
+          value={enddate}
+          mode={endmode}
+          is24Hour={true}
+          display="default"
+          onChange={onChangeend}
+        />
+      )}
+    </View>
         {/* //////////////////////////////////////////////////////////////////////////////////// */}
 
         {/* //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// */}
@@ -273,7 +388,8 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   container: {
-    padding: 30,
+    paddingVertical:10,
+    paddingHorizontal:30
   },
   errorMsg: {
     color: colors.primary,
@@ -281,6 +397,7 @@ const styles = StyleSheet.create({
   },
   holderView: {
     width: '100%',
+    paddingTop:20
   },
   holderText: {
     fontSize: 16,
@@ -307,6 +424,30 @@ const styles = StyleSheet.create({
   inviteTouchText: {
     color: colors.additional2,
   },
+  datepicker:{
+    marginVertical:5,
+    flexDirection:'row',
+    justifyContent:'space-between'
+  },
+  datepickerttext:{
+    fontSize:18,
+    fontFamily:'sans-serif-condensed',
+    color:'white'
+  },
+  datepickerttextoutput:{
+    fontSize:18,
+    fontFamily:'sans-serif-condensed',
+    color:'grey'
+  },
+  
+  datepickerbutton:{
+    borderColor:colors.primary,
+    borderWidth:1,
+    paddingHorizontal:10,
+    paddingVertical:5,
+    backgroundColor:colors.primary,
+    borderRadius:10
+  }
 });
 
 export default DriveOrganizer;

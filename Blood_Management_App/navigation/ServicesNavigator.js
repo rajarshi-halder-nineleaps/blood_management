@@ -14,15 +14,18 @@ import Inventory from '../src/MainTabs/ServicesStack/Inventory';
 import Sales from '../src/MainTabs/ServicesStack/Sales';
 import FindDonors from '../src/Service Stack/FindDonors/FindDonors';
 import DonorList from '../src/Service Stack/FindDonors/DonorList';
-import BuyBlood from '../src/Service Stack/BuyBlood/BuyBlood';
-import BuyBloodList from '../src/Service Stack/BuyBlood/BuyBloodList';
-import ConfirmBuy from '../src/Service Stack/BuyBlood/ConfirmBuy';
+import BuyBlood from '../src/Service Stack/BuyBlood/BuyBlood'
+import BuyBloodList from '../src/Service Stack/BuyBlood/BuyBloodList'
+import ConfirmBuy from '../src/Service Stack/BuyBlood/ConfirmBuy'
+import MoreInfo from "../src/Service Stack/BuyBlood/MoreInfo"
+import MyPurchases from "../src/Service Stack/MyPurchases/MyPurchases"
+import ActiveDonorRequest from "../src/Service Stack/ActiveDonorRequest/ActiveDonorRequest"
 
 const ServicesNavigator = createStackNavigator();
 
 const ServicesStackNavigator = () => {
   return (
-    <ServicesNavigator.Navigator headerMode="float">
+    <ServicesNavigator.Navigator headerMode='none'>
       <ServicesNavigator.Screen name="Services" component={Services} />
       <ServicesNavigator.Screen
         name="myDrives"
@@ -90,6 +93,9 @@ const ServicesStackNavigator = () => {
         component={BuyBloodList}
       />
       <ServicesNavigator.Screen name="Confirm Buy" component={ConfirmBuy} />
+      <ServicesNavigator.Screen name="More Info" component={MoreInfo} />
+      <ServicesNavigator.Screen name="My Purchases" component={MyPurchases} />
+      <ServicesNavigator.Screen name="Active Donor Request" component={ActiveDonorRequest} />
     </ServicesNavigator.Navigator>
   );
 };
