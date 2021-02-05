@@ -5,6 +5,7 @@ const initialState = {
   loading: false,
   error: '',
   salesData: [],
+  analyticsData: {},
 };
 
 const salesReducer = (state = initialState, action) => {
@@ -13,10 +14,22 @@ const salesReducer = (state = initialState, action) => {
       return {...state, loading: true};
     }
     case SALES_SUCCESS: {
-      return {...state, loading: false, error: '', salesData: action.salesData};
+      return {
+        ...state,
+        loading: false,
+        error: '',
+        salesData: action.salesData,
+        analyticsData: action.analyticsData,
+      };
     }
     case SALES_FAILURE: {
-      return {...state, loading: false, error: action.error, salesData: []};
+      return {
+        ...state,
+        loading: false,
+        error: action.error,
+        salesData: [],
+        analyticsData: {},
+      };
     }
     default: {
       return state;

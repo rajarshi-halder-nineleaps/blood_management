@@ -123,7 +123,7 @@ const styles = StyleSheet.create({
   },
   editToggle: {
     zIndex: 1,
-    backgroundColor: colors.secondary,
+    backgroundColor: colors.grayishblack,
     width: 60,
     height: 60,
     borderRadius: 100,

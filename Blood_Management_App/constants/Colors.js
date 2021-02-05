@@ -9,6 +9,7 @@ const colors = {
   grayishblack: '#282B3A',
   moderategray: '#999',
   dutchred: '#EA2027',
+  coolblue: '#0d58d1',
 };
 
 export default colors;

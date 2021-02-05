@@ -3,7 +3,11 @@ import axios from 'axios';
 import {SALES_REQ, SALES_SUCCESS, SALES_FAILURE} from './actionTypes';
 
 export const salesReq = () => ({type: SALES_REQ});
-export const salesSuccess = (salesData) => ({type: SALES_SUCCESS, salesData});
+export const salesSuccess = (salesData, analyticsData) => ({
+  type: SALES_SUCCESS,
+  salesData,
+  analyticsData,
+});
 export const salesFailure = (error) => ({type: SALES_FAILURE, error});
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -20,7 +24,9 @@ export const fetchSalesData = (userToken) => {
       if (response.data.success) {
         console.log('response is success!');
         //* coordinate with backend for fixing prop names.
-        dispatch(salesSuccess(response.data.salesData));
+        dispatch(
+          salesSuccess(response.data.salesData, response.data.analyticsData),
+        );
       } else if (response.data.error) {
         console.log('response is error!');
         dispatch(salesFailure(response.data.error));

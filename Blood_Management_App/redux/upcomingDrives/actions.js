@@ -70,7 +70,7 @@ export const upcomingDrivesSearch = (userToken, searchFilters) => {
 };
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////
-//? THUNK BASED ACTION CREATOR TOREGISTER USER FOR A DRIVE.
+//? THUNK BASED ACTION CREATOR TO REGISTER USER FOR A DRIVE.
 
 export const registerUserForDrive = (userToken, driveId) => {
   return async (dispatch) => {

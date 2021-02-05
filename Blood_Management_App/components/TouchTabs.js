@@ -39,8 +39,7 @@ const styles = StyleSheet.create({
   label: {
     color: colors.primary,
     fontSize: 14,
-    fontWeight: 'bold',
-    fontFamily: 'sans-serif-light',
+    fontFamily: 'Montserrat-Bold',
   },
   image: {
     width: 100,
