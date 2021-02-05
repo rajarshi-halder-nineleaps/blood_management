@@ -1,6 +1,7 @@
 import React, {useState, useEffect} from 'react'
 import axios from 'axios'
 import {useDispatch, useSelector} from 'react-redux';
+import Feather from 'react-native-vector-icons/Feather';
 
 
 import {
@@ -92,7 +93,14 @@ const FindDonors = ({navigation}) => {
 
     return(
     <ScrollView style={styles.container}>
-        <Text style={styles.header}>Find Donors</Text>
+      <View style={styles.header}>
+      <TouchableOpacity onPress={() => navigation.goBack()}>
+              <Feather name="chevron-left" color="white" size={30} />
+      </TouchableOpacity>
+      <Text  style={styles.headertitle}>Find Donors</Text>
+      
+      </View>
+        
         <View style={{marginHorizontal:30}}>
         <View style={styles.pickerView}>
               <Picker
@@ -191,24 +199,33 @@ const FindDonors = ({navigation}) => {
 
 const styles= StyleSheet.create({
     container:{
-        
-        
         flex:1,
-        
-        
-       
-
     },
     header:{
-        fontSize:50,
-        fontWeight:'bold',
-        marginBottom:50,
-        backgroundColor:colors.primary,
-        fontFamily: 'sans-serif-condensed',
-        paddingHorizontal:30,
-        paddingVertical:30,
-        color:'white'
-    },
+      marginBottom:20,
+      backgroundColor:colors.primary,
+      paddingHorizontal:30,
+      paddingTop:10,
+      
+  },
+  headertitle:{
+    fontSize:50,
+      fontWeight:'bold',
+      backgroundColor:colors.primary,
+      fontFamily: 'sans-serif-condensed',      
+      paddingTop:10,
+      color:'white'
+  },
+  header2:{
+    fontSize:50,
+    fontWeight:'500',
+    marginBottom:20,
+    backgroundColor:colors.primary,
+    fontFamily: 'sans-serif-condensed',      
+    color:'white'
+      
+      
+  },
     pickerView: {
         marginVertical: 10,
         paddingVertical: 3,

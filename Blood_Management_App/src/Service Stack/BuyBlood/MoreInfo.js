@@ -7,11 +7,12 @@ import {
     Modal,
     TouchableHighlight
 } from 'react-native'
+import { FlatList } from 'react-native-gesture-handler';
 import {useDispatch, useSelector} from 'react-redux';
 import colors from '../../../constants/Colors'
 import Feather from 'react-native-vector-icons/Feather';
 
-const ConfirmBuy = ({route, navigation}) => {
+const MoreInfo = ({route, navigation}) => {
 
     const { itemname } = route.params;
     const buybloodFormState = useSelector((state) => state.buybloodFormState);
@@ -19,75 +20,14 @@ const ConfirmBuy = ({route, navigation}) => {
 
     return(
         <View style={styles.container}>
-
-        <Modal
-        animationType="slide"
-        transparent={true}
-        visible={modalVisible}
-        onRequestClose={() => {
-          Alert.alert("Modal has been closed.");
-        }}
-      >
-        <View style={styles.centeredView}>
-          <View style={styles.modalView}>
-            <Text style={styles.modalText}>Purchase Confirmed!</Text>
-            <Text style={styles.modalTextmore}> Check "My Purchases" for more info</Text>
-
-            <TouchableHighlight
-              style={{ ...styles.openButton, backgroundColor: colors.primary }}
-              onPress={() => {
-                setModalVisible(!modalVisible);
-                navigation.navigate("Services")
-              }}
-            >
-              <Text style={styles.textStyle}>OK!</Text>
-            </TouchableHighlight>
-          </View>
-        </View>
-      </Modal>
-      <View style={styles.header}>
+          <View style={styles.header}>
       <TouchableOpacity onPress={() => navigation.goBack()}>
               <Feather name="chevron-left" color="white" size={30} />
       </TouchableOpacity>
-      <Text  style={styles.headertitle}>Confirm Buy</Text>
+      <Text  style={styles.headertitle}>More Info</Text>
       <Text style={styles.header2}>{itemname}</Text>
       </View>
-            
-            
-            
-            <View style={styles.infobox}>
-            <View style ={styles.inforow}>
-                <Text style={styles.texts}>Blood Group :</Text>
-                <Text style={styles.text}>{buybloodFormState.inputValues.blood_group}</Text>
-            </View>
 
-            
-            <View style ={styles.inforow}>
-                <Text style={styles.texts}>Components :</Text>
-                <Text style={styles.text}>{buybloodFormState.inputValues.blood_component}</Text>
-            </View>
-
-            <View style ={styles.inforow}>
-                <Text style={styles.texts}>Units Required :</Text>
-                <Text style={styles.text}>{buybloodFormState.inputValues.units}</Text>
-            </View>
-            
-            </View>
-            <View style={{justifyContent:'center', alignItems:'center', marginTop:30}}>
-            <View style ={styles.inforow}>
-                <Text style={styles.texts}>Total Amount:</Text>
-            </View>
-
-            <View style ={styles.inforow}>
-                <Text style={styles.texts}>Rs 10,000</Text>
-            </View>
-            <TouchableOpacity onPress={()=> setModalVisible(true)} style={styles.invite}>
-            <Text style={styles.invitebutton}>
-                Confirm Buy
-            </Text>
-            </TouchableOpacity>
-            </View>
-            
         </View>
     );
 }
@@ -208,4 +148,4 @@ const styles= StyleSheet.create({
       }
 })
 
-export default ConfirmBuy
+export default MoreInfo

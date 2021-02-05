@@ -9,21 +9,49 @@ import {
 import {useDispatch, useSelector} from 'react-redux';
 import colors from '../../../constants/Colors';
 import CheckBox from '@react-native-community/checkbox';
+import Feather from 'react-native-vector-icons/Feather';
 
-
-const Item = ({ item, onPress, style }) => (
+const Item = ({ item, onPress, onPressmoreinfo, style }) => (
     
     <View style={[styles.item]}>
-      <Text style={styles.title}>{item.name}</Text>
-      <Text style={styles.title}>{item.address}</Text>
-      <Text style={styles.title}>{item.district}</Text>
-      <Text style={styles.title}>{item.state}</Text>
-      <Text style={styles.title}>{item.pincode}</Text>
+      <View style={{flexDirection:'row'}}>
+        <Text style={[styles.title,{fontWeight:'bold'}]}>Name:</Text>
+        <Text style={styles.title}>  {item.name}</Text>
+      </View>
+      <View style={{flexDirection:'row'}}>
+        <Text style={[styles.title,{fontWeight:'bold'}]}>Address:</Text>
+        <Text style={styles.title}>  {item.address}</Text>
+      </View>
+      <View style={{flexDirection:'row'}}>
+        <Text style={[styles.title,{fontWeight:'bold'}]}>Blood Group:</Text>
+        <Text style={styles.title}>  {item.blood_group}</Text>
+      </View>
+      <View style={{flexDirection:'row'}}>
+        <Text style={[styles.title,{fontWeight:'bold'}]}>Phone no:</Text>
+        <Text style={styles.title}>  {item.phoneno}</Text>
+      </View>
+      <View style={{flexDirection:'row'}}>
+        <Text style={[styles.title,{fontWeight:'bold'}]}>Address:</Text>
+        <Text style={styles.title}>  {item.addrr}</Text>
+      </View>
+      <View style={{flexDirection:'row'}}>
+        <Text style={[styles.title,{fontWeight:'bold'}]}>District:</Text>
+        <Text style={styles.title}>  {item.district}</Text>
+      </View>
+      <View style={{flexDirection:'row'}}>
+        <Text style={[styles.title,{fontWeight:'bold'}]}>State:</Text>
+        <Text style={styles.title}>  {item.state}</Text>
+      </View>
+      <View style={{flexDirection:'row'}}>
+        <Text style={[styles.title,{fontWeight:'bold'}]}>Pincode:</Text>
+        <Text style={styles.title}>  {item.pincode}</Text>
+      </View>
+
       <View style={styles.buttonrow}>
       <TouchableOpacity onPress={onPress} style={styles.invite}>
           <Text style={styles.invitebutton}> Buy</Text>
       </TouchableOpacity>
-      <TouchableOpacity style={styles.invite}>
+      <TouchableOpacity onPress={onPressmoreinfo} style={styles.invite}>
           <Text style={styles.invitebutton}> More Info</Text>
       </TouchableOpacity>
       </View>
@@ -46,6 +74,9 @@ const BuyBloodList = ({navigation}) => {
             onPress={() => navigation.navigate("Confirm Buy", {
                 itemname:item.name
             })}
+            onPressmoreinfo ={()=> navigation.navigate("More Info", {
+              itemname:item.name
+          })}
             style={{ backgroundColor }}
           />
         );
@@ -53,11 +84,12 @@ const BuyBloodList = ({navigation}) => {
 
     return(
         <View style={styles.container}>
-            <Text style={styles.header}>Blood List</Text>
-            <View>
-              
-                
-            </View>
+            <View style={styles.header}>
+      <TouchableOpacity onPress={() => navigation.goBack()}>
+              <Feather name="chevron-left" color="white" size={30} />
+      </TouchableOpacity>
+      <Text  style={styles.headertitle}>Buy Blood</Text>
+      </View>
             <FlatList
         data={buybloodFormState.list}
         renderItem={renderItem}
@@ -82,16 +114,20 @@ const styles= StyleSheet.create({
         
       },
       header:{
-        fontSize:50,
-        fontWeight:'300',
         marginBottom:20,
-        fontFamily: 'sans-serif-condensed',
-        paddingTop:30,
         backgroundColor:colors.primary,
         paddingHorizontal:30,
+        paddingTop:10,
+        
+    },
+    headertitle:{
+      fontSize:50,
+        fontWeight:'bold',
+        marginBottom:20,
+        backgroundColor:colors.primary,
+        fontFamily: 'sans-serif-condensed',      
+        paddingTop:10,
         color:'white'
-        
-        
     },
     container:{
         
