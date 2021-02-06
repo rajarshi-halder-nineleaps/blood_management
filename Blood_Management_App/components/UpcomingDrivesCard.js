@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import React from 'react';
+import React, {useState} from 'react';
 import {
   View,
   Text,
@@ -10,6 +10,7 @@ import {
 import colors from '../constants/Colors';
 import {useSelector, useDispatch} from 'react-redux';
 import Feather from 'react-native-vector-icons/Feather';
+import AreYouSure from './AreYouSure';
 import {
   Collapse,
   CollapseHeader,
@@ -19,124 +20,137 @@ import {
 const UpcomingDrivesCard = (props) => {
   const {item} = props;
   const dispatch = useDispatch();
-  console.log('ID', props.item.driveId);
+
+  const [rusure, setRusure] = useState(false);
+
   return (
-    <Collapse>
-      <CollapseHeader style={styles.touchboard}>
-        <View style={styles.headerDetailsView}>
-          <View style={styles.nameView}>
-            <Text style={styles.nameText}>{item.orgName}</Text>
-          </View>
-          <View style={styles.miniAddressView}>
-            <Text style={styles.miniAddressContent}>
-              From:{'  '}
-              <Text style={styles.miniDateTimeContent}>
-                {item.startDate} at {item.startTime}
-              </Text>
-            </Text>
-            <Text style={styles.miniAddressContent}>
-              To:{'  '}
-              <Text style={styles.miniDateTimeContent}>
-                {item.endDate} at {item.endTime}
-              </Text>
-            </Text>
-          </View>
-        </View>
-
-        <View style={styles.headerIndicatorView}>
-          <TouchableOpacity
-            style={styles.donorListTouch}
-            onPress={() => {
-              console.log(
-                'initiated user registration for drive',
-                props.item.driveId,
-              );
-              dispatch(
-                props.registerUserForDrive(props.userToken, props.item.driveId),
-              );
-            }}>
-            <View style={styles.touchContainerView}>
-              <Text style={styles.touchText}>Register</Text>
-              <View style={styles.iconView}>
-                <Feather
-                  name="chevrons-right"
-                  color={colors.additional2}
-                  size={20}
-                />
-              </View>
+    <>
+      <Collapse>
+        <CollapseHeader style={styles.touchboard}>
+          <View style={styles.headerDetailsView}>
+            <View style={styles.nameView}>
+              <Text style={styles.nameText}>{item.orgName}</Text>
             </View>
-          </TouchableOpacity>
-        </View>
-      </CollapseHeader>
-      <CollapseBody style={styles.collBody}>
-        <View style={styles.bodyHeader}>
-          {item.driveId ? (
-            <Text style={styles.bodyLabel}>
-              Drive ID : {'  '}
-              <Text style={styles.bodyContent}>{item.driveId}</Text>
-            </Text>
-          ) : (
-            <Text style={styles.bodyLabel}>
-              DonationId ID : {'  '}
-              <Text style={styles.bodyContent}>{item.donationId}</Text>
-            </Text>
-          )}
-        </View>
-
-        <View style={styles.detailsBoard}>
-          <View style={styles.contentView}>
-            <View style={styles.addressView}>
-              <Text style={styles.addressLabel}>Drive details:</Text>
-              <View style={styles.addressContentView}>
-                <View style={styles.addressInsideView}>
-                  <Text style={styles.addressInsideLabel}>Address: </Text>
-                  <View style={styles.addressRightView}>
-                    <Text style={styles.addressContent}>
-                      {item.address}, {item.district}, {'\n'}
-                      {item.state} [{item.pincode}]
-                    </Text>
-                  </View>
-                </View>
-                <View style={styles.addressInsideView}>
-                  <Text style={styles.addressInsideLabel}>Organizer Name:</Text>
-                  <View style={styles.addressRightView}>
-                    <Text style={styles.addressContent}>{item.orgName}</Text>
-                  </View>
-                </View>
-                <View style={styles.addressInsideView}>
-                  <Text style={styles.addressInsideLabel}>Email:</Text>
-                  <View style={styles.addressRightView}>
-                    <Text style={styles.addressContent}>{item.orgEmail}</Text>
-                  </View>
-                </View>
-
-                <View style={styles.addressInsideView}>
-                  <Text style={styles.addressInsideLabel}>Contact:</Text>
-                  <View style={styles.addressRightView}>
-                    <Text style={styles.addressContent}>{item.orgContact}</Text>
-                  </View>
-                </View>
-              </View>
+            <View style={styles.miniAddressView}>
+              <Text style={styles.miniAddressContent}>
+                From:{'  '}
+                <Text style={styles.miniDateTimeContent}>
+                  {item.startDate} at {item.startTime}
+                </Text>
+              </Text>
+              <Text style={styles.miniAddressContent}>
+                To:{'  '}
+                <Text style={styles.miniDateTimeContent}>
+                  {item.endDate} at {item.endTime}
+                </Text>
+              </Text>
             </View>
           </View>
 
-          <View style={styles.addressContentView}>
-            <View style={styles.addressView}>
-              <Text style={styles.addressLabel}>Blood groups invited:</Text>
-              <View style={styles.groupsContentView}>
-                {props.item.bloodGroupsInvited.map((val) => {
-                  return (
-                    <View key={val} style={styles.indGroup}>
-                      <Text style={styles.indGroupContent}>{val}</Text>
+          <View style={styles.headerIndicatorView}>
+            <TouchableOpacity
+              style={styles.donorListTouch}
+              onPress={() => {
+                console.log(
+                  'initiated user registration for drive',
+                  props.item.driveId,
+                );
+                setRusure(true);
+              }}>
+              <View style={styles.touchContainerView}>
+                <Text style={styles.touchText}>Register</Text>
+                <View style={styles.iconView}>
+                  <Feather
+                    name="chevrons-right"
+                    color={colors.additional2}
+                    size={20}
+                  />
+                </View>
+              </View>
+            </TouchableOpacity>
+          </View>
+        </CollapseHeader>
+        <CollapseBody style={styles.collBody}>
+          <View style={styles.bodyHeader}>
+            {item.driveId ? (
+              <Text style={styles.bodyLabel}>
+                Drive ID : {'  '}
+                <Text style={styles.bodyContent}>{item.driveId}</Text>
+              </Text>
+            ) : (
+              <Text style={styles.bodyLabel}>
+                DonationId ID : {'  '}
+                <Text style={styles.bodyContent}>{item.donationId}</Text>
+              </Text>
+            )}
+          </View>
+
+          <View style={styles.detailsBoard}>
+            <View style={styles.contentView}>
+              <View style={styles.addressView}>
+                <Text style={styles.addressLabel}>Drive details:</Text>
+                <View style={styles.addressContentView}>
+                  <View style={styles.addressInsideView}>
+                    <Text style={styles.addressInsideLabel}>Address: </Text>
+                    <View style={styles.addressRightView}>
+                      <Text style={styles.addressContent}>
+                        {item.address}, {item.district}, {'\n'}
+                        {item.state} [{item.pincode}]
+                      </Text>
                     </View>
-                  );
-                })}
+                  </View>
+                  <View style={styles.addressInsideView}>
+                    <Text style={styles.addressInsideLabel}>
+                      Organizer Name:
+                    </Text>
+                    <View style={styles.addressRightView}>
+                      <Text style={styles.addressContent}>{item.orgName}</Text>
+                    </View>
+                  </View>
+                  <View style={styles.addressInsideView}>
+                    <Text style={styles.addressInsideLabel}>Email:</Text>
+                    <View style={styles.addressRightView}>
+                      <Text style={styles.addressContent}>{item.orgEmail}</Text>
+                    </View>
+                  </View>
+
+                  <View style={styles.addressInsideView}>
+                    <Text style={styles.addressInsideLabel}>Contact:</Text>
+                    <View style={styles.addressRightView}>
+                      <Text style={styles.addressContent}>
+                        {item.orgContact}
+                      </Text>
+                    </View>
+                  </View>
+                </View>
+              </View>
+            </View>
+
+            <View style={styles.addressContentView}>
+              <View style={styles.addressView}>
+                <Text style={styles.addressLabel}>Blood groups invited:</Text>
+                <View style={styles.groupsContentView}>
+                  {props.item.bloodGroupsInvited.map((val) => {
+                    return (
+                      <View key={val} style={styles.indGroup}>
+                        <Text style={styles.indGroupContent}>{val}</Text>
+                      </View>
+                    );
+                  })}
+                </View>
               </View>
             </View>
           </View>
-        </View>
-      </CollapseBody>
-    </Collapse>
+        </CollapseBody>
+      </Collapse>
+      <AreYouSure
+        visibleState={rusure}
+        visibleStateChanger={setRusure}
+        dispatchable={props.registerUserForDrive}
+        dispatchData={props.item.driveId}
+        message="Are you sure you wish to conduct this drive?"
+      />
+    </>
   );
 };
 

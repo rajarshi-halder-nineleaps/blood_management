@@ -7,12 +7,13 @@ import {
   Text,
   Image,
   StyleSheet,
+  Platform,
   TouchableOpacity,
   TouchableHighlight,
   ActivityIndicator,
   Modal,
   Alert,
-  Button
+  Button,
 } from 'react-native';
 import {useSelector, useDispatch} from 'react-redux';
 import * as places from '../../../assets/places.json';
@@ -145,11 +146,11 @@ const DriveOrganizer = ({navigation}) => {
       isValid = false;
     }
 
-    if (fieldId === 'date'){
-      isValid = false
+    if (fieldId === 'date') {
+      isValid = false;
     }
-    if (fieldId === 'starttime'){
-      isValid = false
+    if (fieldId === 'starttime') {
+      isValid = false;
     }
 
     dispatch(updateFields(val, fieldId, isValid));
@@ -183,66 +184,71 @@ const DriveOrganizer = ({navigation}) => {
         {/* //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// */}
         {/* todo start data start time end date end time */}
 
+        <View>
+          <View style={styles.datepicker}>
+            <TouchableOpacity
+              style={styles.datepickerbutton}
+              onPress={showstartDatepicker}>
+              <Text style={styles.datepickerttext}>Set Start Date</Text>
+            </TouchableOpacity>
+            <Text style={styles.datepickerttextoutput}>
+              {startdate.toDateString()}
+            </Text>
+          </View>
+          <View style={styles.datepicker}>
+            <TouchableOpacity
+              style={styles.datepickerbutton}
+              onPress={showstartTimepicker}>
+              <Text style={styles.datepickerttext}>Set Start Time</Text>
+            </TouchableOpacity>
+            <Text style={styles.datepickerttextoutput}>
+              {startdate.toLocaleTimeString()}
+            </Text>
+          </View>
+          {startshow && (
+            <DateTimePicker
+              testID="dateTimePicker"
+              value={startdate}
+              mode={startmode}
+              is24Hour={true}
+              display="default"
+              onChange={onChangestart}
+            />
+          )}
+        </View>
 
-      <View>
-      <View style={styles.datepicker}>
-        <TouchableOpacity style={styles.datepickerbutton} onPress={showstartDatepicker}>
-          <Text style={styles.datepickerttext}>Set Start Date</Text>
-        </TouchableOpacity>
-        <Text style={styles.datepickerttextoutput}>
-          {startdate.toDateString()}
-        </Text>
-      </View>
-      <View style={styles.datepicker}>
-        <TouchableOpacity style={styles.datepickerbutton} onPress={showstartTimepicker}>
-          <Text style={styles.datepickerttext}>Set Start Time</Text>
-        </TouchableOpacity>
-        <Text style={styles.datepickerttextoutput}>
-          {startdate.toLocaleTimeString()}
-        </Text>
-        
-      </View>
-      {startshow && (
-        <DateTimePicker
-          testID="dateTimePicker"
-          value={startdate}
-          mode={startmode}
-          is24Hour={true}
-          display="default"
-          onChange={onChangestart}
-        />
-      )}
-    </View>
-
-    <View>
-      <View style={styles.datepicker}>
-        <TouchableOpacity style={styles.datepickerbutton} onPress={showendDatepicker}>
-          <Text style={styles.datepickerttext}>Set End Date</Text>
-        </TouchableOpacity>
-        <Text style={styles.datepickerttextoutput}>
-          {enddate.toDateString()}
-        </Text>
-      </View>
-      <View style={styles.datepicker}>
-        <TouchableOpacity style={styles.datepickerbutton} onPress={showendTimepicker}>
-          <Text style={styles.datepickerttext}>Set End Time</Text>
-        </TouchableOpacity>
-        <Text style={styles.datepickerttextoutput}>
-          {enddate.toLocaleTimeString()}
-        </Text>
-        
-      </View>
-      {endshow && (
-        <DateTimePicker
-          testID="dateTimePicker"
-          value={enddate}
-          mode={endmode}
-          is24Hour={true}
-          display="default"
-          onChange={onChangeend}
-        />
-      )}
-    </View>
+        <View>
+          <View style={styles.datepicker}>
+            <TouchableOpacity
+              style={styles.datepickerbutton}
+              onPress={showendDatepicker}>
+              <Text style={styles.datepickerttext}>Set End Date</Text>
+            </TouchableOpacity>
+            <Text style={styles.datepickerttextoutput}>
+              {enddate.toDateString()}
+            </Text>
+          </View>
+          <View style={styles.datepicker}>
+            <TouchableOpacity
+              style={styles.datepickerbutton}
+              onPress={showendTimepicker}>
+              <Text style={styles.datepickerttext}>Set End Time</Text>
+            </TouchableOpacity>
+            <Text style={styles.datepickerttextoutput}>
+              {enddate.toLocaleTimeString()}
+            </Text>
+          </View>
+          {endshow && (
+            <DateTimePicker
+              testID="dateTimePicker"
+              value={enddate}
+              mode={endmode}
+              is24Hour={true}
+              display="default"
+              onChange={onChangeend}
+            />
+          )}
+        </View>
         {/* //////////////////////////////////////////////////////////////////////////////////// */}
 
         {/* //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// */}
@@ -388,8 +394,8 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   container: {
-    paddingVertical:10,
-    paddingHorizontal:30
+    paddingVertical: 10,
+    paddingHorizontal: 30,
   },
   errorMsg: {
     color: colors.primary,
@@ -397,7 +403,7 @@ const styles = StyleSheet.create({
   },
   holderView: {
     width: '100%',
-    paddingTop:20
+    paddingTop: 20,
   },
   holderText: {
     fontSize: 16,
@@ -424,30 +430,30 @@ const styles = StyleSheet.create({
   inviteTouchText: {
     color: colors.additional2,
   },
-  datepicker:{
-    marginVertical:5,
-    flexDirection:'row',
-    justifyContent:'space-between'
+  datepicker: {
+    marginVertical: 5,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
   },
-  datepickerttext:{
-    fontSize:18,
-    fontFamily:'sans-serif-condensed',
-    color:'white'
+  datepickerttext: {
+    fontSize: 18,
+    fontFamily: 'sans-serif-condensed',
+    color: 'white',
   },
-  datepickerttextoutput:{
-    fontSize:18,
-    fontFamily:'sans-serif-condensed',
-    color:'grey'
+  datepickerttextoutput: {
+    fontSize: 18,
+    fontFamily: 'sans-serif-condensed',
+    color: 'grey',
   },
-  
-  datepickerbutton:{
-    borderColor:colors.primary,
-    borderWidth:1,
-    paddingHorizontal:10,
-    paddingVertical:5,
-    backgroundColor:colors.primary,
-    borderRadius:10
-  }
+
+  datepickerbutton: {
+    borderColor: colors.primary,
+    borderWidth: 1,
+    paddingHorizontal: 10,
+    paddingVertical: 5,
+    backgroundColor: colors.primary,
+    borderRadius: 10,
+  },
 });
 
 export default DriveOrganizer;

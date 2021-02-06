@@ -11,10 +11,7 @@ import {
   ActivityIndicator,
 } from 'react-native';
 import {useSelector, useDispatch} from 'react-redux';
-import {
-  donationVerification,
-  doubleDataPoster,
-} from '../../../redux/myDrives/actions';
+import {donorVerification} from '../../../redux/myDrives/actions';
 import colors from '../../../constants/Colors';
 import Feather from 'react-native-vector-icons/Feather';
 
@@ -23,18 +20,11 @@ const DriveDonorList = ({route, navigation}) => {
   const authState = useSelector((state) => state.authState);
   const dispatch = useDispatch();
 
-  const {driveId} = route.params;
-
-  let acceptedDonors = [];
-
-  const currDrive = myDrivesState.myDrivesData.filter(
-    (val) => val.driveId === driveId,
-  )[0];
-  acceptedDonors = [...currDrive.acceptedDonors];
-
-  const bloodDonationHandler = (drive, donor) => {
+  const bloodDonationHandler = (donorId) => {
     console.log('thunk action creator for posting myDriveDetails data started');
-    dispatch(doubleDataPoster(authState.userToken, drive, donor));
+    dispatch(
+      donorVerification(authState.userToken, route.params.driveId, donorId),
+    );
   };
 
   const renderItem = ({item}) => {
@@ -55,7 +45,7 @@ const DriveDonorList = ({route, navigation}) => {
             {!item.hasGivenBlood ? (
               <TouchableOpacity
                 style={styles.completedDonationTouch}
-                onPress={() => bloodDonationHandler(driveId, item.donorId)}>
+                onPress={() => bloodDonationHandler(item.donorId)}>
                 <ImageBackground
                   style={styles.imgBtnBkg}
                   source={require('../../../assets/images/invBkg.png')}>
@@ -67,9 +57,7 @@ const DriveDonorList = ({route, navigation}) => {
                 </ImageBackground>
               </TouchableOpacity>
             ) : (
-              <View
-                style={styles.completedDonationTouchDonated}
-                onPress={() => bloodDonationHandler(driveId, item.donorId)}>
+              <View style={styles.completedDonationTouchDonated}>
                 <Feather
                   name="check-square"
                   color={colors.additional2}
@@ -96,7 +84,7 @@ const DriveDonorList = ({route, navigation}) => {
             size="large"
           />
         </View>
-      ) : myDrivesState.myDrivesData.length === 0 ? (
+      ) : myDrivesState.donorsList.length === 0 ? (
         <View style={styles.suchEmpty}>
           <Image
             style={styles.suchEmptyImg}
@@ -108,7 +96,7 @@ const DriveDonorList = ({route, navigation}) => {
         <View>
           <FlatList
             style={styles.scroll}
-            data={acceptedDonors}
+            data={myDrivesState.donorsList}
             renderItem={renderItem}
             keyExtractor={(item) => item.donorId}
           />

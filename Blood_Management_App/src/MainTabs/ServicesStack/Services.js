@@ -23,10 +23,11 @@ const Services = ({navigation}) => {
 
   const userType = authState.userType;
 
-  useEffect(() => {
-    dispatch(resetDoneState());
-    console.log('gotData state set to false');
-  }, [dispatch]);
+  //* THIS HAS BEEN CHANGED
+  // useEffect(() => {
+  // dispatch(resetDoneState());
+  // console.log('gotData state set to false');
+  // }, [dispatch]);
 
   // useEffect(() => {
   //   if (myDrivesState.gotData) {
@@ -34,8 +35,9 @@ const Services = ({navigation}) => {
   //   }
   // }, [myDrivesState.gotData, navigation]);
 
+  //TODO convert all this to useEffect
+
   const myDrivesHandler = () => {
-    dispatch(getDriveData(authState.userToken));
     navigation.navigate('myDrives');
   };
 

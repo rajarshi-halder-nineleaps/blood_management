@@ -3,34 +3,23 @@ import {Alert} from 'react-native';
 import {
   FETCH_DRIVES_REQ,
   FETCH_DRIVES_SUCCESS,
+  DRIVE_CANCEL_SUCCESS,
+  FETCH_LIST_SUCCESS,
   FETCH_DRIVES_FAILURE,
   DONATION_VERIFICATION,
-  RESET_DONE_STATE,
-  DRIVE_CANCEL_SUCCESS,
 } from './actionTypes';
 
 const initialState = {
   myDrivesData: [],
+  donorsList: [],
   loading: false,
   error: '',
-  gotData: false,
 };
 
 const myDrivesReducer = (state = initialState, action) => {
   switch (action.type) {
     case FETCH_DRIVES_REQ: {
       return {...state, loading: true};
-    }
-
-    case FETCH_DRIVES_SUCCESS: {
-      console.log('GET DATA REACHED REDUCER');
-      return {
-        ...state,
-        loading: false,
-        error: '',
-        myDrivesData: action.myDrivesData,
-        gotData: true,
-      };
     }
 
     case FETCH_DRIVES_FAILURE: {
@@ -40,30 +29,46 @@ const myDrivesReducer = (state = initialState, action) => {
         ...state,
         loading: false,
         error: action.error,
-        myDrivesData: [],
-        gotData: false,
       };
     }
 
-    case RESET_DONE_STATE: {
-      console.log('reset done state reached reducer!');
+    case FETCH_DRIVES_SUCCESS: {
+      console.log('GET DATA REACHED REDUCER');
       return {
         ...state,
-        gotData: false,
+        loading: false,
+        error: '',
+        myDrivesData: action.myDrivesData,
       };
     }
 
-    // case DONATION_VERIFICATION: {
-    //   console.log('button click to update state reached reducer');
-    //   const newState = {...state};
-    //   newState.myDrivesData
-    //     .filter((val) => val.driveId === action.drive)[0]
-    //     .acceptedDonors.filter(
-    //       (val) => val.donorId === action.donor,
-    //     )[0].hasGivenBlood = true;
-    //   console.log('NEWSTATE(()): ', newState.myDrivesData[0].acceptedDonors[0]);
-    //   return newState;
-    // }
+    case FETCH_LIST_SUCCESS: {
+      console.log('Donors list reached reducer!');
+      return {
+        ...state,
+        loading: false,
+        error: '',
+        donorsList: action.donorsList,
+      };
+    }
+
+    case DRIVE_CANCEL_SUCCESS: {
+      console.log('cancelled drive data reached reducer!', action);
+      const newDrivesData = state.myDrivesData.filter(
+        (val) => val.driveId !== action.driveId,
+      );
+
+      return {...state, loading: false, myDrivesData: newDrivesData};
+    }
+
+    case DONATION_VERIFICATION: {
+      const newDonorsList = [...state.donorsList];
+      newDonorsList.find(
+        (val) => val.donorId === action.donorId,
+      ).hasGivenBlood = true;
+
+      return {...state, loading: false, donorsList: newDonorsList};
+    }
 
     default:
       return state;
