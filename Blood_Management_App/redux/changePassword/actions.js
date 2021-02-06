@@ -23,7 +23,8 @@ export const blurFields = (fieldId) => ({
 });
 
 export const stateCleanup = () => ({type: STATE_CLEANUP_CHANGE});
-//////////////////////////////////////////////////////////////////////////////
+
+/////////////////////////////////////////////////////////////////////////////////////////////////
 
 export const changeReq = () => ({type: CHANGE_REQ});
 
@@ -37,27 +38,34 @@ export const changeReqSuccess = (successReq) => ({
   successReq: successReq,
 });
 
-export const resetDoneState = () => ({
+export const resetDoneState = (currScreen) => ({
   type: RESET_DONE_STATE,
+  currScreen,
 });
 
-////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-export const postCurrentPassword = (password) => {
+export const postCurrentPassword = (userToken, password) => {
   return async (dispatch) => {
     dispatch(changeReq());
+    dispatch(resetDoneState('currPassword'));
+
     try {
       const response = await axios.post(
-        'http://API URI HERE:5000/changepassword',
+        'http://192.168.43.89:5000/currentpassword',
+        {password},
         {
-          currPassword: password,
+          headers: {Authorization: userToken},
         },
       );
       if (response.data.error) {
         dispatch(changeReqFailure(response.data.error));
-        console.log('Error while posting old password', response.data.error);
+        console.log(
+          'Error while posting current password',
+          response.data.error,
+        );
       } else if (response.data.success) {
-        dispatch(changeReqSuccess('emailSent'));
+        dispatch(changeReqSuccess('passwordSent'));
       } else {
         dispatch(changeReqFailure("Something's not right!"));
       }
@@ -68,16 +76,21 @@ export const postCurrentPassword = (password) => {
   };
 };
 
-////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-export const postResetPassword = (password) => {
+export const postResetPassword = (userToken, password) => {
   return async (dispatch) => {
     dispatch(changeReq());
+    dispatch(resetDoneState('newPassword'));
+
     try {
-      //*axios put request
-      const response = await axios.put('http://API URI HERE:5000/resetpwd', {
-        password: password,
-      });
+      const response = await axios.put(
+        'http://192.168.43.89:5000/makenewpwd',
+        {password},
+        {
+          headers: {Authorization: userToken},
+        },
+      );
       if (response.data.error) {
         dispatch(changeReqFailure(response.data.error));
         console.log('Error while posting reset password', response.data.error);

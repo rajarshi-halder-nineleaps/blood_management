@@ -35,6 +35,7 @@ const initialState = {
   emailSent: false,
   otpVerified: false,
   passwordReset: false,
+  resentOtp: 0,
 };
 
 const forgotReducer = (state = initialState, action) => {
@@ -70,12 +71,18 @@ const forgotReducer = (state = initialState, action) => {
       return {...state, loading: true};
     }
     case FORGOT_REQ_SUCCESS: {
+      let newResentOtp = state.resentOtp;
+      if (action.successReq === 'emailSent') {
+        newResentOtp += 1;
+      }
+
       console.log('forgotpassword success response recieved!');
       console.log({
         ...state,
         loading: false,
         error: '',
         [action.successReq]: true,
+        resentOtp: newResentOtp,
       });
       return {...state, loading: false, error: '', [action.successReq]: true};
     }
@@ -85,12 +92,24 @@ const forgotReducer = (state = initialState, action) => {
     }
 
     case RESET_DONE_STATE: {
-      return {
+      let newState = {
         ...state,
         emailSent: false,
         otpVerified: false,
         passwordReset: false,
       };
+
+      if (action.resettable === 'otp') {
+        newState.inputValues.otp = '';
+        newState.isTouched.otp = false;
+      } else {
+        newState.inputValues.password = '';
+        newState.inputValues.cpassword = '';
+        newState.isTouched.password = false;
+        newState.isTouched.cpassword = false;
+      }
+
+      return newState;
     }
 
     default:

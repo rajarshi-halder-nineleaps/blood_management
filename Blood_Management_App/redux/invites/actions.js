@@ -2,7 +2,9 @@
 import axios from 'axios';
 import {DREQ_REQ, DREQ_SUCCESS, DREQ_FAILURE, DREQ_UPDATE} from './actionTypes';
 
-export const invitesReq = () => ({type: DREQ_REQ});
+export const invitesReq = () => ({
+  type: DREQ_REQ,
+});
 
 export const invitesSuccess = (invitesList) => ({
   type: DREQ_SUCCESS,

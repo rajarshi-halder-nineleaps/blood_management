@@ -143,13 +143,15 @@ const UpcomingDrivesCard = (props) => {
           </View>
         </CollapseBody>
       </Collapse>
-      <AreYouSure
-        visibleState={rusure}
-        visibleStateChanger={setRusure}
-        dispatchable={props.registerUserForDrive}
-        dispatchData={props.item.driveId}
-        message="Are you sure you wish to conduct this drive?"
-      />
+      {rusure ? (
+        <AreYouSure
+          visibleState={rusure}
+          visibleStateChanger={setRusure}
+          dispatchable={props.registerUserForDrive}
+          dispatchData={props.item.driveId}
+          message="Are you sure you wish to conduct this drive?"
+        />
+      ) : null}
     </>
   );
 };

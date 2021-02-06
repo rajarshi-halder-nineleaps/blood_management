@@ -9,16 +9,32 @@ import {
   TouchableOpacity,
   ImageBackground,
   ActivityIndicator,
+  RefreshControl,
 } from 'react-native';
 import {useSelector, useDispatch} from 'react-redux';
 import {donorVerification} from '../../../redux/myDrives/actions';
 import colors from '../../../constants/Colors';
 import Feather from 'react-native-vector-icons/Feather';
+import {getDonorList} from '../../../redux/myDrives/actions';
 
 const DriveDonorList = ({route, navigation}) => {
   const myDrivesState = useSelector((state) => state.myDrivesState);
   const authState = useSelector((state) => state.authState);
   const dispatch = useDispatch();
+  const [refreshing, setRefreshing] = React.useState(false);
+
+  const onRefresh = React.useCallback(() => {
+    setRefreshing(true);
+    dispatch(getDonorList(authState.userToken, route.params.driveId));
+    if (!myDrivesState.loading) {
+      setRefreshing(false);
+    }
+  }, [
+    authState.userToken,
+    dispatch,
+    myDrivesState.loading,
+    route.params.driveId,
+  ]);
 
   const bloodDonationHandler = (donorId) => {
     console.log('thunk action creator for posting myDriveDetails data started');
@@ -99,6 +115,13 @@ const DriveDonorList = ({route, navigation}) => {
             data={myDrivesState.donorsList}
             renderItem={renderItem}
             keyExtractor={(item) => item.donorId}
+            refreshControl={
+              <RefreshControl
+                colors={[colors.primary, colors.secondary]}
+                refreshing={refreshing}
+                onRefresh={onRefresh}
+              />
+            }
           />
         </View>
       )}

@@ -18,7 +18,6 @@ import {fetchInvitesList} from '../../../redux/invites/actions';
 
 const Services = ({navigation}) => {
   const authState = useSelector((state) => state.authState);
-  const myDrivesState = useSelector((state) => state.myDrivesState);
   const dispatch = useDispatch();
 
   const userType = authState.userType;
@@ -42,7 +41,6 @@ const Services = ({navigation}) => {
   };
 
   const myCommitmentsHandler = () => {
-    dispatch(fetchCommitments(authState.userToken));
     navigation.navigate('commitments');
   };
 

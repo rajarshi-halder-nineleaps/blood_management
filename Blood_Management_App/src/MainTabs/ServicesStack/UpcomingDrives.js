@@ -8,6 +8,7 @@ import {
   TouchableOpacity,
   FlatList,
   Alert,
+  RefreshControl,
   ActivityIndicator,
   KeyboardAvoidingView,
 } from 'react-native';
@@ -15,13 +16,31 @@ import React, {useState, useEffect} from 'react';
 import {useSelector, useDispatch} from 'react-redux';
 import colors from '../../../constants/Colors';
 import {registerUserForDrive} from '../../../redux/upcomingDrives/actions';
+import {upcomingDrivesSearch} from '../../../redux/upcomingDrives/actions';
 import UpcomingDrivesCard from '../../../components/UpcomingDrivesCard';
 
-const UpcomingDrives = ({navigation}) => {
+const UpcomingDrives = ({navigation, route}) => {
   const authState = useSelector((state) => state.authState);
   const upcomingDrivesState = useSelector((state) => state.upcomingDrivesState);
-  //   const dispatch = useDispatch();
-
+  const dispatch = useDispatch();
+  const [refreshing, setRefreshing] = React.useState(false);
+  const onRefresh = React.useCallback(
+    (driveId) => {
+      setRefreshing(true);
+      dispatch(
+        upcomingDrivesSearch(authState.userToken, route.params.searchData),
+      );
+      if (!upcomingDrivesState.loading) {
+        setRefreshing(false);
+      }
+    },
+    [
+      authState.userToken,
+      dispatch,
+      route.params.searchData,
+      upcomingDrivesState.loading,
+    ],
+  );
   return (
     <View style={styles.container}>
       {upcomingDrivesState.loading ? (
@@ -71,6 +90,13 @@ const UpcomingDrives = ({navigation}) => {
                 />
               )}
               keyExtractor={(item) => item.driveId}
+              refreshControl={
+                <RefreshControl
+                  colors={[colors.primary, colors.secondary]}
+                  refreshing={refreshing}
+                  onRefresh={onRefresh}
+                />
+              }
             />
           )}
         </View>

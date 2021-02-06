@@ -10,32 +10,29 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import {TextInput} from 'react-native-gesture-handler';
-import colors from '../../constants/Colors';
+import colors from '../../../constants/Colors';
 import Feather from 'react-native-vector-icons/Feather';
-import {updateFields, blurFields} from '../../redux/forgotpassword/actions';
-import {useDispatch, useSelector} from 'react-redux';
-import {passwordRegex} from '../../constants/Regexes';
 import {
-  postResetPassword,
+  updateFields,
+  blurFields,
   resetDoneState,
   stateCleanup,
-} from '../../redux/forgotpassword/actions';
+  postResetPassword,
+} from '../../../redux/changePassword/actions';
+import {useDispatch, useSelector} from 'react-redux';
+import {passwordRegex} from '../../../constants/Regexes';
 
-const Resetpassword = ({navigation}) => {
+const NewPassword = ({navigation}) => {
   const dispatch = useDispatch();
-  const forgotState = useSelector((state) => state.forgotState);
+  const changePasswordState = useSelector((state) => state.changePasswordState);
+  const authState = useSelector((state) => state.authState);
 
   useEffect(() => {
-    dispatch(resetDoneState('passwordReset'));
-    console.log('passwordReset set to false');
-  }, [dispatch]);
-
-  useEffect(() => {
-    if (forgotState.passwordReset) {
+    if (changePasswordState.passwordReset) {
       dispatch(stateCleanup());
-      navigation.navigate('LoginScreen');
+      navigation.navigate('profile');
     }
-  }, [dispatch, forgotState.passwordReset, navigation]);
+  }, [dispatch, changePasswordState.passwordReset, navigation]);
 
   const handlepassword = (val, fieldId) => {
     let isValid = true;
@@ -43,22 +40,24 @@ const Resetpassword = ({navigation}) => {
       isValid = false;
     }
 
-    if (fieldId === 'cpassword' && val !== forgotState.inputValues.password) {
+    if (
+      fieldId === 'cpassword' &&
+      val !== changePasswordState.inputValues.password
+    ) {
       isValid = false;
     }
-
     dispatch(updateFields(val, fieldId, isValid));
   };
 
   const handleSubmit = () => {
     if (
-      forgotState.inputValidity.password &&
-      forgotState.inputValidity.cpassword
+      changePasswordState.inputValidity.password &&
+      changePasswordState.inputValidity.cpassword
     ) {
       dispatch(
         postResetPassword(
-          forgotState.inputValues.email,
-          forgotState.inputValues.password,
+          authState.userToken,
+          changePasswordState.inputValues.password,
         ),
       );
     } else {
@@ -91,7 +90,7 @@ const Resetpassword = ({navigation}) => {
           <TextInput
             secureTextEntry={true}
             keyboardType="default"
-            value={forgotState.inputValues.password}
+            value={changePasswordState.inputValues.password}
             style={[styles.input, {marginTop: 30}]}
             placeholder="Password"
             onChangeText={(val) => handlepassword(val, 'password')}
@@ -100,15 +99,15 @@ const Resetpassword = ({navigation}) => {
             }}
           />
 
-          {!forgotState.inputValidity.password &&
-            forgotState.isTouched.password && (
+          {!changePasswordState.inputValidity.password &&
+            changePasswordState.isTouched.password && (
               <Text style={styles.errMsg}>Invalid password format!</Text>
             )}
 
           <TextInput
             secureTextEntry={true}
             keyboardType="default"
-            value={forgotState.inputValues.cpassword}
+            value={changePasswordState.inputValues.cpassword}
             style={[styles.input, {marginTop: 30}]}
             placeholder="Confirm Password"
             onChangeText={(val) => handlepassword(val, 'cpassword')}
@@ -116,8 +115,8 @@ const Resetpassword = ({navigation}) => {
               dispatch(blurFields('cpassword'));
             }}
           />
-          {!forgotState.inputValidity.cpassword &&
-            forgotState.isTouched.cpassword && (
+          {!changePasswordState.inputValidity.cpassword &&
+            changePasswordState.isTouched.cpassword && (
               <Text style={styles.errMsg}>Password mismatch!</Text>
             )}
 
@@ -202,4 +201,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Resetpassword;
+export default NewPassword;

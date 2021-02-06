@@ -34,6 +34,7 @@ const Profile = ({navigation}) => {
             <View style={styles.userInfoView}>
               <View style={styles.imageView}>
                 <View style={styles.imageCutterView}>
+                  {/*todo find a way to recieve images via server. */}
                   <Image
                     style={styles.avatar}
                     source={require('../../../assets/images/realpic1.png')}
@@ -49,7 +50,9 @@ const Profile = ({navigation}) => {
             <TouchableOpacity style={styles.touch}>
               <Text style={styles.touchText}>User Information</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.touch}>
+            <TouchableOpacity
+              style={styles.touch}
+              onPress={() => navigation.navigate('confirmPassword')}>
               <Text style={styles.touchText}>Change Password</Text>
             </TouchableOpacity>
 
@@ -133,7 +136,7 @@ const styles = StyleSheet.create({
   imageCutterView: {
     borderRadius: 100,
     overflow: 'hidden',
-    backgroundColor: 'green',
+    backgroundColor: 'transparent',
   },
   avatar: {
     width: 200,

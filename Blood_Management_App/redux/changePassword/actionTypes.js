@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 export const UPDATE_FIELDS_CHANGE = 'UPDATE_FIELDS_CHANGE';
 export const CHANGE_REQ = 'CHANGE_REQ';
 export const CHANGE_REQ_SUCCESS = 'CHANGE_REQ_SUCCESS';

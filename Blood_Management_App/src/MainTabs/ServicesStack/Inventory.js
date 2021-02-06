@@ -10,6 +10,7 @@ import {
   StyleSheet,
   TouchableOpacity,
   ActivityIndicator,
+  RefreshControl,
 } from 'react-native';
 import {
   updateInventory,
@@ -25,6 +26,7 @@ const Inventory = () => {
   const inventoryState = useSelector((state) => state.inventoryState);
   const authState = useSelector((state) => state.authState);
   //   console.log(inventoryState.invData);
+  const [refreshing, setRefreshing] = React.useState(false);
 
   const toggleTouchHandler = () => {
     if (inventoryState.editing) {
@@ -33,6 +35,14 @@ const Inventory = () => {
       dispatch(editingToggle());
     }
   };
+
+  const onRefresh = React.useCallback(() => {
+    setRefreshing(true);
+    dispatch(getInventory(authState.userToken));
+    if (!inventoryState.loading) {
+      setRefreshing(false);
+    }
+  }, [authState.userToken, dispatch, inventoryState.loading]);
 
   return (
     <View style={styles.container}>
@@ -50,6 +60,7 @@ const Inventory = () => {
       ) : (
         <View>
           <ScrollView style={styles.scroll}>
+            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
             {inventoryState.invData.map((val, idx) => (
               <InventoryCard key={idx} id={idx} cardData={val} />
             ))}

@@ -10,6 +10,7 @@ import {
   ImageBackground,
   TouchableOpacity,
   ActivityIndicator,
+  RefreshControl,
 } from 'react-native';
 import {useSelector, useDispatch} from 'react-redux';
 import colors from '../../../constants/Colors';
@@ -33,6 +34,18 @@ const MyDrives = ({navigation}) => {
 
   const [rusure, setRusure] = useState(false);
   const [cancelId, setCancelId] = useState('');
+  const [refreshing, setRefreshing] = React.useState(false);
+
+  const onRefresh = React.useCallback(
+    (driveId) => {
+      setRefreshing(true);
+      dispatch(getDriveData(authState.userToken));
+      if (!myDrivesState.loading) {
+        setRefreshing(false);
+      }
+    },
+    [authState.userToken, dispatch, myDrivesState.loading],
+  );
 
   useEffect(() => {
     dispatch(getDriveData(authState.userToken));
@@ -179,6 +192,13 @@ const MyDrives = ({navigation}) => {
           data={myDrivesState.myDrivesData}
           renderItem={renderItem}
           keyExtractor={(item) => item.driveId}
+          refreshControl={
+            <RefreshControl
+              colors={[colors.primary, colors.secondary]}
+              refreshing={refreshing}
+              onRefresh={onRefresh}
+            />
+          }
         />
       )}
       {rusure ? (
