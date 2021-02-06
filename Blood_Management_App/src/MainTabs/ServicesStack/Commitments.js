@@ -7,15 +7,33 @@ import {
   StyleSheet,
   Image,
   FlatList,
+  RefreshControl,
   ActivityIndicator,
 } from 'react-native';
 import {useSelector, useDispatch} from 'react-redux';
 import colors from '../../../constants/Colors';
 import renderItem from '../../../components/CommitmentsCard';
+import {fetchCommitments} from '../../../redux/commitments/actions';
 
 const Commitments = () => {
   const commitmentsState = useSelector((state) => state.commitmentsState);
+  const dispatch = useDispatch();
+  const authState = useSelector((state) => state.authState);
+  useEffect(() => {
+    dispatch(fetchCommitments(authState.userToken));
+  }, [authState.userToken, dispatch]);
+  const [refreshing, setRefreshing] = React.useState(false);
 
+  const onRefresh = React.useCallback(
+    (driveId) => {
+      setRefreshing(true);
+      dispatch(fetchCommitments(authState.userToken));
+      if (!commitmentsState.loading) {
+        setRefreshing(false);
+      }
+    },
+    [authState.userToken, commitmentsState.loading, dispatch],
+  );
   //* if adding anything before or after the flatlist, use flatlist's header and footer props.
   return (
     <View style={styles.container}>
@@ -44,6 +62,13 @@ const Commitments = () => {
           data={commitmentsState.commitmentsList}
           renderItem={renderItem}
           keyExtractor={(item) => item.driveId || item.donationId}
+          refreshControl={
+            <RefreshControl
+              colors={[colors.primary, colors.secondary]}
+              refreshing={refreshing}
+              onRefresh={onRefresh}
+            />
+          }
         />
       )}
     </View>

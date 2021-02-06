@@ -10,13 +10,9 @@ import {
   ImageBackground,
   TouchableOpacity,
   ActivityIndicator,
+  RefreshControl,
 } from 'react-native';
 import {useSelector, useDispatch} from 'react-redux';
-import {
-  getDriveData,
-  resetDoneState,
-  driveCancellation,
-} from '../../../redux/myDrives/actions';
 import colors from '../../../constants/Colors';
 import Feather from 'react-native-vector-icons/Feather';
 import {
@@ -24,6 +20,11 @@ import {
   CollapseHeader,
   CollapseBody,
 } from 'accordion-collapse-react-native';
+import {
+  getDriveData,
+  getDonorList,
+  driveCancellation,
+} from '../../../redux/myDrives/actions';
 import AreYouSure from '../../../components/AreYouSure';
 
 const MyDrives = ({navigation}) => {
@@ -33,15 +34,22 @@ const MyDrives = ({navigation}) => {
 
   const [rusure, setRusure] = useState(false);
   const [cancelId, setCancelId] = useState('');
-  // useEffect(() => {
-  //   console.log('dispatching initial get action');
-  //   dispatch(getDriveData(authState.userToken));
-  // }, [authState.userToken, dispatch]);
+  const [refreshing, setRefreshing] = React.useState(false);
+
+  const onRefresh = React.useCallback(
+    (driveId) => {
+      setRefreshing(true);
+      dispatch(getDriveData(authState.userToken));
+      if (!myDrivesState.loading) {
+        setRefreshing(false);
+      }
+    },
+    [authState.userToken, dispatch, myDrivesState.loading],
+  );
 
   useEffect(() => {
-    dispatch(resetDoneState());
-    console.log('gotData state set to false');
-  }, [dispatch]);
+    dispatch(getDriveData(authState.userToken));
+  }, [dispatch, authState.userToken]);
 
   const renderItem = ({item}) => {
     return (
@@ -50,6 +58,13 @@ const MyDrives = ({navigation}) => {
           <View style={styles.headerDetailsView}>
             <View style={styles.nameView}>
               <Text style={styles.nameText}>{item.driveId}</Text>
+              {new Date(item.endDate).getTime() <= new Date().getTime() ? (
+                <Text style={styles.greenText}>COMPLETED</Text>
+              ) : new Date(item.startDate).getTime() >= new Date().getTime() ? (
+                <Text style={styles.blueText}>UPCOMING</Text>
+              ) : (
+                <Text style={styles.redText}>ACTIVE</Text>
+              )}
             </View>
             <View style={styles.miniAddressView}>
               <Text style={styles.miniAddressContent}>
@@ -74,6 +89,7 @@ const MyDrives = ({navigation}) => {
               style={styles.donorListTouch}
               onPress={() => {
                 console.log('navigating to the list of accepted donors screen');
+                dispatch(getDonorList(authState.userToken, item.driveId));
                 navigation.navigate('driveDonorList', {
                   driveId: item.driveId,
                 });
@@ -127,16 +143,21 @@ const MyDrives = ({navigation}) => {
                   })}
                 </View>
               </View>
-              <View style={styles.cancelDriveView}>
-                <TouchableOpacity
-                  style={styles.cancelDriveTouch}
-                  onPress={() => {
-                    setCancelId(item.driveId);
-                    setRusure(true);
-                  }}>
-                  <Text style={styles.cancelDriveText}>Cancel This drive</Text>
-                </TouchableOpacity>
-              </View>
+              {new Date(item.startDate).getTime() <=
+              new Date().getTime() ? null : (
+                <View style={styles.cancelDriveView}>
+                  <TouchableOpacity
+                    style={styles.cancelDriveTouch}
+                    onPress={() => {
+                      setCancelId(item.driveId);
+                      setRusure(true);
+                    }}>
+                    <Text style={styles.cancelDriveText}>
+                      Cancel This drive
+                    </Text>
+                  </TouchableOpacity>
+                </View>
+              )}
             </View>
           </View>
         </CollapseBody>
@@ -171,15 +192,24 @@ const MyDrives = ({navigation}) => {
           data={myDrivesState.myDrivesData}
           renderItem={renderItem}
           keyExtractor={(item) => item.driveId}
+          refreshControl={
+            <RefreshControl
+              colors={[colors.primary, colors.secondary]}
+              refreshing={refreshing}
+              onRefresh={onRefresh}
+            />
+          }
         />
       )}
-      <AreYouSure
-        visibleState={rusure}
-        visibleStateChanger={setRusure}
-        dispatchable={driveCancellation}
-        dispatchData={cancelId}
-        message="Are you sure you wish to cancel this drive?"
-      />
+      {rusure ? (
+        <AreYouSure
+          visibleState={rusure}
+          visibleStateChanger={setRusure}
+          dispatchable={driveCancellation}
+          dispatchData={cancelId}
+          message="Are you sure you wish to cancel this drive?"
+        />
+      ) : null}
     </View>
   );
 };
@@ -275,6 +305,7 @@ const styles = StyleSheet.create({
   },
   nameView: {
     marginBottom: 5,
+    flexDirection: 'row',
   },
   nameText: {
     fontFamily: 'Montserrat-Bold',
@@ -395,6 +426,21 @@ const styles = StyleSheet.create({
   cancelDriveText: {
     color: colors.additional2,
     fontFamily: 'Montserrat-Regular',
+  },
+  greenText: {
+    color: 'green',
+    fontFamily: 'Montserrat-Bold',
+    marginLeft: 10,
+  },
+  blueText: {
+    color: colors.coolblue,
+    fontFamily: 'Montserrat-Bold',
+    marginLeft: 10,
+  },
+  redText: {
+    color: colors.dutchred,
+    fontFamily: 'Montserrat-Bold',
+    marginLeft: 10,
   },
 });
 

@@ -7,19 +7,33 @@ import {
   Image,
   FlatList,
   ActivityIndicator,
+  RefreshControl,
 } from 'react-native';
 import React from 'react';
 import {useSelector, useDispatch} from 'react-redux';
 import colors from '../../../constants/Colors';
 import {registerUserForDrive} from '../../../redux/upcomingDrives/actions';
 import DonationRequestsCard from '../../../components/DonationRequestsCard';
+import {fetchSalesData} from '../../../redux/sales/actions';
 
 //TODO replace commitments state with donation requests state
 
 const DonationRequests = ({navigation}) => {
   const authState = useSelector((state) => state.authState);
   const invitesState = useSelector((state) => state.invitesState);
+  const dispatch = useDispatch();
 
+  const [refreshing, setRefreshing] = React.useState(false);
+  const onRefresh = React.useCallback(
+    (driveId) => {
+      setRefreshing(true);
+      dispatch(fetchSalesData(authState.userToken));
+      if (!invitesState.loading) {
+        setRefreshing(false);
+      }
+    },
+    [authState.userToken, dispatch, invitesState.loading],
+  );
   return (
     <View style={styles.container}>
       {invitesState.loading ? (
@@ -47,6 +61,13 @@ const DonationRequests = ({navigation}) => {
           data={invitesState.invitesList}
           renderItem={({item}) => <DonationRequestsCard item={item} />}
           keyExtractor={(item) => item.driveId || item.donationId}
+          refreshControl={
+            <RefreshControl
+              colors={[colors.primary, colors.secondary]}
+              refreshing={refreshing}
+              onRefresh={onRefresh}
+            />
+          }
         />
       )}
     </View>

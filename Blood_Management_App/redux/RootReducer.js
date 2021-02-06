@@ -20,6 +20,7 @@ import buybloodReducer from './buyblood/reducer';
 import invitesReducer from './invites/reducer';
 import mypurchasesReducer from './mypurchases/reducer';
 import activedonorReducer from './activedonorrequest/reducer';
+import changePasswordReducer from './changePassword/reducer';
 
 const rootReducer = combineReducers({
   loginFormState: loginReducer,
@@ -40,6 +41,7 @@ const rootReducer = combineReducers({
   invitesState: invitesReducer,
   mypurchasesFormState: mypurchasesReducer,
   activedonorFormState: activedonorReducer,
+  changePasswordState: changePasswordReducer,
 });
 
 export default rootReducer;

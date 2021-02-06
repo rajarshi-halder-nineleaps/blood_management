@@ -10,23 +10,29 @@ import {
   Alert,
   TouchableOpacity,
   KeyboardAvoidingView,
+  ToastAndroid,
+  AlertIOS,
 } from 'react-native';
 import {TextInput} from 'react-native-gesture-handler';
 import colors from '../../constants/Colors';
 import Feather from 'react-native-vector-icons/Feather';
 import {updateFields, blurFields} from '../../redux/forgotpassword/actions';
 import {useDispatch, useSelector} from 'react-redux';
-import {postOTP, resetDoneState} from '../../redux/forgotpassword/actions';
+import {
+  postEmail,
+  postOTP,
+  resetDoneState,
+} from '../../redux/forgotpassword/actions';
 import {otpRegex} from '../../constants/Regexes';
 
 const Enterotp = ({navigation}) => {
   const dispatch = useDispatch();
   const forgotState = useSelector((state) => state.forgotState);
 
-  useEffect(() => {
-    dispatch(resetDoneState('otpVerified'));
-    console.log('otpVerified set to false');
-  }, [dispatch]);
+  // useEffect(() => {
+  //   dispatch(resetDoneState('otpVerified'));
+  //   console.log('otpVerified set to false');
+  // }, [dispatch]);
 
   useEffect(() => {
     if (forgotState.otpVerified) {
@@ -44,7 +50,9 @@ const Enterotp = ({navigation}) => {
 
   const handleSubmit = () => {
     if (forgotState.inputValidity.otp) {
-      dispatch(postOTP(forgotState.inputValues.otp));
+      dispatch(
+        postOTP(forgotState.inputValues.email, forgotState.inputValues.otp),
+      );
     } else {
       Alert.alert('Invalid OTP', 'Please enter a valid OTP');
     }
@@ -83,7 +91,17 @@ const Enterotp = ({navigation}) => {
             {!forgotState.inputValidity.otp && forgotState.isTouched.otp && (
               <Text style={styles.errMsg}>Inavlid OTP!</Text>
             )}
-            <Text style={{color: colors.secondary}}>Resend OTP</Text>
+            <TouchableOpacity
+              onPress={() => {
+                if (Platform.OS === 'android') {
+                  ToastAndroid.show('Resending OTP', ToastAndroid.SHORT);
+                } else {
+                  AlertIOS.alert('Resending OTP');
+                }
+                dispatch(postEmail(forgotState.inputValues.email));
+              }}>
+              <Text style={styles.resendotp}>Resend OTP</Text>
+            </TouchableOpacity>
 
             <View style={styles.button}>
               <TouchableOpacity
@@ -114,7 +132,7 @@ const styles = StyleSheet.create({
     backgroundColor: colors.primary,
     paddingHorizontal: 40,
     paddingBottom: 10,
-    paddingTop: 80,
+    paddingTop: 50,
   },
   body: {
     flex: 0.8,
@@ -123,14 +141,14 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   titlefont: {
-    fontSize: 40,
-    fontFamily: 'sans-serif-light',
+    fontSize: 25,
+    fontFamily: 'Montserrat-Regular',
     color: colors.additional2,
     marginBottom: 20,
   },
   titlefontdesc: {
-    fontSize: 20,
-    fontWeight: '500',
+    fontSize: 14,
+    fontFamily: 'Montserrat-Regular',
   },
   input: {
     paddingVertical: 15,
@@ -138,11 +156,12 @@ const styles = StyleSheet.create({
     borderRadius: 100,
     backgroundColor: colors.accent,
     fontSize: 18,
-    fontFamily: 'sans-serif-condensed',
+    fontFamily: 'Montserrat-Regular',
     paddingHorizontal: 30,
     color: 'black',
   },
   errMsg: {
+    fontFamily: 'Montserrat-Regular',
     color: colors.primary,
   },
   button: {
@@ -159,9 +178,12 @@ const styles = StyleSheet.create({
     height: 50,
   },
   textSign: {
-    fontSize: 25,
-    fontWeight: 'bold',
-    fontFamily: 'serif',
+    fontSize: 20,
+    fontFamily: 'Montserrat-Regular',
+  },
+  resendotp: {
+    fontFamily: 'Montserrat-Regular',
+    color: colors.coolblue,
   },
 });
 

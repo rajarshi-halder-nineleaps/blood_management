@@ -18,15 +18,15 @@ import {fetchInvitesList} from '../../../redux/invites/actions';
 
 const Services = ({navigation}) => {
   const authState = useSelector((state) => state.authState);
-  const myDrivesState = useSelector((state) => state.myDrivesState);
   const dispatch = useDispatch();
 
   const userType = authState.userType;
 
-  useEffect(() => {
-    dispatch(resetDoneState());
-    console.log('gotData state set to false');
-  }, [dispatch]);
+  //* THIS HAS BEEN CHANGED
+  // useEffect(() => {
+  // dispatch(resetDoneState());
+  // console.log('gotData state set to false');
+  // }, [dispatch]);
 
   // useEffect(() => {
   //   if (myDrivesState.gotData) {
@@ -34,13 +34,13 @@ const Services = ({navigation}) => {
   //   }
   // }, [myDrivesState.gotData, navigation]);
 
+  //TODO convert all this to useEffect
+
   const myDrivesHandler = () => {
-    dispatch(getDriveData(authState.userToken));
     navigation.navigate('myDrives');
   };
 
   const myCommitmentsHandler = () => {
-    dispatch(fetchCommitments(authState.userToken));
     navigation.navigate('commitments');
   };
 

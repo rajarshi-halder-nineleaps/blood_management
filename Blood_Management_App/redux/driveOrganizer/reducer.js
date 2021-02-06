@@ -13,8 +13,9 @@ import {
 const initialState = {
   inputValues: {
     startDate: new Date(),
-    startTime: "00:00:00",
+    startTime: '00:00:00',
     endDate: new Date(),
+    endTime: '00:00:00',
     bloodgroup: [],
     address: '',
     selectedState: '',
@@ -25,6 +26,8 @@ const initialState = {
   inputValidity: {
     startDate: true,
     endDate: true,
+    startTime: true,
+    endTime: true,
     bloodgroup: false,
     address: false,
     selectedState: false,
@@ -35,6 +38,8 @@ const initialState = {
   isTouched: {
     startDate: false,
     endDate: false,
+    startTime: false,
+    endTime: false,
     bloodgroup: false,
     address: false,
     selectedState: false,

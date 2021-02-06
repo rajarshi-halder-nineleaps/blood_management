@@ -10,12 +10,12 @@ const initialState = {
 const invitesReducer = (state = initialState, action) => {
   switch (action.type) {
     case DREQ_REQ: {
-      return {...state, laoding: true};
+      return {...state, loading: true};
     }
     case DREQ_FAILURE: {
       return {
         ...state,
-        laoding: false,
+        loading: false,
         error: action.error,
         invitesList: [],
       };
@@ -23,13 +23,13 @@ const invitesReducer = (state = initialState, action) => {
     case DREQ_SUCCESS: {
       return {
         ...state,
-        laoding: false,
+        loading: false,
         error: '',
         invitesList: action.invitesList,
       };
     }
     case DREQ_UPDATE: {
-      const newState = {...state};
+      const newState = {...state, loading: false};
 
       if (action.udata.driveId) {
         newState.invitesList.find(
