@@ -53,18 +53,17 @@ const DriveOrganizer = ({navigation}) => {
     dispatch(stateCleanup());
   }, [dispatch]);
 
-  const [startdate, setstartDate] = useState(new Date(1598051730000));
+  
   const [startmode, setstartMode] = useState('date');
   const [startshow, setstartShow] = useState(false);
 
-  const [enddate, setendDate] = useState(new Date(1598051730000));
   const [endmode, setendMode] = useState('date');
   const [endshow, setendShow] = useState(false);
 
   const onChangestart = (event, selectedDate) => {
     const currentDate = selectedDate || date;
     setstartShow(Platform.OS === 'ios');
-    setstartDate(currentDate);
+    dispatch(updateFields(currentDate, 'startDate', true));
   };
 
   const showstartMode = (currentMode) => {
@@ -83,7 +82,7 @@ const DriveOrganizer = ({navigation}) => {
   const onChangeend = (event, selectedDate) => {
     const currentDate = selectedDate || date;
     setendShow(Platform.OS === 'ios');
-    setendDate(currentDate);
+    dispatch(updateFields(currentDate, 'endDate', true));
   };
 
   const showendMode = (currentMode) => {
@@ -145,7 +144,7 @@ const DriveOrganizer = ({navigation}) => {
       isValid = false;
     }
 
-    if (fieldId === 'date'){
+    if (fieldId === 'startdate'){
       isValid = false
     }
     if (fieldId === 'starttime'){
@@ -190,7 +189,7 @@ const DriveOrganizer = ({navigation}) => {
           <Text style={styles.datepickerttext}>Set Start Date</Text>
         </TouchableOpacity>
         <Text style={styles.datepickerttextoutput}>
-          {startdate.toDateString()}
+          {driveOrganizerState.inputValues.startDate.toDateString()} 
         </Text>
       </View>
       <View style={styles.datepicker}>
@@ -198,14 +197,14 @@ const DriveOrganizer = ({navigation}) => {
           <Text style={styles.datepickerttext}>Set Start Time</Text>
         </TouchableOpacity>
         <Text style={styles.datepickerttextoutput}>
-          {startdate.toLocaleTimeString()}
+          {driveOrganizerState.inputValues.startDate.toLocaleTimeString()}
         </Text>
         
       </View>
       {startshow && (
         <DateTimePicker
           testID="dateTimePicker"
-          value={startdate}
+          value={driveOrganizerState.inputValues.startDate}
           mode={startmode}
           is24Hour={true}
           display="default"
@@ -220,7 +219,7 @@ const DriveOrganizer = ({navigation}) => {
           <Text style={styles.datepickerttext}>Set End Date</Text>
         </TouchableOpacity>
         <Text style={styles.datepickerttextoutput}>
-          {enddate.toDateString()}
+          {driveOrganizerState.inputValues.endDate.toDateString()}
         </Text>
       </View>
       <View style={styles.datepicker}>
@@ -228,14 +227,14 @@ const DriveOrganizer = ({navigation}) => {
           <Text style={styles.datepickerttext}>Set End Time</Text>
         </TouchableOpacity>
         <Text style={styles.datepickerttextoutput}>
-          {enddate.toLocaleTimeString()}
+          {driveOrganizerState.inputValues.endDate.toLocaleTimeString()}
         </Text>
         
       </View>
       {endshow && (
         <DateTimePicker
           testID="dateTimePicker"
-          value={enddate}
+          value={driveOrganizerState.inputValues.endDate}
           mode={endmode}
           is24Hour={true}
           display="default"

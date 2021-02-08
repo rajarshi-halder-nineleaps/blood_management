@@ -85,10 +85,7 @@ const BuyBloodList = ({navigation}) => {
     return(
         <View style={styles.container}>
             <View style={styles.header}>
-      <TouchableOpacity onPress={() => navigation.goBack()}>
-              <Feather name="chevron-left" color="white" size={30} />
-      </TouchableOpacity>
-      <Text  style={styles.headertitle}>Buy Blood</Text>
+      
       </View>
             <FlatList
         data={buybloodFormState.list}
@@ -115,7 +112,7 @@ const styles= StyleSheet.create({
       },
       header:{
         marginBottom:20,
-        backgroundColor:colors.primary,
+        
         paddingHorizontal:30,
         paddingTop:10,
         

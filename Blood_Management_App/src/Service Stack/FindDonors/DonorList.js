@@ -99,11 +99,7 @@ const DonorList = ({navigation}) => {
         </View>
       </Modal>
       <View style={styles.header}>
-      <TouchableOpacity onPress={() => navigation.goBack()}>
-              <Feather name="chevron-left" color="white" size={30} />
-      </TouchableOpacity>
-      <Text  style={styles.headertitle}>Donor List</Text>
-      
+     
       </View>
         
             <View>
@@ -153,7 +149,7 @@ const styles= StyleSheet.create({
       },
     header:{
         marginBottom:20,
-        backgroundColor:colors.primary,
+        
         paddingHorizontal:30,
         paddingTop:10,    
     },

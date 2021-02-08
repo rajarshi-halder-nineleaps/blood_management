@@ -12,33 +12,7 @@ import {useDispatch, useSelector} from 'react-redux';
 import {
     getactivedonorList
 } from '../../../redux/activedonorrequest/actions'
-
-
-const Item = ({ item, onPress, style }) => (
-    <TouchableOpacity onPress={onPress} style={[styles.item, style]}>
-      <View style={{flexDirection:'row'}}>
-        <Text style={[styles.title,{fontWeight:'bold'}]}>Name:</Text>
-        <Text style={styles.title}>  {item.name}</Text>
-      </View>
-      <View style={{flexDirection:'row'}}>
-        <Text style={[styles.title,{fontWeight:'bold'}]}>Email:</Text>
-        <Text style={styles.title}>  {item.email}</Text>
-      </View>
-      <View style={{flexDirection:'row'}}>
-        <Text style={[styles.title,{fontWeight:'bold'}]}>Blood Group:</Text>
-        <Text style={styles.title}>  {item.blood_group}</Text>
-      </View>
-      <View style={{flexDirection:'row'}}>
-        <Text style={[styles.title,{fontWeight:'bold'}]}>Phone no:</Text>
-        <Text style={styles.title}>  {item.contact}</Text>
-      </View>
-      <View style={{flexDirection:'row'}}>
-        <Text style={[styles.title,{fontWeight:'bold'}]}>Has Given Blood:</Text>
-        <Text style={styles.title}>  {item.hasgiven}</Text>
-      </View>
-      
-    </TouchableOpacity>
-  );
+import renderItem from '../../../components/DonorRequestCard';
 
 const ActiveDonorRequest = ({navigation}) => {
 
@@ -49,29 +23,18 @@ const ActiveDonorRequest = ({navigation}) => {
         dispatch(getactivedonorList());
       }, [dispatch]);
 
-      const renderItem = ({ item }) => {
-        const backgroundColor =  "white";
-    
-        return (
-          <Item
-            item={item}
-            
-            style={{ backgroundColor }}
-          />
-        );
-      };
-
+      
     return(
         <View style={styles.container}>
              <View style={styles.header}>
       <TouchableOpacity onPress={() => navigation.goBack()}>
-              <Feather name="chevron-left" color="white" size={30} />
+              <Feather name="chevron-left" color={colors.primary} size={30} />
       </TouchableOpacity>
-      <Text  style={styles.headertitle}>Active Donor Request</Text>
+      <Text  style={styles.headertitle}>Donor Request</Text>
       
       </View>
       <FlatList
-        data={activedonorFormState.list}
+        data={activedonorFormState.donorList}
         renderItem={renderItem}
         keyExtractor={(item) => item.id}
         
@@ -81,21 +44,20 @@ const ActiveDonorRequest = ({navigation}) => {
 }
 
 const styles = StyleSheet.create({
-    header:{
-        marginBottom:20,
-        backgroundColor:colors.primary,
-        paddingHorizontal:30,
-        paddingTop:10,    
-    },
-    headertitle:{
-      fontSize:50,
-        fontWeight:'bold',
-        backgroundColor:colors.primary,
-        fontFamily: 'sans-serif-condensed',      
-        paddingTop:10,
-        color:'white',
-        paddingBottom:20
-    },
+  header: {
+    marginBottom: 20,
+    backgroundColor: 'transparent',
+    paddingTop: 10,
+    flexDirection:'row'
+
+  },
+  headertitle: {
+    fontSize: 40,
+    backgroundColor: 'transparent',
+    marginLeft:10,
+    color: colors.primary,
+    fontFamily: 'Montserrat-Regular',
+  },
     header2:{
       fontSize:50,
       fontWeight:'500',

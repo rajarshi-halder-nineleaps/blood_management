@@ -15,8 +15,6 @@ import inventoryReducer from './inventory/reducer';
 import salesReducer from './sales/reducer';
 import aboutReducer from './about/reducer';
 import profileReducer from './profile/reducer';
-import finddonorReducer from './finddonors/reducer';
-import buybloodReducer from './buyblood/reducer';
 import finddonorReducer from './finddonors/reducer'
 import buybloodReducer from './buyblood/reducer'
 import mypurchasesReducer from './mypurchases/reducer'

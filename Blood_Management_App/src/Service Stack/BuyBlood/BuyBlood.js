@@ -104,67 +104,16 @@ const FindDonors = ({navigation}) => {
 
     return(
     <ScrollView style={styles.container}>
-      <View style={styles.header}>
+       <View style={styles.header}>
       <TouchableOpacity onPress={() => navigation.goBack()}>
-              <Feather name="chevron-left" color="white" size={30} />
+              <Feather name="chevron-left" color={colors.primary} size={30} />
       </TouchableOpacity>
       <Text  style={styles.headertitle}>Buy Blood</Text>
+      
       </View>
         
         <View style={{marginHorizontal:30}}>
-        <View style={styles.pickerView}>
-              <Picker
-                style={styles.picker}
-                selectedValue={buybloodFormState.inputValues.selectedState}
-                onValueChange={(val, itemIndex) => {
-                  blurListener('selectedState');
-                  checkValidity(val, 'selectedState');
-                  setdistEnb(true);
-                  setselectedStateindex(itemIndex);
-                }}>
-                {word.map((item, id) => (
-                  <Picker.Item label={item.state} value={item.state} key={id} />
-                ))}
-              </Picker>
-            </View>
-
-            {!buybloodFormState.inputValidity.selectedState &&
-              buybloodFormState.isTouched.selectedState && (
-                <Text style={styles.errorMsg}>Please select your state</Text>
-              )}
-
-            <View style={styles.pickerView}>
-              <Picker
-                enabled={distEnb}
-                selectedValue={buybloodFormState.inputValues.selectedDistrict}
-                onValueChange={(val, itemIndex) => {
-                  blurListener('selectedDistrict');
-                  checkValidity(val, 'selectedDistrict');
-                }}>
-                {word[selectedStateindex].districts.map((item, id) => (
-                  <Picker.Item label={item} value={item} key={id} />
-                ))}
-              </Picker>
-            </View>
-
-            {!buybloodFormState.inputValidity.selectedDistrict &&
-              buybloodFormState.isTouched.selectedDistrict && (
-                <Text style={styles.errorMsg}>Please select your district</Text>
-              )}
-
-              <Input
-              label="Pincode"
-              error="Invalid pincode!"
-              returnKeyType="next"
-              inputIsValid={buybloodFormState.inputValidity.pincode}
-              inputIsTouched={buybloodFormState.isTouched.pincode}
-              value={buybloodFormState.inputValues.pincode}
-              onChangeText={(val) => checkValidity(val, 'pincode')}
-              onBlur={() => {
-                blurListener('pincode');
-              }}
-            />
-            <View style={styles.pickerView} >
+        <View style={styles.pickerView} >
                 <Picker 
                 style={styles.picker}
                 selectedValue={buybloodFormState.inputValues.blood_group}
@@ -217,7 +166,60 @@ const FindDonors = ({navigation}) => {
                     
                 </Picker>
                 </View>
-                </View>
+
+        <View style={styles.pickerView}>
+              <Picker
+                style={styles.picker}
+                selectedValue={buybloodFormState.inputValues.selectedState}
+                onValueChange={(val, itemIndex) => {
+                  blurListener('selectedState');
+                  checkValidity(val, 'selectedState');
+                  setdistEnb(true);
+                  setselectedStateindex(itemIndex);
+                }}>
+                {word.map((item, id) => (
+                  <Picker.Item label={item.state} value={item.state} key={id} />
+                ))}
+              </Picker>
+            </View>
+
+            {!buybloodFormState.inputValidity.selectedState &&
+              buybloodFormState.isTouched.selectedState && (
+                <Text style={styles.errorMsg}>Please select your state</Text>
+              )}
+
+            <View style={styles.pickerView}>
+              <Picker
+                enabled={distEnb}
+                selectedValue={buybloodFormState.inputValues.selectedDistrict}
+                onValueChange={(val, itemIndex) => {
+                  blurListener('selectedDistrict');
+                  checkValidity(val, 'selectedDistrict');
+                }}>
+                {word[selectedStateindex].districts.map((item, id) => (
+                  <Picker.Item label={item} value={item} key={id} />
+                ))}
+              </Picker>
+            </View>
+
+            {!buybloodFormState.inputValidity.selectedDistrict &&
+              buybloodFormState.isTouched.selectedDistrict && (
+                <Text style={styles.errorMsg}>Please select your district</Text>
+              )}
+
+              <Input
+              label="Pincode"
+              error="Invalid pincode!"
+              returnKeyType="next"
+              inputIsValid={buybloodFormState.inputValidity.pincode}
+              inputIsTouched={buybloodFormState.isTouched.pincode}
+              value={buybloodFormState.inputValues.pincode}
+              onChangeText={(val) => checkValidity(val, 'pincode')}
+              onBlur={() => {
+                blurListener('pincode');
+              }}
+            />
+                            </View>
 
                 <View style={styles.button}>
                 <TouchableOpacity onPress={()=>{sumbitHandler()}}>
@@ -250,21 +252,19 @@ const styles= StyleSheet.create({
        
 
     },
-    header:{
-        marginBottom:20,
-        backgroundColor:colors.primary,
-        paddingHorizontal:30,
-        paddingTop:10,
-        
+    header: {
+      marginBottom: 20,
+      backgroundColor: 'transparent',
+      paddingTop: 10,
+      flexDirection:'row'
+  
     },
-    headertitle:{
-      fontSize:50,
-        fontWeight:'bold',
-        marginBottom:20,
-        backgroundColor:colors.primary,
-        fontFamily: 'sans-serif-condensed',      
-        paddingTop:10,
-        color:'white'
+    headertitle: {
+      fontSize: 50,
+      backgroundColor: 'transparent',
+      marginLeft:10,
+      color: colors.primary,
+      fontFamily: 'Montserrat-Regular',
     },
     pickerView: {
         marginVertical: 10,
@@ -286,24 +286,22 @@ const styles= StyleSheet.create({
       title: {
         fontSize: 25,
       },
-      button:{
-        backgroundColor:"#f9c2ff",
-        alignSelf:'center',
-        marginTop:20,
-
-        
+      button: {
+        backgroundColor: colors.primary,
+        alignSelf: 'center',
+        marginTop: 20,
         borderRadius: 100,
-        backgroundColor: colors.accent,
         fontSize: 18,
-        fontFamily: 'sans-serif-condensed',
+        fontFamily: 'Montserrat-Regular',
         paddingHorizontal: 30,
-        color: 'black',
-        paddingVertical:10
-        
+        color: colors.additional2,
+        paddingVertical: 10
       },
-      buttontext:{
-        fontSize:20,
-        fontWeight:'bold'
+      buttontext: {
+        fontSize: 20,
+        fontWeight: 'bold',
+        fontFamily: 'Montserrat-Regular',
+        color: colors.additional2,
       },
       backbutton:{
         backgroundColor: colors.primary

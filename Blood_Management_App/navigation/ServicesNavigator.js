@@ -25,7 +25,7 @@ const ServicesNavigator = createStackNavigator();
 
 const ServicesStackNavigator = () => {
   return (
-    <ServicesNavigator.Navigator headerMode='none'>
+    <ServicesNavigator.Navigator headerMode='screen'>
       <ServicesNavigator.Screen name="Services" component={Services} />
       <ServicesNavigator.Screen
         name="myDrives"

@@ -3,7 +3,7 @@ import axios from 'axios';
 
 import {
   COMMITMENTS_REQ,
-  COMMITMENTS_SUCCESS,
+  COMMITMENTS_SUCCESS, 
   COMMITMENTS_FAILURE,
 } from './actionTypes';
 

@@ -71,7 +71,7 @@ const Services = ({navigation}) => {
         </View>
         <View style={styles.row}>
           <TouchTabs
-            label="Active Donor Request"
+            label="Donor Request"
             imgSrc="../assets/images/servicesScreen/findDonors.png"
             touchHandler={()=> navigation.navigate('Active Donor Request')}
           />
@@ -81,7 +81,7 @@ const Services = ({navigation}) => {
             touchHandler={() => navigation.navigate('My Purchases')}
           />
         </View>
-        {userType === 1 ? (
+        {userType === 0 ? (
           <>
             <TouchTabs
               label="My Commitments"
@@ -119,7 +119,7 @@ const Services = ({navigation}) => {
             />
           </>
         )}
-        {userType === 3 ? (
+        {userType === 2 ? (
           <TouchTabs
             label="My Sales"
             source={require('../../../assets/images/servicesScreen/sales.png')}

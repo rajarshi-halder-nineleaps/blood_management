@@ -1,44 +1,29 @@
 import axios from 'axios';
 import {
-    UPDATE_FIELDS_REG,
-    STATE_CLEANUP,
-    BLUR_FIELDS_REG,
-    REQ,
-    UPDATE_SUCCESS,
-    REQ_FAILURE,
-    UPDATE_ACTIVEDONOR_ARRAY
+    DONORLIST_SUCCESS,
+    DONORLIST_REQ,
+    DONORLIST_FAILURE
   } from './actionTypes';
 
-  export const req = () => ({
-    type: REQ,
+  export const donorListreq = () => ({
+    type: DONORLIST_REQ,
   });
 
-export const updateFields = (val, fieldId, isValid) => ({
-    type: UPDATE_FIELDS_REG,
-    val: val,
-    fieldId: fieldId,
-    isValid: isValid,
-  });
-  export const blurFields = (fieldId) => ({
-    type: BLUR_FIELDS_REG,
-    fieldId: fieldId,
+  export const donorListSuccess = (donorList) => ({
+    type: DONORLIST_SUCCESS,
+    donorList,
   });
 
-  export const stateCleanup = () => ({
-    type: STATE_CLEANUP,
+  export const donorListFailure = (error) => ({
+    type: DONORLIST_FAILURE,
+    error,
   });
-
-  export const updateArray = (array) => ({
-    type: UPDATE_ACTIVEDONOR_ARRAY,
-    array:array
-
-  })
 
   
 
   export const getactivedonorList = () => {
     return async (dispatch) => {
-      dispatch(req());
+      dispatch(donorListreq());
       console.log('Getting Active Donor List');
       try {
         const response = await axios.get(
@@ -48,6 +33,7 @@ export const updateFields = (val, fieldId, isValid) => ({
         console.log('COMPLETE RESPONSE DATA: ', response.data);
     
         if (response.data.error) {
+          dispatch(donorListFailure(response.data.error))
           
           console.log(response.data.error);
         } else if (response.data.success) {
@@ -55,13 +41,15 @@ export const updateFields = (val, fieldId, isValid) => ({
           
           
           console.log('Saved data to async storage!');
-          dispatch(updateArray(response.data.list))
+          dispatch(donorListSuccess(response.data.list))
         
         } else {
+          dispatch(donorListFailure("Something went wrong!"))
          console.log("Failed")
         }
       } catch (err) {
         console.log(err.message);
+        dispatch(donorListFailure(err))
         
       }
     };
