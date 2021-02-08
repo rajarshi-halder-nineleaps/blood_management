@@ -6,6 +6,7 @@ import {
   INV_FAILURE,
   INV_CHANGE,
   EDITING_TOGGLE,
+  TOGGLE_SECURE,
 } from './actionTypes';
 
 const initialState = {
@@ -13,10 +14,16 @@ const initialState = {
   error: '',
   loading: false,
   editing: false,
+  secure: false,
 };
 
 const inventoryReducer = (state = initialState, action) => {
   switch (action.type) {
+
+    case TOGGLE_SECURE: {
+      return {...state, secure: action.newSecure}
+    }
+
     case INV_REQ: {
       return {...state, loading: true};
     }

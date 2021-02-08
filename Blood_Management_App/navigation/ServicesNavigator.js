@@ -1,6 +1,9 @@
 /* eslint-disable prettier/prettier */
 import React from 'react';
+import {TouchableOpacity, Text} from 'react-native';
+import Feather from 'react-native-vector-icons/Feather';
 import {createStackNavigator} from '@react-navigation/stack';
+import colors from '../constants/Colors';
 
 //? Importing the screens
 import Services from '../src/MainTabs/ServicesStack/Services';
@@ -82,6 +85,26 @@ const ServicesStackNavigator = () => {
         component={Inventory}
         options={{
           headerTitle: 'My Inventory',
+          headerTitleStyle: {
+            fontFamily: 'Montserrat-Bold',
+            fontSize: 24,
+            color: colors.grayishblack,
+          },
+          // headerLeft: (props) => (
+          //   <TouchableOpacity
+          //     {...props}
+          //     onPress={() => {
+          //       props.navigation.goBack();
+          //     }}>
+          //     {console.log(props)}
+          //     <Feather
+          //       name="chevron-left"
+          //       color={colors.grayishblack}
+          //       size={30}
+          //       style={{}}
+          //     />
+          //   </TouchableOpacity>
+          // ),
         }}
       />
 

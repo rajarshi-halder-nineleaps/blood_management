@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import {Alert} from 'react-native';
+import {Alert, ToastAndroid, Platform, AlertIOS} from 'react-native';
 import {
   UPDATE_FIELDS_CHANGE,
   CHANGE_REQ,
@@ -55,7 +55,11 @@ const changePasswordReducer = (state = initialState, action) => {
       return {...state, isTouched: newInputIsTouched};
     }
     case STATE_CLEANUP_CHANGE: {
-      Alert.alert('Success', 'New password set successfully!');
+      if (Platform.OS === 'android') {
+        ToastAndroid.show('Password Updated!', ToastAndroid.SHORT);
+      } else {
+        AlertIOS.alert('Password Updated!');
+      }
       console.log('flushing state');
       return initialState;
     }

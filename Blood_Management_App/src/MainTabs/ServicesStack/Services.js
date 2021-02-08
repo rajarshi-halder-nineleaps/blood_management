@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   View,
   ScrollView,
@@ -7,12 +7,13 @@ import {
   StyleSheet,
   ImageBackground,
 } from 'react-native';
+import PasswordModal from '../../../components/PasswordModal';
 import {useSelector, useDispatch} from 'react-redux';
 import TouchTabs from '../../../components/TouchTabs';
 import colors from '../../../constants/Colors';
 import {getDriveData, resetDoneState} from '../../../redux/myDrives/actions';
 import {fetchCommitments} from '../../../redux/commitments/actions';
-import {getInventory} from '../../../redux/inventory/actions';
+import {getInventory, checkPassword} from '../../../redux/inventory/actions';
 import {fetchSalesData} from '../../../redux/sales/actions';
 import {fetchInvitesList} from '../../../redux/invites/actions';
 
@@ -21,6 +22,7 @@ const Services = ({navigation}) => {
   const dispatch = useDispatch();
 
   const userType = authState.userType;
+  const [rusure, setRusure] = useState(false);
 
   //* THIS HAS BEEN CHANGED
   // useEffect(() => {
@@ -46,7 +48,7 @@ const Services = ({navigation}) => {
 
   const inventoryHandler = () => {
     dispatch(getInventory(authState.userToken));
-    navigation.navigate('inventory');
+    setRusure(true);
   };
 
   const salesHandler = () => {
@@ -59,8 +61,18 @@ const Services = ({navigation}) => {
     navigation.navigate('donationRequests');
   };
 
+  //* ask back end team to initialize every inventory field with 0.
+
   return (
     <View style={styles.container}>
+      <PasswordModal
+        visibleState={rusure}
+        visibleStateChanger={setRusure}
+        dispatchable={checkPassword}
+        verified={() => {
+          navigation.navigate('inventory');
+        }}
+      />
       <ScrollView style={styles.scroll}>
         <View style={styles.headingView}>
           <Text style={styles.headingText}>Services</Text>

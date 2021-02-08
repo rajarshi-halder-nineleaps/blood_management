@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import {
   UPDATE_FIELDS_REG,
   BLUR_FIELDS_REG,

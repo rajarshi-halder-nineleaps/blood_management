@@ -6,6 +6,7 @@ import {
   INV_FAILURE,
   INV_CHANGE,
   EDITING_TOGGLE,
+  TOGGLE_SECURE,
 } from './actionTypes';
 
 export const invReq = () => ({type: INV_REQ});
@@ -27,9 +28,50 @@ export const editingToggle = (isUpdate) => ({
   isUpdate,
 });
 
+export const toggleSecure = (newSecure) => ({
+  type: TOGGLE_SECURE,
+  newSecure,
+});
+
 // export const invUpdateSuccess = (invData) => ({type: INV_UPDATE, invData});
 
 ////////////////////////////////////////////////////////////////////////////
+
+export const checkPassword = (userToken, password) => {
+  return async (dispatch) => {
+    try {
+      dispatch(invReq());
+      dispatch(toggleSecure(false));
+
+      const response = await axios.post(
+        'http://192.168.43.89:5000/currentpassword',
+        {password},
+        {
+          headers: {Authorization: userToken},
+        },
+      );
+
+      if (response.data.success) {
+        console.log('response is success!');
+        dispatch(toggleSecure(true));
+        dispatch(getInventory(userToken));
+      } else if (response.data.error) {
+        console.log('response is error!');
+        dispatch(invFailure(response.data.error));
+      } else {
+        console.log('outlandish error!');
+        dispatch(
+          invFailure(
+            "Something's not right! please try again after some time.",
+          ),
+        );
+      }
+    } catch (err) {
+      console.log('caught error on inventory get request: ', err);
+      dispatch(invFailure(err.message));
+    }
+  };
+};
 
 export const getInventory = (userToken) => {
   return async (dispatch) => {

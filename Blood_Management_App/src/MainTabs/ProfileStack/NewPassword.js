@@ -21,6 +21,7 @@ import {
 } from '../../../redux/changePassword/actions';
 import {useDispatch, useSelector} from 'react-redux';
 import {passwordRegex} from '../../../constants/Regexes';
+import Fields from '../../../components/Fields';
 
 const NewPassword = ({navigation}) => {
   const dispatch = useDispatch();
@@ -71,55 +72,42 @@ const NewPassword = ({navigation}) => {
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView>
-        <View style={styles.header}>
-          <TouchableOpacity onPress={() => navigation.goBack()}>
-            <Feather name="chevron-left" color="white" size={30} />
-          </TouchableOpacity>
-        </View>
-        <View style={styles.colorView}>
-          <Text style={styles.titlefont}>Set new password</Text>
-        </View>
         <View style={styles.body}>
           <Text style={styles.titlefontdesc}>Enter a new password</Text>
-          <Text style={{marginTop: 20}}>
+
+          <Text style={{marginTop: 20, fontFamily: 'Montserrat-Regular'}}>
             Password must be at least 8 characters long and must contain at
             least 1 number, 1 special character, 1 uppercase and 1 lowercase
             alphabet.
           </Text>
-
-          <TextInput
+          <Fields
+            label="New Password"
             secureTextEntry={true}
             keyboardType="default"
             value={changePasswordState.inputValues.password}
             style={[styles.input, {marginTop: 30}]}
             placeholder="Password"
             onChangeText={(val) => handlepassword(val, 'password')}
+            inputIsValid={changePasswordState.inputValidity.password}
+            inputIsTouched={changePasswordState.isTouched.password}
             onBlur={() => {
               dispatch(blurFields('password'));
             }}
           />
-
-          {!changePasswordState.inputValidity.password &&
-            changePasswordState.isTouched.password && (
-              <Text style={styles.errMsg}>Invalid password format!</Text>
-            )}
-
-          <TextInput
+          <Fields
+            label="Confirm Password"
             secureTextEntry={true}
             keyboardType="default"
             value={changePasswordState.inputValues.cpassword}
             style={[styles.input, {marginTop: 30}]}
-            placeholder="Confirm Password"
+            placeholder="Password"
             onChangeText={(val) => handlepassword(val, 'cpassword')}
+            inputIsValid={changePasswordState.inputValidity.cpassword}
+            inputIsTouched={changePasswordState.isTouched.cpassword}
             onBlur={() => {
               dispatch(blurFields('cpassword'));
             }}
           />
-          {!changePasswordState.inputValidity.cpassword &&
-            changePasswordState.isTouched.cpassword && (
-              <Text style={styles.errMsg}>Password mismatch!</Text>
-            )}
-
           <View style={styles.button}>
             <TouchableOpacity
               style={styles.signIn}
@@ -160,26 +148,29 @@ const styles = StyleSheet.create({
   },
   titlefont: {
     fontSize: 40,
-    fontFamily: 'sans-serif-light',
+    fontFamily: 'Montserrat-Bold',
     color: colors.additional2,
     marginBottom: 20,
   },
   titlefontdesc: {
     fontSize: 20,
+    fontFamily: 'Montserrat-Bold',
     fontWeight: '500',
   },
   input: {
-    paddingVertical: 15,
-    marginVertical: 10,
-    borderRadius: 100,
-    backgroundColor: colors.accent,
-    fontSize: 18,
-    fontFamily: 'sans-serif-condensed',
+    paddingVertical: 10,
+    borderRadius: 5,
+    backgroundColor: 'transparent',
+    borderColor: colors.grayishblack,
+    borderWidth: 2,
+    fontSize: 14,
+    fontFamily: 'Montserrat-Regular',
     paddingHorizontal: 30,
     color: 'black',
   },
   errMsg: {
-    color: colors.primary,
+    color: colors.dutchred,
+    fontFamily: 'Montserrat-Bold',
   },
   button: {
     marginTop: 30,
@@ -192,12 +183,12 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     justifyContent: 'center',
     alignItems: 'center',
-    borderRadius: 100,
-    backgroundColor: colors.primary,
+    borderRadius: 5,
+    backgroundColor: colors.grayishblack,
   },
   textSign: {
-    fontSize: 18,
-    fontFamily: 'sans-serif-light',
+    fontSize: 14,
+    fontFamily: 'Montserrat-Bold',
   },
 });
 
