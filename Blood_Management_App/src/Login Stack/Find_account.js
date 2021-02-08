@@ -22,10 +22,10 @@ const Findaccount = ({navigation}) => {
   const dispatch = useDispatch();
   const forgotState = useSelector((state) => state.forgotState);
 
-  useEffect(() => {
-    dispatch(resetDoneState('emailSent'));
-    console.log('emailSent set to false');
-  }, [dispatch]);
+  // useEffect(() => {
+  //   dispatch(resetDoneState('emailSent'));
+  //   console.log('emailSent set to false');
+  // }, [dispatch]);
 
   useEffect(() => {
     if (forgotState.emailSent) {

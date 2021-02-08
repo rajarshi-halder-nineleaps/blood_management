@@ -47,11 +47,13 @@ export const resetDoneState = (resettable) => ({
 //THUNK ACTION TO POST EMAIL
 
 export const postEmail = (email) => {
+  console.log('sending email');
   return async (dispatch) => {
     dispatch(forgotReq());
+    dispatch(resetDoneState('emailSent'));
     try {
       const response = await axios.post(
-        'http://API URI HERE:5000/forgotpassword',
+        'http://192.168.43.89:5000/forgotpassword',
         {
           recoveryEmail: email,
         },
@@ -74,12 +76,14 @@ export const postEmail = (email) => {
 
 //THUNK ACTION TO POST OTP
 
-export const postOTP = (otp) => {
+export const postOTP = (email, otp) => {
   return async (dispatch) => {
     dispatch(forgotReq());
+    dispatch(resetDoneState('otp'));
     try {
-      const response = await axios.post('http://API URI HERE:5000/otp', {
-        otp: otp,
+      const response = await axios.post('http://192.168.43.89:5000/otp', {
+        email,
+        otp,
       });
       if (response.data.error) {
         dispatch(forgotReqFailure(response.data.error));
@@ -99,18 +103,17 @@ export const postOTP = (otp) => {
 
 //THUNK ACTION TO POST PASSWORD
 
-export const postResetPassword = (password) => {
+export const postResetPassword = (email, password) => {
   return async (dispatch) => {
     dispatch(forgotReq());
     try {
-      //*axios put request
-      const response = await axios.put('http://API URI HERE:5000/resetpwd', {
-        password: password,
+      const response = await axios.put('http://192.168.43.89:5000/resetpwd', {
+        email,
+        password,
       });
       if (response.data.error) {
         dispatch(forgotReqFailure(response.data.error));
         console.log('Error while posting reset password', response.data.error);
-        //* COORDINATE WITH BACK END TEAM TO ADD A BOOLEAN SUCCESS FLAG HERE.
       } else if (response.data.success) {
         dispatch(forgotReqSuccess('passwordReset'));
       } else {

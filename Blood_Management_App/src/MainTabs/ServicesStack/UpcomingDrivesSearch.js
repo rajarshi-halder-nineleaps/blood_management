@@ -50,7 +50,9 @@ const UpcomingDrivesSearch = ({navigation}) => {
   const searchSubmitHandler = () => {
     if (inputs.inputValidity.selectedState && inputs.inputValidity.pincode) {
       dispatch(upcomingDrivesSearch(authState.userToken, inputs.inputValues));
-      navigation.navigate('upcomingDrives');
+      navigation.navigate('upcomingDrives', {
+        params: {searchData: inputs.inputValues},
+      });
     } else if (!inputs.inputValidity.selectedState) {
       Alert.alert('State is required', 'Please enter a desired input state');
     } else if (!inputs.inputValidity.pincode) {

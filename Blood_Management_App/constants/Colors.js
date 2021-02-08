@@ -9,7 +9,14 @@ const colors = {
   grayishblack: '#282B3A',
   moderategray: '#999',
   dutchred: '#EA2027',
+<<<<<<< HEAD
   grey:'grey'
+=======
+  coolblue: '#0d58d1',
+  green: 'green',
+>>>>>>> aee30c9390a0913f0c0843131a9a2473041eb8cc
 };
 
 export default colors;
+
+// E94364

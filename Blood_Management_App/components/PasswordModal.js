@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   Alert,
   Modal,
@@ -8,13 +8,33 @@ import {
   TouchableHighlight,
   View,
   Image,
+  ToastAndroid,
+  Platform,
+  AlertIOS,
 } from 'react-native';
 import colors from '../constants/Colors';
+import Fields from './Fields';
 import {useSelector, useDispatch} from 'react-redux';
 
 const AreYouSure = (props) => {
   const authState = useSelector((state) => state.authState);
+  const inventoryState = useSelector((state) => state.inventoryState);
   const dispatch = useDispatch();
+
+  const [passwordVal, setPasswordVal] = useState('');
+
+  useEffect(() => {
+    setPasswordVal('');
+    if (inventoryState.secure) {
+      props.visibleStateChanger(!props.visibleState);
+      props.verified();
+      if (Platform.OS === 'android') {
+        ToastAndroid.show('Verified!', ToastAndroid.SHORT);
+      } else {
+        AlertIOS.alert('Verified!');
+      }
+    }
+  }, [inventoryState.secure]);
 
   return (
     // <View style={styles.centeredView}>
@@ -29,21 +49,28 @@ const AreYouSure = (props) => {
             style={styles.image}
             source={require('../assets/logonobk.png')}
           />
-          <Text style={styles.modalText}>{props.message}</Text>
+          <Text style={styles.modalText}>
+            For security reasons, we need to verify your identity. Please enter
+            your password below.
+          </Text>
+
+          <Fields
+            label="Password"
+            error="Invalid Password!"
+            value={passwordVal}
+            onChangeText={(val) => {
+              setPasswordVal(val);
+            }}
+            secureTextEntry={true}
+          />
 
           <View style={styles.touchBoard}>
             <TouchableHighlight
               style={{...styles.openButton, backgroundColor: colors.primary}}
               onPress={() => {
-                props.visibleStateChanger(!props.visibleState);
-                dispatch(
-                  props.dispatchable(
-                    authState.userToken,
-                    props.dispatchData ? props.dispatchData : null,
-                  ),
-                );
+                dispatch(props.dispatchable(authState.userToken, passwordVal));
               }}>
-              <Text style={styles.textStyle}>Yes</Text>
+              <Text style={styles.textStyle}>Confirm</Text>
             </TouchableHighlight>
             <TouchableHighlight
               style={{
@@ -51,9 +78,10 @@ const AreYouSure = (props) => {
                 backgroundColor: colors.secondary,
               }}
               onPress={() => {
+                setPasswordVal('');
                 props.visibleStateChanger(!props.visibleState);
               }}>
-              <Text style={styles.textStyle}>No</Text>
+              <Text style={styles.textStyle}>Cancel</Text>
             </TouchableHighlight>
           </View>
         </View>
@@ -79,7 +107,6 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     borderRadius: 10,
     padding: 35,
-    alignItems: 'center',
     shadowColor: '#000',
     shadowOffset: {
       width: 0,

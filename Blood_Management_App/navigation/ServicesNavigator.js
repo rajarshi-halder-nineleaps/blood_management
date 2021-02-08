@@ -1,6 +1,9 @@
 /* eslint-disable prettier/prettier */
 import React from 'react';
+import {TouchableOpacity, Text} from 'react-native';
+import Feather from 'react-native-vector-icons/Feather';
 import {createStackNavigator} from '@react-navigation/stack';
+import colors from '../constants/Colors';
 
 //? Importing the screens
 import Services from '../src/MainTabs/ServicesStack/Services';
@@ -11,22 +14,34 @@ import UpcomingDrivesSearch from '../src/MainTabs/ServicesStack/UpcomingDrivesSe
 import DriveOrganizer from '../src/MainTabs/ServicesStack/DriveOrganizer';
 import Commitments from '../src/MainTabs/ServicesStack/Commitments';
 import Inventory from '../src/MainTabs/ServicesStack/Inventory';
-import Sales from '../src/MainTabs/ServicesStack/Sales';
+import DonationRequests from '../src/MainTabs/ServicesStack/DonationRequests';
 import FindDonors from '../src/Service Stack/FindDonors/FindDonors';
 import DonorList from '../src/Service Stack/FindDonors/DonorList';
-import BuyBlood from '../src/Service Stack/BuyBlood/BuyBlood'
-import BuyBloodList from '../src/Service Stack/BuyBlood/BuyBloodList'
-import ConfirmBuy from '../src/Service Stack/BuyBlood/ConfirmBuy'
-import MoreInfo from "../src/Service Stack/BuyBlood/MoreInfo"
-import MyPurchases from "../src/Service Stack/MyPurchases/MyPurchases"
-import ActiveDonorRequest from "../src/Service Stack/ActiveDonorRequest/ActiveDonorRequest"
+import BuyBlood from '../src/Service Stack/BuyBlood/BuyBlood';
+import BuyBloodList from '../src/Service Stack/BuyBlood/BuyBloodList';
+import ConfirmBuy from '../src/Service Stack/BuyBlood/ConfirmBuy';
+import SalesNavigator from './SalesNavigator';
+import MoreInfo from '../src/Service Stack/BuyBlood/MoreInfo';
+import MyPurchases from '../src/Service Stack/MyPurchases/MyPurchases';
+import ActiveDonorRequest from '../src/Service Stack/ActiveDonorRequest/ActiveDonorRequest';
 
 const ServicesNavigator = createStackNavigator();
 
 const ServicesStackNavigator = () => {
   return (
+<<<<<<< HEAD
     <ServicesNavigator.Navigator headerMode='screen'>
       <ServicesNavigator.Screen name="Services" component={Services} />
+=======
+    <ServicesNavigator.Navigator headerMode="float">
+      <ServicesNavigator.Screen
+        name="Services"
+        component={Services}
+        options={{
+          headerShown: false,
+        }}
+      />
+>>>>>>> aee30c9390a0913f0c0843131a9a2473041eb8cc
       <ServicesNavigator.Screen
         name="myDrives"
         component={MyDrives}
@@ -75,19 +90,50 @@ const ServicesStackNavigator = () => {
         component={Inventory}
         options={{
           headerTitle: 'My Inventory',
+          headerTitleStyle: {
+            fontFamily: 'Montserrat-Bold',
+            fontSize: 24,
+            color: colors.grayishblack,
+          },
+          // headerLeft: (props) => (
+          //   <TouchableOpacity
+          //     {...props}
+          //     onPress={() => {
+          //       props.navigation.goBack();
+          //     }}>
+          //     {console.log(props)}
+          //     <Feather
+          //       name="chevron-left"
+          //       color={colors.grayishblack}
+          //       size={30}
+          //       style={{}}
+          //     />
+          //   </TouchableOpacity>
+          // ),
         }}
       />
 
       <ServicesNavigator.Screen
         name="sales"
-        component={Sales}
+        component={SalesNavigator}
         options={{
-          headerTitle: 'My Sales',
+          headerStyle: {
+            elevation: 0,
+            shadowOpacity: 0,
+          },
         }}
       />
       <ServicesNavigator.Screen name="Find Donors" component={FindDonors} />
       <ServicesNavigator.Screen name="Donor List" component={DonorList} />
       <ServicesNavigator.Screen name="Buy Blood" component={BuyBlood} />
+
+      <ServicesNavigator.Screen
+        name="donationRequests"
+        component={DonationRequests}
+        options={{
+          headerTitle: 'Invites',
+        }}
+      />
       <ServicesNavigator.Screen
         name="Buy Blood List"
         component={BuyBloodList}
@@ -95,7 +141,10 @@ const ServicesStackNavigator = () => {
       <ServicesNavigator.Screen name="Confirm Buy" component={ConfirmBuy} />
       <ServicesNavigator.Screen name="More Info" component={MoreInfo} />
       <ServicesNavigator.Screen name="My Purchases" component={MyPurchases} />
-      <ServicesNavigator.Screen name="Active Donor Request" component={ActiveDonorRequest} />
+      <ServicesNavigator.Screen
+        name="Active Donor Request"
+        component={ActiveDonorRequest}
+      />
     </ServicesNavigator.Navigator>
   );
 };

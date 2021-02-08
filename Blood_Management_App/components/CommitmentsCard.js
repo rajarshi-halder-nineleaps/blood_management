@@ -72,7 +72,7 @@ const CommitmentsCard = ({item}) => {
             </Text>
 
             <View style={styles.addressView}>
-              <Text style={styles.addressLabel}>Drive details:</Text>
+              <Text style={styles.addressLabel}>Details:</Text>
               <View style={styles.addressContentView}>
                 <View style={styles.addressInsideView}>
                   <Text style={styles.addressInsideLabel}>Address: </Text>

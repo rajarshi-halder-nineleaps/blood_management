@@ -1,46 +1,41 @@
 /* eslint-disable prettier/prettier */
-import {Alert} from 'react-native';
-
+import {Alert, ToastAndroid, Platform, AlertIOS} from 'react-native';
 import {
-  UPDATE_FIELDS_FORGOT,
-  FORGOT_REQ,
-  FORGOT_REQ_SUCCESS,
-  FORGOT_REQ_FAILURE,
-  BLUR_FIELDS_FORGOT,
-  STATE_CLEANUP_FORGOT,
+  UPDATE_FIELDS_CHANGE,
+  CHANGE_REQ,
+  CHANGE_REQ_SUCCESS,
+  CHANGE_REQ_FAILURE,
+  BLUR_FIELDS_CHANGE,
+  STATE_CLEANUP_CHANGE,
   RESET_DONE_STATE,
 } from './actionTypes';
 
 const initialState = {
   inputValues: {
-    email: '',
-    otp: '',
+    currPassword: '',
     password: '',
     cpassword: '',
   },
   inputValidity: {
-    email: false,
-    otp: false,
+    currPassword: false,
     password: false,
     cpassword: false,
   },
   isTouched: {
-    email: false,
+    currPassword: false,
     otp: false,
     password: false,
     cpassword: false,
   },
   loading: false,
   error: '',
-  emailSent: false,
-  otpVerified: false,
+  passwordSent: false,
   passwordReset: false,
-  resentOtp: 0,
 };
 
-const forgotReducer = (state = initialState, action) => {
+const changePasswordReducer = (state = initialState, action) => {
   switch (action.type) {
-    case UPDATE_FIELDS_FORGOT: {
+    case UPDATE_FIELDS_CHANGE: {
       const newInputValue = {
         ...state.inputValues,
         [action.fieldId]: action.val,
@@ -55,53 +50,52 @@ const forgotReducer = (state = initialState, action) => {
         inputValidity: newInputValidity,
       };
     }
-    case BLUR_FIELDS_FORGOT: {
+    case BLUR_FIELDS_CHANGE: {
       const newInputIsTouched = {...state.isTouched, [action.fieldId]: true};
       return {...state, isTouched: newInputIsTouched};
     }
-    case STATE_CLEANUP_FORGOT: {
-      Alert.alert('Success', 'New password set successfully!');
+    case STATE_CLEANUP_CHANGE: {
+      if (Platform.OS === 'android') {
+        ToastAndroid.show('Password Updated!', ToastAndroid.SHORT);
+      } else {
+        AlertIOS.alert('Password Updated!');
+      }
       console.log('flushing state');
       return initialState;
     }
 
-    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////
 
-    case FORGOT_REQ: {
+    case CHANGE_REQ: {
       return {...state, loading: true};
     }
-    case FORGOT_REQ_SUCCESS: {
-      let newResentOtp = state.resentOtp;
-      if (action.successReq === 'emailSent') {
-        newResentOtp += 1;
-      }
 
-      console.log('forgotpassword success response recieved!');
+    case CHANGE_REQ_SUCCESS: {
+      console.log('change password success response recieved!');
       console.log({
         ...state,
         loading: false,
         error: '',
         [action.successReq]: true,
-        resentOtp: newResentOtp,
       });
       return {...state, loading: false, error: '', [action.successReq]: true};
     }
-    case FORGOT_REQ_FAILURE: {
+
+    case CHANGE_REQ_FAILURE: {
       Alert.alert('Error', action.error);
       return {...state, loading: false, error: action.error};
     }
 
     case RESET_DONE_STATE: {
-      let newState = {
+      const newState = {
         ...state,
-        emailSent: false,
-        otpVerified: false,
+        passwordSent: false,
         passwordReset: false,
       };
 
-      if (action.resettable === 'otp') {
-        newState.inputValues.otp = '';
-        newState.isTouched.otp = false;
+      if (action.currScreen === 'currPassword') {
+        newState.inputValues.currPassword = '';
+        newState.isTouched.currPassword = false;
       } else {
         newState.inputValues.password = '';
         newState.inputValues.cpassword = '';
@@ -112,9 +106,10 @@ const forgotReducer = (state = initialState, action) => {
       return newState;
     }
 
-    default:
+    default: {
       return state;
+    }
   }
 };
 
-export default forgotReducer;
+export default changePasswordReducer;

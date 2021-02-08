@@ -1,5 +1,4 @@
 /* eslint-disable prettier/prettier */
-import React, {useEffect} from 'react';
 import {
   View,
   ScrollView,
@@ -7,60 +6,60 @@ import {
   StyleSheet,
   Image,
   FlatList,
-  RefreshControl,
   ActivityIndicator,
+  RefreshControl,
 } from 'react-native';
+import React from 'react';
 import {useSelector, useDispatch} from 'react-redux';
 import colors from '../../../constants/Colors';
-import renderItem from '../../../components/CommitmentsCard';
-import {fetchCommitments} from '../../../redux/commitments/actions';
+import {registerUserForDrive} from '../../../redux/upcomingDrives/actions';
+import DonationRequestsCard from '../../../components/DonationRequestsCard';
+import {fetchSalesData} from '../../../redux/sales/actions';
 
-const Commitments = () => {
-  const commitmentsState = useSelector((state) => state.commitmentsState);
-  const dispatch = useDispatch();
+//TODO replace commitments state with donation requests state
+
+const DonationRequests = ({navigation}) => {
   const authState = useSelector((state) => state.authState);
-  useEffect(() => {
-    dispatch(fetchCommitments(authState.userToken));
-  }, [authState.userToken, dispatch]);
-  const [refreshing, setRefreshing] = React.useState(false);
+  const invitesState = useSelector((state) => state.invitesState);
+  const dispatch = useDispatch();
 
+  const [refreshing, setRefreshing] = React.useState(false);
   const onRefresh = React.useCallback(
     (driveId) => {
       setRefreshing(true);
-      dispatch(fetchCommitments(authState.userToken));
-      if (!commitmentsState.loading) {
+      dispatch(fetchSalesData(authState.userToken));
+      if (!invitesState.loading) {
         setRefreshing(false);
       }
     },
-    [authState.userToken, commitmentsState.loading, dispatch],
+    [authState.userToken, dispatch, invitesState.loading],
   );
-  //* if adding anything before or after the flatlist, use flatlist's header and footer props.
   return (
     <View style={styles.container}>
-      {commitmentsState.loading ? (
+      {invitesState.loading ? (
         <ActivityIndicator
-          visible={commitmentsState.loading}
+          visible={invitesState.loading}
           textContent={'Loading...'}
           textStyle={styles.spinnerTextStyle}
           animating={true}
           color={colors.primary}
           size="large"
         />
-      ) : commitmentsState.commitmentsList.length === 0 ? (
+      ) : invitesState.invitesList.length === 0 ? (
         <View style={styles.suchEmpty}>
           <Image
             style={styles.suchEmptyImg}
             source={require('../../../assets/images/empty.png')}
           />
           <Text style={styles.emptyInfo}>
-            You don't have any commitments yet.
+            You don't have any donation requests yet.
           </Text>
         </View>
       ) : (
         <FlatList
           style={styles.scroll}
-          data={commitmentsState.commitmentsList}
-          renderItem={renderItem}
+          data={invitesState.invitesList}
+          renderItem={({item}) => <DonationRequestsCard item={item} />}
           keyExtractor={(item) => item.driveId || item.donationId}
           refreshControl={
             <RefreshControl
@@ -111,4 +110,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Commitments;
+export default DonationRequests;

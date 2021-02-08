@@ -40,7 +40,7 @@ export const upcomingDrivesSearch = (userToken, searchFilters) => {
     try {
       dispatch(driveFindReq());
       const response = await axios.post(
-        'http://10.0.2.2:8000/finddrives',
+        'http://192.168.43.89:5000/finddrives',
         searchFilters,
         {
           headers: {Authorization: userToken},
@@ -70,7 +70,7 @@ export const upcomingDrivesSearch = (userToken, searchFilters) => {
 };
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////
-//? THUNK BASED ACTION CREATOR TOREGISTER USER FOR A DRIVE.
+//? THUNK BASED ACTION CREATOR TO REGISTER USER FOR A DRIVE.
 
 export const registerUserForDrive = (userToken, driveId) => {
   return async (dispatch) => {

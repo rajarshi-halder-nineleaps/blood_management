@@ -1,5 +1,6 @@
-import React from "react";
-import { Text, View, TextInput, Button, StyleSheet } from "react-native";
+/* eslint-disable prettier/prettier */
+import React from 'react';
+import {Text, View, TextInput, Button, StyleSheet} from 'react-native';
 
 const RegisterInput = (props) => {
   //   let error = "Invalid input";

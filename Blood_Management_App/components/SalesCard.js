@@ -35,6 +35,10 @@ const SalesCard = ({item}) => {
           <View style={styles.contentView}>
             <View style={styles.detailsView}>
               <Text style={styles.label}>
+                Purchase date:{' '}
+                <Text style={styles.content}>{item.saleDate}</Text>
+              </Text>
+              <Text style={styles.label}>
                 Purchased blood group:{' '}
                 <Text style={styles.content}>{item.purchasedGroup}</Text>
               </Text>

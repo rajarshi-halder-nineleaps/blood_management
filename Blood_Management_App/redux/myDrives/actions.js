@@ -2,10 +2,10 @@
 import {
   FETCH_DRIVES_REQ,
   FETCH_DRIVES_SUCCESS,
+  DRIVE_CANCEL_SUCCESS,
+  FETCH_LIST_SUCCESS,
   FETCH_DRIVES_FAILURE,
   DONATION_VERIFICATION,
-  RESET_DONE_STATE,
-  DRIVE_CANCEL_SUCCESS,
 } from './actionTypes';
 import axios from 'axios';
 
@@ -15,29 +15,33 @@ export const fetchDrivesReq = () => ({
 
 export const fetchDriveSuccess = (myDrivesData) => ({
   type: FETCH_DRIVES_SUCCESS,
-  myDrivesData: myDrivesData,
+  myDrivesData,
+});
+
+export const fetchListSuccess = (donorsList) => ({
+  type: FETCH_LIST_SUCCESS,
+  donorsList,
+});
+
+export const driveCancelSuccess = (driveId) => ({
+  type: DRIVE_CANCEL_SUCCESS,
+  driveId,
 });
 
 export const fetchDriveFailure = (error) => ({
   type: FETCH_DRIVES_FAILURE,
-  error: error,
+  error,
 });
 
-export const donationVerification = (drive, donor) => ({
+//* USE THIS TO SET THE VALUE OF DONOR'S HAS GIVEN BLOOD STATUS TO FALSE
+export const donationVerification = (driveId, donorId) => ({
   type: DONATION_VERIFICATION,
-  drive: drive,
-  donor: donor,
+  driveId,
+  donorId,
 });
 
-export const resetDoneState = () => ({
-  type: RESET_DONE_STATE,
-});
-
-export const driveCancelSuccess = () => ({
-  type: DRIVE_CANCEL_SUCCESS,
-});
-
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////
+//? GET LIST OF DRIVES
 
 export const getDriveData = (userToken) => {
   return async (dispatch) => {
@@ -69,21 +73,58 @@ export const getDriveData = (userToken) => {
   };
 };
 
-//todo make an action creator for double posting.
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+//? GET LIST OF DONORS FOR A PARTICULAR DRIVE
 
-export const doubleDataPoster = (userToken, driveId, donorId) => {
+export const getDonorList = (userToken, driveId) => {
+  return async (dispatch) => {
+    dispatch(fetchDrivesReq());
+    try {
+      console.log('sending axios list post request!');
+      const response = await axios.post(
+        'http://192.168.43.89:5000/donorList',
+        {driveId},
+        {
+          headers: {Authorization: userToken},
+        },
+      );
+
+      if (response.data.success) {
+        console.log('response is success!');
+        //? SET THIS PROP NAME ACCORDING TO BACK END
+        // console.log(response.data.acceptedDonors);
+        dispatch(fetchListSuccess(response.data.acceptedDonors));
+      } else if (response.data.error) {
+        console.log('response is error!');
+        dispatch(fetchDriveFailure(response.data.error));
+      } else {
+        console.log('outlandish error!');
+        dispatch(
+          fetchDriveFailure(
+            "Something's not right! please try again after some time.",
+          ),
+        );
+      }
+    } catch (err) {
+      console.log('caught error on donor list get request: ', err);
+      dispatch(fetchDriveFailure(err.message));
+    }
+  };
+};
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//? POST DATA THAT A USER HAS DONATED BLOOD.
+
+export const donorVerification = (userToken, driveId, donorId) => {
   return async (dispatch) => {
     console.log(
-      'double data posting api request for my donation drives started!',
+      'donorVerification api request for my donation drives started!',
     );
     try {
-      //todo finsih this
-      //TODO DOUBT: THERE ARE 2 POSTS, WHAT IF ONE SUCCEEDS AND THE OTHER DOESNT
-      //* theres a solution, u send a single post request to the back end and let them handle it beacuse they can check if one is done or both are.
       dispatch(fetchDrivesReq());
       console.log("posting updated data to current user's records");
       const response = await axios.post(
-        'http://10.0.2.2:8000/mydrives',
+        'http://192.168.43.89:5000/mydrives',
         {driveId, donorId},
         {
           headers: {Authorization: userToken},
@@ -91,13 +132,12 @@ export const doubleDataPoster = (userToken, driveId, donorId) => {
       );
 
       if (response.data.success) {
-        console.log("posted data to both user's and donor's records");
-        //* coordinate with back end team to fixate on this response with the same name.
-        dispatch(fetchDriveSuccess(response.data.driveData));
+        console.log('donor verification complete!');
+        //? coordinate with back end team to fixate on this response with the same name.
+        dispatch(donationVerification(driveId, donorId));
       } else if (response.data.error) {
         dispatch(fetchDriveFailure(response.data.error));
       } else {
-        //* Anandhu: This is the place where misplacing a single curly bracket crashed my whole App. Took me 4 hours to figure it out.
         dispatch(
           fetchDriveFailure(
             "Something's not right! Please try after some time.",
@@ -107,12 +147,15 @@ export const doubleDataPoster = (userToken, driveId, donorId) => {
     } catch (err) {
       dispatch(fetchDriveFailure(err.message));
       console.log(
-        'Error caught while double data posting in my donation drives.',
+        'Error caught while data posting in my donation drives.',
         err.message,
       );
     }
   };
 };
+
+////////////////////////////////////////////////////////////
+//? CANCEL A DRIVE
 
 export const driveCancellation = (userToken, driveId) => {
   return async (dispatch) => {
@@ -130,8 +173,8 @@ export const driveCancellation = (userToken, driveId) => {
 
       if (response.data.success) {
         console.log('drive cancellation successful');
-        //* coordinate with back end team to fixate on this response with the same name.
-        dispatch(fetchDriveSuccess(response.data.driveData));
+        //? coordinate with back end team to fixate on this response with the same name.
+        dispatch(driveCancelSuccess(driveId));
       } else if (response.data.error) {
         dispatch(fetchDriveFailure(response.data.error));
       } else {
@@ -143,10 +186,7 @@ export const driveCancellation = (userToken, driveId) => {
       }
     } catch (err) {
       dispatch(fetchDriveFailure(err.message));
-      console.log(
-        'Error caught while double data posting in my donation drives.',
-        err.message,
-      );
+      console.log('Error caught while cancelling drive.', err.message);
     }
   };
 };

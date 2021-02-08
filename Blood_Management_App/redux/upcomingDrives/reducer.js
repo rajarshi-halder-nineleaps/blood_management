@@ -15,12 +15,13 @@ const initialState = {
   upcomingDrivesList: [],
   error: '',
   gotData: false,
+  registerSuccess: false,
 };
 
 const upcomingDrivesReducer = (state = initialState, action) => {
   switch (action.type) {
     case DRIVE_FIND_REQ: {
-      return {...state, loading: true};
+      return {...state, loading: true, registerSuccess: false};
     }
     case DRIVE_FIND_FAILURE: {
       console.log('Drive find failure reached reducer.');
@@ -29,7 +30,6 @@ const upcomingDrivesReducer = (state = initialState, action) => {
     }
     case DRIVE_FIND_SUCCESS: {
       console.log('upcomingDrives data reached reducer.');
-      console.log(action.upcomingDrivesList);
       return {
         ...state,
         upcomingDrivesList: action.upcomingDrivesList,
@@ -43,7 +43,7 @@ const upcomingDrivesReducer = (state = initialState, action) => {
         'Success',
         'You have successsfully registered for this drive!',
       );
-      return {...state, loading: false};
+      return {...state, loading: false, registerSuccess: true};
     }
 
     case STATE_CLEANUP: {
