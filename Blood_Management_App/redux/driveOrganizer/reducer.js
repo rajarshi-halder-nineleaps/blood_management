@@ -13,10 +13,6 @@ import {
 const initialState = {
   inputValues: {
     startDate: new Date(),
-<<<<<<< HEAD
-=======
-    startTime: '00:00:00',
->>>>>>> aee30c9390a0913f0c0843131a9a2473041eb8cc
     endDate: new Date(),
     endTime: '00:00:00',
     bloodgroup: [],

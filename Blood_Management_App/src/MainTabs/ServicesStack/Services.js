@@ -92,12 +92,8 @@ const Services = ({navigation}) => {
         </View>
         <View style={styles.row}>
           <TouchTabs
-<<<<<<< HEAD
-            label="Donor Request"
-=======
             label="My Blood Requests"
             source={require('../../../assets/images/servicesScreen/findDonors.png')}
->>>>>>> aee30c9390a0913f0c0843131a9a2473041eb8cc
             imgSrc="../assets/images/servicesScreen/findDonors.png"
             touchHandler={() => navigation.navigate('Active Donor Request')}
           />

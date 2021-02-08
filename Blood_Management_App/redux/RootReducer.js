@@ -15,19 +15,12 @@ import inventoryReducer from './inventory/reducer';
 import salesReducer from './sales/reducer';
 import aboutReducer from './about/reducer';
 import profileReducer from './profile/reducer';
-<<<<<<< HEAD
-import finddonorReducer from './finddonors/reducer'
-import buybloodReducer from './buyblood/reducer'
-import mypurchasesReducer from './mypurchases/reducer'
-import activedonorReducer from './activedonorrequest/reducer'
-=======
 import finddonorReducer from './finddonors/reducer';
 import buybloodReducer from './buyblood/reducer';
 import invitesReducer from './invites/reducer';
 import mypurchasesReducer from './mypurchases/reducer';
 import activedonorReducer from './activedonorrequest/reducer';
 import changePasswordReducer from './changePassword/reducer';
->>>>>>> aee30c9390a0913f0c0843131a9a2473041eb8cc
 
 const rootReducer = combineReducers({
   loginFormState: loginReducer,

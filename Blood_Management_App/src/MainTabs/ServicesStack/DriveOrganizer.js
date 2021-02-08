@@ -145,13 +145,8 @@ const DriveOrganizer = ({navigation}) => {
       isValid = false;
     }
 
-<<<<<<< HEAD
     if (fieldId === 'startdate'){
       isValid = false
-=======
-    if (fieldId === 'date') {
-      isValid = false;
->>>>>>> aee30c9390a0913f0c0843131a9a2473041eb8cc
     }
     if (fieldId === 'starttime') {
       isValid = false;
@@ -221,7 +216,6 @@ const DriveOrganizer = ({navigation}) => {
           )}
         </View>
 
-<<<<<<< HEAD
       <View>
       <View style={styles.datepicker}>
         <TouchableOpacity style={styles.datepickerbutton} onPress={showstartDatepicker}>
@@ -281,40 +275,6 @@ const DriveOrganizer = ({navigation}) => {
         />
       )}
     </View>
-=======
-        <View>
-          <View style={styles.datepicker}>
-            <TouchableOpacity
-              style={styles.datepickerbutton}
-              onPress={showendDatepicker}>
-              <Text style={styles.datepickerttext}>Set End Date</Text>
-            </TouchableOpacity>
-            <Text style={styles.datepickerttextoutput}>
-              {enddate.toDateString()}
-            </Text>
-          </View>
-          <View style={styles.datepicker}>
-            <TouchableOpacity
-              style={styles.datepickerbutton}
-              onPress={showendTimepicker}>
-              <Text style={styles.datepickerttext}>Set End Time</Text>
-            </TouchableOpacity>
-            <Text style={styles.datepickerttextoutput}>
-              {enddate.toLocaleTimeString()}
-            </Text>
-          </View>
-          {endshow && (
-            <DateTimePicker
-              testID="dateTimePicker"
-              value={enddate}
-              mode={endmode}
-              is24Hour={true}
-              display="default"
-              onChange={onChangeend}
-            />
-          )}
-        </View>
->>>>>>> aee30c9390a0913f0c0843131a9a2473041eb8cc
         {/* //////////////////////////////////////////////////////////////////////////////////// */}
 
         {/* //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// */}

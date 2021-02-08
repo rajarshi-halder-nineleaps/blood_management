@@ -29,10 +29,6 @@ const ServicesNavigator = createStackNavigator();
 
 const ServicesStackNavigator = () => {
   return (
-<<<<<<< HEAD
-    <ServicesNavigator.Navigator headerMode='screen'>
-      <ServicesNavigator.Screen name="Services" component={Services} />
-=======
     <ServicesNavigator.Navigator headerMode="float">
       <ServicesNavigator.Screen
         name="Services"
@@ -41,7 +37,6 @@ const ServicesStackNavigator = () => {
           headerShown: false,
         }}
       />
->>>>>>> aee30c9390a0913f0c0843131a9a2473041eb8cc
       <ServicesNavigator.Screen
         name="myDrives"
         component={MyDrives}
