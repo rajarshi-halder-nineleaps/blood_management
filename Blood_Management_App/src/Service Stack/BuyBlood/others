@@ -1,0 +1,17 @@
+
+    const renderItem = ({ item }) => {
+        const backgroundColor = item.id === selectedId ? "#6e3b6e" : "#f9c2ff";
+    
+        return (
+          <Item
+            item={item}
+            onPress={() => navigation.navigate("Confirm Buy", {
+                itemname:item.name
+            })}
+            onPressmoreinfo ={()=> navigation.navigate("More Info", {
+              itemname:item.name
+          })}
+            style={{ backgroundColor }}
+          />
+        );
+      };

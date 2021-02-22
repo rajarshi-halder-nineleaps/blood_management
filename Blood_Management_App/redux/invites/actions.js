@@ -1,6 +1,6 @@
 /* eslint-disable prettier/prettier */
 import axios from 'axios';
-import {DREQ_REQ, DREQ_SUCCESS, DREQ_FAILURE, DREQ_UPDATE} from './actionTypes';
+import { DREQ_REQ, DREQ_SUCCESS, DREQ_FAILURE, DREQ_UPDATE } from './actionTypes';
 
 export const invitesReq = () => ({
   type: DREQ_REQ,
@@ -28,8 +28,8 @@ export const fetchInvitesList = (userToken) => {
     try {
       console.log('Fetching list of invites.');
       dispatch(invitesReq());
-      const response = await axios.get('http://192.168.43.89:5000/invites', {
-        headers: {Authorization: userToken},
+      const response = await axios.get('http://10.0.2.2:8000/invites', {
+        headers: { Authorization: userToken },
       });
 
       if (response.data.success) {
@@ -56,17 +56,17 @@ export const fetchInvitesList = (userToken) => {
 ///////////////////////////////////////////////////////////////////////////////////////////////////////
 
 //* remember to structure the request object based on invite type before dispatching this
-export const updateInvitesList = (userToken, updatedData) => {
+export const updateRequestList = (userToken, updatedData) => {
   console.log('Updater dispatched!');
   return async (dispatch) => {
     try {
       console.log('updating list of invites.');
       dispatch(invitesReq());
       const response = await axios.put(
-        'http://192.168.43.89:5000/invites',
+        'http://10.0.2.2:8000/invites',
         updatedData,
         {
-          headers: {Authorization: userToken},
+          headers: { Authorization: userToken },
         },
       );
 

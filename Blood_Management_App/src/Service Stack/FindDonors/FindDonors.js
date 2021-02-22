@@ -200,9 +200,7 @@ const styles = StyleSheet.create({
   },
   headertitle: {
     fontSize: 50,
-
     backgroundColor: 'transparent',
-    
     marginLeft:10,
     color: colors.primary,
     fontFamily: 'Montserrat-Regular',

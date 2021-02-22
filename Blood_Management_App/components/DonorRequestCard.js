@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import React, {useEffect} from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   View,
   ScrollView,
@@ -17,138 +17,183 @@ import {
   CollapseBody,
 } from 'accordion-collapse-react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
+import AreYouSure from './AreYouSure';
+import { updateRequestList } from "../redux/activedonorrequest/actions"
 
 
-const DonorRequestCard = ({item}) => {
+const DonorRequestCard = ({ item }) => {
 
 
 
+  const updateObjAccept = item.id
+    ? { id: item.id, hasgiven: 2 }
+    : null;
+
+
+  const [rusurer, setRusurer] = useState(false);
   return (
-    <Collapse>
-      <CollapseHeader style={styles.touchboard}>
-        <View style={styles.typeView}>
-          <Text style={styles.headerContent}>{item.blood_group}</Text>
-        </View>
-        <View style={styles.headerDetailsView}>
-          <View style={styles.nameView}>
-            <Text style={styles.nameText}>{item.name}</Text>
+    <>
+      <Collapse>
+        <CollapseHeader style={styles.touchboard}>
+          <View style={styles.typeView}>
+            <Text style={styles.headerContent}>{item.blood_group}</Text>
           </View>
-        </View>
-        <View style={styles.headerIndicatorView}>
-          {item.hasgiven ? (
-            <View style={styles.yesnoView}>
-              <Text style={styles.yes}>DONE</Text>
-            </View>
-          ) : (
-            <View style={styles.yesnoView}>
-              <Text style={styles.no}>TODO</Text>
-            </View>
-          )}
-        </View>
-      </CollapseHeader>
-      <CollapseBody style={styles.collBody}>
-        <View style={styles.bodyHeader}>
-          {item.driveId ? (
-            <Text style={styles.bodyLabel}>
-              Drive ID : {item.driveId}
-              <Text style={styles.bodyContent}>{item.driveId}</Text>
-            </Text>
-          ) : (
-            <Text style={styles.bodyLabel}>
-              DonationId ID : {item.requestid}
-              <Text style={styles.bodyContent}>{item.donationId}</Text>
-            </Text>
-          )}
-        </View>
-
-        <View style={styles.detailsBoard}>
-          <View style={styles.contentView}>
-            <Text style={styles.label}>
-              Commitment made on: {'  '}
-              <Text style={styles.content}>
-                {item.date} at {item.time}
-              </Text>
-            </Text>
-
-            <View style={styles.addressView}>
-              <Text style={styles.addressLabel}>Drive details:</Text>
-              <View style={styles.addressContentView}>
-                <View style={styles.addressInsideView}>
-                  
-                </View>
-              </View>
-            </View>
-          </View>
-          <View style={styles.detailsView}>
-            <View style={styles.addressContentView}>
-              <View style={styles.addressInsideView}>
-                <Text style={styles.addressInsideLabel}>Recipient name:</Text>
-                <View style={styles.addressRightView}>
-                  <Text style={styles.addressContent}>
-                    {item.name}
-                  </Text>
-                </View>
-              </View>
-              <View style={styles.addressInsideView}>
-                <Text style={styles.addressInsideLabel}>Recipient Email:</Text>
-                <View style={styles.addressRightView}>
-                  <Text style={styles.addressContent}>
-                    {item.email}
-                  </Text>
-                </View>
-              </View>
-
-              <View style={styles.addressInsideView}>
-                <Text style={styles.addressInsideLabel}>
-                  Recipient Contact:
-                </Text>
-                <View style={styles.addressRightView}>
-                  <Text style={styles.addressContent}>
-                    {item.contact}
-                  </Text>
-                </View>
-              </View>
-
-              {item.driveId ? (
-                <>
-                  <View style={styles.addressInsideView}>
-                    <Text style={styles.addressInsideLabel}>From:</Text>
-                    <View style={styles.addressRightView}>
-                      <Text style={styles.addressContent}>
-                        {item.date} at
-                        {'  ' + item.time}
-                      </Text>
-                    </View>
-                  </View>
-                  <View style={styles.addressInsideView}>
-                    <Text style={styles.addressInsideLabel}>To:</Text>
-                    <View style={styles.addressRightView}>
-                      <Text style={styles.addressContent}>
-                        {item.date} at
-                        {'  ' + item.time}
-                      </Text>
-                    </View>
-                  </View> 
-                </>
-              ) : null}
+          <View style={styles.headerDetailsView}>
+            <View style={styles.nameView}>
+              <Text style={styles.nameText}>{item.name}</Text>
             </View>
           </View>
           <View style={styles.headerIndicatorView}>
-            {item.hasgiven ? (
-              <View style={styles.yesnoView}>
-                <Text style={styles.yes}>COMPLETED</Text>
-              </View>
-            ) : (
-              <View style={styles.yesnoView}>
-                <TouchableOpacity onPress={()=> dispatch}>
-                <Text style={styles.no}>INCOMPLETE</Text>
-                </TouchableOpacity>
-              </View>
-            )}
+            {
+              item.hasgiven == 0 ? (
+                <View style={styles.yesnoView}>
+                  <Text style={styles.requested}>REQUESTED</Text>
+                </View>
+
+              ) :
+                null
+            }
+            {
+              item.hasgiven == 1 ? (
+                <View style={styles.yesnoView}>
+                  <Text style={styles.yes}>ACCEPTED</Text>
+                </View>
+
+              ) :
+                null
+            }
+            {
+              item.hasgiven == 2 ? (
+                <View style={styles.yesnoView}>
+                  <Text style={styles.no}>DONATED</Text>
+                </View>
+
+              ) :
+                null
+            }
+
           </View>
-        </View>
-      </CollapseBody>
-    </Collapse>
+        </CollapseHeader>
+        <CollapseBody style={styles.collBody}>
+          <View style={styles.bodyHeader}>
+            {item.driveId ? (
+              <Text style={styles.bodyLabel}>
+                Drive ID : {item.driveId}
+                <Text style={styles.bodyContent}>{item.driveId}</Text>
+              </Text>
+            ) : (
+                <Text style={styles.bodyLabel}>
+                  DonationId ID : {item.requestid}
+                  <Text style={styles.bodyContent}>{item.donationId}</Text>
+                </Text>
+              )}
+          </View>
+
+          <View style={styles.detailsBoard}>
+            <View style={styles.contentView}>
+              <Text style={styles.label}>
+                Commitment made on: {'  '}
+                <Text style={styles.content}>
+                  {item.date} at {item.time}
+                </Text>
+              </Text>
+
+              <View style={styles.addressView}>
+                <Text style={styles.addressLabel}>Drive details:</Text>
+                <View style={styles.addressContentView}>
+                  <View style={styles.addressInsideView}>
+
+                  </View>
+                </View>
+              </View>
+            </View>
+            <View style={styles.detailsView}>
+              <View style={styles.addressContentView}>
+                <View style={styles.addressInsideView}>
+                  <Text style={styles.addressInsideLabel}>Recipient name:</Text>
+                  <View style={styles.addressRightView}>
+                    <Text style={styles.addressContent}>
+                      {item.name}
+                    </Text>
+                  </View>
+                </View>
+                <View style={styles.addressInsideView}>
+                  <Text style={styles.addressInsideLabel}>Recipient Email:</Text>
+                  <View style={styles.addressRightView}>
+                    <Text style={styles.addressContent}>
+                      {item.email}
+                    </Text>
+                  </View>
+                </View>
+
+                <View style={styles.addressInsideView}>
+                  <Text style={styles.addressInsideLabel}>
+                    Recipient Contact:
+                </Text>
+                  <View style={styles.addressRightView}>
+                    <Text style={styles.addressContent}>
+                      {item.contact}
+                    </Text>
+                  </View>
+                </View>
+
+                {item.driveId ? (
+                  <>
+                    <View style={styles.addressInsideView}>
+                      <Text style={styles.addressInsideLabel}>From:</Text>
+                      <View style={styles.addressRightView}>
+                        <Text style={styles.addressContent}>
+                          {item.date} at
+                        {'  ' + item.time}
+                        </Text>
+                      </View>
+                    </View>
+                    <View style={styles.addressInsideView}>
+                      <Text style={styles.addressInsideLabel}>To:</Text>
+                      <View style={styles.addressRightView}>
+                        <Text style={styles.addressContent}>
+                          {item.date} at
+                        {'  ' + item.time}
+                        </Text>
+                      </View>
+                    </View>
+                  </>
+                ) : null}
+              </View>
+            </View>
+            <View style={styles.row}>
+              {
+                item.hasgiven == 1 ?
+                  <TouchableOpacity onPress={() => {
+                    setRusurer(true);
+                  }} >
+                    <View style={styles.updatebutton}>
+                      <Text style={styles.buttontext}>Update Status</Text>
+                    </View>
+                  </TouchableOpacity>
+                  :
+                  null
+              }
+
+              <View style={styles.headerIndicatorView}>
+              </View>
+            </View>
+
+          </View>
+        </CollapseBody>
+      </Collapse>
+      { rusurer ? (
+        <>
+          <AreYouSure
+            visibleState={rusurer}
+            visibleStateChanger={setRusurer}
+            dispatchable={updateRequestList}
+            dispatchData={updateObjAccept}
+            message="Has the user donated blood?"
+          />
+        </>
+      ) : null}
+    </>
   );
 };
 
@@ -205,6 +250,11 @@ const styles = StyleSheet.create({
     padding: 10,
     justifyContent: 'flex-end',
   },
+  requested: {
+    fontFamily: 'Montserrat-Bold',
+    fontSize: 12,
+    color: 'red',
+  },
 
   yes: {
     fontFamily: 'Montserrat-Bold',
@@ -214,7 +264,7 @@ const styles = StyleSheet.create({
   no: {
     fontFamily: 'Montserrat-Bold',
     fontSize: 12,
-    color: 'red',
+    color: 'blue',
   },
   headerContent: {
     fontFamily: 'Montserrat-Regular',
@@ -284,6 +334,28 @@ const styles = StyleSheet.create({
     fontFamily: 'Montserrat-Regular',
     color: colors.additional1,
   },
+  updatebutton: {
+    backgroundColor: colors.additional2,
+    paddingHorizontal: 10,
+    paddingVertical: 5,
+    marginTop: 10,
+    borderRadius: 5,
+    borderWidth: 2,
+    borderColor: colors.primary
+
+  },
+  buttontext: {
+    fontSize: 18,
+    backgroundColor: 'transparent',
+    color: colors.primary,
+    fontFamily: 'Montserrat-Regular',
+  },
+  row: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    flex: 1
+  }
 });
 
 export default DonorRequestCard;

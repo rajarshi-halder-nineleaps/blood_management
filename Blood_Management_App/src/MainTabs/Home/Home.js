@@ -1,15 +1,15 @@
 /* eslint-disable prettier/prettier */
 import React from 'react';
-import { SafeAreaView,ScrollView, View, Text, Dimensions, TouchableOpacity, StyleSheet, Image, FlatList } from 'react-native';
+import { SafeAreaView, ScrollView, View, Text, Dimensions, TouchableOpacity, StyleSheet, Image, FlatList } from 'react-native';
 import colors from '../../../constants/Colors';
 import { useDispatch, useSelector } from 'react-redux'
 import { FlatListSlider } from 'react-native-flatlist-slider'
 import HomeSlider from '../../../components/HomeSlider'
 import Icon from 'react-native-vector-icons/FontAwesome'
 
-import {fetchCommitments} from '../../../redux/commitments/actions';
-import {getInventory} from '../../../redux/inventory/actions';
-import {fetchSalesData} from '../../../redux/sales/actions';
+import { fetchCommitments } from '../../../redux/commitments/actions';
+import { getInventory } from '../../../redux/inventory/actions';
+import { fetchSalesData } from '../../../redux/sales/actions';
 import {
   PieChart,
   BarChart,
@@ -26,7 +26,7 @@ const data = {
 
 const piedata = [
   {
-    name: "Whole Blood",
+    name: "Blood",
     quantity: 1012,
     color: "rgba(131, 167, 234, 1)",
     legendFontColor: "#7F7F7F",
@@ -64,14 +64,21 @@ const piedata = [
 
 const images = [
   {
-    image: 'https://images.unsplash.com/photo-1567226475328-9d6baaf565cf?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=400&q=60',
-    desc: 'Silent Waters in the mountains in midst of Himilayas',
+    icon: 'home',
+    number: 23,
+    title: 'Blood Camps',
   },
   {
-    image: 'https://images.unsplash.com/photo-1455620611406-966ca6889d80?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1130&q=80',
-    desc:
-      'Red fort in India New Delhi is a magnificient masterpeiece of humans',
+    icon: 'tint',
+    number: 56,
+    title: 'Active Donors',
   },
+  {
+    icon: 'hospital-symbol',
+    number: 79,
+    title: 'Active Blood Banks',
+  },
+
 ]
 const chartConfig = {
   backgroundGradientFrom: colors.additional2,
@@ -90,7 +97,7 @@ const Home = ({ navigation }) => {
   const authState = useSelector((state) => state.authState);
   const userType = authState.userType;
   const dispatch = useDispatch()
-  
+
   const salesHandler = () => {
     dispatch(fetchSalesData(authState.userToken));
     navigation.navigate('services', { screen: 'sales' })
@@ -101,7 +108,7 @@ const Home = ({ navigation }) => {
     dispatch(fetchCommitments(authState.userToken));
     navigation.navigate('services', { screen: 'commitments' })
   };
-  
+
   const inventoryHandler = () => {
     dispatch(getInventory(authState.userToken));
     navigation.navigate('services', { screen: 'inventory' })
@@ -133,23 +140,23 @@ const Home = ({ navigation }) => {
         </View>
       </View>
       <View>
-        <Text style={styles.sectiontitle}>Our Achievements</Text>
+        <Text style={styles.sectiontitle}></Text>
         <FlatListSlider
           data={images}
-          width={350}
+          width={150}
           timer={5000}
           component={<HomeSlider />}
           onPress={{}}
           indicatorActiveWidth={50}
           contentContainerStyle={{ paddingHorizontal: 16 }}
-          indicatorContainerStyle={{ position: "absolute", bottom: 10 }} />
+          indicatorContainerStyle={{ position: "absolute", bottom: -15 }} />
       </View>
       <View style={styles.donateblood}>
         <View style={{ flexDirection: 'row-reverse', alignItems: 'center' }}>
           <Text style={styles.title}>
             {userType === 0 ? "Donate Blood" : "Organize Drive"}
-            
-            </Text>
+
+          </Text>
           <Icon name="tint" size={20} color={colors.primary} />
         </View>
         <TouchableOpacity
@@ -160,98 +167,98 @@ const Home = ({ navigation }) => {
         </TouchableOpacity>
       </View>
       <View>
-      <Text style={styles.sectiontitle}>Our Services</Text>
-      <ScrollView
-      style={styles.services}
-      horizontal={true}
-      showsHorizontalScrollIndicator={false}>
-        <TouchableOpacity onPress={() =>navigation.navigate('services', { screen: "Buy Blood" })} >
-          <View style={styles.card}>
-            <Icon name="tint" size={20} color={colors.additional2} />
-            <Text style={styles.cardtitle}>Buy</Text>
-            <Text style={styles.cardtitle}>Blood</Text>
-          </View>
-        </TouchableOpacity>
+        <Text style={styles.sectiontitle}>Our Services</Text>
+        <ScrollView
+          style={styles.services}
+          horizontal={true}
+          showsHorizontalScrollIndicator={false}>
+          <TouchableOpacity onPress={() => navigation.navigate('services', { screen: "Buy Blood" })} >
+            <View style={styles.card}>
+              <Icon name="tint" size={20} color={colors.additional2} />
+              <Text style={styles.cardtitle}>Buy</Text>
+              <Text style={styles.cardtitle}>Blood</Text>
+            </View>
+          </TouchableOpacity>
           <TouchableOpacity onPress={() => navigation.navigate('services', { screen: 'Find Donors' })}>
-          <View style={styles.card}>
-            <Icon name="tint" size={20} color={colors.additional2} />
-            <Text style={styles.cardtitle}>Find</Text>
-            <Text style={styles.cardtitle}>Donors</Text>
-          </View>
+            <View style={styles.card}>
+              <Icon name="tint" size={20} color={colors.additional2} />
+              <Text style={styles.cardtitle}>Find</Text>
+              <Text style={styles.cardtitle}>Donors</Text>
+            </View>
           </TouchableOpacity>
 
-          
-          {userType === 0 ? 
-          <>
-           <TouchableOpacity onPress={() =>myCommitmentsHandler()} >
-          <View style={styles.card}>
-            <Icon name="tint" size={20} color={colors.additional2} />
-            <Text style={styles.cardtitle}>My</Text>
-            <Text style={styles.cardtitle}>Commitments</Text>
-          </View>
-          </TouchableOpacity>
-          <TouchableOpacity onPress={() => navigation.navigate('services', { screen: 'upcomingDrivesSearch' })} >
-          <View style={styles.card}>
-            <Icon name="tint" size={20} color={colors.additional2} />
-            <Text style={styles.cardtitle}>Upcoming</Text>
-            <Text style={styles.cardtitle}>Drives</Text>
-          </View>
-          </TouchableOpacity>
-          </>
-          :
-          <>
-          <TouchableOpacity onPress={()=> inventoryHandler()}>
-          <View style={styles.card}>
-            <Icon name="tint" size={20} color={colors.additional2} />
-            <Text style={styles.cardtitle}>My</Text>
-            <Text style={styles.cardtitle}>Inventory</Text>
-          </View>
-          </TouchableOpacity>
-          <TouchableOpacity onPress={() => myDrivesHandler()}></TouchableOpacity>
-          <View style={styles.card}>
-          <Icon name="tint" size={20} color={colors.additional2} />
-          <Text style={styles.cardtitle}>My</Text>
-          <Text style={styles.cardtitle}>Drives</Text>
-        </View>
-        </>
+
+          {userType === 0 ?
+            <>
+              <TouchableOpacity onPress={() => myCommitmentsHandler()} >
+                <View style={styles.card}>
+                  <Icon name="tint" size={20} color={colors.additional2} />
+                  <Text style={styles.cardtitle}>My</Text>
+                  <Text style={styles.cardtitle}>Commitments</Text>
+                </View>
+              </TouchableOpacity>
+              <TouchableOpacity onPress={() => navigation.navigate('services', { screen: 'upcomingDrivesSearch' })} >
+                <View style={styles.card}>
+                  <Icon name="tint" size={20} color={colors.additional2} />
+                  <Text style={styles.cardtitle}>Upcoming</Text>
+                  <Text style={styles.cardtitle}>Drives</Text>
+                </View>
+              </TouchableOpacity>
+            </>
+            :
+            <>
+              <TouchableOpacity onPress={() => inventoryHandler()}>
+                <View style={styles.card}>
+                  <Icon name="tint" size={20} color={colors.additional2} />
+                  <Text style={styles.cardtitle}>My</Text>
+                  <Text style={styles.cardtitle}>Inventory</Text>
+                </View>
+              </TouchableOpacity>
+              <TouchableOpacity onPress={() => myDrivesHandler()}></TouchableOpacity>
+              <View style={styles.card}>
+                <Icon name="tint" size={20} color={colors.additional2} />
+                <Text style={styles.cardtitle}>My</Text>
+                <Text style={styles.cardtitle}>Drives</Text>
+              </View>
+            </>
           }
           {userType == 2 ?
-          <TouchableOpacity onPress={() => salesHandler()}>
-          <View style={styles.card}>
-          <Icon name="tint" size={20} color={colors.additional2} />
-          <Text style={styles.cardtitle}>My</Text>
-          <Text style={styles.cardtitle}>Sales</Text>
-        </View>
-        </TouchableOpacity> :
-        null
-        }
-          
-      </ScrollView>
-      <Text style={styles.sectiontitle}>Statistics</Text>
-      <BarChart
-  style={styles.graphStyle}
-  data={data}
-  width={screenWidth-30}
-  height={220}
-  yAxisLabel="Rs"
-  chartConfig={chartConfig}
-  verticalLabelRotation={30}
-/>
-<Text style={styles.sectiontitle}>Blood Inventory</Text>
+            <TouchableOpacity onPress={() => salesHandler()}>
+              <View style={styles.card}>
+                <Icon name="tint" size={20} color={colors.additional2} />
+                <Text style={styles.cardtitle}>My</Text>
+                <Text style={styles.cardtitle}>Sales</Text>
+              </View>
+            </TouchableOpacity> :
+            null
+          }
 
-<PieChart
-  data={piedata}
-  width={screenWidth}
-  height={220}
-  chartConfig={chartConfig}
-  accessor={"quantity"}
-  backgroundColor={"transparent"}
-  
-  center={[0, 0]}
-  absolute
-/>
+        </ScrollView>
+        <Text style={styles.sectiontitle}>Statistics</Text>
+        <BarChart
+          style={styles.graphStyle}
+          data={data}
+          width={screenWidth - 30}
+          height={220}
+          yAxisLabel="Rs"
+          chartConfig={chartConfig}
+          verticalLabelRotation={30}
+        />
+        <Text style={styles.sectiontitle}>Blood Inventory</Text>
+
+        <PieChart
+          data={piedata}
+          width={screenWidth}
+          height={220}
+          chartConfig={chartConfig}
+          accessor={"quantity"}
+          backgroundColor={"transparent"}
+
+          center={[0, 0]}
+          absolute
+        />
       </View>
-      
+
 
     </ScrollView>
   );
@@ -334,28 +341,28 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontFamily: 'Montserrat-Regular'
   },
-  card:{
-    backgroundColor:colors.primary,
-    height:120,
-    width:120,
-    marginHorizontal:15,
-    borderRadius:10,
-    justifyContent:'center',
-    alignItems:'center',
-    flexDirection:'column',
-    
+  card: {
+    backgroundColor: colors.primary,
+    height: 120,
+    width: 120,
+    marginHorizontal: 15,
+    borderRadius: 10,
+    justifyContent: 'center',
+    alignItems: 'center',
+    flexDirection: 'column',
+
   },
-  services:{
-    marginTop:10,
+  services: {
+    marginTop: 10,
   },
-  cardtitle:{
-    fontSize:18,
-    fontWeight:'bold',
-    color:colors.additional2,
-    alignContent:'center',
-    alignSelf:'center',
-    alignItems:'center',
-    justifyContent:'center',
+  cardtitle: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: colors.additional2,
+    alignContent: 'center',
+    alignSelf: 'center',
+    alignItems: 'center',
+    justifyContent: 'center',
     fontFamily: 'Montserrat-Regular',
   }
 

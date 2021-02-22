@@ -1,17 +1,19 @@
 /* eslint-disable prettier/prettier */
-import {SALES_REQ, SALES_SUCCESS, SALES_FAILURE} from './actionTypes';
+import { SALES_REQ, SALES_SUCCESS, SALES_FAILURE, UPDATE_YEAR, UPDATE_MONTH } from './actionTypes';
 
 const initialState = {
   loading: false,
   error: '',
   salesData: [],
   analyticsData: {},
+  selectedYear: '',
+  selectedMonth: ''
 };
 
 const salesReducer = (state = initialState, action) => {
   switch (action.type) {
     case SALES_REQ: {
-      return {...state, loading: true};
+      return { ...state, loading: true };
     }
     case SALES_SUCCESS: {
       return {
@@ -33,6 +35,18 @@ const salesReducer = (state = initialState, action) => {
     }
     default: {
       return state;
+    }
+    case UPDATE_YEAR: {
+      return {
+        ...state,
+        selectedYear: action.selectedYear
+      };
+    }
+    case UPDATE_MONTH: {
+      return {
+        ...state,
+        selectedMonth: action.selectedMonth
+      };
     }
   }
 };
