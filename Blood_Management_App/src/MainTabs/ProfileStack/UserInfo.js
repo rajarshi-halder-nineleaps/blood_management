@@ -239,14 +239,16 @@ const UserInfo = ({navigation}) => {
                       <View style={styles.addressInsideView}>
                         <Text style={styles.addressInsideLabel}>Phone:</Text>
                         <View>
-                          {
-                            //* map error
-                          }
-                          {/* {profileState.profileData.phone.map((val, idx) => (
-                            <View key={idx} style={styles.addressRightView}>
-                              <Text style={styles.addressContent}>{val}</Text>
-                            </View>
-                          ))} */}
+                          {console.log(profileState.profileData.phone)}
+                          {//TODO THERE IS SOME ERROR HERE, CHECK IT OUT.
+                            profileState &&
+                            profileState.profileData &&
+                            profileState.profileData.phone &&
+                            profileState.profileData.phone.map((val, idx) => (
+                              <View key={idx} style={styles.addressRightView}>
+                                <Text style={styles.addressContent}>{val}</Text>
+                              </View>
+                            ))}
                         </View>
                       </View>
                     )}

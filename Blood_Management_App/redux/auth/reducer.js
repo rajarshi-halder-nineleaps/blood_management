@@ -40,6 +40,7 @@ const authReducer = (state = initialState, action) => {
       console.log('loading: false');
       return {
         ...state,
+        isLogggedIn: false,
         loading: false,
         error: action.error,
         userId: '',

@@ -31,14 +31,14 @@ const invitesReducer = (state = initialState, action) => {
     case DREQ_UPDATE: {
       const newState = {...state, loading: false};
 
-      if (action.udata.driveId) {
+      if (action.udata.eventType === 'drive') {
         newState.invitesList.find(
-          (val) => val.driveId === action.udata.driveId,
-        ).status = action.udata.status;
+          (val) => val.driveId === action.udata.eventId,
+        ).status = action.udata.acceptance;
       } else {
         newState.invitesList.find(
-          (val) => val.donationId === action.udata.donationId,
-        ).status = action.udata.status;
+          (val) => val.donationId === action.udata.eventId,
+        ).status = action.udata.acceptance;
       }
       return newState;
     }

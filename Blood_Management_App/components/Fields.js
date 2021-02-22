@@ -15,7 +15,7 @@ const Fields = (props) => {
               ? styles.formInputInvalid
               : styles.formInput
           }
-          placeholder={props.label}
+          // placeholder={props.label}
           placeholderTextColor={colors.grayishblack}
           onFocus={() => {}}
         />
@@ -36,6 +36,7 @@ const styles = StyleSheet.create({
   },
   labelText: {
     fontFamily: 'Montserrat-Regular',
+    paddingBottom: 3, //* REMOVE THIS IF INTERFACE GETS MESSED UP
   },
   formInput: {
     paddingVertical: 10,

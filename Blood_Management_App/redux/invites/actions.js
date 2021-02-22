@@ -1,4 +1,3 @@
-/* eslint-disable prettier/prettier */
 import axios from 'axios';
 import {DREQ_REQ, DREQ_SUCCESS, DREQ_FAILURE, DREQ_UPDATE} from './actionTypes';
 
@@ -28,16 +27,20 @@ export const fetchInvitesList = (userToken) => {
     try {
       console.log('Fetching list of invites.');
       dispatch(invitesReq());
-      const response = await axios.get('http://192.168.43.89:5000/invites', {
-        headers: {Authorization: userToken},
-      });
+      const response = await axios.get(
+        'http://192.168.43.217:8080/invites/fetchinvites',
+        {
+          headers: {Authorization: 'Bearer ' + userToken},
+        },
+      );
 
-      if (response.data.success) {
+      if (response.headers.success) {
         console.log('response is success!');
-        dispatch(invitesSuccess(response.data.invitesList));
-      } else if (response.data.error) {
+        // console.log('RESPONSE DATA: ' + response.data[0].district);
+        dispatch(invitesSuccess(response.data));
+      } else if (response.headers.error) {
         console.log('response is error!');
-        dispatch(invitesFailure(response.data.error));
+        dispatch(invitesFailure(response.headers.error));
       } else {
         console.log('outlandish error!');
         dispatch(
@@ -63,19 +66,20 @@ export const updateInvitesList = (userToken, updatedData) => {
       console.log('updating list of invites.');
       dispatch(invitesReq());
       const response = await axios.put(
-        'http://192.168.43.89:5000/invites',
+        'http://192.168.43.217:8080/invites/inviteresponse',
         updatedData,
         {
-          headers: {Authorization: userToken},
+          headers: {Authorization: 'Bearer ' + userToken},
         },
       );
 
-      if (response.data.success) {
+      if (response.headers.success) {
         console.log('response is success!');
+        console.log('RESPONSE DATA' + response.data);
         dispatch(invitesUpdate(updatedData));
-      } else if (response.data.error) {
+      } else if (response.headers.error) {
         console.log('response is error!');
-        dispatch(invitesFailure(response.data.error));
+        dispatch(invitesFailure(response.headers.error));
       } else {
         console.log('outlandish error!');
         dispatch(

@@ -33,7 +33,7 @@ export const fetchDriveFailure = (error) => ({
   error,
 });
 
-//* USE THIS TO SET THE VALUE OF DONOR'S HAS GIVEN BLOOD STATUS TO FALSE
+//* USE THIS TO SET THE VALUE OF "DONOR HAS GIVEN" BLOOD STATUS TO FALSE
 export const donationVerification = (driveId, donorId) => ({
   type: DONATION_VERIFICATION,
   driveId,

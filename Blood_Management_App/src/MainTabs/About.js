@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   View,
   Text,
@@ -15,18 +15,27 @@ import colors from '../../constants/Colors';
 import {useSelector, useDispatch} from 'react-redux';
 import {updateFields, makeContact} from '../../redux/about/actions';
 import Feather from 'react-native-vector-icons/Feather';
+import Fields from '../../components/Fields';
 
 const About = ({navigation}) => {
   const dispatch = useDispatch();
   const aboutState = useSelector((state) => state.aboutState);
   const authState = useSelector((state) => state.authState);
 
+  const [touchedState, setTouchedState] = useState({sub: false, msg: false});
+
   const contacter = () => {
+    setTouchedState({sub: true, msg: true});
+    //* Anandhu | Alerts can be un commented if later its is required to show alerts
+    // BEST FORM IN THE APP.
     if (!aboutState.inputValues.subject) {
-      Alert.alert('Missing Subject', 'The subject field cannot be empty');
+      null;
+      // Alert.alert('Missing Subject', 'The subject field cannot be empty');
     } else if (!aboutState.inputValues.message) {
-      Alert.alert('Missing Message', 'The message field cannot be empty');
+      null;
+      // Alert.alert('Missing Message', 'The message field cannot be empty');
     } else {
+      setTouchedState({sub: false, msg: false});
       dispatch(makeContact(authState.userToken, aboutState.inputValues));
     }
   };
@@ -66,8 +75,7 @@ const About = ({navigation}) => {
                 We intend to bridge that with{' '}
                 <Text
                   style={{
-                    fontWeight: 'bold',
-                    fontFamily: 'sans-serif',
+                    fontFamily: 'Montserrat-Regular',
                     color: colors.additional2,
                   }}>
                   redBank
@@ -75,8 +83,7 @@ const About = ({navigation}) => {
                 . {'\n\n\n'}
                 <Text
                   style={{
-                    fontWeight: 'bold',
-                    fontFamily: 'sans-serif',
+                    fontFamily: 'Montserrat-Bold',
                     color: colors.additional2,
                   }}>
                   RedBank serves as a platform to bridge the gap between the
@@ -102,14 +109,23 @@ const About = ({navigation}) => {
               </Text>
               <View style={styles.contactForm}>
                 <View style={styles.inputView}>
-                  <TextInput
-                    style={styles.input}
-                    placeholder="Subject"
+                  <Fields
+                    // style={styles.input}
+                    label="*Subject"
+                    error="This field cannot be empty"
                     returnKeyType="next"
                     value={aboutState.inputValues.subject}
+                    inputIsValid={aboutState.inputValues.subject.length}
+                    inputIsTouched={touchedState.sub}
                     onChangeText={(val) => {
                       dispatch(updateFields(val, 'subject'));
                     }}
+                    onBlur={() =>
+                      setTouchedState((prevState) => ({
+                        ...prevState,
+                        sub: true,
+                      }))
+                    }
                   />
 
                   {/* {!aboutState.inputValues.subject && (
@@ -119,16 +135,25 @@ const About = ({navigation}) => {
                 )} */}
                 </View>
                 <View style={styles.inputView}>
-                  <TextInput
-                    style={styles.input}
-                    placeholder="message"
+                  <Fields
+                    // style={styles.input}
+                    label="*Message"
+                    error="This field cannot be empty"
                     multiline={true}
                     numberOfLines={5}
                     returnKeyType="next"
                     value={aboutState.inputValues.message}
+                    inputIsValid={aboutState.inputValues.message.length}
+                    inputIsTouched={touchedState.msg}
                     onChangeText={(val) => {
                       dispatch(updateFields(val, 'message'));
                     }}
+                    onBlur={() =>
+                      setTouchedState((prevState) => ({
+                        ...prevState,
+                        msg: true,
+                      }))
+                    }
                   />
                   {/* {!aboutState.inputValues.message && (
                   <Text style={styles.errorMsg}>
@@ -189,7 +214,7 @@ const styles = StyleSheet.create({
   },
   headingText: {
     fontSize: 30,
-    fontFamily: 'sans-serif-light',
+    fontFamily: 'Montserrat-Regular',
     textShadowOffset: {width: 2, height: 2},
     textShadowRadius: 10,
   },
@@ -205,29 +230,31 @@ const styles = StyleSheet.create({
     paddingVertical: 15,
     borderRadius: 10,
     backgroundColor: colors.accent,
-    fontSize: 18,
-    fontFamily: 'sans-serif-condensed',
+    fontSize: 14,
+    fontFamily: 'Montserrat-Regular',
     paddingHorizontal: 30,
     color: 'black',
   },
   errorMsg: {
     color: colors.primary,
-    fontFamily: 'qs-reg',
+    fontFamily: 'Montserrat-Regular',
   },
   sendTouchView: {
     flexDirection: 'row',
   },
   sendTouch: {
-    backgroundColor: colors.primary,
+    backgroundColor: colors.grayishblack,
     padding: 10,
     flexDirection: 'row',
+    alignItems: 'center',
     paddingHorizontal: 20,
-    borderRadius: 100,
+    borderRadius: 5,
     justifyContent: 'space-between',
     elevation: 5,
   },
   sendTouchText: {
     color: colors.additional2,
+    fontFamily: 'Montserrat-Regular',
     paddingRight: 10,
   },
 });

@@ -10,6 +10,7 @@ import {numbersOnlyRegex} from '../constants/Regexes';
 const InventoryCard = (props) => {
   const {cardData} = props;
   const inventoryState = useSelector((state) => state.inventoryState);
+  const authState = useSelector((state) => state.authState);
   const dispatch = useDispatch();
   return (
     <View style={styles.card}>
@@ -33,13 +34,15 @@ const InventoryCard = (props) => {
               dispatch(updateFields(newVal, idx, 'units', props.id));
             }}
           />
-          <InventoryInput
-            style={styles.inventoryInput}
-            value={inventoryState.invData[props.id].data[idx].price + ''}
-            onChangeText={(newVal) => {
-              dispatch(updateFields(newVal, idx, 'price', props.id));
-            }}
-          />
+          {authState.userType === 2 ? (
+            <InventoryInput
+              style={styles.inventoryInput}
+              value={inventoryState.invData[props.id].data[idx].price + ''}
+              onChangeText={(newVal) => {
+                dispatch(updateFields(newVal, idx, 'price', props.id));
+              }}
+            />
+          ) : null}
         </View>
       ))}
     </View>
