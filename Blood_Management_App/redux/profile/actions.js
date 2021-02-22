@@ -10,7 +10,7 @@ import {
   SET_DATA_SAVED,
 } from './actionTypes';
 
-export const profileReq = () => ({type: PROFILE_REQ});
+export const profileReq = () => ({ type: PROFILE_REQ });
 
 export const profileSuccess = (profileData) => ({
   type: PROFILE_SUCCESS,
@@ -37,7 +37,7 @@ export const profileUpdateSuccess = (newProfileData) => ({
   newProfileData,
 });
 
-export const setDataSaved = () => ({type: SET_DATA_SAVED});
+export const setDataSaved = () => ({ type: SET_DATA_SAVED });
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -46,8 +46,8 @@ export const getUserData = (userToken) => {
     try {
       console.log("Fetching user's minimial data.");
       dispatch(profileReq());
-      const response = await axios.get('http://192.168.43.89:5000/userdata', {
-        headers: {Authorization: userToken},
+      const response = await axios.get('http://10.0.2.2:8000/userdata', {
+        headers: { Authorization: userToken },
       });
 
       if (response.data.success) {
@@ -78,8 +78,8 @@ export const getProfileData = (userToken) => {
     try {
       console.log("Fetching user's profile data.");
       dispatch(profileReq());
-      const response = await axios.get('http://192.168.43.89:5000/profile', {
-        headers: {Authorization: userToken},
+      const response = await axios.get('http://10.0.2.2:8000/profile', {
+        headers: { Authorization: userToken },
       });
 
       if (response.data.success) {
@@ -111,10 +111,10 @@ export const changeDetails = (userToken, newDetails) => {
       console.log("Fetching user's profile data.");
       dispatch(profileReq());
       const response = await axios.put(
-        'http://192.168.43.89:5000/profile',
+        'http://10.0.2.2:8000/profile',
         newDetails,
         {
-          headers: {Authorization: userToken},
+          headers: { Authorization: userToken },
         },
       );
 
@@ -147,10 +147,10 @@ export const setDonorStatus = (userToken, newDonorStatus) => {
       console.log("Fetching user's profile data.");
       dispatch(profileReq());
       const response = await axios.put(
-        'http://192.168.43.89:5000/toggledonor',
-        {newDonorStatus},
+        'http://10.0.2.2:8000/toggledonor',
+        { newDonorStatus },
         {
-          headers: {Authorization: userToken},
+          headers: { Authorization: userToken },
         },
       );
 

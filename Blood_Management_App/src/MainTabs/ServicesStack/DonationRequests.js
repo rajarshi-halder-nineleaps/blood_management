@@ -10,15 +10,15 @@ import {
   RefreshControl,
 } from 'react-native';
 import React from 'react';
-import {useSelector, useDispatch} from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import colors from '../../../constants/Colors';
-import {registerUserForDrive} from '../../../redux/upcomingDrives/actions';
+import { registerUserForDrive } from '../../../redux/upcomingDrives/actions';
 import DonationRequestsCard from '../../../components/DonationRequestsCard';
-import {fetchSalesData} from '../../../redux/sales/actions';
+import { fetchSalesData } from '../../../redux/sales/actions';
 
 //TODO replace commitments state with donation requests state
 
-const DonationRequests = ({navigation}) => {
+const DonationRequests = ({ navigation }) => {
   const authState = useSelector((state) => state.authState);
   const invitesState = useSelector((state) => state.invitesState);
   const dispatch = useDispatch();
@@ -56,20 +56,20 @@ const DonationRequests = ({navigation}) => {
           </Text>
         </View>
       ) : (
-        <FlatList
-          style={styles.scroll}
-          data={invitesState.invitesList}
-          renderItem={({item}) => <DonationRequestsCard item={item} />}
-          keyExtractor={(item) => item.driveId || item.donationId}
-          refreshControl={
-            <RefreshControl
-              colors={[colors.primary, colors.secondary]}
-              refreshing={refreshing}
-              onRefresh={onRefresh}
+            <FlatList
+              style={styles.scroll}
+              data={invitesState.invitesList}
+              renderItem={({ item }) => <DonationRequestsCard item={item} />}
+              keyExtractor={(item) => item.driveId || item.donationId}
+              refreshControl={
+                <RefreshControl
+                  colors={[colors.primary, colors.secondary]}
+                  refreshing={refreshing}
+                  onRefresh={onRefresh}
+                />
+              }
             />
-          }
-        />
-      )}
+          )}
     </View>
   );
 };

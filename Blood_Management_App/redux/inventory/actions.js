@@ -9,11 +9,11 @@ import {
   TOGGLE_SECURE,
 } from './actionTypes';
 
-export const invReq = () => ({type: INV_REQ});
+export const invReq = () => ({ type: INV_REQ });
 
-export const invFailure = (error) => ({type: INV_FAILURE, error});
+export const invFailure = (error) => ({ type: INV_FAILURE, error });
 
-export const invSuccess = (invData) => ({type: INV_SUCCESS, invData});
+export const invSuccess = (invData) => ({ type: INV_SUCCESS, invData });
 
 export const updateFields = (val, groupIdx, label, idx) => ({
   type: INV_CHANGE,
@@ -44,10 +44,10 @@ export const checkPassword = (userToken, password) => {
       dispatch(toggleSecure(false));
 
       const response = await axios.post(
-        'http://192.168.43.89:5000/currentpassword',
-        {password},
+        'http://10.0.2.2:8000/currentpassword',
+        { password },
         {
-          headers: {Authorization: userToken},
+          headers: { Authorization: userToken },
         },
       );
 
@@ -77,8 +77,8 @@ export const getInventory = (userToken) => {
   return async (dispatch) => {
     try {
       dispatch(invReq());
-      const response = await axios.get('http://192.168.43.89:5000/inventory', {
-        headers: {Authorization: userToken},
+      const response = await axios.get('http://10.0.2.2:8000/inventory', {
+        headers: { Authorization: userToken },
       });
 
       if (response.data.success) {
@@ -110,10 +110,10 @@ export const updateInventory = (userToken, inventory) => {
       dispatch(invReq());
       //*axios put request
       const response = await axios.put(
-        'http://192.168.43.89:5000/inventory',
+        'http://10.0.2.2:8000/inventory',
         inventory,
         {
-          headers: {Authorization: userToken},
+          headers: { Authorization: userToken },
         },
       );
 

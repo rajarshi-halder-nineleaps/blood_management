@@ -28,7 +28,7 @@ export const logUserIn = (loginData) => {
     console.log('login works');
     try {
       const response = await axios.post(
-        'http://192.168.43.89:5000/login',
+        'http://10.0.2.2:8000/login',
         loginData,
       );
       console.log('COMPLETE RESPONSE DATA: ', response.data);
@@ -79,7 +79,7 @@ export const regUserUp = (regData) => {
       }
       console.log('USER TYPE: ', regData.userType);
       const response = await axios.post(
-        'http://192.168.43.89:5000/login',
+        'http://10.0.2.2:8000/login',
         regData.formData,
       );
       console.log('COMPLETE RESPONSE DATA: ', response.data);

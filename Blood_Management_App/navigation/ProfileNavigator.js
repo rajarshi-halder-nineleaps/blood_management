@@ -5,7 +5,7 @@ import colors from '../constants/Colors';
 
 //? Importing the screens
 import Profile from '../src/MainTabs/ProfileStack/Profile';
-import ConfirmPassword from '../src/MainTabs/ProfileStack/ConfirmPassword';
+import ConfirmPassword from '../src/MainTabs/ProfileStack/confirmPassword';
 import NewPassword from '../src/MainTabs/ProfileStack/NewPassword';
 import UserInfo from '../src/MainTabs/ProfileStack/UserInfo';
 import InfoEdit from '../src/MainTabs/ProfileStack/InfoEdit';
