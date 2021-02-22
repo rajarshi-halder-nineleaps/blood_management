@@ -11,7 +11,7 @@ import {
 } from './actionTypes';
 
 //? sets loading to true thereby showing activityIndicator
-export const driveFindReq = () => ({type: DRIVE_FIND_REQ});
+export const driveFindReq = () => ({ type: DRIVE_FIND_REQ });
 
 export const driveFindFailure = (error) => ({
   type: DRIVE_FIND_FAILURE,
@@ -40,10 +40,10 @@ export const upcomingDrivesSearch = (userToken, searchFilters) => {
     try {
       dispatch(driveFindReq());
       const response = await axios.post(
-        'http://192.168.43.89:5000/finddrives',
+        'http://10.0.2.2:8000/finddrives',
         searchFilters,
         {
-          headers: {Authorization: userToken},
+          headers: { Authorization: userToken },
         },
       );
 
@@ -81,10 +81,10 @@ export const registerUserForDrive = (userToken, driveId) => {
       );
       dispatch(driveFindReq());
       const response = await axios.post(
-        'http://192.168.43.89:5000/registerUserForDrive',
-        {driveId},
+        'http://10.0.2.2:8000/registerUserForDrive',
+        { driveId },
         {
-          headers: {Authorization: userToken},
+          headers: { Authorization: userToken },
         },
       );
 

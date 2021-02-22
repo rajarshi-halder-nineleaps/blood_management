@@ -22,11 +22,11 @@ export const blurFields = (fieldId) => ({
   fieldId: fieldId,
 });
 
-export const stateCleanup = () => ({type: STATE_CLEANUP_CHANGE});
+export const stateCleanup = () => ({ type: STATE_CLEANUP_CHANGE });
 
 /////////////////////////////////////////////////////////////////////////////////////////////////
 
-export const changeReq = () => ({type: CHANGE_REQ});
+export const changeReq = () => ({ type: CHANGE_REQ });
 
 export const changeReqFailure = (error) => ({
   type: CHANGE_REQ_FAILURE,
@@ -52,10 +52,10 @@ export const postCurrentPassword = (userToken, password) => {
 
     try {
       const response = await axios.post(
-        'http://192.168.43.89:5000/currentpassword',
-        {password},
+        'http://10.0.2.2:8000/currentpassword',
+        { password },
         {
-          headers: {Authorization: userToken},
+          headers: { Authorization: userToken },
         },
       );
       if (response.data.error) {
@@ -85,10 +85,10 @@ export const postResetPassword = (userToken, password) => {
 
     try {
       const response = await axios.put(
-        'http://192.168.43.89:5000/makenewpwd',
-        {password},
+        'http://10.0.2.2:8000/makenewpwd',
+        { password },
         {
-          headers: {Authorization: userToken},
+          headers: { Authorization: userToken },
         },
       );
       if (response.data.error) {

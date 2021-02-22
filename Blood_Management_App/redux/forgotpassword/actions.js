@@ -22,10 +22,10 @@ export const blurFields = (fieldId) => ({
   fieldId: fieldId,
 });
 
-export const stateCleanup = () => ({type: STATE_CLEANUP_FORGOT});
+export const stateCleanup = () => ({ type: STATE_CLEANUP_FORGOT });
 //////////////////////////////////////////////////////////////////////////////
 
-export const forgotReq = () => ({type: FORGOT_REQ});
+export const forgotReq = () => ({ type: FORGOT_REQ });
 
 export const forgotReqFailure = (error) => ({
   type: FORGOT_REQ_FAILURE,
@@ -53,7 +53,7 @@ export const postEmail = (email) => {
     dispatch(resetDoneState('emailSent'));
     try {
       const response = await axios.post(
-        'http://192.168.43.89:5000/forgotpassword',
+        'http://10.0.2.2:8000/forgotpassword',
         {
           recoveryEmail: email,
         },
@@ -81,7 +81,7 @@ export const postOTP = (email, otp) => {
     dispatch(forgotReq());
     dispatch(resetDoneState('otp'));
     try {
-      const response = await axios.post('http://192.168.43.89:5000/otp', {
+      const response = await axios.post('http://10.0.2.2:8000/otp', {
         email,
         otp,
       });
@@ -107,7 +107,7 @@ export const postResetPassword = (email, password) => {
   return async (dispatch) => {
     dispatch(forgotReq());
     try {
-      const response = await axios.put('http://192.168.43.89:5000/resetpwd', {
+      const response = await axios.put('http://10.0.2.2:8000/resetpwd', {
         email,
         password,
       });

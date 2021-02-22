@@ -103,7 +103,7 @@ const Services = ({navigation}) => {
             touchHandler={() => navigation.navigate('My Purchases')}
           />
         </View>
-        {userType === 1 ? (
+        {userType === 0 ? (
           <>
             <TouchTabs
               label="My Commitments"
@@ -140,7 +140,7 @@ const Services = ({navigation}) => {
             />
           </>
         )}
-        {userType === 3 ? (
+        {userType === 2 ? (
           <TouchTabs
             label="My Sales"
             source={require('../../../assets/images/servicesScreen/sales.png')}
