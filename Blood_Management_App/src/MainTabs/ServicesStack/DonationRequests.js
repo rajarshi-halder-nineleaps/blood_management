@@ -9,12 +9,13 @@ import {
   ActivityIndicator,
   RefreshControl,
 } from 'react-native';
-import React from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import React, {useState} from 'react';
+import {useSelector, useDispatch} from 'react-redux';
 import colors from '../../../constants/Colors';
-import { registerUserForDrive } from '../../../redux/upcomingDrives/actions';
+import DonationDriveFilter from '../../../components/DonationDriveFilter';
 import DonationRequestsCard from '../../../components/DonationRequestsCard';
-import { fetchSalesData } from '../../../redux/sales/actions';
+import {fetchSalesData} from '../../../redux/sales/actions';
+import DeprecatedViewPropTypes from 'react-native/Libraries/DeprecatedPropTypes/DeprecatedViewPropTypes';
 
 //TODO replace commitments state with donation requests state
 
@@ -22,6 +23,8 @@ const DonationRequests = ({ navigation }) => {
   const authState = useSelector((state) => state.authState);
   const invitesState = useSelector((state) => state.invitesState);
   const dispatch = useDispatch();
+
+  const [active, setActive] = useState(true);
 
   const [refreshing, setRefreshing] = React.useState(false);
   const onRefresh = React.useCallback(
@@ -56,20 +59,32 @@ const DonationRequests = ({ navigation }) => {
           </Text>
         </View>
       ) : (
-            <FlatList
-              style={styles.scroll}
-              data={invitesState.invitesList}
-              renderItem={({ item }) => <DonationRequestsCard item={item} />}
-              keyExtractor={(item) => item.driveId || item.donationId}
-              refreshControl={
-                <RefreshControl
-                  colors={[colors.primary, colors.secondary]}
-                  refreshing={refreshing}
-                  onRefresh={onRefresh}
-                />
+        <>
+
+          <DonationDriveFilter active = {active} setActive = {setActive}/>
+
+          <FlatList 
+            style={styles.scroll}
+            data={invitesState.invitesList.filter(val =>{
+              if(active){
+                return val.inviteType === "drive";
               }
-            />
-          )}
+              else{
+                return val.inviteType === "donation";
+              }
+            })}
+            renderItem={({item}) => <DonationRequestsCard item={item} />}
+            keyExtractor={(item) => item.driveId || item.donationId}
+            refreshControl={
+              <RefreshControl
+                colors={[colors.primary, colors.secondary]}
+                refreshing={refreshing}
+                onRefresh={onRefresh}
+              />
+            }
+          />
+        </>
+      )}
     </View>
   );
 };

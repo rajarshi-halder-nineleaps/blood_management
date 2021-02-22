@@ -37,20 +37,20 @@ export const makeContact = (userToken, contactData) => {
       console.log('Fetching list of commitments.');
       dispatch(contactReq());
       const response = await axios.post(
-        'http://192.168.43.89:5000/contact',
+        'http://192.168.43.217:8080/contactus/addmessage',
         contactData,
         {
-          headers: {Authorization: userToken},
+          headers: {Authorization: 'Bearer ' + userToken},
         },
       );
 
-      if (response.data.success) {
+      if (response.headers.success) {
         console.log('response is success!');
         dispatch(contactSuccess());
         dispatch(stateCleanup());
-      } else if (response.data.error) {
+      } else if (response.headers.error) {
         console.log('response is error!');
-        dispatch(contactFailure(response.data.error));
+        dispatch(contactFailure(response.headers.error));
       } else {
         console.log('outlandish error!');
         dispatch(

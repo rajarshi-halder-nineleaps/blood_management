@@ -83,6 +83,7 @@ const NewPassword = ({navigation}) => {
           <Fields
             label="New Password"
             secureTextEntry={true}
+            error="Invalid Password Format!"
             keyboardType="default"
             value={changePasswordState.inputValues.password}
             style={[styles.input, {marginTop: 30}]}
@@ -97,6 +98,7 @@ const NewPassword = ({navigation}) => {
           <Fields
             label="Confirm Password"
             secureTextEntry={true}
+            error="Password Mismatch!"
             keyboardType="default"
             value={changePasswordState.inputValues.cpassword}
             style={[styles.input, {marginTop: 30}]}

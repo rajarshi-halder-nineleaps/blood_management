@@ -19,22 +19,45 @@ import {
   CollapseBody,
 } from 'accordion-collapse-react-native';
 import AreYouSure from './AreYouSure';
+import RejectionMessageModal from './RejectionMessageModal';
 import {updateInvitesList} from '../redux/invites/actions';
+import { useTheme } from '@react-navigation/native';
 
 const DonationRequestsCard = ({item}) => {
   const authState = useSelector((state) => state.authState);
   const dispatch = useDispatch();
 
-  const updateObjReject = item.driveId
-    ? {driveId: item.driveId, status: 0}
-    : {donationId: item.donationId, status: 0};
+//TODO CHANGE THE UPDATE OBJECTS AS PER NEW ONES FROM BACK END.
 
-  const updateObjAccept = item.driveId
-    ? {driveId: item.driveId, status: 1}
-    : {donationId: item.donationId, status: 1};
+  // const updateObjReject = item.driveId
+  //   ? {driveId: item.driveId, status: 0}
+  //   : {donationId: item.donationId, status: 0};
+
+  // const updateObjAccept = item.driveId
+  //   ? {driveId: item.driveId, status: 1}
+  //   : {donationId: item.donationId, status: 1};
+
+  const updateObjReject = {
+    eventId: item.driveId ? item.driveId : item.donationId,
+    eventType: item.inviteType,
+    acceptance: 0,
+    rejectionMessage: '',
+  };
+
+  const updateObjAccept = {
+    eventId: item.driveId ? item.driveId : item.donationId,
+    eventType: item.inviteType,
+    acceptance: 1,
+    rejectionMessage: '',
+  };
+
 
   const [rusurea, setRusurea] = useState(false);
   const [rusurer, setRusurer] = useState(false);
+
+  const invitedOn = item.inviteTimestamp.split('T');
+  const startTimestamp = item.startTimestamp.split('T');
+  const endTimestamp = item.endTimestamp.split('T');
 
   return (
     <>
@@ -88,9 +111,9 @@ const DonationRequestsCard = ({item}) => {
           <View style={styles.detailsBoard}>
             <View style={styles.contentView}>
               <Text style={styles.label}>
-                Request date: {'  '}
+                Invited on: {'  '}
                 <Text style={styles.content}>
-                  {item.inviteDate} at {item.inviteTime}
+                  {` ${invitedOn[0]} at ${invitedOn[1].split(':')[0]}:${invitedOn[1].split(':')[1]} `}
                 </Text>
               </Text>
 
@@ -147,8 +170,7 @@ const DonationRequestsCard = ({item}) => {
                       <Text style={styles.addressInsideLabel}>From:</Text>
                       <View style={styles.addressRightView}>
                         <Text style={styles.addressContent}>
-                          {item.startDate} at
-                          {'  ' + item.startTime}
+                        {` ${startTimestamp[0]} at ${startTimestamp[1].split(':')[0]}:${startTimestamp[1].split(':')[1]} `}
                         </Text>
                       </View>
                     </View>
@@ -156,11 +178,13 @@ const DonationRequestsCard = ({item}) => {
                       <Text style={styles.addressInsideLabel}>To:</Text>
                       <View style={styles.addressRightView}>
                         <Text style={styles.addressContent}>
-                          {item.endDate} at
-                          {'  ' + item.endTime}
+                        {` ${endTimestamp[0]} at ${endTimestamp[1].split(':')[0]}:${endTimestamp[1].split(':')[1]} `}
                         </Text>
                       </View>
                     </View>
+                    <Text style={styles.messageText}>
+                        {item.message}
+                        </Text>
                   </>
                 ) : null}
               </View>
@@ -203,12 +227,12 @@ const DonationRequestsCard = ({item}) => {
             dispatchData={updateObjAccept}
             message="Are you sure you wish to accept this request?"
           />
-          <AreYouSure
+          <RejectionMessageModal
             visibleState={rusurer}
             visibleStateChanger={setRusurer}
             dispatchable={updateInvitesList}
             dispatchData={updateObjReject}
-            message="Are you sure you wish to reject this request?"
+            message="Confirm invite rejection"
           />
         </>
       ) : null}
@@ -382,6 +406,12 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     borderRadius: 5,
     marginHorizontal: 10,
+  },
+  messageText:{
+    paddingHorizontal: 20,
+    paddingVertical: 20,
+    fontFamily: 'Montserrat-Regular',
+    textAlign: 'center',
   },
 });
 

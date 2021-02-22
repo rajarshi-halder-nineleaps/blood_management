@@ -28,15 +28,16 @@ export const logUserIn = (loginData) => {
     console.log('login works');
     try {
       const response = await axios.post(
-        'http://10.0.2.2:8000/login',
+        'http://192.168.43.217:8080/authenticate',
         loginData,
       );
-      console.log('COMPLETE RESPONSE DATA: ', response.data);
+      console.log('COMPLETE RESPONSE DATA: ', response.headers);
 
-      if (response.data.error) {
-        dispatch(reqFailure(response.data.error));
-        console.log(response.data.error);
-      } else if (response.data.success) {
+      if (response.headers.error) {
+        dispatch(reqFailure('Invalid login credentials! Please try again.'));
+        console.log(response.headers.error);
+      } else if (response.headers.success) {
+        console.log('saving to async storage');
         //? SAVING USER DATA TO ASYNC STORAGE ON SUCCESSFUL LOGIN.
         const userData = JSON.stringify({
           userToken: response.data.userToken,
@@ -74,19 +75,70 @@ export const regUserUp = (regData) => {
     dispatch(req());
     console.log('regsiter works');
     try {
-      if (regData.formData.dob) {
-        regData.formData.dob = regData.formData.dob.toLocaleDateString();
-      }
       console.log('USER TYPE: ', regData.userType);
-      const response = await axios.post(
-        'http://10.0.2.2:8000/login',
-        regData.formData,
-      );
+
+      let response = {};
+
+      if (regData.userType === 1) {
+        // regData.formData.dob = regData.formData.dob.toLocaleDateString();
+        const requestObject = {
+          name: regData.formData.name,
+          email: regData.formData.email,
+          phone: regData.formData.phone,
+          dob: regData.formData.dob.toLocaleDateString(),
+          bloodGroup: regData.formData.bloodgroup,
+          address: regData.formData.address,
+          state: regData.formData.selectedState,
+          district: regData.formData.selectedDistrict,
+          pincode: regData.formData.pincode,
+          password: regData.formData.password,
+        };
+
+        response = await axios.post(
+          'http://192.168.43.217:8080/registerind',
+          requestObject,
+        );
+      } else if (regData.userType === 2) {
+        const requestObject = {
+          name: regData.formData.name,
+          email: regData.formData.email,
+          phone: regData.formData.phone,
+          licenseNumber: regData.formData.license,
+          address: regData.formData.address,
+          state: regData.formData.selectedState,
+          district: regData.formData.selectedDistrict,
+          pincode: regData.formData.pincode,
+          password: regData.formData.password,
+        };
+
+        response = await axios.post(
+          'http://192.168.43.217:8080/registerhos',
+          requestObject,
+        );
+      } else {
+        const requestObject = {
+          name: regData.formData.name,
+          email: regData.formData.email,
+          phone: regData.formData.phone,
+          licenseNumber: regData.formData.license,
+          address: regData.formData.address,
+          state: regData.formData.selectedState,
+          district: regData.formData.selectedDistrict,
+          pincode: regData.formData.pincode,
+          password: regData.formData.password,
+        };
+
+        response = await axios.post(
+          'http://192.168.43.89:5000/registerbb',
+          requestObject,
+        );
+      }
+
       console.log('COMPLETE RESPONSE DATA: ', response.data);
-      if (response.data.error) {
-        dispatch(reqFailure(response.data.error));
-        console.log(response.data.error);
-      } else if (response.data.success) {
+      if (response.headers.error) {
+        dispatch(reqFailure(response.headers.error));
+        console.log(response.headers.error);
+      } else if (response.headers.success) {
         const userData = JSON.stringify({
           userToken: response.data.userToken,
           userId: response.data.userId,

@@ -1,19 +1,25 @@
+/* eslint-disable prettier/prettier */
 import React, {useState} from 'react';
 import {
-  Alert,
   Modal,
   StyleSheet,
   Text,
   TouchableHighlight,
   View,
   Image,
+  ToastAndroid,
+  Platform,
+  AlertIOS,
 } from 'react-native';
 import colors from '../constants/Colors';
+import Fields from './Fields';
 import {useSelector, useDispatch} from 'react-redux';
 
-const AreYouSure = (props) => {
+const RejectionMessageModal = (props) => {
   const authState = useSelector((state) => state.authState);
   const dispatch = useDispatch();
+
+  const [rejectionMsg, setRejectionMsg] = useState('');
 
   return (
     // <View style={styles.centeredView}>
@@ -30,10 +36,28 @@ const AreYouSure = (props) => {
           />
           <Text style={styles.modalText}>{props.message}</Text>
 
+          <Fields
+            label="*Rejection message (Optional)"
+            multiline={true}
+            numberOfLines={3}
+            returnKeyType="next"
+            value={rejectionMsg}
+            inputIsValid={true}
+            inputIsTouched={true}
+            onChangeText={(val) => {
+              setRejectionMsg(val);
+            }}
+          />
           <View style={styles.touchBoard}>
             <TouchableHighlight
               style={{...styles.openButton, backgroundColor: colors.primary}}
               onPress={() => {
+                props.dispatchData.rejectionMessage = rejectionMsg;
+                if (Platform.OS === 'android') {
+                    ToastAndroid.show('Invitation rejected!', ToastAndroid.SHORT)
+                  } else {
+                    AlertIOS.alert('Invitation rejected!');
+                  }
                 props.visibleStateChanger(!props.visibleState);
                 dispatch(
                   props.dispatchable(
@@ -42,7 +66,7 @@ const AreYouSure = (props) => {
                   ),
                 );
               }}>
-              <Text style={styles.textStyle}>Yes</Text>
+              <Text style={styles.textStyle}>Reject</Text>
             </TouchableHighlight>
             <TouchableHighlight
               style={{
@@ -52,7 +76,7 @@ const AreYouSure = (props) => {
               onPress={() => {
                 props.visibleStateChanger(!props.visibleState);
               }}>
-              <Text style={styles.textStyle}>No</Text>
+              <Text style={styles.textStyle}>Back</Text>
             </TouchableHighlight>
           </View>
         </View>
@@ -100,7 +124,7 @@ const styles = StyleSheet.create({
   },
   textStyle: {
     color: 'white',
-    fontWeight: 'bold',
+    fontFamily: 'Montserrat-Regular',
     textAlign: 'center',
   },
   modalText: {
@@ -111,4 +135,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default AreYouSure;
+export default RejectionMessageModal;
