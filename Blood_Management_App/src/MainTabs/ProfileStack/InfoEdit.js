@@ -237,9 +237,8 @@ const InfoEdit = ({navigation}) => {
           formState.inputValues,
         ),
       );
-    
+
       console.log(formState.inputValues);
-    
     } else {
       Alert.alert('Invalid Inputs', 'Please check all inputs before saving.');
     }
@@ -318,7 +317,6 @@ const InfoEdit = ({navigation}) => {
                     />
                   );
                 })}
-
                 <View style={styles.phoneAddView}>
                   <TouchableOpacity
                     style={styles.phoneAdd}
@@ -326,7 +324,7 @@ const InfoEdit = ({navigation}) => {
                     <Text style={styles.phoneAddText}>Add new Phone</Text>
                     <Feather name="plus" color={colors.additional2} size={15} />
                   </TouchableOpacity>
-                </View>object
+                </View>
               </>
             )}
             <Fields

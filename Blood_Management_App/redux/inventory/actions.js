@@ -15,12 +15,11 @@ export const invFailure = (error) => ({type: INV_FAILURE, error});
 
 export const invSuccess = (invData) => ({type: INV_SUCCESS, invData});
 
-export const updateFields = (val, groupIdx, label, idx) => ({
+export const updateFields = (val, compIdx, label) => ({
   type: INV_CHANGE,
   val,
-  groupIdx,
+  compIdx,
   label,
-  idx,
 });
 
 export const editingToggle = (isUpdate) => ({
@@ -44,10 +43,10 @@ export const checkPassword = (userToken, password) => {
       dispatch(toggleSecure(false));
 
       const response = await axios.post(
-        'http://192.168.43.89:5000/currentpassword',
-        {password},
+        'http://192.168.43.217:8080/profile/verifycurrentpassword',
+        {currentPassword: password},
         {
-          headers: {Authorization: userToken},
+          headers: {Authorization: 'Bearer ' + userToken},
         },
       );
 
@@ -55,9 +54,9 @@ export const checkPassword = (userToken, password) => {
         console.log('response is success!');
         dispatch(toggleSecure(true));
         dispatch(getInventory(userToken));
-      } else if (response.data.error) {
+      } else if (!response.data.success) {
         console.log('response is error!');
-        dispatch(invFailure(response.data.error));
+        dispatch(invFailure('Invalid password! Please try again.'));
       } else {
         console.log('outlandish error!');
         dispatch(
@@ -77,16 +76,16 @@ export const getInventory = (userToken) => {
   return async (dispatch) => {
     try {
       dispatch(invReq());
-      const response = await axios.get('http://192.168.43.89:5000/inventory', {
-        headers: {Authorization: userToken},
+      const response = await axios.get('http://192.168.43.217:8080/inventory/receieveinventory', {
+        headers: {Authorization: 'Bearer ' + userToken},
       });
 
-      if (response.data.success) {
+      if (response.headers.success) {
         console.log('response is success!');
-        dispatch(invSuccess(response.data.inventoryData));
-      } else if (response.data.error) {
+        dispatch(invSuccess(response.data));
+      } else if (response.headers.error) {
         console.log('response is error!');
-        dispatch(invFailure(response.data.error));
+        dispatch(invFailure(response.headers.error));
       } else {
         console.log('outlandish error!');
         dispatch(
@@ -104,26 +103,42 @@ export const getInventory = (userToken) => {
 
 ///////////////////////////////////////////////////////////////////////////////
 
-export const updateInventory = (userToken, inventory) => {
+export const updateInventory = (userToken, userType, inventory) => {
   return async (dispatch) => {
     try {
       dispatch(invReq());
       //*axios put request
-      const response = await axios.put(
-        'http://192.168.43.89:5000/inventory',
-        inventory,
-        {
-          headers: {Authorization: userToken},
-        },
-      );
 
-      if (response.data.success) {
+      let response = [];
+
+      if (userType === 2){
+        response = await axios.put(
+          'http://192.168.43.217:8080/inventory/updatehosinventory',
+          inventory,
+          {
+            headers: {Authorization: 'Bearer ' + userToken},
+          },
+        );
+      }
+      else {
+        response = await axios.put(
+          'http://192.168.43.217:8080/inventory/updatebbinventory',
+          inventory,
+          {
+            headers: {Authorization: 'Bearer ' + userToken},
+          },
+        );
+      }
+
+    
+
+      if (response.headers.success) {
         console.log('response is success!');
-        dispatch(invSuccess(response.data.inventoryData));
+        dispatch(invSuccess(response.data));
         dispatch(editingToggle(true));
-      } else if (response.data.error) {
+      } else if (response.headers.error) {
         console.log('response is error!');
-        dispatch(invFailure(response.data.error));
+        dispatch(invFailure(response.headers.error));
       } else {
         console.log('outlandish error!');
         dispatch(

@@ -29,19 +29,19 @@ const UpcomingDrivesCard = (props) => {
         <CollapseHeader style={styles.touchboard}>
           <View style={styles.headerDetailsView}>
             <View style={styles.nameView}>
-              <Text style={styles.nameText}>{item.orgName}</Text>
+              <Text style={styles.nameText}>{item.name}</Text>
             </View>
             <View style={styles.miniAddressView}>
               <Text style={styles.miniAddressContent}>
                 From:{'  '}
                 <Text style={styles.miniDateTimeContent}>
-                  {item.startDate} at {item.startTime}
+                  {`${item.startTimestamp.split('T')[0]} at ${item.startTimestamp.split('T')[1].split(':')[0]}:${item.startTimestamp.split('T')[1].split(':')[1]}`}
                 </Text>
               </Text>
               <Text style={styles.miniAddressContent}>
                 To:{'  '}
                 <Text style={styles.miniDateTimeContent}>
-                  {item.endDate} at {item.endTime}
+                {`${item.endTimestamp.split('T')[0]} at ${item.endTimestamp.split('T')[1].split(':')[0]}:${item.endTimestamp.split('T')[1].split(':')[1]}`}
                 </Text>
               </Text>
             </View>
@@ -104,13 +104,13 @@ const UpcomingDrivesCard = (props) => {
                       Organizer Name:
                     </Text>
                     <View style={styles.addressRightView}>
-                      <Text style={styles.addressContent}>{item.orgName}</Text>
+                      <Text style={styles.addressContent}>{item.name}</Text>
                     </View>
                   </View>
                   <View style={styles.addressInsideView}>
                     <Text style={styles.addressInsideLabel}>Email:</Text>
                     <View style={styles.addressRightView}>
-                      <Text style={styles.addressContent}>{item.orgEmail}</Text>
+                      <Text style={styles.addressContent}>{item.email}</Text>
                     </View>
                   </View>
 
@@ -118,7 +118,7 @@ const UpcomingDrivesCard = (props) => {
                     <Text style={styles.addressInsideLabel}>Contact:</Text>
                     <View style={styles.addressRightView}>
                       <Text style={styles.addressContent}>
-                        {item.orgContact}
+                        {item.contact}
                       </Text>
                     </View>
                   </View>
@@ -130,7 +130,7 @@ const UpcomingDrivesCard = (props) => {
               <View style={styles.addressView}>
                 <Text style={styles.addressLabel}>Blood groups invited:</Text>
                 <View style={styles.groupsContentView}>
-                  {props.item.bloodGroupsInvited.map((val) => {
+                  {props.item.bloodGroups.map((val) => {
                     return (
                       <View key={val} style={styles.indGroup}>
                         <Text style={styles.indGroupContent}>{val}</Text>

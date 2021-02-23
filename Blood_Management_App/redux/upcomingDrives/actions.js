@@ -40,20 +40,24 @@ export const upcomingDrivesSearch = (userToken, searchFilters) => {
     try {
       dispatch(driveFindReq());
       const response = await axios.post(
-        'http://192.168.43.89:5000/finddrives',
-        searchFilters,
+        'http://192.168.43.217:8080/upcomingdrives/fetchdriveslist',
         {
-          headers: {Authorization: userToken},
+          state: searchFilters.selectedState,
+          district: searchFilters.selectedDistrict,
+          pincode: searchFilters.pincode,
+        },
+        {
+          headers: {Authorization: 'Bearer ' + userToken},
         },
       );
 
-      if (response.data.success) {
+      if (response.headers.success) {
         //* coordinate with backend team to fixate on the names of response object props.
         console.log('Data fetch call responded with success!');
-        dispatch(driveFindSuccess(response.data.upcomingDrivesList));
-      } else if (response.data.error) {
+        dispatch(driveFindSuccess(response.data));
+      } else if (response.headers.error) {
         console.log('error while fetching upcomingDrivesList data');
-        dispatch(driveFindFailure(response.data.error));
+        dispatch(driveFindFailure(response.headers.error));
       } else {
         console.log('Outlandish error on upcomingDrives data fetch call');
         dispatch(

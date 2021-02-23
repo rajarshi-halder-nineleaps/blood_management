@@ -1,10 +1,6 @@
 /* eslint-disable prettier/prettier */
 import React, {useEffect} from 'react';
-import {
-  View,
-  Text,
-  StyleSheet,
-} from 'react-native';
+import {View, Text, StyleSheet} from 'react-native';
 import colors from '../constants/Colors';
 import {
   Collapse,
@@ -13,6 +9,12 @@ import {
 } from 'accordion-collapse-react-native';
 
 const CommitmentsCard = ({item}) => {
+  let commitmentTimestamp = item.dateTime || item.commitment_timeStamp || '';
+
+  commitmentTimestamp = `${commitmentTimestamp.split('T')[0]} at ${
+    commitmentTimestamp.split('T')[1].split(':')[0]
+  }:${commitmentTimestamp.split('T')[1].split(':')[1]}`;
+
   return (
     <Collapse>
       <CollapseHeader style={styles.touchboard}>
@@ -24,10 +26,7 @@ const CommitmentsCard = ({item}) => {
             <Text style={styles.nameText}>{item.recipientName}</Text>
           </View>
           <View style={styles.miniAddressView}>
-            <Text style={styles.miniAddressContent}>
-              {item.district + ', '}
-            </Text>
-            <Text style={styles.miniAddressContent}>{item.state}</Text>
+            <Text style={styles.miniAddressContent}>{commitmentTimestamp}</Text>
           </View>
         </View>
         <View style={styles.headerIndicatorView}>
@@ -62,7 +61,7 @@ const CommitmentsCard = ({item}) => {
             <Text style={styles.label}>
               Commitment made on: {'  '}
               <Text style={styles.content}>
-                {item.commitmentDate} at {item.commitmentTime}
+                {commitmentTimestamp}
               </Text>
             </Text>
 
@@ -73,8 +72,7 @@ const CommitmentsCard = ({item}) => {
                   <Text style={styles.addressInsideLabel}>Address: </Text>
                   <View style={styles.addressRightView}>
                     <Text style={styles.addressContent}>
-                      {item.address}, {item.district}, {'\n'}
-                      {item.state} [{item.pincode}]
+                      {item.recipientAddress}
                     </Text>
                   </View>
                 </View>
@@ -117,8 +115,7 @@ const CommitmentsCard = ({item}) => {
                     <Text style={styles.addressInsideLabel}>From:</Text>
                     <View style={styles.addressRightView}>
                       <Text style={styles.addressContent}>
-                        {item.startDate} at
-                        {'  ' + item.startTime}
+                        {item.startTimeStamp ? `${item.startTimeStamp.split('T')[0]}, ${item.startTimeStamp.split('T')[1].split(':')[0]}:${item.startTimeStamp.split('T')[1].split(':')[1]}` : null}
                       </Text>
                     </View>
                   </View>
@@ -126,8 +123,8 @@ const CommitmentsCard = ({item}) => {
                     <Text style={styles.addressInsideLabel}>To:</Text>
                     <View style={styles.addressRightView}>
                       <Text style={styles.addressContent}>
-                        {item.endDate} at
-                        {'  ' + item.endTime}
+                        {item.endTimeStamp ? `${item.endTimeStamp.split('T')[0]}, ${item.endTimeStamp.split('T')[1].split(':')[0]}:${item.endTimeStamp.split('T')[1].split(':')[1]}` : null}
+                        {}
                       </Text>
                     </View>
                   </View>
@@ -259,7 +256,7 @@ const styles = StyleSheet.create({
   },
   addressInsideView: {
     flexDirection: 'row',
-    borderBottomWidth: 0.5,
+    borderBottomWidth: 0.7,
     borderColor: colors.grayishblack,
     padding: 10,
     justifyContent: 'space-between',
