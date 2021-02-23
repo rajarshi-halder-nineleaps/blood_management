@@ -57,7 +57,8 @@ const Commitments = () => {
           </Text>
         </View>
       ) : (
-        <FlatList
+        <>
+          <FlatList
           style={styles.scroll}
           data={commitmentsState.commitmentsList}
           renderItem={renderItem}
@@ -70,6 +71,7 @@ const Commitments = () => {
             />
           }
         />
+        </>
       )}
     </View>
   );

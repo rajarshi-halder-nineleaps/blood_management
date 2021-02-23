@@ -1,47 +1,38 @@
-import { DONORLIST_REQ, DONORLIST_SUCCESS, DONORLIST_FAILURE, DONORLIST_UPDATE } from './actionTypes'
-
-const initialState = {
-  loading: false,
-  donorList: [],
-  error: '',
-};
-
-const activedonorReducer = (state = initialState, action) => {
-  switch (action.type) {
-
-    case DONORLIST_REQ: {
-      return { ...state, loading: true };
-    }
-    case DONORLIST_SUCCESS: {
-      return {
-        ...state,
-        loading: false,
-        error: '',
-        donorList: action.donorList,
-      };
-    }
-    case DONORLIST_FAILURE: {
-      return {
-        ...state,
-        loading: false,
-        error: action.error,
-        donorList: [],
-      };
-    }
-    case DONORLIST_UPDATE: {
-      const newState = { ...state, loading: false };
-
-
-      newState.donorList.find(
-        (val) => val.id === action.udata.id,
-      ).hasgiven = action.udata.hasgiven;
-
-      return newState;
-    }
-    default: {
-      return state;
-    }
+import { UPDATE_FIELDS_REG, STATE_CLEANUP,BLUR_FIELDS_REG,
+    UPDATE_ACTIVEDONOR_ARRAY, 
+    UPDATE_SUCCESS} from './actionTypes'
+  
+  const initialState = {
+      list:[],
+  };
+  
+  const activedonorReducer  = (state = initialState, action) => {
+      switch (action.type) {
+         
+          case STATE_CLEANUP: {
+              console.log('Cleaning state');
+              return initialState;
+            }
+  
+          case UPDATE_ACTIVEDONOR_ARRAY:{
+            console.log("updating")
+            
+            return{
+              ...state,
+              list:action.array,
+              
+            }
+            
+            
+            
+          }
+          case UPDATE_SUCCESS:{
+            console.log("done")
+          }
+        
+            default:
+              return state;
+      }    
   }
-}
-
-export default activedonorReducer
+  
+  export default activedonorReducer

@@ -212,7 +212,7 @@ const UserInfo = ({navigation}) => {
                           </Text>
                           <View style={styles.addressRightView}>
                             <Text style={styles.addressContent}>
-                              {profileState.profileData.dob}
+                              {profileState.profileData.dob ? profileState.profileData.dob.split('T')[0] : null}
                             </Text>
                           </View>
                         </View>
@@ -222,7 +222,7 @@ const UserInfo = ({navigation}) => {
                           </Text>
                           <View style={styles.addressRightView}>
                             <Text style={styles.addressContent}>
-                              {profileState.profileData.bloodgroup}
+                              {profileState.profileData.bloodGroup}
                             </Text>
                           </View>
                         </View>

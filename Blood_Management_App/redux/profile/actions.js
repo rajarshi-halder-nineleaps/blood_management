@@ -10,7 +10,7 @@ import {
   SET_DATA_SAVED,
 } from './actionTypes';
 
-export const profileReq = () => ({ type: PROFILE_REQ });
+export const profileReq = () => ({type: PROFILE_REQ});
 
 export const profileSuccess = (profileData) => ({
   type: PROFILE_SUCCESS,
@@ -37,7 +37,7 @@ export const profileUpdateSuccess = (newProfileData) => ({
   newProfileData,
 });
 
-export const setDataSaved = () => ({ type: SET_DATA_SAVED });
+export const setDataSaved = () => ({type: SET_DATA_SAVED});
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -46,16 +46,19 @@ export const getUserData = (userToken) => {
     try {
       console.log("Fetching user's minimial data.");
       dispatch(profileReq());
-      const response = await axios.get('http://10.0.2.2:8000/userdata', {
-        headers: { Authorization: userToken },
-      });
+      const response = await axios.get(
+        'http://192.168.43.217:8080/profile/fetchuserprofile',
+        {
+          headers: {Authorization: 'Bearer ' + userToken},
+        },
+      );
 
-      if (response.data.success) {
+      if (response.headers.success) {
         console.log('response is success!');
-        dispatch(userSuccess(response.data.userData));
-      } else if (response.data.error) {
+        dispatch(userSuccess(response.data));
+      } else if (response.headers.error) {
         console.log('response is error!');
-        dispatch(profileFailure(response.data.error));
+        dispatch(profileFailure(response.headers.error));
       } else {
         console.log('outlandish error!');
         dispatch(
@@ -78,16 +81,19 @@ export const getProfileData = (userToken) => {
     try {
       console.log("Fetching user's profile data.");
       dispatch(profileReq());
-      const response = await axios.get('http://10.0.2.2:8000/profile', {
-        headers: { Authorization: userToken },
-      });
+      const response = await axios.get(
+        'http://192.168.43.217:8080/profile/fetchuserdata',
+        {
+          headers: {Authorization: 'Bearer ' + userToken},
+        },
+      );
 
-      if (response.data.success) {
+      if (response.headers.success) {
         console.log('response is success!');
-        dispatch(profileSuccess(response.data.profileData));
-      } else if (response.data.error) {
+        dispatch(profileSuccess(response.data));
+      } else if (response.headers.error) {
         console.log('response is error!');
-        dispatch(profileFailure(response.data.error));
+        dispatch(profileFailure(response.headers.error));
       } else {
         console.log('outlandish error!');
         dispatch(
@@ -97,7 +103,7 @@ export const getProfileData = (userToken) => {
         );
       }
     } catch (err) {
-      console.log('caught error on profile get request: ', err);
+      console.log('caught error on profile data fetch: ', err);
       dispatch(profileFailure(err.message));
     }
   };
@@ -105,25 +111,45 @@ export const getProfileData = (userToken) => {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
 
-export const changeDetails = (userToken, newDetails) => {
+export const changeDetails = (userToken, userType, newDetails) => {
   return async (dispatch) => {
     try {
-      console.log("Fetching user's profile data.");
+      console.log('Updating user details.');
       dispatch(profileReq());
-      const response = await axios.put(
-        'http://10.0.2.2:8000/profile',
-        newDetails,
-        {
-          headers: { Authorization: userToken },
-        },
-      );
+      let response = {};
 
-      if (response.data.success) {
+      if (userType === 1) {
+        response = await axios.put(
+          'http://192.168.43.217:8080/profile/updateindprofile',
+          newDetails,
+          {
+            headers: {Authorization: 'Bearer ' + userToken},
+          },
+        );
+      } else if (userType === 2) {
+        response = await axios.put(
+          'http://192.168.43.217:8080/profile/updatehosprofile',
+          newDetails,
+          {
+            headers: {Authorization: 'Bearer ' + userToken},
+          },
+        );
+      } else {
+        response = await axios.put(
+          'http://192.168.43.217:8080/profile/updatebbprofile',
+          newDetails,
+          {
+            headers: {Authorization: 'Bearer ' + userToken},
+          },
+        );
+      }
+
+      if (response.headers.success) {
         console.log('response is success!');
         dispatch(profileUpdateSuccess(newDetails));
-      } else if (response.data.error) {
+      } else if (response.headers.error) {
         console.log('response is error!');
-        dispatch(profileFailure(response.data.error));
+        dispatch(profileFailure(response.headers.error));
       } else {
         console.log('outlandish error!');
         dispatch(
@@ -133,7 +159,7 @@ export const changeDetails = (userToken, newDetails) => {
         );
       }
     } catch (err) {
-      console.log('caught error on profile get request: ', err);
+      console.log('caught error on profile data change: ', err);
       dispatch(profileFailure(err.message));
     }
   };
@@ -144,13 +170,13 @@ export const changeDetails = (userToken, newDetails) => {
 export const setDonorStatus = (userToken, newDonorStatus) => {
   return async (dispatch) => {
     try {
-      console.log("Fetching user's profile data.");
+      console.log('Toggling donor.');
       dispatch(profileReq());
       const response = await axios.put(
-        'http://10.0.2.2:8000/toggledonor',
-        { newDonorStatus },
+        'http://192.168.43.217:8080/profile/donorstatus',
+        {donorStatus: newDonorStatus},
         {
-          headers: { Authorization: userToken },
+          headers: {Authorization: 'Bearer ' + userToken},
         },
       );
 
@@ -171,7 +197,7 @@ export const setDonorStatus = (userToken, newDonorStatus) => {
         );
       }
     } catch (err) {
-      console.log('caught error on profile get request: ', err);
+      console.log('caught error on toggle donor status: ', err);
       dispatch(profileFailure(err.message));
     }
   };

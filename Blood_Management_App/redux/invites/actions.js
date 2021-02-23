@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { DREQ_REQ, DREQ_SUCCESS, DREQ_FAILURE, DREQ_UPDATE } from './actionTypes';
+import {DREQ_REQ, DREQ_SUCCESS, DREQ_FAILURE, DREQ_UPDATE} from './actionTypes';
 
 export const invitesReq = () => ({
   type: DREQ_REQ,
@@ -59,24 +59,17 @@ export const fetchInvitesList = (userToken) => {
 ///////////////////////////////////////////////////////////////////////////////////////////////////////
 
 //* remember to structure the request object based on invite type before dispatching this
-export const updateRequestList = (userToken, updatedData) => {
+export const updateInvitesList = (userToken, updatedData) => {
   console.log('Updater dispatched!');
   return async (dispatch) => {
     try {
       console.log('updating list of invites.');
       dispatch(invitesReq());
       const response = await axios.put(
-<<<<<<< HEAD
         'http://192.168.43.217:8080/invites/inviteresponse',
         updatedData,
         {
           headers: {Authorization: 'Bearer ' + userToken},
-=======
-        'http://10.0.2.2:8000/invites',
-        updatedData,
-        {
-          headers: { Authorization: userToken },
->>>>>>> e7b31b393216d3a7dba091e3b62550656afc2dcd
         },
       );
 

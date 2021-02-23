@@ -54,17 +54,18 @@ const DriveOrganizer = ({navigation}) => {
     dispatch(stateCleanup());
   }, [dispatch]);
 
-  
+  const [startdate, setstartDate] = useState(new Date(1598051730000));
   const [startmode, setstartMode] = useState('date');
   const [startshow, setstartShow] = useState(false);
 
+  const [enddate, setendDate] = useState(new Date(1598051730000));
   const [endmode, setendMode] = useState('date');
   const [endshow, setendShow] = useState(false);
 
   const onChangestart = (event, selectedDate) => {
     const currentDate = selectedDate || date;
     setstartShow(Platform.OS === 'ios');
-    dispatch(updateFields(currentDate, 'startDate', true));
+    setstartDate(currentDate);
   };
 
   const showstartMode = (currentMode) => {
@@ -83,7 +84,7 @@ const DriveOrganizer = ({navigation}) => {
   const onChangeend = (event, selectedDate) => {
     const currentDate = selectedDate || date;
     setendShow(Platform.OS === 'ios');
-    dispatch(updateFields(currentDate, 'endDate', true));
+    setendDate(currentDate);
   };
 
   const showendMode = (currentMode) => {
@@ -145,8 +146,8 @@ const DriveOrganizer = ({navigation}) => {
       isValid = false;
     }
 
-    if (fieldId === 'startdate'){
-      isValid = false
+    if (fieldId === 'date') {
+      isValid = false;
     }
     if (fieldId === 'starttime') {
       isValid = false;
@@ -216,65 +217,38 @@ const DriveOrganizer = ({navigation}) => {
           )}
         </View>
 
-      <View>
-      <View style={styles.datepicker}>
-        <TouchableOpacity style={styles.datepickerbutton} onPress={showstartDatepicker}>
-          <Text style={styles.datepickerttext}>Set Start Date</Text>
-        </TouchableOpacity>
-        <Text style={styles.datepickerttextoutput}>
-          {driveOrganizerState.inputValues.startDate.toDateString()} 
-        </Text>
-      </View>
-      <View style={styles.datepicker}>
-        <TouchableOpacity style={styles.datepickerbutton} onPress={showstartTimepicker}>
-          <Text style={styles.datepickerttext}>Set Start Time</Text>
-        </TouchableOpacity>
-        <Text style={styles.datepickerttextoutput}>
-          {driveOrganizerState.inputValues.startDate.toLocaleTimeString()}
-        </Text>
-        
-      </View>
-      {startshow && (
-        <DateTimePicker
-          testID="dateTimePicker"
-          value={driveOrganizerState.inputValues.startDate}
-          mode={startmode}
-          is24Hour={true}
-          display="default"
-          onChange={onChangestart}
-        />
-      )}
-    </View>
-
-    <View>
-      <View style={styles.datepicker}>
-        <TouchableOpacity style={styles.datepickerbutton} onPress={showendDatepicker}>
-          <Text style={styles.datepickerttext}>Set End Date</Text>
-        </TouchableOpacity>
-        <Text style={styles.datepickerttextoutput}>
-          {driveOrganizerState.inputValues.endDate.toDateString()}
-        </Text>
-      </View>
-      <View style={styles.datepicker}>
-        <TouchableOpacity style={styles.datepickerbutton} onPress={showendTimepicker}>
-          <Text style={styles.datepickerttext}>Set End Time</Text>
-        </TouchableOpacity>
-        <Text style={styles.datepickerttextoutput}>
-          {driveOrganizerState.inputValues.endDate.toLocaleTimeString()}
-        </Text>
-        
-      </View>
-      {endshow && (
-        <DateTimePicker
-          testID="dateTimePicker"
-          value={driveOrganizerState.inputValues.endDate}
-          mode={endmode}
-          is24Hour={true}
-          display="default"
-          onChange={onChangeend}
-        />
-      )}
-    </View>
+        <View>
+          <View style={styles.datepicker}>
+            <TouchableOpacity
+              style={styles.datepickerbutton}
+              onPress={showendDatepicker}>
+              <Text style={styles.datepickerttext}>Set End Date</Text>
+            </TouchableOpacity>
+            <Text style={styles.datepickerttextoutput}>
+              {enddate.toDateString()}
+            </Text>
+          </View>
+          <View style={styles.datepicker}>
+            <TouchableOpacity
+              style={styles.datepickerbutton}
+              onPress={showendTimepicker}>
+              <Text style={styles.datepickerttext}>Set End Time</Text>
+            </TouchableOpacity>
+            <Text style={styles.datepickerttextoutput}>
+              {enddate.toLocaleTimeString()}
+            </Text>
+          </View>
+          {endshow && (
+            <DateTimePicker
+              testID="dateTimePicker"
+              value={enddate}
+              mode={endmode}
+              is24Hour={true}
+              display="default"
+              onChange={onChangeend}
+            />
+          )}
+        </View>
         {/* //////////////////////////////////////////////////////////////////////////////////// */}
 
         {/* //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// */}

@@ -4,7 +4,7 @@ import {createMaterialBottomTabNavigator} from '@react-navigation/material-botto
 import colors from '../constants/Colors';
 import Feather from 'react-native-vector-icons/Feather';
 
-import Home from '../src/MainTabs/Home/Home';
+import Home from '../src/MainTabs/Individual/Home';
 import About from '../src/MainTabs/About';
 import Notification from '../src/MainTabs/Individual/Notification';
 import Profile from '../src/MainTabs/ProfileStack/Profile';
@@ -46,7 +46,7 @@ const MainNavigator = () => {
         }}
       />
       <Tab.Screen
-        name="services"
+        name=" services "
         component={ServicesStackNavigator}
         options={{
           tabBarLabel: 'Services',

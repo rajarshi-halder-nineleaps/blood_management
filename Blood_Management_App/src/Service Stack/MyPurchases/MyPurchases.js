@@ -76,7 +76,7 @@ const MyPurchases = ({navigation}) => {
         <View style={styles.container}>
           <View style={styles.header}>
       <TouchableOpacity onPress={() => navigation.goBack()}>
-              <Feather name="chevron-left" color={colors.primary} size={30} />
+              <Feather name="chevron-left" color="white" size={30} />
       </TouchableOpacity>
       <Text  style={styles.headertitle}>My Purchases</Text>
       
@@ -109,20 +109,21 @@ const styles= StyleSheet.create({
         fontSize: 20,
         
       },
-      header: {
-        marginBottom: 20,
-        backgroundColor: 'transparent',
-        paddingTop: 10,
-        flexDirection:'row'
-    
-      },
-      headertitle: {
-        fontSize: 40,
-        backgroundColor: 'transparent',
-        marginLeft:10,
-        color: colors.primary,
-        fontFamily: 'Montserrat-Regular',
-      },
+      header:{
+        marginBottom:20,
+        backgroundColor:colors.primary,
+        paddingHorizontal:30,
+        paddingTop:10,    
+    },
+    headertitle:{
+      fontSize:50,
+        fontWeight:'bold',
+        backgroundColor:colors.primary,
+        fontFamily: 'sans-serif-condensed',      
+        paddingTop:10,
+        color:'white',
+        paddingBottom:20
+    },
     header2:{
       fontSize:50,
       fontWeight:'500',

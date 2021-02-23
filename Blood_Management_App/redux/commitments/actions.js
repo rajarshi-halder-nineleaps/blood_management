@@ -7,7 +7,7 @@ import {
   COMMITMENTS_FAILURE,
 } from './actionTypes';
 
-export const commitmentsReq = () => ({ type: COMMITMENTS_REQ });
+export const commitmentsReq = () => ({type: COMMITMENTS_REQ});
 export const commitmentsSuccess = (commitmentsList) => ({
   type: COMMITMENTS_SUCCESS,
   commitmentsList,
@@ -25,18 +25,18 @@ export const fetchCommitments = (userToken) => {
       console.log('Fetching list of commitments.');
       dispatch(commitmentsReq());
       const response = await axios.get(
-        'http://10.0.2.2:8000/commitments',
+        'http://192.168.43.217:8080/commitment',
         {
-          headers: { Authorization: userToken },
+          headers: {Authorization: 'Bearer ' + userToken},
         },
       );
 
-      if (response.data.success) {
+      if (response.headers.success) {
         console.log('response is success!');
-        dispatch(commitmentsSuccess(response.data.commitmentsList));
-      } else if (response.data.error) {
+        dispatch(commitmentsSuccess(response.data));
+      } else if (response.headers.error) {
         console.log('response is error!');
-        dispatch(commitmentsFailure(response.data.error));
+        dispatch(commitmentsFailure(response.headers.error));
       } else {
         console.log('outlandish error!');
         dispatch(
