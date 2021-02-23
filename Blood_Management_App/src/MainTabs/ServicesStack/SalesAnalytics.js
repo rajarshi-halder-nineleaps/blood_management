@@ -9,7 +9,7 @@ import { Picker } from '@react-native-picker/picker';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 const SalesAnalytics = () => {
   const salesState = useSelector((state) => state.salesState);
-  const dispatch = useDispatch();
+  const dispatch = useDispatch(); sf
 
   return (
     <View style={styles.container}>
