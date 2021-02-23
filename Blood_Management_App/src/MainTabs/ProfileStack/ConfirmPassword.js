@@ -34,7 +34,7 @@ const ConfirmPassword = ({navigation}) => {
       dispatch(resetDoneState());
       navigation.navigate('newPassword');
     }
-  }, [changePasswordState.passwordSent, navigation]);
+  }, [changePasswordState.passwordSent, navigation, dispatch]);
 
   const handleOTP = (val, fieldId) => {
     let isValid = true;

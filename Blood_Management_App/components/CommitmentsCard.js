@@ -2,13 +2,8 @@
 import React, {useEffect} from 'react';
 import {
   View,
-  ScrollView,
   Text,
   StyleSheet,
-  Image,
-  FlatList,
-  ActivityIndicator,
-  ImageBackground,
 } from 'react-native';
 import colors from '../constants/Colors';
 import {

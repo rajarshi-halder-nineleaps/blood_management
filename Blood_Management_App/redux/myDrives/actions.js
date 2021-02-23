@@ -48,8 +48,8 @@ export const getDriveData = (userToken) => {
     dispatch(fetchDrivesReq());
     try {
       console.log('sending axios get request!');
-      const response = await axios.get('http://10.0.2.2:8000/mydrives', {
-        headers: { Authorization: userToken },
+      const response = await axios.get('http://192.168.43.89:5000/mydrives', {
+        headers: {Authorization: userToken},
       });
 
       if (response.data.success) {
@@ -82,10 +82,10 @@ export const getDonorList = (userToken, driveId) => {
     try {
       console.log('sending axios list post request!');
       const response = await axios.post(
-        'http://10.0.2.2:8000/donorList',
-        { driveId },
+        'http://192.168.43.89:5000/donorList',
+        {driveId},
         {
-          headers: { Authorization: userToken },
+          headers: {Authorization: userToken},
         },
       );
 
@@ -124,10 +124,10 @@ export const donorVerification = (userToken, driveId, donorId) => {
       dispatch(fetchDrivesReq());
       console.log("posting updated data to current user's records");
       const response = await axios.post(
-        'http://10.0.2.2:8000/mydrives',
-        { driveId, donorId },
+        'http://192.168.43.89:5000/mydrives',
+        {driveId, donorId},
         {
-          headers: { Authorization: userToken },
+          headers: {Authorization: userToken},
         },
       );
 
@@ -164,10 +164,10 @@ export const driveCancellation = (userToken, driveId) => {
       dispatch(fetchDrivesReq());
       console.log("posting updated data to current user's records");
       const response = await axios.post(
-        'http://10.0.2.2:8000/canceldrive',
-        { driveId },
+        'http://192.168.43.89:5000/canceldrive',
+        {driveId},
         {
-          headers: { Authorization: userToken },
+          headers: {Authorization: userToken},
         },
       );
 

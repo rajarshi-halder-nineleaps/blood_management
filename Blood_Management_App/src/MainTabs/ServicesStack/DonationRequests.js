@@ -19,7 +19,7 @@ import DeprecatedViewPropTypes from 'react-native/Libraries/DeprecatedPropTypes/
 
 //TODO replace commitments state with donation requests state
 
-const DonationRequests = ({ navigation }) => {
+const DonationRequests = ({navigation}) => {
   const authState = useSelector((state) => state.authState);
   const invitesState = useSelector((state) => state.invitesState);
   const dispatch = useDispatch();

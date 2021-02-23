@@ -54,12 +54,12 @@ const InfoEdit = ({navigation}) => {
 
   if (authState.userType === 1) {
     initialFormState.inputValues.phone = profileState.profileData.phone;
-    initialFormState.inputValues.bloodgroup =
-      profileState.profileData.bloodgroup;
+    initialFormState.inputValues.bloodGroup =
+      profileState.profileData.bloodGroup;
     initialFormState.inputValidity.phone = true;
-    initialFormState.inputValidity.bloodgroup = true;
+    initialFormState.inputValidity.bloodGroup = true;
     initialFormState.isTouched.phone = false;
-    initialFormState.isTouched.bloodgroup = false;
+    initialFormState.isTouched.bloodGroup = false;
   } else {
     initialFormState.inputValues.phone = [...profileState.profileData.phone];
     initialFormState.inputValidity.phone = [];
@@ -125,7 +125,7 @@ const InfoEdit = ({navigation}) => {
       isValid = false;
     }
 
-    if (fieldId === 'bloodgroup' && val === '0') {
+    if (fieldId === 'bloodGroup' && val === '0') {
       isValid = false;
     }
     setFormState((prevState) => {
@@ -230,7 +230,16 @@ const InfoEdit = ({navigation}) => {
 
   const submitHandler = () => {
     if (formState.finalFormState) {
-      dispatch(changeDetails(authState.userToken, formState.inputValues));
+      dispatch(
+        changeDetails(
+          authState.userToken,
+          authState.userType,
+          formState.inputValues,
+        ),
+      );
+    
+      console.log(formState.inputValues);
+    
     } else {
       Alert.alert('Invalid Inputs', 'Please check all inputs before saving.');
     }
@@ -249,20 +258,27 @@ const InfoEdit = ({navigation}) => {
                   value={formState.inputValues.phone}
                   inputIsValid={formState.inputValidity.phone}
                   inputIsTouched={formState.isTouched.phone}
+                  onChangeText={(val) => {
+                    checkValidity(val, 'phone');
+                  }}
+                  onBlur={() => {
+                    blurListener('phone');
+                  }}
                 />
 
+                <Text style={styles.pickerLabel}>Blood Group</Text>
                 <View style={styles.pickerView}>
                   <Picker
                     mode="dropdown"
                     iosIcon={<Feather name="chevron-down" />}
-                    selectedValue={formState.inputValues.bloodgroup}
+                    selectedValue={formState.inputValues.bloodGroup}
                     style={{
                       color: 'black',
                       borderBottomWidth: 0.5,
                     }}
                     onValueChange={(selectedVal) => {
-                      checkValidity(selectedVal, 'bloodgroup');
-                      blurListener('bloodgroup');
+                      checkValidity(selectedVal, 'bloodGroup');
+                      blurListener('bloodGroup');
                     }}>
                     <Picker.Item label="Blood Group" value="0" />
                     <Picker.Item label="B+" value="B+" />
@@ -310,7 +326,7 @@ const InfoEdit = ({navigation}) => {
                     <Text style={styles.phoneAddText}>Add new Phone</Text>
                     <Feather name="plus" color={colors.additional2} size={15} />
                   </TouchableOpacity>
-                </View>
+                </View>object
               </>
             )}
             <Fields
@@ -491,6 +507,7 @@ const styles = StyleSheet.create({
     color: colors.grayishblack,
     fontFamily: 'Montserrat-Regular',
     marginTop: 10,
+    paddingBottom: 3,
   },
   pickerView: {
     borderRadius: 5,

@@ -22,11 +22,11 @@ export const blurFields = (fieldId) => ({
   fieldId: fieldId,
 });
 
-export const stateCleanup = () => ({ type: STATE_CLEANUP_CHANGE });
+export const stateCleanup = () => ({type: STATE_CLEANUP_CHANGE});
 
 /////////////////////////////////////////////////////////////////////////////////////////////////
 
-export const changeReq = () => ({ type: CHANGE_REQ });
+export const changeReq = () => ({type: CHANGE_REQ});
 
 export const changeReqFailure = (error) => ({
   type: CHANGE_REQ_FAILURE,
@@ -52,19 +52,19 @@ export const postCurrentPassword = (userToken, password) => {
 
     try {
       const response = await axios.post(
-        'http://10.0.2.2:8000/currentpassword',
-        { password },
+        'http://192.168.43.217:8080/profile/verifycurrentpassword',
+        {currentPassword : password},
         {
-          headers: { Authorization: userToken },
+          headers: {Authorization: 'Bearer ' + userToken},
         },
       );
-      if (response.data.error) {
-        dispatch(changeReqFailure(response.data.error));
+      if (!response.data.success) {
+        dispatch(changeReqFailure('Invalid Password! Please try again.'));
         console.log(
           'Error while posting current password',
-          response.data.error,
+          response.headers.error,
         );
-      } else if (response.data.success) {
+      } else if (response.headers.success) {
         dispatch(changeReqSuccess('passwordSent'));
       } else {
         dispatch(changeReqFailure("Something's not right!"));
@@ -85,15 +85,15 @@ export const postResetPassword = (userToken, password) => {
 
     try {
       const response = await axios.put(
-        'http://10.0.2.2:8000/makenewpwd',
-        { password },
+        'http://192.168.43.217:8080/profile/changepassword',
+        {newPassword : password},
         {
-          headers: { Authorization: userToken },
+          headers: {Authorization: 'Bearer ' + userToken},
         },
       );
-      if (response.data.error) {
-        dispatch(changeReqFailure(response.data.error));
-        console.log('Error while posting reset password', response.data.error);
+      if (!response.data.success) {
+        dispatch(changeReqFailure('Something went wrong! Please try again.'));
+        console.log('Error while posting reset password');
       } else if (response.data.success) {
         dispatch(changeReqSuccess('passwordReset'));
       } else {

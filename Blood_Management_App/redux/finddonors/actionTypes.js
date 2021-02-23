@@ -7,5 +7,4 @@ export const BLUR_FIELDS_REG = 'BLUR_FIELDS_REG'
 export const REQ = 'REQ';
 export const UPDATE_SUCCESS = 'UPDATE_SUCCESS';
 export const REQ_FAILURE = 'REQ_FAILURE';
-export const UPDATE_DONOR_ARRAY = 'UPDATE_DONOR_ARRAY';
-export const UPDATE_SELECTED = 'UPDATE_SELECTED';
+export const UPDATE_DONOR_ARRAY = 'UPDATE_DONOR_ARRAY' 
