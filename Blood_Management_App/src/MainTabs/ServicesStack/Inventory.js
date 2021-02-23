@@ -30,7 +30,7 @@ const Inventory = ({navigation}) => {
 
   const toggleTouchHandler = () => {
     if (inventoryState.editing) {
-      dispatch(updateInventory(authState.userToken, inventoryState.invData));
+      dispatch(updateInventory(authState.userToken, authState.userToken, inventoryState.invData));
     } else {
       dispatch(editingToggle());
     }

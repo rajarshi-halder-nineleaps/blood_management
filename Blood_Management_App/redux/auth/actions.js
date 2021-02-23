@@ -129,7 +129,7 @@ export const regUserUp = (regData) => {
         };
 
         response = await axios.post(
-          'http://192.168.43.89:5000/registerbb',
+          'http://192.168.43.217:8080/registerbb',
           requestObject,
         );
       }
