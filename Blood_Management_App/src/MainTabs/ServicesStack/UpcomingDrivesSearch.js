@@ -28,8 +28,8 @@ const UpcomingDrivesSearch = ({navigation}) => {
   const [distEnb, setdistEnb] = useState(false);
   const [inputs, setInputs] = useState({
     inputValues: {
-      selectedState: '',
-      selectedDistrict: '',
+      selectedState: 'All',
+      selectedDistrict: 'All',
       pincode: '',
     },
     inputValidity: {

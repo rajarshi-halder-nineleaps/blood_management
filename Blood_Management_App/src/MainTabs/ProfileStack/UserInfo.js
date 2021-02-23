@@ -128,19 +128,19 @@ const UserInfo = ({navigation}) => {
                       <View style={styles.statsInsideView}>
                         <Text style={styles.statsLabel}>Total Donations</Text>
                         <Text style={styles.statsContent}>
-                          {profileState.profileData.totalDonations}
+                          {profileState.profileData.donationMade}
                         </Text>
                       </View>
                       <View style={styles.statsInsideView}>
                         <Text style={styles.statsLabel}>Commitments made</Text>
                         <Text style={styles.statsContent}>
-                          {profileState.profileData.commitmentsLeft}
+                          {profileState.profileData.commitmentMade}
                         </Text>
                       </View>
                       <View style={styles.statsInsideView}>
                         <Text style={styles.statsLabel}>Drives attended</Text>
                         <Text style={styles.statsContent}>
-                          {profileState.profileData.driveAttended}
+                          {profileState.profileData.drivesAttended}
                         </Text>
                       </View>
                     </>
@@ -149,7 +149,7 @@ const UserInfo = ({navigation}) => {
                       <View style={styles.statsInsideView}>
                         <Text style={styles.statsLabel}>Requests made</Text>
                         <Text style={styles.statsContent}>
-                          {profileState.profileData.requestsMade}
+                          {profileState.profileData.requestMade}
                         </Text>
                       </View>
                       <View style={styles.statsInsideView}>
@@ -164,7 +164,7 @@ const UserInfo = ({navigation}) => {
                       <View style={styles.statsInsideView}>
                         <Text style={styles.statsLabel}>Requests made</Text>
                         <Text style={styles.statsContent}>
-                          {profileState.profileData.requestsMade}
+                          {profileState.profileData.requestMade}
                         </Text>
                       </View>
                       <View style={styles.statsInsideView}>
@@ -212,7 +212,9 @@ const UserInfo = ({navigation}) => {
                           </Text>
                           <View style={styles.addressRightView}>
                             <Text style={styles.addressContent}>
-                              {profileState.profileData.dob ? profileState.profileData.dob.split('T')[0] : null}
+                              {profileState.profileData.dob
+                                ? profileState.profileData.dob.split('T')[0]
+                                : null}
                             </Text>
                           </View>
                         </View>
@@ -241,14 +243,12 @@ const UserInfo = ({navigation}) => {
                         <View>
                           {console.log(profileState.profileData.phone)}
                           {//TODO THERE IS SOME ERROR HERE, CHECK IT OUT.
-                            profileState &&
-                            profileState.profileData &&
-                            profileState.profileData.phone &&
+                            profileState.profileData.phone ? 
                             profileState.profileData.phone.map((val, idx) => (
                               <View key={idx} style={styles.addressRightView}>
                                 <Text style={styles.addressContent}>{val}</Text>
                               </View>
-                            ))}
+                            )) : null}
                         </View>
                       </View>
                     )}
@@ -261,6 +261,28 @@ const UserInfo = ({navigation}) => {
                           {profileState.profileData.district}, {'\n'}
                           {profileState.profileData.state} [
                           {profileState.profileData.pincode}]
+                        </Text>
+                      </View>
+                    </View>
+                    <View style={styles.addressInsideView}>
+                      <Text style={styles.addressInsideLabel}>
+                        Registered on:
+                      </Text>
+                      <View style={styles.addressRightView}>
+                        <Text style={styles.addressContent}>
+                          {profileState.profileData.registration_date ? `${
+                            profileState.profileData.registration_date.split(
+                              'T',
+                            )[0]
+                          } at ${
+                            profileState.profileData.registration_date
+                              .split('T')[1]
+                              .split(':')[0]
+                          }:${
+                            profileState.profileData.registration_date
+                              .split('T')[1]
+                              .split(':')[1]
+                          }` : null}
                         </Text>
                       </View>
                     </View>

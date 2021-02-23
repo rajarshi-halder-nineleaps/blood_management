@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import React, {useEffect} from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   View,
   ScrollView,
@@ -13,6 +13,7 @@ import {
 import {useSelector, useDispatch} from 'react-redux';
 import colors from '../../../constants/Colors';
 import renderItem from '../../../components/CommitmentsCard';
+import DonationDriveFilter from '../../../components/DonationDriveFilter';
 import {fetchCommitments} from '../../../redux/commitments/actions';
 
 const Commitments = () => {
@@ -22,7 +23,9 @@ const Commitments = () => {
   useEffect(() => {
     dispatch(fetchCommitments(authState.userToken));
   }, [authState.userToken, dispatch]);
-  const [refreshing, setRefreshing] = React.useState(false);
+  const [refreshing, setRefreshing] = useState(false);
+
+  const [active, setActive] = useState(true);
 
   const onRefresh = React.useCallback(
     (driveId) => {
@@ -58,19 +61,27 @@ const Commitments = () => {
         </View>
       ) : (
         <>
+          <DonationDriveFilter active={active} setActive={setActive} />
+
           <FlatList
-          style={styles.scroll}
-          data={commitmentsState.commitmentsList}
-          renderItem={renderItem}
-          keyExtractor={(item) => item.driveId || item.donationId}
-          refreshControl={
-            <RefreshControl
-              colors={[colors.primary, colors.secondary]}
-              refreshing={refreshing}
-              onRefresh={onRefresh}
-            />
-          }
-        />
+            style={styles.scroll}
+            data={commitmentsState.commitmentsList.filter((val) => {
+              if (active) {
+                return val.commitmentType === 'drive';
+              } else {
+                return val.commitmentType === 'donation';
+              }
+            })}
+            renderItem={renderItem}
+            keyExtractor={(item) => item.driveId || item.donationId}
+            refreshControl={
+              <RefreshControl
+                colors={[colors.primary, colors.secondary]}
+                refreshing={refreshing}
+                onRefresh={onRefresh}
+              />
+            }
+          />
         </>
       )}
     </View>
