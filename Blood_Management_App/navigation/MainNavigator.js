@@ -6,7 +6,7 @@ import Feather from 'react-native-vector-icons/Feather';
 
 import Home from '../src/MainTabs/Individual/Home';
 import About from '../src/MainTabs/About';
-import Notification from '../src/MainTabs/Individual/Notification';
+import Notifications from '../src/MainTabs/Notifications';
 import Profile from '../src/MainTabs/ProfileStack/Profile';
 import ProfileStackNavigator from './ProfileNavigator';
 import ServicesStackNavigator from './ServicesNavigator';
@@ -56,10 +56,10 @@ const MainNavigator = () => {
         }}
       />
       <Tab.Screen
-        name=" notiication "
-        component={Notification}
+        name=" notiications"
+        component={Notifications}
         options={{
-          tabBarLabel: 'Notification',
+          tabBarLabel: 'Notifications',
           tabBarIcon: ({color}) => (
             <Feather name="bell" color={color} size={20} />
           ),

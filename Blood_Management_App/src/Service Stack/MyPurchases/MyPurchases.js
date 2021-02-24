@@ -1,213 +1,215 @@
-import React, { useState, useEffect } from 'react'
+/* eslint-disable prettier/prettier */
+import React, {useEffect} from 'react';
 import {
-    View,
-    Text,
-    StyleSheet,
-    TouchableOpacity,
-    Modal,
-    TouchableHighlight
-} from 'react-native'
-import { FlatList } from 'react-native-gesture-handler';
-import {useDispatch, useSelector} from 'react-redux';
-import colors from '../../../constants/Colors'
-import {
-  getmypurchasesList
-} from "../../../redux/mypurchases/actions"
+  View,
+  ScrollView,
+  FlatList,
+  Text,
+  Image,
+  ImageBackground,
+  StyleSheet,
+  TouchableOpacity,
+  ActivityIndicator,
+} from 'react-native';
+import colors from '../../../constants/Colors';
+import {useSelector, useDispatch} from 'react-redux';
+import renderItem from '../../../components/PurchasesCard';
 import Feather from 'react-native-vector-icons/Feather';
 
-const Item = ({ item, onPress, style }) => (
-    <TouchableOpacity onPress={onPress} style={[styles.item, style]}>
-     <View style={{flexDirection:'row'}}>
-        <Text style={[styles.title,{fontWeight:'bold'}]}>Name:</Text>
-        <Text style={styles.title}>  {item.name}</Text>
-      </View>
-      <View style={{flexDirection:'row'}}>
-        <Text style={[styles.title,{fontWeight:'bold'}]}>Contact No:</Text>
-        <Text style={styles.title}>  {item.contact}</Text>
-      </View>
-      <View style={{flexDirection:'row'}}>
-        <Text style={[styles.title,{fontWeight:'bold'}]}>Date of Purchase:</Text>
-        <Text style={styles.title}>  {item.dop}</Text>
-      </View>
-      <View style={{flexDirection:'row'}}>
-        <Text style={[styles.title,{fontWeight:'bold'}]}>Blood Group:</Text>
-        <Text style={styles.title}>  {item.blood_group}</Text>
-      </View>
-      <View style={{flexDirection:'row'}}>
-        <Text style={[styles.title,{fontWeight:'bold'}]}>Component:</Text>
-        <Text style={styles.title}>  {item.component}</Text>
-      </View>
-      <View style={{flexDirection:'row'}}>
-        <Text style={[styles.title,{fontWeight:'bold'}]}>Units:</Text>
-        <Text style={styles.title}>  {item.units}</Text>
-      </View>
-      <View style={{flexDirection:'row'}}>
-        <Text style={[styles.title,{fontWeight:'bold'}]}>Total:</Text>
-        <Text style={styles.title}> Rs {item.total}</Text>
-      </View>
-    </TouchableOpacity>
-  );
+const MyPurchases = () => {
 
-const MyPurchases = ({navigation}) => {
+  const purchasesState = useSelector((state) => state.purchasesState);
+  console.log(purchasesState.salesData);
 
-    const dispatch = useDispatch();
-    
-    const mypurchasesFormState = useSelector((state) => state.mypurchasesFormState);
-    const [modalVisible, setModalVisible] = useState(false);
-
-
-    useEffect(() => {
-        dispatch(getmypurchasesList());
-      }, [dispatch]);
-
-      const renderItem = ({ item }) => {
-        const backgroundColor =  "white";
-    
-        return (
-          <Item
-            item={item}
-            
-            style={{ backgroundColor }}
+  return (
+    <View style={styles.container}>
+      {purchasesState.loading ? (
+        <ActivityIndicator
+          visible={purchasesState.loading}
+          textContent={'Loading...'}
+          textStyle={styles.spinnerTextStyle}
+          animating={true}
+          color={colors.primary}
+          size="large"
+        />
+      ) : purchasesState.salesData.length === 0 ? (
+        <View style={styles.suchEmpty}>
+          <Image
+            style={styles.suchEmptyImg}
+            source={require('../../../assets/images/empty.png')}
           />
-        );
-      };
-
-    return(
-        <View style={styles.container}>
-          <View style={styles.header}>
-      <TouchableOpacity onPress={() => navigation.goBack()}>
-              <Feather name="chevron-left" color="white" size={30} />
-      </TouchableOpacity>
-      <Text  style={styles.headertitle}>My Purchases</Text>
-      
-      </View>
-            <FlatList
-        data={mypurchasesFormState.list}
-        renderItem={renderItem}
-        keyExtractor={(item) => item.id}
-        
-      />
-            
-           
-            
+          <Text style={styles.emptyInfo}>No purchases made so far.</Text>
         </View>
-    );
-}
+      ) : (
+        <FlatList
+          style={styles.scroll}
+          data={purchasesState.salesData}
+          renderItem={renderItem}
+          keyExtractor={(item) => item.purchaseId}
+        />
+      )}
+    </View>
+  );
+};
 
-const styles= StyleSheet.create({
-    item: {
-        backgroundColor: '#f9c2ff',
-        padding: 20,
-        marginVertical: 8,
-        paddingHorizontal:30,
-        marginHorizontal:20,
-        borderRadius:20,
-        elevation:10,
-        paddingHorizontal:50
-      },
-      title: {
-        fontSize: 20,
-        
-      },
-      header:{
-        marginBottom:20,
-        backgroundColor:colors.primary,
-        paddingHorizontal:30,
-        paddingTop:10,    
-    },
-    headertitle:{
-      fontSize:50,
-        fontWeight:'bold',
-        backgroundColor:colors.primary,
-        fontFamily: 'sans-serif-condensed',      
-        paddingTop:10,
-        color:'white',
-        paddingBottom:20
-    },
-    header2:{
-      fontSize:50,
-      fontWeight:'500',
-      marginBottom:20,
-      backgroundColor:colors.primary,
-      fontFamily: 'sans-serif-condensed',      
-      color:'white'  
-    },
-    container:{
-        flex:1
-    },
-    inforow:{
-        flexDirection:'row',
-        justifyContent:'space-between',
-        paddingVertical:5,
-        alignItems:'center',
-        alignContent:'center'
-    },
-    texts:{
-        fontSize:25,
-        fontWeight:'bold'
-    },
-    text:{
-        fontSize:22,
-        fontWeight:'500'
-    },
-    infobox:{
-        marginHorizontal:30,
-        marginTop:50
-    },
-    invite:{
-        marginTop:30,
-        paddingHorizontal:15,
-        backgroundColor:colors.primary,
-        paddingVertical:10,
-        borderRadius:10
-    },
-    invitebutton:{
-        color:'white'
-    },
-    centeredView: {
-        flex: 1,
-        justifyContent: "center",
-        alignItems: "center",
-        marginTop: 22
-      },
-      modalView: {
-        margin: 20,
-        backgroundColor: "white",
-        borderRadius: 20,
-        padding: 35,
-        alignItems: "center",
-        shadowColor: "#000",
-        shadowOffset: {
-          width: 0,
-          height: 2
-        },
-        shadowOpacity: 0.25,
-        shadowRadius: 3.84,
-        elevation: 5
-      },
-      openButton: {
-        backgroundColor: "#F194FF",
-        borderRadius: 20,
-        padding: 10,
-        elevation: 2
-      },
-      textStyle: {
-        color: "white",
-        fontWeight: "bold",
-        textAlign: "center"
-      },
-      modalText: {
-        marginBottom: 15,
-        textAlign: "center",
-        fontSize:25,
-        fontWeight:'bold'
-      },
-      modalTextmore: {
-        marginBottom: 15,
-        textAlign: "center",
-        fontSize:20,
-        
-      }
-})
+const styles = StyleSheet.create({
+  imgBkg: {
+    flex: 1,
+    resizeMode: 'cover',
+    justifyContent: 'center',
+    paddingBottom: 30,
+    width: '100%',
+    height: '100%',
+  },
+  header: {
+    paddingTop: 50,
+    padding: 20,
+  },
+  titleView: {
+    flexDirection: 'row',
+  },
+  headerText: {
+    color: colors.additional2,
+    fontWeight: 'bold',
+    fontSize: 18,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  idView: {
+    backgroundColor: colors.additional2,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: 10,
+    paddingHorizontal: 10,
+    marginLeft: 10,
+  },
+  headerContent: {
+    color: colors.primary,
+    fontWeight: 'bold',
+    fontSize: 18,
+  },
+  dateTimeView: {
+    paddingTop: 10,
+  },
+  dateTimeLabel: {
+    color: colors.additional2,
+    fontWeight: 'bold',
+  },
+  dateTimeContent: {
+    color: colors.additional2,
+    fontWeight: '100',
+  },
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    overflow: 'hidden',
+  },
+  scroll: {
+    paddingHorizontal: 20,
+  },
+  suchEmpty: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: colors.additional2,
+  },
+  suchEmptyImg: {
+    height: 150,
+    width: 150,
+  },
+  emptyInfo: {
+    color: colors.primary,
+    fontSize: 10,
+  },
+  touchboard: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    elevation: 5,
+    overflow: 'hidden',
+    margin: 10,
+  },
+  touch: {
+    flex: 1,
+    width: '100%',
+    backgroundColor: colors.additional2,
+    borderRadius: 10,
+    overflow: 'hidden',
+  },
+  contentBoard: {
+    paddingHorizontal: 20,
+    paddingTop: 20,
+    backgroundColor: colors.additional2,
+    borderTopLeftRadius: 20,
+    borderTopRightRadius: 20,
+  },
+  donorListTouchView: {
+    flexDirection: 'row',
+    width: '100%',
+    padding: 20,
+    justifyContent: 'center',
+  },
+  donorListTouch: {
+    marginTop: 10,
+    elevation: 5,
+    borderRadius: 100,
+    flexDirection: 'row',
+    overflow: 'hidden',
+  },
+  touchContainerView: {
+    flexDirection: 'row',
+    padding: 10,
+    paddingHorizontal: 20,
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    width: '100%',
+  },
+  imgBtnBkg: {
+    width: '100%',
+  },
+  touchText: {
+    color: colors.additional2,
+    fontFamily: 'sans-serif-light',
+  },
+  iconView: {
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  addressView: {},
+  groupsView: {},
+  label: {
+    fontSize: 20,
+    color: colors.primary,
+    paddingTop: 10,
+  },
+  addressContentView: {
+    paddingVertical: 20,
+  },
+  groupsContentView: {
+    paddingVertical: 20,
+    flexDirection: 'row',
+  },
+  indGroup: {
+    backgroundColor: colors.primary,
+    width: 34,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: 100,
+    marginHorizontal: 2,
+    padding: 5,
+  },
+  indGroupContent: {
+    color: colors.additional2,
+    fontSize: 12,
+  },
+  content: {
+    color: colors.additional1,
+    fontFamily: 'sans-serif',
+    fontSize: 15,
+  },
+  statePincodeView: {
+    flexDirection: 'row',
+  },
+});
 
-export default MyPurchases
+export default MyPurchases;

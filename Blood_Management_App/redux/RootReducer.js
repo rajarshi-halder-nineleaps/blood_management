@@ -21,6 +21,8 @@ import invitesReducer from './invites/reducer';
 import mypurchasesReducer from './mypurchases/reducer';
 import activedonorReducer from './activedonorrequest/reducer';
 import changePasswordReducer from './changePassword/reducer';
+import purchasesReducer from './purchases/reducer';
+import notificationsReducer from './notifications/reducer';
 
 const rootReducer = combineReducers({
   loginFormState: loginReducer,
@@ -39,9 +41,11 @@ const rootReducer = combineReducers({
   finddonorFormState: finddonorReducer,
   buybloodFormState: buybloodReducer,
   invitesState: invitesReducer,
-  mypurchasesFormState: mypurchasesReducer,
+  mypurchasesFormState: mypurchasesReducer, //todo remove
   activedonorFormState: activedonorReducer,
   changePasswordState: changePasswordReducer,
+  purchasesState: purchasesReducer,
+  notificationsState: notificationsReducer,
 });
 
 export default rootReducer;
