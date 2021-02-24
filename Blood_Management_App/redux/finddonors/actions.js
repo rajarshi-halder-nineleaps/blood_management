@@ -1,7 +1,6 @@
 import axios from 'axios';
 
-
-import { GETDONORLIST } from "./actionTypes";
+import {GETDONORLIST} from './actionTypes';
 import {
   UPDATE_FIELDS_REG,
   STATE_CLEANUP,
@@ -10,7 +9,8 @@ import {
   UPDATE_SUCCESS,
   REQ_FAILURE,
   UPDATE_DONOR_ARRAY,
-  UPDATE_SELECTED, SELECT_ALL
+  UPDATE_SELECTED,
+  SELECT_ALL,
 } from './actionTypes';
 
 export const req = () => ({
@@ -34,51 +34,50 @@ export const stateCleanup = () => ({
 
 export const updateArray = (array) => ({
   type: UPDATE_DONOR_ARRAY,
-  array: array
-
-})
+  array: array,
+});
 
 export const updateselected = (item) => ({
   type: UPDATE_SELECTED,
-  item: item
-})
+  item: item,
+});
 
 export const selectall = (array) => ({
   type: SELECT_ALL,
-  array: array
-})
+  array: array,
+});
 
-
-
-export const getDonorList = () => {
+export const getDonorList = (userToken, formData) => {
   return async (dispatch) => {
     dispatch(req());
     console.log('Getting Donor List');
     try {
-      const response = await axios.get(
-        'http://10.0.2.2:8000/donorlist'
-
+      const response = await axios.post(
+        'http://192.168.43.217:8080/finddonors/donorslist',
+        {
+          address: formData.address,
+          state: formData.state,
+          district: formData.district,
+          pincode: formData.pincode,
+          bloodGroup: formData.blood_group,
+        },
+        {headers: {Authorization: 'Bearer ' + userToken}},
       );
       console.log('COMPLETE RESPONSE DATA: ', response.data);
 
-      if (response.data.error) {
-
-        console.log(response.data.error);
-      } else if (response.data.success) {
+      if (response.headers.error) {
+        console.log(response.headers.error);
+      } else if (response.headers.success) {
         //? SAVING USER DATA TO ASYNC STORAGE ON SUCCESSFUL LOGIN.
 
         console.log('Saved data to async storage!');
-        dispatch(updateArray(response.data.list))
-        console.log(response.data.list)
-
+        dispatch(updateArray(response.data));
+        // console.log(response.data);
       } else {
-        console.log("Failed")
+        console.log('Failed');
       }
     } catch (err) {
       console.log(err.message);
-
     }
   };
-
-
-}
+};

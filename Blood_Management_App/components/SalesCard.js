@@ -14,7 +14,7 @@ const SalesCard = ({item}) => {
             <View style={styles.titleView}>
               <Text style={styles.headerText}>SALE ID :</Text>
               <View style={styles.idView}>
-                <Text style={styles.headerContent}>{item.saleId}</Text>
+                <Text style={styles.headerContent}>{item.salesId}</Text>
               </View>
             </View>
             <View style={styles.buyerView}>
@@ -36,7 +36,10 @@ const SalesCard = ({item}) => {
             <View style={styles.detailsView}>
               <Text style={styles.label}>
                 Purchase date:{' '}
-                <Text style={styles.content}>{item.saleDate}</Text>
+                <Text style={styles.content}>
+                {item.dateOfTransaction ? `${item.dateOfTransaction.split('T')[0]}, ${item.dateOfTransaction.split('T')[1].split(':')[0]}:${item.dateOfTransaction.split('T')[1].split(':')[1]}` : null}
+
+                </Text>
               </Text>
               <Text style={styles.label}>
                 Purchased blood group:{' '}
@@ -53,7 +56,7 @@ const SalesCard = ({item}) => {
             </View>
             <View style={styles.billView}>
               <Text style={styles.billLabel}>Total bill amount: </Text>
-              <Text style={styles.bill}>₹ {item.bill}</Text>
+              <Text style={styles.bill}>₹ {item.pricePerUnit * item.purchasedQty}</Text>
             </View>
           </View>
         </ImageBackground>

@@ -2,7 +2,7 @@
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-import { REQ, REQ_SUCCESS, REQ_FAILURE, LOGOUT } from './actionTypes';
+import {REQ, REQ_SUCCESS, REQ_FAILURE, LOGOUT} from './actionTypes';
 
 export const req = () => ({
   type: REQ,
@@ -28,7 +28,7 @@ export const logUserIn = (loginData) => {
     console.log('login works');
     try {
       const response = await axios.post(
-        'http://10.0.2.2:8000/login',
+        'http://192.168.43.217:8080/authenticate',
         loginData,
       );
       console.log('COMPLETE RESPONSE DATA: ', response.headers);
@@ -63,7 +63,11 @@ export const logUserIn = (loginData) => {
       }
     } catch (err) {
       console.log(err.message);
-      dispatch(reqFailure(err.message));
+      if (err.message.includes('401')) {
+        dispatch(reqFailure('Invalid credentials!'));
+      } else {
+        dispatch(reqFailure(err.message));
+      }
     }
   };
 };
@@ -199,7 +203,7 @@ export const tokenRetriever = () => {
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-export const logout = () => ({ type: LOGOUT });
+export const logout = () => ({type: LOGOUT});
 
 export const logUserOut = () => {
   console.log('logging out');

@@ -3,10 +3,9 @@ import axios from 'axios';
 import {SALES_REQ, SALES_SUCCESS, SALES_FAILURE} from './actionTypes';
 
 export const salesReq = () => ({type: SALES_REQ});
-export const salesSuccess = (salesData, analyticsData) => ({
+export const salesSuccess = (salesData) => ({
   type: SALES_SUCCESS,
   salesData,
-  analyticsData,
 });
 export const salesFailure = (error) => ({type: SALES_FAILURE, error});
 
@@ -17,19 +16,18 @@ export const fetchSalesData = (userToken) => {
     try {
       dispatch(salesReq());
       console.log('making API call');
-      const response = await axios.get('http://192.168.43.89:5000/sales', {
-        headers: {Authorization: userToken},
+      const response = await axios.get('http://192.168.43.217:8080/transactions/fetchsaleslist', {
+        headers: {Authorization: 'Bearer ' + userToken},
       });
 
-      if (response.data.success) {
+      if (response.headers.success) {
         console.log('response is success!');
-        //* coordinate with backend for fixing prop names.
         dispatch(
-          salesSuccess(response.data.salesData, response.data.analyticsData),
+          salesSuccess(response.data),
         );
-      } else if (response.data.error) {
+      } else if (response.headers.error) {
         console.log('response is error!');
-        dispatch(salesFailure(response.data.error));
+        dispatch(salesFailure(response.headers.error));
       } else {
         console.log('outlandish error!');
         dispatch(
