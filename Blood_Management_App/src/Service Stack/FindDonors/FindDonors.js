@@ -1,8 +1,7 @@
-import React, { useState, useEffect } from 'react'
-import axios from 'axios'
-import { useDispatch, useSelector } from 'react-redux';
+import React, {useState, useEffect} from 'react';
+import axios from 'axios';
+import {useDispatch, useSelector} from 'react-redux';
 import Feather from 'react-native-vector-icons/Feather';
-
 
 import {
   View,
@@ -11,44 +10,36 @@ import {
   FlatList,
   ScrollView,
   SafeAreaView,
-  Alert
-} from 'react-native'
-import { Picker } from '@react-native-picker/picker';
-import { TouchableOpacity } from 'react-native-gesture-handler';
+  Alert,
+} from 'react-native';
+import {Picker} from '@react-native-picker/picker';
+import {TouchableOpacity} from 'react-native-gesture-handler';
 import * as places from '../../../assets/places.json';
-import colors from '../../../constants/Colors'
-import { getDonorList } from '../../../redux/finddonors/actions';
+import colors from '../../../constants/Colors';
+import {getDonorList} from '../../../redux/finddonors/actions';
 import {
   updateFields,
   stateCleanup,
-  blurFields
+  blurFields,
 } from '../../../redux/finddonors/actions';
 
 import Input from '../../../components/Input';
 
-
-
-const FindDonors = ({ navigation }) => {
-
+const FindDonors = ({navigation}) => {
   const dispatch = useDispatch();
+  const authState = useSelector((state) => state.authState);
   const finddonorFormState = useSelector((state) => state.finddonorFormState);
   const [selectedStateindex, setselectedStateindex] = useState(0);
   const [distEnb, setdistEnb] = useState(false);
   const word = places.states;
 
-
-
-
-
   const blurListener = (fieldId) => {
     dispatch(blurFields(fieldId));
   };
 
-
   const checkValidity = (val, fieldId) => {
     console.log(fieldId);
     let isValid = true;
-
 
     if (fieldId === 'state' && val === 'Select state') {
       isValid = false;
@@ -68,27 +59,22 @@ const FindDonors = ({ navigation }) => {
       isValid = false;
     }
 
-
     dispatch(updateFields(val, fieldId, isValid));
   };
 
-
   const sumbitHandler = () => {
-    console.log(finddonorFormState.inputValues)
+    console.log(finddonorFormState.inputValues);
     if (finddonorFormState.inputValidity.blood_group) {
-      dispatch(getDonorList({ ...finddonorFormState.inputValues }));
-      navigation.navigate("Donor List")
-
-    } else {
-      Alert.alert(
-        'Invalid Input',
-        'Please select Blood Group to continue',
-        [{ text: 'Okay' }],
+      dispatch(
+        getDonorList(authState.userToken, {...finddonorFormState.inputValues}),
       );
+      navigation.navigate('Donor List');
+    } else {
+      Alert.alert('Invalid Input', 'Please select Blood Group to continue', [
+        {text: 'Okay'},
+      ]);
     }
   };
-
-
 
   return (
     <ScrollView style={styles.container}>
@@ -97,11 +83,10 @@ const FindDonors = ({ navigation }) => {
           <Feather name="chevron-left" color={colors.primary} size={30} />
         </TouchableOpacity>
         <Text style={styles.headertitle}>Find Donors</Text>
-
       </View>
 
-      <View style={{ marginHorizontal: 20 }}>
-        <View style={styles.pickerView} >
+      <View style={{marginHorizontal: 20}}>
+        <View style={styles.pickerView}>
           <Picker
             style={styles.picker}
             selectedValue={finddonorFormState.inputValues.blood_group}
@@ -109,7 +94,10 @@ const FindDonors = ({ navigation }) => {
               blurListener('blood_group');
               checkValidity(val, 'blood_group');
             }}>
-            <Picker.Item label="Select Blood Group" value="Select Blood Group" />
+            <Picker.Item
+              label="Select Blood Group"
+              value="Select Blood Group"
+            />
             <Picker.Item label="A+" value="A+" />
             <Picker.Item label="A-" value="A-" />
             <Picker.Item label="B+" value="B+" />
@@ -118,7 +106,6 @@ const FindDonors = ({ navigation }) => {
             <Picker.Item label="O-" value="O-" />
             <Picker.Item label="AB+" value="AB+" />
             <Picker.Item label="AB-" value="AB-" />
-
           </Picker>
         </View>
         <View style={styles.pickerView}>
@@ -173,29 +160,30 @@ const FindDonors = ({ navigation }) => {
             blurListener('pincode');
           }}
         />
-
       </View>
 
       <View style={styles.button}>
-        <TouchableOpacity onPress={() => { sumbitHandler() }}>
+        <TouchableOpacity
+          onPress={() => {
+            sumbitHandler();
+          }}>
           <Text style={styles.buttontext}>Find</Text>
         </TouchableOpacity>
       </View>
     </ScrollView>
   );
-}
+};
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    color: colors.additional2
+    color: colors.additional2,
   },
   header: {
     marginBottom: 20,
     backgroundColor: 'transparent',
     paddingTop: 10,
-    flexDirection: 'row'
-
+    flexDirection: 'row',
   },
   headertitle: {
     fontSize: 50,
@@ -217,14 +205,13 @@ const styles = StyleSheet.create({
   picker: {
     fontSize: 18,
     fontFamily: 'Montserrat-Regular',
-
   },
   item: {
     backgroundColor: '#f9c2ff',
     padding: 20,
     marginVertical: 8,
     marginHorizontal: 16,
-    borderRadius: 20
+    borderRadius: 20,
   },
   title: {
     fontSize: 25,
@@ -238,14 +225,14 @@ const styles = StyleSheet.create({
     fontFamily: 'Montserrat-Regular',
     paddingHorizontal: 30,
     color: colors.additional2,
-    paddingVertical: 10
+    paddingVertical: 10,
   },
   buttontext: {
     fontSize: 20,
     fontWeight: 'bold',
     fontFamily: 'Montserrat-Regular',
     color: colors.additional2,
-  }
-})
+  },
+});
 
-export default FindDonors
+export default FindDonors;

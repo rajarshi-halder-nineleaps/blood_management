@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, {useState} from 'react';
 import {
   View,
   Text,
@@ -6,50 +6,54 @@ import {
   TouchableOpacity,
   StyleSheet,
   Modal,
-  TouchableHighlight
-} from 'react-native'
-import { useDispatch, useSelector } from 'react-redux';
+  TouchableHighlight,
+  Alert,
+} from 'react-native';
+import {useDispatch, useSelector} from 'react-redux';
 import colors from '../../../constants/Colors';
 import CheckBox from '@react-native-community/checkbox';
 import Feather from 'react-native-vector-icons/Feather';
-import { updateselected, selectall } from "../../../redux/finddonors/actions";
+import {updateselected, selectall} from '../../../redux/finddonors/actions';
 
-
-
-const DonorList = ({ navigation }) => {
+const DonorList = ({navigation}) => {
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedId, setSelectedId] = useState(null);
   const finddonorFormState = useSelector((state) => state.finddonorFormState);
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
 
   const onValueChange = (item, index) => {
-    dispatch(updateselected(item))
-  }
+    dispatch(updateselected(item));
+  };
 
-  const Item = ({ item, onPress, style, index }) => (
+  const Item = ({item, onPress, style, index}) => (
     <TouchableOpacity onPress={onPress} style={[styles.item, style]}>
-      <View style={{ flexDirection: 'row', alignContent: 'center', alignItems: 'center' }}>
+      <View
+        style={{
+          flexDirection: 'row',
+          alignContent: 'center',
+          alignItems: 'center',
+        }}>
         <CheckBox
           disabled={false}
-          onAnimationType='fill'
-          offAnimationType='fade'
+          onAnimationType="fill"
+          offAnimationType="fade"
           value={item.selected}
-          onValueChange={() => onValueChange(item, index)} />
-        <Text style={styles.title}>  {item.name}</Text>
+          onValueChange={() => onValueChange(item, index)}
+        />
+        <Text style={styles.title}> {item.name}</Text>
       </View>
     </TouchableOpacity>
   );
-  const renderItem = ({ item, index }) => {
-    const backgroundColor = item.id === selectedId ? "#f9c2ff" : "white";
+  const renderItem = ({item, index}) => {
+    const backgroundColor = item.id === selectedId ? '#f9c2ff' : 'white';
 
     return (
       <View>
-
         <Item
           item={item}
           index={index}
           onPress={() => setSelectedId(item.id)}
-          style={{ backgroundColor }}
+          style={{backgroundColor}}
         />
       </View>
     );
@@ -62,51 +66,44 @@ const DonorList = ({ navigation }) => {
         transparent={true}
         visible={modalVisible}
         onRequestClose={() => {
-          Alert.alert("Modal has been closed.");
-        }}
-      >
+          Alert.alert('Modal has been closed.');
+        }}>
         <View style={styles.centeredView}>
           <View style={styles.modalView}>
             <Text style={styles.modalText}>Invite Sent!</Text>
 
-
             <TouchableHighlight
-              style={{ ...styles.openButton, backgroundColor: colors.primary }}
+              style={{...styles.openButton, backgroundColor: colors.primary}}
               onPress={() => {
                 setModalVisible(!modalVisible);
-                navigation.navigate("Services")
-              }}
-            >
+                navigation.navigate('Services');
+              }}>
               <Text style={styles.textStyle}>OK!</Text>
             </TouchableHighlight>
           </View>
         </View>
       </Modal>
-      <View style={styles.header}>
-
-      </View>
+      <View style={styles.header}></View>
 
       <View>
         <View style={styles.inputView}>
           <View style={styles.check}>
             <CheckBox
-              tintColors={{ true: colors.primary, false: colors.accent }}
+              tintColors={{true: colors.primary, false: colors.accent}}
               disabled={false}
               value={finddonorFormState.allselected}
               onValueChange={(val) => {
-                dispatch(selectall(finddonorFormState.list))
-
+                dispatch(selectall(finddonorFormState.list));
               }}
             />
             <Text style={styles.tncText}>Select All</Text>
           </View>
-          <TouchableOpacity style={styles.invite} onPress={() => console.log(finddonorFormState.list)}>
-            <Text style={styles.invitebutton}>Send Invite</Text>
+          <TouchableOpacity
+            style={styles.invite}
+            onPress={() => console.log(finddonorFormState.list)}>
+            <Text style={styles.invitebutton}>Send Invites</Text>
           </TouchableOpacity>
         </View>
-
-
-
       </View>
       <FlatList
         data={finddonorFormState.list}
@@ -115,8 +112,8 @@ const DonorList = ({ navigation }) => {
         extraData={finddonorFormState.list}
       />
     </View>
-  )
-}
+  );
+};
 
 const styles = StyleSheet.create({
   item: {
@@ -126,16 +123,14 @@ const styles = StyleSheet.create({
     paddingHorizontal: 30,
     marginHorizontal: 20,
     borderRadius: 20,
-    elevation: 10
+    elevation: 10,
   },
   title: {
-
     fontSize: 20,
     backgroundColor: 'transparent',
     marginLeft: 10,
     color: colors.primary,
     fontFamily: 'Montserrat-Regular',
-
   },
   header: {
     marginBottom: 20,
@@ -149,7 +144,7 @@ const styles = StyleSheet.create({
     backgroundColor: colors.primary,
     fontFamily: 'sans-serif-condensed',
     paddingTop: 10,
-    color: 'white'
+    color: 'white',
   },
   header2: {
     fontSize: 50,
@@ -157,11 +152,10 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     backgroundColor: colors.primary,
     fontFamily: 'sans-serif-condensed',
-    color: 'white'
+    color: 'white',
   },
   container: {
-
-    flex: 1
+    flex: 1,
   },
   inputView: {
     paddingHorizontal: 20,
@@ -169,7 +163,7 @@ const styles = StyleSheet.create({
     width: '100%',
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-between'
+    justifyContent: 'space-between',
   },
   check: {
     flexDirection: 'row',
@@ -179,55 +173,54 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     backgroundColor: colors.primary,
     paddingVertical: 10,
-    borderRadius: 10
+    borderRadius: 10,
   },
   invitebutton: {
-    color: 'white'
+    color: 'white',
   },
   centeredView: {
     flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    marginTop: 22
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 22,
   },
   modalView: {
     margin: 20,
-    backgroundColor: "white",
+    backgroundColor: 'white',
     borderRadius: 20,
     padding: 35,
-    alignItems: "center",
-    shadowColor: "#000",
+    alignItems: 'center',
+    shadowColor: '#000',
     shadowOffset: {
       width: 0,
-      height: 2
+      height: 2,
     },
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
-    elevation: 5
+    elevation: 5,
   },
   openButton: {
-    backgroundColor: "#F194FF",
+    backgroundColor: '#F194FF',
     borderRadius: 20,
     padding: 10,
-    elevation: 2
+    elevation: 2,
   },
   textStyle: {
-    color: "white",
-    fontWeight: "bold",
-    textAlign: "center"
+    color: 'white',
+    fontWeight: 'bold',
+    textAlign: 'center',
   },
   modalText: {
     marginBottom: 15,
-    textAlign: "center",
+    textAlign: 'center',
     fontSize: 25,
-    fontWeight: 'bold'
+    fontWeight: 'bold',
   },
   modalTextmore: {
     marginBottom: 15,
-    textAlign: "center",
+    textAlign: 'center',
     fontSize: 20,
+  },
+});
 
-  }
-})
-
-export default DonorList
+export default DonorList;

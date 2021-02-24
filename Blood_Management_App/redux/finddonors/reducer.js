@@ -1,10 +1,12 @@
 import {
-  UPDATE_FIELDS_REG, STATE_CLEANUP, BLUR_FIELDS_REG,
+  UPDATE_FIELDS_REG,
+  STATE_CLEANUP,
+  BLUR_FIELDS_REG,
   UPDATE_DONOR_ARRAY,
   UPDATE_SUCCESS,
   UPDATE_SELECTED,
-  SELECT_ALL
-} from './actionTypes'
+  SELECT_ALL,
+} from './actionTypes';
 
 const initialState = {
   list: [],
@@ -18,8 +20,6 @@ const initialState = {
     district: '',
     pincode: '',
     blood_group: '',
-
-
   },
   inputValidity: {
     address: false,
@@ -35,8 +35,6 @@ const initialState = {
     pincode: false,
     blood_group: false,
   },
-
-
 };
 
 const finddonorReducer = (state = initialState, action) => {
@@ -64,8 +62,8 @@ const finddonorReducer = (state = initialState, action) => {
       };
     }
     case BLUR_FIELDS_REG: {
-      const newInputIsTouched = { ...state.isTouched, [action.fieldId]: true };
-      return { ...state, isTouched: newInputIsTouched };
+      const newInputIsTouched = {...state.isTouched, [action.fieldId]: true};
+      return {...state, isTouched: newInputIsTouched};
     }
     case STATE_CLEANUP: {
       console.log('Cleaning state');
@@ -73,53 +71,52 @@ const finddonorReducer = (state = initialState, action) => {
     }
 
     case UPDATE_DONOR_ARRAY: {
-      console.log("updating")
-      const newArray = action.array.map(e => {
+      console.log('updating');
+      const newArray = action.array.map((e) => {
         return {
           ...e,
-          selected: false
-        }
-      })
-      console.log("done")
+          selected: false,
+        };
+      });
+      console.log('done');
       return {
         ...state,
         list: newArray,
-        display_results: true
-      }
+        display_results: true,
+      };
     }
     case UPDATE_SUCCESS: {
-      console.log("done")
+      console.log('done');
+      return state;
     }
     case UPDATE_SELECTED: {
-      const newState = { ...state, loading: false };
+      const newState = {...state, loading: false};
 
-      newState.list.find(
-        (val) => val.id === action.item.id,
-      ).selected = !action.item.selected;
+      newState.list.find((val) => val.id === action.item.id).selected = !action
+        .item.selected;
 
       return newState;
     }
     case SELECT_ALL: {
-      console.log("updating")
-      const newArray = action.array.map(e => {
+      console.log('updating');
+      const newArray = action.array.map((e) => {
         return {
           ...e,
           selected: true,
-          allselected: true
-        }
-      })
-      console.log("done")
+          allselected: true,
+        };
+      });
+      console.log('done');
       return {
         ...state,
         list: newArray,
-        display_results: true
-      }
+        display_results: true,
+      };
     }
-
 
     default:
       return state;
   }
-}
+};
 
-export default finddonorReducer
+export default finddonorReducer;

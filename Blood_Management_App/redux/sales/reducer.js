@@ -19,7 +19,6 @@ const salesReducer = (state = initialState, action) => {
         loading: false,
         error: '',
         salesData: action.salesData,
-        analyticsData: action.analyticsData,
       };
     }
     case SALES_FAILURE: {
@@ -28,7 +27,6 @@ const salesReducer = (state = initialState, action) => {
         loading: false,
         error: action.error,
         salesData: [],
-        analyticsData: {},
       };
     }
     default: {

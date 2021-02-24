@@ -43,7 +43,7 @@ const Sales = () => {
           style={styles.scroll}
           data={salesState.salesData}
           renderItem={renderItem}
-          keyExtractor={(item) => item.saleId}
+          keyExtractor={(item) => item.salesId}
         />
       )}
     </View>
