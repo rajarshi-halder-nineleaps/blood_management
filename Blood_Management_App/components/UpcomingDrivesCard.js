@@ -35,13 +35,17 @@ const UpcomingDrivesCard = (props) => {
               <Text style={styles.miniAddressContent}>
                 From:{'  '}
                 <Text style={styles.miniDateTimeContent}>
-                  {`${item.startTimestamp.split('T')[0]} at ${item.startTimestamp.split('T')[1].split(':')[0]}:${item.startTimestamp.split('T')[1].split(':')[1]}`}
+                  {`${item.startTimestamp.split('T')[0]} at ${
+                    item.startTimestamp.split('T')[1].split(':')[0]
+                  }:${item.startTimestamp.split('T')[1].split(':')[1]}`}
                 </Text>
               </Text>
               <Text style={styles.miniAddressContent}>
                 To:{'  '}
                 <Text style={styles.miniDateTimeContent}>
-                {`${item.endTimestamp.split('T')[0]} at ${item.endTimestamp.split('T')[1].split(':')[0]}:${item.endTimestamp.split('T')[1].split(':')[1]}`}
+                  {`${item.endTimestamp.split('T')[0]} at ${
+                    item.endTimestamp.split('T')[1].split(':')[0]
+                  }:${item.endTimestamp.split('T')[1].split(':')[1]}`}
                 </Text>
               </Text>
             </View>
@@ -72,17 +76,10 @@ const UpcomingDrivesCard = (props) => {
         </CollapseHeader>
         <CollapseBody style={styles.collBody}>
           <View style={styles.bodyHeader}>
-            {item.driveId ? (
-              <Text style={styles.bodyLabel}>
-                Drive ID : {'  '}
-                <Text style={styles.bodyContent}>{item.driveId}</Text>
-              </Text>
-            ) : (
-              <Text style={styles.bodyLabel}>
-                DonationId ID : {'  '}
-                <Text style={styles.bodyContent}>{item.donationId}</Text>
-              </Text>
-            )}
+            <Text style={styles.bodyLabel}>
+              Drive ID : {'  '}
+              <Text style={styles.bodyContent}>{item.driveId}</Text>
+            </Text>
           </View>
 
           <View style={styles.detailsBoard}>
@@ -117,9 +114,7 @@ const UpcomingDrivesCard = (props) => {
                   <View style={styles.addressInsideView}>
                     <Text style={styles.addressInsideLabel}>Contact:</Text>
                     <View style={styles.addressRightView}>
-                      <Text style={styles.addressContent}>
-                        {item.contact}
-                      </Text>
+                      <Text style={styles.addressContent}>{item.contact}</Text>
                     </View>
                   </View>
                 </View>
@@ -149,7 +144,7 @@ const UpcomingDrivesCard = (props) => {
           visibleStateChanger={setRusure}
           dispatchable={props.registerUserForDrive}
           dispatchData={props.item.driveId}
-          message="Are you sure you wish to conduct this drive?"
+          message="Are you sure you register for this drive?"
         />
       ) : null}
     </>

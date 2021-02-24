@@ -6,7 +6,7 @@ import Feather from 'react-native-vector-icons/Feather';
 const NotificationItem = ({item}) => {
   return (
     <>
-      <View style={styles.tab}>
+      <View style={item.status ? styles.seenTab : styles.tab}>
         <View style={styles.imageBoard}>
           {item.title === 'New donor!' ? (
             <Feather name="check" color={colors.primary} size={20} />
@@ -32,7 +32,16 @@ const styles = StyleSheet.create({
     backgroundColor: colors.additional2,
     elevation: 5,
     marginBottom: 20,
-    borderRadius: 5,
+    borderRadius: 10,
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingVertical: 10,
+  },
+  seenTab: {
+    backgroundColor: colors.accent,
+    elevation: 5,
+    marginBottom: 20,
+    borderRadius: 10,
     flexDirection: 'row',
     alignItems: 'center',
     paddingVertical: 10,

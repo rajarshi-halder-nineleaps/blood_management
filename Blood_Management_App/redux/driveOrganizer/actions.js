@@ -52,15 +52,24 @@ export const organizeFailure = (error) => ({
 
 export const organizeDriveConfirm = (userToken, newDriveData) => {
   console.log('data reached organizeDriveConfirm');
-  console.log(newDriveData);
+  console.log(newDriveData.startDate.toLocaleDateString() + '');
   return async (dispatch) => {
     try {
       dispatch(organizeReq());
       const response = await axios.post(
-        'http://192.168.43.89:5000/orgdrive',
-        newDriveData,
+        'http://192.168.43.217:8080/conductadrive/savedrivedetails',
         {
-          headers: {Authorization: userToken},
+          startTimeStamp: '',
+          endTimeStamp:  '',
+          bloodGroups: newDriveData.bloodgroup,
+          address: newDriveData.address,
+          state: newDriveData.state,
+          district: newDriveData.district,
+          pincode: newDriveData.pincode,
+          message: newDriveData.message,
+        },
+        {
+          headers: {Authorization: 'Bearer ' + userToken},
         },
       );
 

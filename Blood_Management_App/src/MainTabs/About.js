@@ -185,7 +185,7 @@ const About = ({navigation}) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: colors.secondary,
+    backgroundColor: colors.primary,
   },
   imageBkg: {
     width: '100%',
