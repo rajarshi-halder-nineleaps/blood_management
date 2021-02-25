@@ -44,24 +44,26 @@ const DriveDonorList = ({route, navigation}) => {
   };
 
   const renderItem = ({item}) => {
+
+
     return (
       <View style={styles.touchboard}>
         <View style={styles.touch}>
           <View style={styles.labelBoard}>
             <Text style={styles.label}>
-              Donor ID :<Text style={styles.content}>{item.donorId}</Text>
+              Donor ID :<Text style={styles.content}>{item.userId}</Text>
             </Text>
             <Text style={styles.label}>
-              Donor Name :<Text style={styles.content}>{item.donorName}</Text>
+              Donor Name :<Text style={styles.content}>{item.name}</Text>
             </Text>
             <Text style={styles.label}>
               Blood group :<Text style={styles.content}>{item.bloodGroup}</Text>
             </Text>
 
-            {!item.hasGivenBlood ? (
+            {!item.donationStatus ? (
               <TouchableOpacity
                 style={styles.completedDonationTouch}
-                onPress={() => bloodDonationHandler(item.donorId)}>
+                onPress={() => bloodDonationHandler(item.userId)}>
                 <ImageBackground
                   style={styles.imgBtnBkg}
                   source={require('../../../assets/images/invBkg.png')}>
@@ -114,7 +116,7 @@ const DriveDonorList = ({route, navigation}) => {
             style={styles.scroll}
             data={myDrivesState.donorsList}
             renderItem={renderItem}
-            keyExtractor={(item) => item.donorId}
+            keyExtractor={(item) => item.userId}
             refreshControl={
               <RefreshControl
                 colors={[colors.primary, colors.secondary]}

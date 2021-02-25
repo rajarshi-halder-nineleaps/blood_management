@@ -48,16 +48,21 @@ export const getDriveData = (userToken) => {
     dispatch(fetchDrivesReq());
     try {
       console.log('sending axios get request!');
-      const response = await axios.get('http://192.168.43.89:5000/mydrives', {
-        headers: {Authorization: userToken},
-      });
+      const response = await axios.get(
+        'http://192.168.43.217:8080/mydrives/fetchdrives',
+        {
+          headers: {Authorization: 'Bearer ' + userToken},
+        },
+      );
 
-      if (response.data.success) {
+      console.log('DA RESPPONSE: ' + response);
+
+      if (response.headers.success) {
         console.log('response is success!');
-        dispatch(fetchDriveSuccess(response.data.driveData));
-      } else if (response.data.error) {
+        dispatch(fetchDriveSuccess(response.data));
+      } else if (response.headers.error) {
         console.log('response is error!');
-        dispatch(fetchDriveFailure(response.data.error));
+        dispatch(fetchDriveFailure(response.headers.error));
       } else {
         console.log('outlandish error!');
         dispatch(
@@ -80,23 +85,22 @@ export const getDonorList = (userToken, driveId) => {
   return async (dispatch) => {
     dispatch(fetchDrivesReq());
     try {
-      console.log('sending axios list post request!');
-      const response = await axios.post(
-        'http://192.168.43.89:5000/donorList',
-        {driveId},
+      console.log('sending axios list get request!');
+      const response = await axios.get(
+        `http://192.168.43.217:8080/mydrives/fetchdrivedonorlist/${driveId}`,
         {
-          headers: {Authorization: userToken},
+          headers: {Authorization: 'Bearer ' + userToken},
         },
       );
 
-      if (response.data.success) {
+      if (response.headers.success) {
         console.log('response is success!');
         //? SET THIS PROP NAME ACCORDING TO BACK END
         // console.log(response.data.acceptedDonors);
-        dispatch(fetchListSuccess(response.data.acceptedDonors));
-      } else if (response.data.error) {
+        dispatch(fetchListSuccess(response.data));
+      } else if (response.headers.error) {
         console.log('response is error!');
-        dispatch(fetchDriveFailure(response.data.error));
+        dispatch(fetchDriveFailure(response.data.headers));
       } else {
         console.log('outlandish error!');
         dispatch(
@@ -123,20 +127,22 @@ export const donorVerification = (userToken, driveId, donorId) => {
     try {
       dispatch(fetchDrivesReq());
       console.log("posting updated data to current user's records");
-      const response = await axios.post(
-        'http://192.168.43.89:5000/mydrives',
-        {driveId, donorId},
+      const response = await axios.put(
+        'http://192.168.43.217:8080/mydrives/drivedonorverification',
         {
-          headers: {Authorization: userToken},
+          driveId: driveId,
+          userId: donorId,
+        },
+        {
+          headers: {Authorization: 'Bearer ' + userToken},
         },
       );
 
-      if (response.data.success) {
+      if (response.headers.success) {
         console.log('donor verification complete!');
-        //? coordinate with back end team to fixate on this response with the same name.
         dispatch(donationVerification(driveId, donorId));
-      } else if (response.data.error) {
-        dispatch(fetchDriveFailure(response.data.error));
+      } else if (response.headers.error) {
+        dispatch(fetchDriveFailure(response.headers.error));
       } else {
         dispatch(
           fetchDriveFailure(
@@ -163,11 +169,11 @@ export const driveCancellation = (userToken, driveId) => {
     try {
       dispatch(fetchDrivesReq());
       console.log("posting updated data to current user's records");
-      const response = await axios.post(
-        'http://192.168.43.89:5000/canceldrive',
+      const response = await axios.put(
+        'http://192.168.43.217:8080/mydrives/canceldrive',
         {driveId},
         {
-          headers: {Authorization: userToken},
+          headers: {Authorization: 'Bearer ' + userToken},
         },
       );
 

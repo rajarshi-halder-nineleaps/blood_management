@@ -21,6 +21,15 @@ const NotificationItem = ({item}) => {
           <View style={styles.descBoard}>
             <Text style={styles.desc}>{item.message}</Text>
           </View>
+          <View style={styles.dateBoard}>
+            <Text style={styles.dateText}>
+              {item.notificationDate
+                ? `${item.notificationDate.split('T')[0]}, ${
+                    item.notificationDate.split('T')[1].split(':')[0]
+                  }:${item.notificationDate.split('T')[1].split(':')[1]}`
+                : null}
+            </Text>
+          </View>
         </View>
       </View>
     </>
@@ -60,6 +69,18 @@ const styles = StyleSheet.create({
   },
   descBoard: {},
   desc: {
+    fontFamily: 'Montserrat-Regular',
+  },
+  dateBoard: {
+    fontFamily: 'Montserrat-Regular',
+    fontSize: 7,
+    width: '100%',
+    alignItems: 'flex-end',
+    marginTop: 5,
+  },
+  dateText: {
+    color: colors.grayishblack,
+    fontSize: 10,
     fontFamily: 'Montserrat-Regular',
   },
 });
