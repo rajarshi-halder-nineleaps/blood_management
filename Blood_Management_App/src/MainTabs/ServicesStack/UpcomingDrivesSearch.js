@@ -205,12 +205,12 @@ const styles = StyleSheet.create({
     borderRadius: 100,
     backgroundColor: colors.accent,
     fontSize: 18,
-    fontFamily: 'sans-serif-condensed',
+    fontFamily: 'Montserrat-Regular',
     paddingHorizontal: 30,
     color: 'black',
   },
   picker: {
-    fontFamily: 'sans-serif-condensed',
+    fontFamily: 'Montserrat-Regular',
   },
   touchBoard: {
     borderRadius: 100,
@@ -233,6 +233,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
+    fontFamily: 'Montserrat-Regular',
   },
   finderTouchText: {
     color: colors.additional2,
@@ -240,7 +241,7 @@ const styles = StyleSheet.create({
   },
   errorMsg: {
     color: colors.primary,
-    fontFamily: 'qs-reg',
+    fontFamily: 'Montserrat-Regular',
   },
 });
 

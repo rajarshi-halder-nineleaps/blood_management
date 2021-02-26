@@ -6,10 +6,21 @@ import Feather from 'react-native-vector-icons/Feather';
 const NotificationItem = ({item}) => {
   return (
     <>
-      <View style={item.status ? styles.seenTab : styles.tab}>
+      <View
+        style={
+          item.title === 'Eligibility update'
+            ? styles.eligibilityTab
+            : item.status
+            ? styles.seenTab
+            : styles.tab
+        }>
         <View style={styles.imageBoard}>
           {item.title === 'New donor!' ? (
             <Feather name="check" color={colors.primary} size={20} />
+          ) : item.title === 'Drive cancelled' ? (
+            <Feather name="alert-triangle" color={colors.primary} size={20} />
+          ) : item.title === 'Eligibility update' ? (
+            <Feather name="droplet" color={colors.primary} size={20} />
           ) : (
             <Feather name="info" color={colors.primary} size={20} />
           )}
@@ -45,9 +56,19 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     paddingVertical: 10,
+    borderWidth: 5,
   },
   seenTab: {
     backgroundColor: colors.accent,
+    elevation: 5,
+    marginBottom: 20,
+    borderRadius: 10,
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingVertical: 10,
+  },
+  eligibilityTab: {
+    backgroundColor: colors.additional2,
     elevation: 5,
     marginBottom: 20,
     borderRadius: 10,
@@ -60,7 +81,10 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     padding: 20,
   },
-  detailsBoard: {},
+  detailsBoard: {
+    flex: 1,
+    paddingHorizontal: 10,
+  },
   titleBoard: {
     marginBottom: 10,
   },

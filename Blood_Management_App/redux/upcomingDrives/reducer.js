@@ -25,7 +25,7 @@ const upcomingDrivesReducer = (state = initialState, action) => {
     }
     case DRIVE_FIND_FAILURE: {
       console.log('Drive find failure reached reducer.');
-      Alert.alert('Error', action.error);
+      Alert.alert('Invalid action', action.error);
       return {...state, error: action.error, loading: false};
     }
     case DRIVE_FIND_SUCCESS: {

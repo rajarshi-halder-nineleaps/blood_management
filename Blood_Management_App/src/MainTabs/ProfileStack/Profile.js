@@ -58,7 +58,11 @@ const Profile = ({navigation}) => {
             <View style={styles.imageView}>
               <Image
                 style={styles.avatar}
-                source={{uri: profileState.userData.profilePicture}}
+                source={
+                  profileState.userData.profilePicture
+                    ? {uri: profileState.userData.profilePicture}
+                    : require('../../../assets/images/account/nodp.png')
+                }
               />
             </View>
 

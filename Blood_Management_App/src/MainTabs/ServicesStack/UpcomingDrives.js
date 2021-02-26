@@ -109,7 +109,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#eee',
-    paddingVertical: 20,
   },
   indicatorView: {
     flex: 1,

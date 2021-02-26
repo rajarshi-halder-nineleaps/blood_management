@@ -34,9 +34,21 @@ const Notifications = ({navigation}) => {
   }, [authState.userToken, dispatch]);
 
   return (
-    <View style={styles.container}>
+    <View
+      style={
+        notificationsState.notifications.length === 0
+          ? styles.containerEmpty
+          : styles.container
+      }>
       <View style={styles.header}>
-        <Text style={styles.heading}>Notifications</Text>
+        <Text
+          style={
+            notificationsState.notifications.length === 0
+              ? styles.headingEmpty
+              : styles.heading
+          }>
+          Notifications
+        </Text>
         <TouchableOpacity
           style={styles.refreshTouch}
           onPress={() => refreshHandler()}>
@@ -89,6 +101,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: colors.primary,
   },
+  containerEmpty: {
+    flex: 1,
+    alignItems: 'center',
+    backgroundColor: colors.additional2,
+  },
   progressBoard: {
     flex: 1,
     justifyContent: 'center',
@@ -106,6 +123,11 @@ const styles = StyleSheet.create({
     fontFamily: 'Montserrat-Bold',
     fontSize: 30,
     color: colors.additional2,
+  },
+  headingEmpty: {
+    fontFamily: 'Montserrat-Bold',
+    fontSize: 30,
+    color: colors.primary,
   },
   refreshTouch: {
     backgroundColor: colors.additional2,

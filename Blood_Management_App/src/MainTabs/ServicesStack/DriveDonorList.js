@@ -180,7 +180,7 @@ const styles = StyleSheet.create({
     color: colors.primary,
     fontSize: 14,
     fontWeight: 'bold',
-    fontFamily: 'sans-serif-light',
+    fontFamily: 'Montserrat-Regular',
   },
   content: {
     color: colors.additional1,
@@ -194,7 +194,7 @@ const styles = StyleSheet.create({
   },
   touchText: {
     color: colors.additional2,
-    fontFamily: 'sans-serif-light',
+    fontFamily: 'Montserrat-Regular',
   },
   completedDonationTouch: {
     borderRadius: 5,
@@ -215,7 +215,7 @@ const styles = StyleSheet.create({
     elevation: 5,
   },
   completedDonationTouchDonated: {
-    backgroundColor: 'limegreen',
+    backgroundColor: colors.green,
     borderRadius: 5,
     padding: 10,
     alignItems: 'center',
@@ -224,7 +224,7 @@ const styles = StyleSheet.create({
   },
   completedDonationText: {
     color: colors.additional2,
-    fontFamily: 'sans-serif-light',
+    fontFamily: 'Montserrat-Regular',
   },
 });
 
