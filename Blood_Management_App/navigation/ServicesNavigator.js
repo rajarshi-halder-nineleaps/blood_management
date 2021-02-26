@@ -1,8 +1,8 @@
 /* eslint-disable prettier/prettier */
 import React from 'react';
-import {TouchableOpacity, Text} from 'react-native';
+import { TouchableOpacity, Text } from 'react-native';
 import Feather from 'react-native-vector-icons/Feather';
-import {createStackNavigator} from '@react-navigation/stack';
+import { createStackNavigator } from '@react-navigation/stack';
 import colors from '../constants/Colors';
 
 //? Importing the screens
@@ -24,6 +24,7 @@ import SalesNavigator from './SalesNavigator';
 import MoreInfo from '../src/Service Stack/BuyBlood/MoreInfo';
 import MyPurchases from '../src/Service Stack/MyPurchases/MyPurchases';
 import ActiveDonorRequest from '../src/Service Stack/ActiveDonorRequest/ActiveDonorRequest';
+import DonationRequestList from '../src/Service Stack/ActiveDonorRequest/DonationRequestList'
 
 const ServicesNavigator = createStackNavigator();
 
@@ -139,6 +140,10 @@ const ServicesStackNavigator = () => {
       <ServicesNavigator.Screen
         name="Active Donor Request"
         component={ActiveDonorRequest}
+      />
+      <ServicesNavigator.Screen
+        name="DonationRequestList"
+        component={DonationRequestList}
       />
     </ServicesNavigator.Navigator>
   );

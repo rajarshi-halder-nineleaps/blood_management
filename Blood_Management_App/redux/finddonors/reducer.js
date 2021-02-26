@@ -6,6 +6,7 @@ import {
   UPDATE_SUCCESS,
   UPDATE_SELECTED,
   SELECT_ALL,
+  INVITE_SUCCESS
 } from './actionTypes';
 
 const initialState = {
@@ -13,6 +14,8 @@ const initialState = {
   selectAll: false,
   display_results: false,
   allselected: false,
+  selectedids: [],
+  success: false,
 
   inputValues: {
     address: '',
@@ -62,8 +65,8 @@ const finddonorReducer = (state = initialState, action) => {
       };
     }
     case BLUR_FIELDS_REG: {
-      const newInputIsTouched = {...state.isTouched, [action.fieldId]: true};
-      return {...state, isTouched: newInputIsTouched};
+      const newInputIsTouched = { ...state.isTouched, [action.fieldId]: true };
+      return { ...state, isTouched: newInputIsTouched };
     }
     case STATE_CLEANUP: {
       console.log('Cleaning state');
@@ -90,29 +93,85 @@ const finddonorReducer = (state = initialState, action) => {
       return state;
     }
     case UPDATE_SELECTED: {
-      const newState = {...state, loading: false};
+      const newState = { ...state, loading: false };
 
-      newState.list.find((val) => val.id === action.item.id).selected = !action
+      const nState = { ...state, loading: false };
+
+      newState.list.find((val) => val.userId === action.item.userId).selected = !action
         .item.selected;
 
-      return newState;
+
+
+      if (newState.list.find((val) => val.userId === action.item.userId).selected) {
+        nState.selectedids.push(action.item.userId);
+      } else {
+        nState.selectedids.pop(action.item.userId)
+      }
+
+      return nState;
     }
     case SELECT_ALL: {
       console.log('updating');
+      const nState = { ...state, loading: false };
       const newArray = action.array.map((e) => {
+
         return {
           ...e,
-          selected: true,
-          allselected: true,
+          selected: action.action,
         };
+
       });
-      console.log('done');
+      console.log("hi", newArray)
+
+      newArray.forEach(id => {
+        if (action.action ? true : false) {
+          nState.selectedids.push(id.userId)
+        } else {
+          nState.selectedids.pop(id.userId)
+        }
+      })
+
+      // newArray.forEach(val => val.selected = action.action){
+
+      // }
+
+      // if (newArray.find((val) => val.id === action.item.id).selected) {
+      //   nState.selectedids.push(action.item.id);
+      // } else {
+      //   nState.selectedids.pop(action.item.id)
+      // }
+
+
+      // if (action.action ? true : false) {
+      //   newArray.forEach(item => {
+      //     nState.selectedids.push(item.id)
+      //   })
+
+      // } else {
+      //   newArray.forEach(item => {
+      //     nState.selectedids.pop()
+      //   })
+      // }
+
+      console.log('done', nState.selectedids);
+
       return {
         ...state,
         list: newArray,
-        display_results: true,
+        allselected: !initialState.allselected,
       };
+
+
+
     }
+    case INVITE_SUCCESS: {
+      console.log("invite sent successfully");
+      return {
+        ...state,
+        success: action.action
+      }
+    }
+
 
     default:
       return state;

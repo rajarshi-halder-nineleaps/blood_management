@@ -1,7 +1,7 @@
 /* eslint-disable prettier/prettier */
-import {Alert} from 'react-native';
+import { Alert } from 'react-native';
 
-import {REQ, REQ_SUCCESS, REQ_FAILURE, LOGOUT} from './actionTypes';
+import { REQ, REQ_SUCCESS, REQ_FAILURE, LOGOUT } from './actionTypes';
 
 const initialState = {
   isLoggedIn: false,
@@ -16,7 +16,7 @@ const authReducer = (state = initialState, action) => {
   switch (action.type) {
     case REQ: {
       console.log('login request started!');
-      return {...state, loading: true};
+      return { ...state, loading: true };
     }
 
     case REQ_SUCCESS: {
@@ -53,7 +53,7 @@ const authReducer = (state = initialState, action) => {
 
     case LOGOUT: {
       console.log('logout request at reducer');
-      return {...state, isLoggedIn: false};
+      return { ...state, isLoggedIn: false };
     }
     default:
       return state;

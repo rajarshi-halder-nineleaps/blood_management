@@ -32,10 +32,13 @@ const FindDonors = ({ navigation }) => {
   const buybloodFormState = useSelector((state) => state.buybloodFormState);
   const [selectedStateindex, setselectedStateindex] = useState(0);
   const [distEnb, setdistEnb] = useState(false);
+  const authState = useSelector((state) => state.authState)
   const word = places.states;
 
 
-
+  useEffect(() => {
+    dispatch(stateCleanup());
+  }, [dispatch]);
 
 
   const blurListener = (fieldId) => {
@@ -86,7 +89,7 @@ const FindDonors = ({ navigation }) => {
     if (buybloodFormState.inputValidity.blood_group) {
       if (buybloodFormState.inputValidity.component) {
         if (buybloodFormState.inputValidity.req_units) {
-          dispatch(getBuyBloodList({ ...buybloodFormState.inputValues }));
+          dispatch(getBuyBloodList(buybloodFormState.inputValues, authState.userToken));
           navigation.navigate("Buy Blood List")
         } else {
           Alert.alert(

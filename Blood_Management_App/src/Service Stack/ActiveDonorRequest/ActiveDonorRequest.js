@@ -7,7 +7,8 @@ import {
   FlatList,
   ActivityIndicator,
   RefreshControl,
-  Image
+  Image,
+  Dimensions
 } from 'react-native'
 import colors from '../../../constants/Colors'
 import Feather from 'react-native-vector-icons/Feather';
@@ -16,6 +17,7 @@ import {
   getactivedonorList
 } from '../../../redux/activedonorrequest/actions'
 import DonorRequestCard from '../../../components/DonorRequestCard';
+import { Colors } from 'react-native/Libraries/NewAppScreen';
 
 const ActiveDonorRequest = ({ navigation }) => {
   const authState = useSelector((state) => state.authState);
@@ -26,7 +28,7 @@ const ActiveDonorRequest = ({ navigation }) => {
   const onRefresh = React.useCallback(
     (driveId) => {
       setRefreshing(true);
-      dispatch(getactivedonorList());
+      dispatch(getactivedonorList(authState.userToken));
       if (!activedonorFormState.loading) {
         setRefreshing(false);
       }
@@ -35,19 +37,29 @@ const ActiveDonorRequest = ({ navigation }) => {
   );
 
   useEffect(() => {
-    dispatch(getactivedonorList());
+    dispatch(getactivedonorList(authState.userToken));
   }, [dispatch]);
+
+  const renderItem = ({ item }) => {
+
+
+    return (
+      <DonorRequestCard item={item} onPress={() => navigation.navigate("DonationRequestList", {
+        donationId: item.donationId
+      })} />
+    );
+  };
 
 
   return (
     <View style={styles.container}>
-      <View style={styles.header}>
+      {/* <View style={styles.header}>
         <TouchableOpacity onPress={() => navigation.goBack()}>
           <Feather name="chevron-left" color={colors.primary} size={30} />
         </TouchableOpacity>
         <Text style={styles.headertitle}>Blood Request</Text>
 
-      </View>
+      </View> */}
       {activedonorFormState.loading ? (
         <ActivityIndicator
           visible={activedonorFormState.loading}
@@ -57,20 +69,23 @@ const ActiveDonorRequest = ({ navigation }) => {
           color={colors.primary}
           size="large"
         />
-      ) : activedonorFormState.donorList.length === 0 ? (
+      ) : activedonorFormState.donorList === null ? (
         <View style={styles.suchEmpty}>
           <Image
             style={styles.suchEmptyImg}
             source={require('../../../assets/images/empty.png')}
           />
           <Text style={styles.emptyInfo}>
-            You don't have any donor requests yet.
+            You don't have any donor requests yet!
+          </Text>
+          <Text style={styles.emptyInfo}>
+            Check back in a while!
           </Text>
         </View>
       ) : (
             <FlatList
               data={activedonorFormState.donorList}
-              renderItem={({ item }) => <DonorRequestCard item={item} />}
+              renderItem={renderItem}
               keyExtractor={(item) => item.id}
               refreshControl={
                 <RefreshControl
@@ -110,7 +125,9 @@ const styles = StyleSheet.create({
     color: 'white'
   },
   container: {
-    flex: 1
+    flex: 1,
+    backgroundColor: "white"
+
   },
   item: {
     backgroundColor: '#f9c2ff',
@@ -122,6 +139,22 @@ const styles = StyleSheet.create({
     elevation: 10,
     paddingHorizontal: 50
   },
+  suchEmpty: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    alignContent: 'center'
+  },
+  suchEmptyImg: {
+    width: Dimensions.get('window').width,
+    height: 300
+  },
+  emptyInfo: {
+    marginTop: 10,
+    fontFamily: 'Montserrat-Regular',
+    fontSize: 16
+
+  }
 })
 
 export default ActiveDonorRequest

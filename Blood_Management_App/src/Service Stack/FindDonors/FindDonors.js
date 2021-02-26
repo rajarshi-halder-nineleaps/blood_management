@@ -1,6 +1,6 @@
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import {useDispatch, useSelector} from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import Feather from 'react-native-vector-icons/Feather';
 
 import {
@@ -12,26 +12,30 @@ import {
   SafeAreaView,
   Alert,
 } from 'react-native';
-import {Picker} from '@react-native-picker/picker';
-import {TouchableOpacity} from 'react-native-gesture-handler';
+import { Picker } from '@react-native-picker/picker';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 import * as places from '../../../assets/places.json';
 import colors from '../../../constants/Colors';
-import {getDonorList} from '../../../redux/finddonors/actions';
+import { getDonorList } from '../../../redux/finddonors/actions';
 import {
   updateFields,
   stateCleanup,
   blurFields,
 } from '../../../redux/finddonors/actions';
+import Input from '../../../components/Input'
+import Fields from '../../../components/Fields';
 
-import Input from '../../../components/Input';
-
-const FindDonors = ({navigation}) => {
+const FindDonors = ({ navigation }) => {
   const dispatch = useDispatch();
   const authState = useSelector((state) => state.authState);
   const finddonorFormState = useSelector((state) => state.finddonorFormState);
   const [selectedStateindex, setselectedStateindex] = useState(0);
   const [distEnb, setdistEnb] = useState(false);
   const word = places.states;
+
+  useEffect(() => {
+    dispatch(stateCleanup());
+  }, [dispatch]);
 
   const blurListener = (fieldId) => {
     dispatch(blurFields(fieldId));
@@ -50,6 +54,9 @@ const FindDonors = ({navigation}) => {
     if (fieldId === 'district' && val === 'Select district') {
       isValid = false;
     }
+    if (fieldId === 'address' && val === "") {
+      isValid = false;
+    }
 
     if (fieldId === 'pincode' && val.trim().length !== 6) {
       isValid = false;
@@ -65,13 +72,19 @@ const FindDonors = ({navigation}) => {
   const sumbitHandler = () => {
     console.log(finddonorFormState.inputValues);
     if (finddonorFormState.inputValidity.blood_group) {
-      dispatch(
-        getDonorList(authState.userToken, {...finddonorFormState.inputValues}),
-      );
-      navigation.navigate('Donor List');
+      if (finddonorFormState.inputValidity.address) {
+        dispatch(
+          getDonorList(authState.userToken, finddonorFormState.inputValues),
+        );
+        navigation.navigate('Donor List');
+      } else {
+        Alert.alert('Invalid Input', 'Please input Donation Address to continue', [
+          { text: 'Okay' },
+        ]);
+      }
     } else {
       Alert.alert('Invalid Input', 'Please select Blood Group to continue', [
-        {text: 'Okay'},
+        { text: 'Okay' },
       ]);
     }
   };
@@ -85,7 +98,7 @@ const FindDonors = ({navigation}) => {
         <Text style={styles.headertitle}>Find Donors</Text>
       </View>
 
-      <View style={{marginHorizontal: 20}}>
+      <View style={{ marginHorizontal: 20 }}>
         <View style={styles.pickerView}>
           <Picker
             style={styles.picker}
@@ -111,7 +124,7 @@ const FindDonors = ({navigation}) => {
         <View style={styles.pickerView}>
           <Picker
             style={styles.picker}
-            selectedValue={finddonorFormState.inputValues.selectedState}
+            selectedValue={finddonorFormState.inputValues.state}
             onValueChange={(val, itemIndex) => {
               blurListener('state');
               checkValidity(val, 'state');
@@ -134,8 +147,8 @@ const FindDonors = ({navigation}) => {
             enabled={distEnb}
             selectedValue={finddonorFormState.inputValues.district}
             onValueChange={(val, itemIndex) => {
-              blurListener('selectedDistrict');
-              checkValidity(val, 'selectedDistrict');
+              blurListener('district');
+              checkValidity(val, 'district');
             }}>
             {word[selectedStateindex].districts.map((item, id) => (
               <Picker.Item label={item} value={item} key={id} />
@@ -158,6 +171,19 @@ const FindDonors = ({navigation}) => {
           onChangeText={(val) => checkValidity(val, 'pincode')}
           onBlur={() => {
             blurListener('pincode');
+          }}
+        />
+
+        <Fields
+          label="Address of Donation"
+          error="Invalid address!"
+          returnKeyType="next"
+          inputIsValid={finddonorFormState.inputValidity.address}
+          inputIsTouched={finddonorFormState.isTouched.address}
+          value={finddonorFormState.inputValues.address}
+          onChangeText={(val) => checkValidity(val, 'address')}
+          onBlur={() => {
+            blurListener('address');
           }}
         />
       </View>

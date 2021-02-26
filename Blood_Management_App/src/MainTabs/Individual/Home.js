@@ -74,7 +74,7 @@ const images = [
     title: 'Active Donors',
   },
   {
-    icon: 'hospital-symbol',
+    icon: 'flag',
     number: 79,
     title: 'Active Blood Banks',
   },

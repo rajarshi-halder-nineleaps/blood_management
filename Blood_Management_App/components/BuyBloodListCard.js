@@ -26,13 +26,16 @@ const BuyBloodListCard = ({ item, onPress }) => {
     <Collapse>
       <CollapseHeader style={styles.touchboard}>
         <View style={styles.typeView}>
-          <Text style={styles.headerContent}>{item.blood_group}</Text>
+          <Text style={styles.headerContent}>{item.bbId}</Text>
         </View>
         <View style={styles.headerDetailsView}>
           <View style={styles.nameView}>
-            <Text style={styles.nameText}>{item.name}</Text>
+            <Text style={styles.nameText}>{item.bbName}</Text>
           </View>
         </View>
+        <TouchableOpacity onPress={onPress} style={styles.invite}>
+          <Text style={styles.invitebutton}>Buy Now</Text>
+        </TouchableOpacity>
         <View style={styles.headerIndicatorView}>
 
         </View>
@@ -48,7 +51,7 @@ const BuyBloodListCard = ({ item, onPress }) => {
                 <Text style={styles.addressInsideLabel}>Name:</Text>
                 <View style={styles.addressRightView}>
                   <Text style={styles.addressContent}>
-                    {item.name}
+                    {item.bbName}
                   </Text>
                 </View>
               </View>
@@ -63,11 +66,11 @@ const BuyBloodListCard = ({ item, onPress }) => {
 
               <View style={styles.addressInsideView}>
                 <Text style={styles.addressInsideLabel}>
-                  Unit Price:
+                  Price per unit:
                 </Text>
                 <View style={styles.addressRightView}>
                   <Text style={styles.addressContent}>
-                    {item.unitprice}
+                    {item.price}
                   </Text>
                 </View>
               </View>
@@ -75,9 +78,7 @@ const BuyBloodListCard = ({ item, onPress }) => {
             </View>
           </View>
           <View style={styles.headerIndicatorView}>
-            <TouchableOpacity onPress={onPress} style={styles.invite}>
-              <Text style={styles.invitebutton}>Buy Now</Text>
-            </TouchableOpacity>
+
 
           </View>
         </View>
