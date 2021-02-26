@@ -14,17 +14,18 @@ import { buyit } from '../../../redux/buyblood/actions';
 
 const ConfirmBuy = ({ route, navigation }) => {
 
-  const { price } = route.params;
+  const { sellerId, blood_group, component, units, price } = route.params;
   const buybloodFormState = useSelector((state) => state.buybloodFormState);
   const [modalVisible, setModalVisible] = useState(false);
   const dispatch = useDispatch()
   const buysuccess = buybloodFormState.boughtit;
   const buyfailure = buybloodFormState.tryagain;
+  const authState = useSelector((state) => state.authState)
 
   const [total, setTotal] = useState(0)
 
   useEffect(() => {
-    setTotal(price * buybloodFormState.inputValues.req_units)
+    setTotal((+buybloodFormState.inputValues.req_units * price).toFixed(2))
   });
   return (
     <View style={styles.container}>
@@ -45,6 +46,7 @@ const ConfirmBuy = ({ route, navigation }) => {
               <TouchableHighlight
                 style={{ ...styles.openButton, backgroundColor: colors.primary }}
                 onPress={() => {
+                  dispatch(buyit(sellerId, blood_group, component, price, units, authState.userToken))
                   setModalVisible(!modalVisible);
                   navigation.navigate("Services")
                 }}
@@ -92,7 +94,7 @@ const ConfirmBuy = ({ route, navigation }) => {
           <Text style={styles.texts}>Rs {total}</Text>
         </View>
         <TouchableOpacity onPress={() => {
-          dispatch(buyit(buybloodFormState.inputValues));
+          dispatch(buyit(sellerId, blood_group, component, price, units, authState.userToken))
           setModalVisible(!modalVisible);
         }} style={styles.invite}>
           <Text style={styles.invitebutton}>

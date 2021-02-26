@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import React from 'react';
+import React, { useEffect } from 'react';
 import { SafeAreaView, ScrollView, View, Text, Dimensions, TouchableOpacity, StyleSheet, Image, FlatList } from 'react-native';
 import colors from '../../../constants/Colors';
 import { useDispatch, useSelector } from 'react-redux'
@@ -15,6 +15,7 @@ import {
   BarChart,
 } from "react-native-chart-kit";
 import { color } from 'react-native-reanimated';
+import { getUserData } from '../../../redux/profile/actions'
 const data = {
   labels: ["January", "February", "March", "April", "May", "June"],
   datasets: [
@@ -74,7 +75,7 @@ const images = [
     title: 'Active Donors',
   },
   {
-    icon: 'hospital-symbol',
+    icon: 'flag',
     number: 79,
     title: 'Active Blood Banks',
   },
@@ -97,6 +98,18 @@ const Home = ({ navigation }) => {
   const authState = useSelector((state) => state.authState);
   const userType = authState.userType;
   const dispatch = useDispatch()
+  const profileState = useSelector((state) => state.profileState)
+
+  useEffect(() => {
+    dispatch(getUserData(authState.userToken));
+  }, [dispatch]);
+
+  // useEffect(() => {
+  //   const lastDonationDate = "2021-02-26T05:55:13.197+0000";
+  //   lastDonationDate = new Date(lastDonationDate.split('T')[0]);
+  //   console.log(lastDonationDate)
+  //   dispatch();
+  // }, [dispatch, profileState.userData]);
 
   const salesHandler = () => {
     dispatch(fetchSalesData(authState.userToken));
@@ -129,14 +142,14 @@ const Home = ({ navigation }) => {
             source={require("../../../assets/images/account/avatar.png")} />
         </View>
         <View style={styles.userinfo}>
-          <Text style={styles.name}>Name Title</Text>
+          <Text style={styles.name}>{profileState.userData.name}</Text>
 
           <Text style={styles.other}>
-            {userType === 0 ? "Individual" : null}
-            {userType === 1 ? "Hospital" : null}
-            {userType === 2 ? "Blood Bank" : null}
+            {userType === 1 ? "Individual" : null}
+            {userType === 2 ? "Hospital" : null}
+            {userType === 3 ? "Blood Bank" : null}
           </Text>
-          <Text style={styles.other}>#SDA15426</Text>
+          <Text style={styles.other}>{profileState.userData.userId}</Text>
         </View>
       </View>
       <View>
@@ -154,7 +167,7 @@ const Home = ({ navigation }) => {
       <View style={styles.donateblood}>
         <View style={{ flexDirection: 'row-reverse', alignItems: 'center' }}>
           <Text style={styles.title}>
-            {userType === 0 ? "Donate Blood" : "Organize Drive"}
+            {userType === 1 ? "Donate Blood" : "Organize Drive"}
 
           </Text>
           <Icon name="tint" size={20} color={colors.primary} />

@@ -38,9 +38,8 @@ export const organizeReq = () => ({
   type: ORGANIZE_REQ,
 });
 
-export const organizeSuccess = (driveId) => ({
+export const organizeSuccess = () => ({
   type: ORGANIZE_SUCCESS,
-  driveId: driveId,
 });
 
 export const organizeFailure = (error) => ({
@@ -52,31 +51,33 @@ export const organizeFailure = (error) => ({
 
 export const organizeDriveConfirm = (userToken, newDriveData) => {
   console.log('data reached organizeDriveConfirm');
+  console.log(newDriveData, userToken);
   console.log(newDriveData.startDate.toLocaleDateString() + '');
   return async (dispatch) => {
     try {
       dispatch(organizeReq());
       const response = await axios.post(
-        'http://192.168.43.217:8080/conductadrive/savedrivedetails',
+        'http://10.0.2.2:8080/conductadrive/savedrivedetails', {
+        startTimeStamp: null,
+        endTimeStamp: null,
+        bloodGroups: newDriveData.bloodgroup,
+        address: newDriveData.address,
+        state: newDriveData.state,
+        district: newDriveData.district,
+        pincode: newDriveData.pincode,
+        message: newDriveData.message
+
+      },
         {
-          startTimeStamp: '',
-          endTimeStamp:  '',
-          bloodGroups: newDriveData.bloodgroup,
-          address: newDriveData.address,
-          state: newDriveData.state,
-          district: newDriveData.district,
-          pincode: newDriveData.pincode,
-          message: newDriveData.message,
-        },
-        {
-          headers: {Authorization: 'Bearer ' + userToken},
+          headers: { Authorization: 'Bearer ' + userToken },
         },
       );
 
-      if (response.data.success) {
+      if (response.headers.success) {
         console.log('response is success!');
-        dispatch(organizeSuccess(response.data.driveId));
-      } else if (response.data.error) {
+
+        dispatch(organizeSuccess());
+      } else if (response.headers.error) {
         console.log('response is error!');
         dispatch(organizeFailure(response.data.error));
       } else {

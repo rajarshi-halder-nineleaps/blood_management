@@ -48,23 +48,32 @@ export const reqFailure = (error) => ({
 
 
 
-export const getBuyBloodList = () => {
+export const getBuyBloodList = (object, userToken) => {
   return async (dispatch) => {
     dispatch(req());
     console.log('Getting Donor List');
     try {
-      const response = await axios.get(
-        'http://10.0.2.2:8000/buybloodlist'
-
+      const response = await axios.post(
+        'http://10.0.2.2:8080/buyblood/findbb', {
+        bloodGroup: object.blood_group,
+        component: object.component,
+        reqUnits: object.req_units,
+        state: object.state,
+        district: object.district,
+        pincode: object.pincode
+      },
+        {
+          headers: { Authorization: 'Bearer ' + userToken },
+        },
       );
       console.log('COMPLETE RESPONSE DATA: ', response.data);
 
-      if (response.data.error) {
-        console.log(response.data.error);
+      if (response.headers.error) {
+        console.log(response.headers.error);
         dispatch(reqFailure)
-      } else if (response.data.success) {
+      } else if (response.headers.success) {
         console.log('Saved data to async storage!');
-        dispatch(updateArray(response.data.list))
+        dispatch(updateArray(response.data))
         dispatch(reqSuccess())
 
       } else {
@@ -79,14 +88,24 @@ export const getBuyBloodList = () => {
 
 }
 
-export const buyit = (request) => {
+export const buyit = (sellerId, bloodGroup, component, price, units, userToken) => {
   return async (dispatch) => {
     dispatch(req());
     console.log('login works');
     try {
       const response = await axios.post(
-        'http://192.168.43.217:8080/authenticate', //IP GOES HERE
-        request,
+        'http://10.0.2.2:8080/buyblood/confirmbuy', {
+        sellerId: sellerId,
+        date: new Date().toISOString(),
+        bloodGroup: bloodGroup,
+        component: component,
+        price: price,
+        units: units
+
+      },
+        {
+          headers: { Authorization: 'Bearer ' + userToken },
+        },
       );
       console.log('COMPLETE RESPONSE DATA: ', response.headers);
 
@@ -94,9 +113,10 @@ export const buyit = (request) => {
         dispatch(reqFailure('Invalid login credentials! Please try again.'));
         console.log(response.headers.error);
       } else if (response.headers.success) {
-        dispatch(
-          reqSuccess(),
-        );
+        console.log(response.body)
+        // dispatch(
+        //   reqSuccess(),
+        // );
       } else {
         dispatch(
           reqFailure(
@@ -110,3 +130,4 @@ export const buyit = (request) => {
     }
   };
 };
+

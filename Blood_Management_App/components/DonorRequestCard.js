@@ -10,6 +10,7 @@ import {
   ActivityIndicator,
   ImageBackground,
 } from 'react-native';
+import Icon from 'react-native-vector-icons/FontAwesome';
 import colors from '../constants/Colors';
 import {
   Collapse,
@@ -21,178 +22,35 @@ import AreYouSure from './AreYouSure';
 import { updateRequestList } from "../redux/activedonorrequest/actions"
 
 
-const DonorRequestCard = ({ item }) => {
+const DonorRequestCard = ({ item, onPress }) => {
 
 
-
-  const updateObjAccept = item.id
-    ? { id: item.id, hasgiven: 2 }
-    : null;
-
-
-  const [rusurer, setRusurer] = useState(false);
   return (
     <>
-      <Collapse>
-        <CollapseHeader style={styles.touchboard}>
+      <TouchableOpacity onPress={onPress}  >
+        <View style={styles.touchboard}>
           <View style={styles.typeView}>
-            <Text style={styles.headerContent}>{item.blood_group}</Text>
+            <Text style={styles.headerContent}>{item.donationId}</Text>
           </View>
           <View style={styles.headerDetailsView}>
             <View style={styles.nameView}>
-              <Text style={styles.nameText}>{item.name}</Text>
+              <Text style={styles.moreinfo}>{item.requestTime ? `${item.requestTime.split('T')[0]}, ${item.requestTime.split('T')[1].split(':')[0]}:${item.requestTime.split('T')[1].split(':')[1]}` : null}</Text>
+              <Text style={styles.moreinfo}>Address: {(item.address)}</Text>
+              <Text style={styles.moreinfo}>Blood Group: {(item.bloodGroup)}</Text>
             </View>
           </View>
-          <View style={styles.headerIndicatorView}>
-            {
-              item.hasgiven == 0 ? (
-                <View style={styles.yesnoView}>
-                  <Text style={styles.requested}>REQUESTED</Text>
-                </View>
-
-              ) :
-                null
-            }
-            {
-              item.hasgiven == 1 ? (
-                <View style={styles.yesnoView}>
-                  <Text style={styles.yes}>ACCEPTED</Text>
-                </View>
-
-              ) :
-                null
-            }
-            {
-              item.hasgiven == 2 ? (
-                <View style={styles.yesnoView}>
-                  <Text style={styles.no}>DONATED</Text>
-                </View>
-
-              ) :
-                null
+          <View>
+            {item.status ?
+              <Icon name="check-circle" color="green" size={30} />
+              :
+              <Icon name="times-circle" color="red" size={30} />
             }
 
           </View>
-        </CollapseHeader>
-        <CollapseBody style={styles.collBody}>
-          <View style={styles.bodyHeader}>
-            {item.driveId ? (
-              <Text style={styles.bodyLabel}>
-                Drive ID : {item.driveId}
-                <Text style={styles.bodyContent}>{item.driveId}</Text>
-              </Text>
-            ) : (
-                <Text style={styles.bodyLabel}>
-                  DonationId ID : {item.requestid}
-                  <Text style={styles.bodyContent}>{item.donationId}</Text>
-                </Text>
-              )}
-          </View>
 
-          <View style={styles.detailsBoard}>
-            <View style={styles.contentView}>
-              <Text style={styles.label}>
-                Commitment made on: {'  '}
-                <Text style={styles.content}>
-                  {item.date} at {item.time}
-                </Text>
-              </Text>
+        </View>
+      </TouchableOpacity>
 
-              <View style={styles.addressView}>
-                <Text style={styles.addressLabel}>Drive details:</Text>
-                <View style={styles.addressContentView}>
-                  <View style={styles.addressInsideView}>
-
-                  </View>
-                </View>
-              </View>
-            </View>
-            <View style={styles.detailsView}>
-              <View style={styles.addressContentView}>
-                <View style={styles.addressInsideView}>
-                  <Text style={styles.addressInsideLabel}>Recipient name:</Text>
-                  <View style={styles.addressRightView}>
-                    <Text style={styles.addressContent}>
-                      {item.name}
-                    </Text>
-                  </View>
-                </View>
-                <View style={styles.addressInsideView}>
-                  <Text style={styles.addressInsideLabel}>Recipient Email:</Text>
-                  <View style={styles.addressRightView}>
-                    <Text style={styles.addressContent}>
-                      {item.email}
-                    </Text>
-                  </View>
-                </View>
-
-                <View style={styles.addressInsideView}>
-                  <Text style={styles.addressInsideLabel}>
-                    Recipient Contact:
-                </Text>
-                  <View style={styles.addressRightView}>
-                    <Text style={styles.addressContent}>
-                      {item.contact}
-                    </Text>
-                  </View>
-                </View>
-
-                {item.driveId ? (
-                  <>
-                    <View style={styles.addressInsideView}>
-                      <Text style={styles.addressInsideLabel}>From:</Text>
-                      <View style={styles.addressRightView}>
-                        <Text style={styles.addressContent}>
-                          {item.date} at
-                        {'  ' + item.time}
-                        </Text>
-                      </View>
-                    </View>
-                    <View style={styles.addressInsideView}>
-                      <Text style={styles.addressInsideLabel}>To:</Text>
-                      <View style={styles.addressRightView}>
-                        <Text style={styles.addressContent}>
-                          {item.date} at
-                        {'  ' + item.time}
-                        </Text>
-                      </View>
-                    </View>
-                  </>
-                ) : null}
-              </View>
-            </View>
-            <View style={styles.row}>
-              {
-                item.hasgiven == 1 ?
-                  <TouchableOpacity onPress={() => {
-                    setRusurer(true);
-                  }} >
-                    <View style={styles.updatebutton}>
-                      <Text style={styles.buttontext}>Update Status</Text>
-                    </View>
-                  </TouchableOpacity>
-                  :
-                  null
-              }
-
-              <View style={styles.headerIndicatorView}>
-              </View>
-            </View>
-
-          </View>
-        </CollapseBody>
-      </Collapse>
-      { rusurer ? (
-        <>
-          <AreYouSure
-            visibleState={rusurer}
-            visibleStateChanger={setRusurer}
-            dispatchable={updateRequestList}
-            dispatchData={updateObjAccept}
-            message="Has the user donated blood?"
-          />
-        </>
-      ) : null}
     </>
   );
 };
@@ -355,6 +213,12 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     flex: 1
+  },
+  moreinfo: {
+    fontFamily: 'Montserrat-Bold',
+    color: colors.grayishblack,
+    fontSize: 12
+
   }
 });
 

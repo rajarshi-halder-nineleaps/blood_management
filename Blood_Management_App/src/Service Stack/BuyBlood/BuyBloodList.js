@@ -14,20 +14,24 @@ import BuyBloodListCard from '../../../components/BuyBloodListCard'
 
 
 const BuyBloodList = ({ navigation }) => {
+  const [selectedId, setSelectedId] = useState(null);
+  const buybloodFormState = useSelector((state) => state.buybloodFormState);
 
   const renderItem = ({ item }) => {
 
 
     return (
       <BuyBloodListCard item={item} onPress={() => navigation.navigate("Confirm Buy", {
-        price: item.unitprice,
+        sellerId: item.bbId,
+        blood_group: buybloodFormState.inputValues.blood_group,
+        component: buybloodFormState.inputValues.component,
+        units: buybloodFormState.inputValues.req_units,
+        price: item.price,
 
       })} />
     );
   };
 
-  const [selectedId, setSelectedId] = useState(null);
-  const buybloodFormState = useSelector((state) => state.buybloodFormState);
 
 
   return (

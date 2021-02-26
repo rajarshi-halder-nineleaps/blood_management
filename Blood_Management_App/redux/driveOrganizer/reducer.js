@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import {Alert} from 'react-native';
+import { Alert } from 'react-native';
 
 import {
   UPDATE_FIELDS_ORGANIZER,
@@ -80,8 +80,8 @@ const driveOrganizerReducer = (state = initialState, action) => {
     }
 
     case BLUR_FIELDS_ORGANIZER: {
-      const newInputIsTouched = {...state.isTouched, [action.fieldId]: true};
-      return {...state, isTouched: newInputIsTouched};
+      const newInputIsTouched = { ...state.isTouched, [action.fieldId]: true };
+      return { ...state, isTouched: newInputIsTouched };
     }
 
     case STATE_CLEANUP: {
@@ -90,15 +90,15 @@ const driveOrganizerReducer = (state = initialState, action) => {
     }
 
     case ORGANIZE_REQ: {
-      return {...state, loading: true};
+      return { ...state, loading: true };
     }
     case ORGANIZE_SUCCESS: {
       Alert.alert('Success', 'Drive organized successfully');
-      return {...state, loading: false, driveId: action.driveId, error: ''};
+      return { ...state, loading: false, error: '' };
     }
     case ORGANIZE_FAILURE: {
       Alert.alert('Error', action.error);
-      return {...state, loading: false, error: action.error, driveId: ''};
+      return { ...state, loading: false, error: action.error, driveId: '' };
     }
 
     default:

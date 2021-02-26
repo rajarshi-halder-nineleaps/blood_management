@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import {
   View,
   Text,
@@ -9,23 +9,38 @@ import {
   TouchableHighlight,
   Alert,
 } from 'react-native';
-import {useDispatch, useSelector} from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import colors from '../../../constants/Colors';
 import CheckBox from '@react-native-community/checkbox';
 import Feather from 'react-native-vector-icons/Feather';
-import {updateselected, selectall} from '../../../redux/finddonors/actions';
+import { updateselected, selectall, submitinvite, invitesuccess } from '../../../redux/finddonors/actions';
 
-const DonorList = ({navigation}) => {
+const DonorList = ({ navigation }) => {
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedId, setSelectedId] = useState(null);
+  const authState = useSelector((state) => state.authState);
   const finddonorFormState = useSelector((state) => state.finddonorFormState);
+  const [allselected, setallselected] = useState(false)
   const dispatch = useDispatch();
-
   const onValueChange = (item, index) => {
     dispatch(updateselected(item));
   };
 
-  const Item = ({item, onPress, style, index}) => (
+  const submitHandler = () => {
+    if (finddonorFormState.selectedids.length == 0) {
+      Alert.alert(
+        'Error',
+        'Please select users before proceeding',
+        [{ text: 'Okay' }],
+      );
+    } else {
+      dispatch(submitinvite(authState.userToken, finddonorFormState.inputValues, finddonorFormState.selectedids));
+      dispatch(invitesuccess(true))
+    }
+
+  }
+
+  const Item = ({ item, onPress, style, index }) => (
     <TouchableOpacity onPress={onPress} style={[styles.item, style]}>
       <View
         style={{
@@ -40,11 +55,12 @@ const DonorList = ({navigation}) => {
           value={item.selected}
           onValueChange={() => onValueChange(item, index)}
         />
-        <Text style={styles.title}> {item.name}</Text>
+        <Text style={styles.title}> {item.userId}</Text>
+        <Text style={styles.name}> {item.name} </Text>
       </View>
     </TouchableOpacity>
   );
-  const renderItem = ({item, index}) => {
+  const renderItem = ({ item, index }) => {
     const backgroundColor = item.id === selectedId ? '#f9c2ff' : 'white';
 
     return (
@@ -52,8 +68,8 @@ const DonorList = ({navigation}) => {
         <Item
           item={item}
           index={index}
-          onPress={() => setSelectedId(item.id)}
-          style={{backgroundColor}}
+          onPress={() => setSelectedId(item.userId)}
+          style={{ backgroundColor }}
         />
       </View>
     );
@@ -64,7 +80,7 @@ const DonorList = ({navigation}) => {
       <Modal
         animationType="slide"
         transparent={true}
-        visible={modalVisible}
+        visible={finddonorFormState.success ? true : false}
         onRequestClose={() => {
           Alert.alert('Modal has been closed.');
         }}>
@@ -73,10 +89,11 @@ const DonorList = ({navigation}) => {
             <Text style={styles.modalText}>Invite Sent!</Text>
 
             <TouchableHighlight
-              style={{...styles.openButton, backgroundColor: colors.primary}}
+              style={{ ...styles.openButton, backgroundColor: colors.primary }}
               onPress={() => {
                 setModalVisible(!modalVisible);
                 navigation.navigate('Services');
+                dispatch(invitesuccess(false))
               }}>
               <Text style={styles.textStyle}>OK!</Text>
             </TouchableHighlight>
@@ -89,18 +106,19 @@ const DonorList = ({navigation}) => {
         <View style={styles.inputView}>
           <View style={styles.check}>
             <CheckBox
-              tintColors={{true: colors.primary, false: colors.accent}}
+              tintColors={{ true: colors.primary, false: colors.accent }}
               disabled={false}
-              value={finddonorFormState.allselected}
+              value={allselected}
               onValueChange={(val) => {
-                dispatch(selectall(finddonorFormState.list));
+                setallselected(!allselected ? true : false)
+                dispatch(selectall(allselected ? false : true, finddonorFormState.list));
               }}
             />
             <Text style={styles.tncText}>Select All</Text>
           </View>
           <TouchableOpacity
             style={styles.invite}
-            onPress={() => console.log(finddonorFormState.list)}>
+            onPress={() => submitHandler()}>
             <Text style={styles.invitebutton}>Send Invites</Text>
           </TouchableOpacity>
         </View>
@@ -221,6 +239,13 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     fontSize: 20,
   },
+  name: {
+    fontSize: 20,
+    backgroundColor: 'transparent',
+    marginLeft: 10,
+    color: colors.coolblue,
+    fontFamily: 'Montserrat-Regular',
+  }
 });
 
 export default DonorList;

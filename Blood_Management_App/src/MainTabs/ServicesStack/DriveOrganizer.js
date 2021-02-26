@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   View,
   ScrollView,
@@ -15,24 +15,24 @@ import {
   Alert,
   Button,
 } from 'react-native';
-import {useSelector, useDispatch} from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import * as places from '../../../assets/places.json';
 import colors from '../../../constants/Colors';
 import Feather from 'react-native-vector-icons/Feather';
 import Input from '../../../components/Input';
 import AreYouSure from '../../../components/AreYouSure';
-import {pincodeRegex} from '../../../constants/Regexes';
-import {Picker} from '@react-native-picker/picker';
+import { pincodeRegex } from '../../../constants/Regexes';
+import { Picker } from '@react-native-picker/picker';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import {
   updateFields,
   blurFields,
   stateCleanup,
 } from '../../../redux/driveOrganizer/actions';
-import {organizeDriveConfirm} from '../../../redux/driveOrganizer/actions';
+import { organizeDriveConfirm } from '../../../redux/driveOrganizer/actions';
 import bloodGroupsList from '../../../constants/BloodGroupsList';
 
-const DriveOrganizer = ({navigation}) => {
+const DriveOrganizer = ({ navigation }) => {
   const driveOrganizerState = useSelector((state) => state.driveOrganizerState);
   const dispatch = useDispatch();
 
@@ -54,18 +54,17 @@ const DriveOrganizer = ({navigation}) => {
     dispatch(stateCleanup());
   }, [dispatch]);
 
-  const [startdate, setstartDate] = useState(new Date(1598051730000));
+
   const [startmode, setstartMode] = useState('date');
   const [startshow, setstartShow] = useState(false);
 
-  const [enddate, setendDate] = useState(new Date(1598051730000));
   const [endmode, setendMode] = useState('date');
   const [endshow, setendShow] = useState(false);
 
   const onChangestart = (event, selectedDate) => {
     const currentDate = selectedDate || date;
     setstartShow(Platform.OS === 'ios');
-    setstartDate(currentDate);
+    dispatch(updateFields(currentDate, 'startDate', true));
   };
 
   const showstartMode = (currentMode) => {
@@ -85,7 +84,7 @@ const DriveOrganizer = ({navigation}) => {
     //todo date is not defined
     const currentDate = selectedDate || date;
     setendShow(Platform.OS === 'ios');
-    setendDate(currentDate);
+    dispatch(updateFields(currentDate, 'endDate', true));
   };
 
   const showendMode = (currentMode) => {
@@ -147,8 +146,8 @@ const DriveOrganizer = ({navigation}) => {
       isValid = false;
     }
 
-    if (fieldId === 'date') {
-      isValid = false;
+    if (fieldId === 'startdate') {
+      isValid = false
     }
     if (fieldId === 'starttime') {
       isValid = false;
@@ -160,14 +159,13 @@ const DriveOrganizer = ({navigation}) => {
   const submitHandler = () => {
     console.log(driveOrganizerState.inputValidity);
     if (driveOrganizerState.finalFormState) {
-      //TODO DISPLAY A CONFIRMATION MODAL
       setRusure(true);
       console.log('starting request for new drive!');
     } else {
       Alert.alert(
         'Invalid Input',
         'Please check all the inputs before proceeding.',
-        [{text: 'Okay'}],
+        [{ text: 'Okay' }],
       );
     }
   };
@@ -185,31 +183,30 @@ const DriveOrganizer = ({navigation}) => {
         {/* //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// */}
         {/* todo start data start time end date end time */}
 
+
+
         <View>
           <View style={styles.datepicker}>
-            <TouchableOpacity
-              style={styles.datepickerbutton}
-              onPress={showstartDatepicker}>
+            <TouchableOpacity style={styles.datepickerbutton} onPress={showstartDatepicker}>
               <Text style={styles.datepickerttext}>Set Start Date</Text>
             </TouchableOpacity>
             <Text style={styles.datepickerttextoutput}>
-              {startdate.toDateString()}
+              {driveOrganizerState.inputValues.startDate.toDateString()}
             </Text>
           </View>
           <View style={styles.datepicker}>
-            <TouchableOpacity
-              style={styles.datepickerbutton}
-              onPress={showstartTimepicker}>
+            <TouchableOpacity style={styles.datepickerbutton} onPress={showstartTimepicker}>
               <Text style={styles.datepickerttext}>Set Start Time</Text>
             </TouchableOpacity>
             <Text style={styles.datepickerttextoutput}>
-              {startdate.toLocaleTimeString()}
+              {driveOrganizerState.inputValues.startDate.toLocaleTimeString()}
             </Text>
+
           </View>
           {startshow && (
             <DateTimePicker
               testID="dateTimePicker"
-              value={startdate}
+              value={driveOrganizerState.inputValues.startDate}
               mode={startmode}
               is24Hour={true}
               display="default"
@@ -220,29 +217,26 @@ const DriveOrganizer = ({navigation}) => {
 
         <View>
           <View style={styles.datepicker}>
-            <TouchableOpacity
-              style={styles.datepickerbutton}
-              onPress={showendDatepicker}>
+            <TouchableOpacity style={styles.datepickerbutton} onPress={showendDatepicker}>
               <Text style={styles.datepickerttext}>Set End Date</Text>
             </TouchableOpacity>
             <Text style={styles.datepickerttextoutput}>
-              {enddate.toDateString()}
+              {driveOrganizerState.inputValues.endDate.toDateString()}
             </Text>
           </View>
           <View style={styles.datepicker}>
-            <TouchableOpacity
-              style={styles.datepickerbutton}
-              onPress={showendTimepicker}>
+            <TouchableOpacity style={styles.datepickerbutton} onPress={showendTimepicker}>
               <Text style={styles.datepickerttext}>Set End Time</Text>
             </TouchableOpacity>
             <Text style={styles.datepickerttextoutput}>
-              {enddate.toLocaleTimeString()}
+              {driveOrganizerState.inputValues.endDate.toLocaleTimeString()}
             </Text>
+
           </View>
           {endshow && (
             <DateTimePicker
               testID="dateTimePicker"
-              value={enddate}
+              value={driveOrganizerState.inputValues.endDate}
               mode={endmode}
               is24Hour={true}
               display="default"
@@ -269,7 +263,7 @@ const DriveOrganizer = ({navigation}) => {
                     itemClickHandler(val);
                     blurListener('bloodgroup');
                   }}>
-                  <Text style={{color: colors.additional2}}>{val}</Text>
+                  <Text style={{ color: colors.additional2 }}>{val}</Text>
                 </TouchableOpacity>
               </View>
             ))}
