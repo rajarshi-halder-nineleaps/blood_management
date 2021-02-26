@@ -15,6 +15,7 @@ import {getDriveData, resetDoneState} from '../../../redux/myDrives/actions';
 import {fetchCommitments} from '../../../redux/commitments/actions';
 import {getInventory, checkPassword} from '../../../redux/inventory/actions';
 import {fetchSalesData} from '../../../redux/sales/actions';
+import {fetchPurchasesData} from '../../../redux/purchases/actions';
 import {fetchInvitesList} from '../../../redux/invites/actions';
 
 const Services = ({navigation}) => {
@@ -55,6 +56,12 @@ const Services = ({navigation}) => {
     dispatch(fetchSalesData(authState.userToken));
     navigation.navigate('sales');
   };
+
+  const purchasesHandler = () => {
+    dispatch(fetchPurchasesData(authState.userToken));
+    navigation.navigate('My Purchases');
+  };
+
 
   const donationRequestsHandler = () => {
     dispatch(fetchInvitesList(authState.userToken));
@@ -100,7 +107,7 @@ const Services = ({navigation}) => {
           <TouchTabs
             label="My Purchases"
             imgSrc="../assets/images/servicesScreen/findDonors.png"
-            touchHandler={() => navigation.navigate('My Purchases')}
+            touchHandler={() => purchasesHandler()}
           />
         </View>
         {userType === 1 ? (

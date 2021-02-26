@@ -52,6 +52,7 @@ export const organizeFailure = (error) => ({
 export const organizeDriveConfirm = (userToken, newDriveData) => {
   console.log('data reached organizeDriveConfirm');
   console.log(newDriveData, userToken);
+  console.log(newDriveData.startDate.toLocaleDateString() + '');
   return async (dispatch) => {
     try {
       dispatch(organizeReq());

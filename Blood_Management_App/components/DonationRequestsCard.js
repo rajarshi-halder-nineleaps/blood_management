@@ -21,13 +21,13 @@ import {
 import AreYouSure from './AreYouSure';
 import RejectionMessageModal from './RejectionMessageModal';
 import {updateInvitesList} from '../redux/invites/actions';
-import { useTheme } from '@react-navigation/native';
+import {useTheme} from '@react-navigation/native';
 
 const DonationRequestsCard = ({item}) => {
   const authState = useSelector((state) => state.authState);
   const dispatch = useDispatch();
 
-//TODO CHANGE THE UPDATE OBJECTS AS PER NEW ONES FROM BACK END.
+  //TODO CHANGE THE UPDATE OBJECTS AS PER NEW ONES FROM BACK END.
 
   // const updateObjReject = item.driveId
   //   ? {driveId: item.driveId, status: 0}
@@ -51,13 +51,18 @@ const DonationRequestsCard = ({item}) => {
     rejectionMessage: '',
   };
 
-
   const [rusurea, setRusurea] = useState(false);
   const [rusurer, setRusurer] = useState(false);
 
   const invitedOn = item.inviteTimestamp.split('T');
-  const startTimestamp = item.startTimestamp.split('T');
-  const endTimestamp = item.endTimestamp.split('T');
+
+  let startTimestamp;
+  let endTimestamp;
+
+  if (item.driveId) {
+    startTimestamp = item.startTimestamp.split('T');
+    endTimestamp = item.endTimestamp.split('T');
+  }
 
   return (
     <>
@@ -71,10 +76,16 @@ const DonationRequestsCard = ({item}) => {
               <Text style={styles.nameText}>{item.recipientName}</Text>
             </View>
             <View style={styles.miniAddressView}>
-              <Text style={styles.miniAddressContent}>
-                {item.district + ', '}
-              </Text>
-              <Text style={styles.miniAddressContent}>{item.state}</Text>
+              {item.driveId ? (
+                <>
+                  <Text style={styles.miniAddressContent}>
+                    {item.district + ', '}
+                  </Text>
+                  <Text style={styles.miniAddressContent}>{item.state}</Text>
+                </>
+              ) : (
+                <Text style={styles.miniAddressContent}>{item.address}</Text>
+              )}
             </View>
           </View>
           <View style={styles.headerIndicatorView}>
@@ -113,7 +124,9 @@ const DonationRequestsCard = ({item}) => {
               <Text style={styles.label}>
                 Invited on: {'  '}
                 <Text style={styles.content}>
-                  {` ${invitedOn[0]} at ${invitedOn[1].split(':')[0]}:${invitedOn[1].split(':')[1]} `}
+                  {` ${invitedOn[0]} at ${invitedOn[1].split(':')[0]}:${
+                    invitedOn[1].split(':')[1]
+                  } `}
                 </Text>
               </Text>
 
@@ -123,10 +136,16 @@ const DonationRequestsCard = ({item}) => {
                   <View style={styles.addressInsideView}>
                     <Text style={styles.addressInsideLabel}>Address: </Text>
                     <View style={styles.addressRightView}>
-                      <Text style={styles.addressContent}>
-                        {item.address}, {item.district}, {'\n'}
-                        {item.state} [{item.pincode}]
-                      </Text>
+                      {item.driveId ? (
+                        <Text style={styles.addressContent}>
+                          {item.address}, {item.district}, {'\n'}
+                          {item.state} [{item.pincode}]
+                        </Text>
+                      ) : (
+                        <Text style={styles.addressContent}>
+                          {item.address}
+                        </Text>
+                      )}
                     </View>
                   </View>
                 </View>
@@ -164,13 +183,15 @@ const DonationRequestsCard = ({item}) => {
                   </View>
                 </View>
 
-                {item.driveId ? (
+                {item.driveId && item.startTimestamp && item.endTimestamp ? (
                   <>
                     <View style={styles.addressInsideView}>
                       <Text style={styles.addressInsideLabel}>From:</Text>
                       <View style={styles.addressRightView}>
                         <Text style={styles.addressContent}>
-                        {` ${startTimestamp[0]} at ${startTimestamp[1].split(':')[0]}:${startTimestamp[1].split(':')[1]} `}
+                          {` ${startTimestamp[0]} at ${
+                            startTimestamp[1].split(':')[0]
+                          }:${startTimestamp[1].split(':')[1]} `}
                         </Text>
                       </View>
                     </View>
@@ -178,13 +199,13 @@ const DonationRequestsCard = ({item}) => {
                       <Text style={styles.addressInsideLabel}>To:</Text>
                       <View style={styles.addressRightView}>
                         <Text style={styles.addressContent}>
-                        {` ${endTimestamp[0]} at ${endTimestamp[1].split(':')[0]}:${endTimestamp[1].split(':')[1]} `}
+                          {` ${endTimestamp[0]} at ${
+                            endTimestamp[1].split(':')[0]
+                          }:${endTimestamp[1].split(':')[1]} `}
                         </Text>
                       </View>
                     </View>
-                    <Text style={styles.messageText}>
-                        {item.message}
-                        </Text>
+                    <Text style={styles.messageText}>{item.message}</Text>
                   </>
                 ) : null}
               </View>
@@ -407,7 +428,7 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     marginHorizontal: 10,
   },
-  messageText:{
+  messageText: {
     paddingHorizontal: 20,
     paddingVertical: 20,
     fontFamily: 'Montserrat-Regular',

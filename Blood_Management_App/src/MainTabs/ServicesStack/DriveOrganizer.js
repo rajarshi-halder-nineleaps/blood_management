@@ -81,6 +81,7 @@ const DriveOrganizer = ({ navigation }) => {
   };
 
   const onChangeend = (event, selectedDate) => {
+    //todo date is not defined
     const currentDate = selectedDate || date;
     setendShow(Platform.OS === 'ios');
     dispatch(updateFields(currentDate, 'endDate', true));

@@ -46,7 +46,9 @@ const InventoryCard = (props) => {
         <View style={styles.tableHead}>
           <Text style={styles.tableHeadLeft}>Group</Text>
           <Text style={styles.tableHeadText}>Units</Text>
-          <Text style={styles.tableHeadText}>Price Per Unit (₹)</Text>
+          {authState.userType === 3 && (
+            <Text style={styles.tableHeadText}>Price Per Unit (₹)</Text>
+          )}
         </View>
       </View>
       {/* {groups.map((val, idx) => (
@@ -228,7 +230,6 @@ const InventoryCard = (props) => {
           />
         ) : null}
       </View>
-
     </View>
   );
 };

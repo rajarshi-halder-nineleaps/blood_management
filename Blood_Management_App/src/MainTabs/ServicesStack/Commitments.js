@@ -41,6 +41,7 @@ const Commitments = () => {
   return (
     <View style={styles.container}>
       {commitmentsState.loading ? (
+        <View style={styles.progressBoard}>
         <ActivityIndicator
           visible={commitmentsState.loading}
           textContent={'Loading...'}
@@ -49,6 +50,7 @@ const Commitments = () => {
           color={colors.primary}
           size="large"
         />
+      </View>
       ) : commitmentsState.commitmentsList.length === 0 ? (
         <View style={styles.suchEmpty}>
           <Image
@@ -92,6 +94,11 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'center',
+  },
+  progressBoard: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   scroll: {
     paddingHorizontal: 0,

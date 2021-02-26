@@ -58,7 +58,9 @@ const MyDrives = ({navigation}) => {
           <View style={styles.headerDetailsView}>
             <View style={styles.nameView}>
               <Text style={styles.nameText}>{item.driveId}</Text>
-              {new Date(item.endDate).getTime() <= new Date().getTime() ? (
+              {!item.status ? (
+                <Text style={styles.cancelledText}>CANCELLED</Text>
+              ) : new Date(item.endDate).getTime() <= new Date().getTime() ? (
                 <Text style={styles.greenText}>COMPLETED</Text>
               ) : new Date(item.startDate).getTime() >= new Date().getTime() ? (
                 <Text style={styles.blueText}>UPCOMING</Text>
@@ -70,7 +72,7 @@ const MyDrives = ({navigation}) => {
               <Text style={styles.miniAddressContent}>
                 From: {'  '}
                 <Text style={styles.miniDateTimeContent}>
-                  {item.startDate} at {item.startTime}
+                {item.startTimestamp ? `${item.startTimestamp.split('T')[0]}, ${item.startTimestamp.split('T')[1].split(':')[0]}:${item.startTimestamp.split('T')[1].split(':')[1]}` : null}
                 </Text>
               </Text>
             </View>
@@ -78,7 +80,7 @@ const MyDrives = ({navigation}) => {
               <Text style={styles.miniAddressContent}>
                 To: {'  '}
                 <Text style={styles.miniDateTimeContent}>
-                  {item.endDate} at {item.endTime}
+                {item.endTimestamp ? `${item.endTimestamp.split('T')[0]}, ${item.endTimestamp.split('T')[1].split(':')[0]}:${item.endTimestamp.split('T')[1].split(':')[1]}` : null}
                 </Text>
               </Text>
             </View>
@@ -128,13 +130,21 @@ const MyDrives = ({navigation}) => {
                       </Text>
                     </View>
                   </View>
+                  <View style={styles.addressInsideView}>
+                    <Text style={styles.addressInsideLabel}>Organized on: </Text>
+                    <View style={styles.addressRightView}>
+                      <Text style={styles.addressContent}>
+                      {item.organizeDate ? `${item.organizeDate.split('T')[0]}, ${item.organizeDate.split('T')[1].split(':')[0]}:${item.organizeDate.split('T')[1].split(':')[1]}` : null}
+                      </Text>
+                    </View>
+                  </View>
                 </View>
               </View>
 
               <View style={styles.addressView}>
                 <Text style={styles.addressLabel}>Blood groups invited:</Text>
                 <View style={styles.groupsContentView}>
-                  {item.bloodGroupsInvited.map((val) => {
+                  {item.bloodGroups.map((val) => {
                     return (
                       <View key={val} style={styles.indGroup}>
                         <Text style={styles.indGroupContent}>{val}</Text>
@@ -146,7 +156,7 @@ const MyDrives = ({navigation}) => {
               {new Date(item.startDate).getTime() <=
               new Date().getTime() ? null : (
                 <View style={styles.cancelDriveView}>
-                  <TouchableOpacity
+                  {item.status ? (<TouchableOpacity
                     style={styles.cancelDriveTouch}
                     onPress={() => {
                       setCancelId(item.driveId);
@@ -155,7 +165,18 @@ const MyDrives = ({navigation}) => {
                     <Text style={styles.cancelDriveText}>
                       Cancel This drive
                     </Text>
-                  </TouchableOpacity>
+                  </TouchableOpacity>) : (
+                    <View
+                    style={styles.cancelledDriveMockTouch}
+                    onPress={() => {
+                      setCancelId(item.driveId);
+                      setRusure(true);
+                    }}>
+                    <Text style={styles.cancelDriveText}>
+                      CANCELLED
+                    </Text>
+                  </View>
+                  )}
                 </View>
               )}
             </View>
@@ -236,6 +257,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
     alignItems: 'center',
     justifyContent: 'center',
+    fontFamily: 'Montserrat-Bold',
   },
   idView: {
     backgroundColor: colors.additional2,
@@ -247,7 +269,7 @@ const styles = StyleSheet.create({
   },
   headerContent: {
     color: colors.primary,
-    fontWeight: 'bold',
+    fontFamily: 'Montserrat-Bold',
     fontSize: 18,
   },
   dateTimeView: {
@@ -282,6 +304,7 @@ const styles = StyleSheet.create({
   emptyInfo: {
     color: colors.primary,
     fontSize: 10,
+    fontFamily: 'Montserrat-Bold',
   },
   touchboard: {
     flex: 1,
@@ -423,6 +446,14 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     marginBottom: 10,
   },
+  cancelledDriveMockTouch:{
+    backgroundColor: colors.accent,
+    padding: 10,
+    borderRadius: 5,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginBottom: 10,
+  },
   cancelDriveText: {
     color: colors.additional2,
     fontFamily: 'Montserrat-Regular',
@@ -439,6 +470,11 @@ const styles = StyleSheet.create({
   },
   redText: {
     color: colors.dutchred,
+    fontFamily: 'Montserrat-Bold',
+    marginLeft: 10,
+  },
+  cancelledText: {
+    color: colors.accent,
     fontFamily: 'Montserrat-Bold',
     marginLeft: 10,
   },

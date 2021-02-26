@@ -74,7 +74,7 @@ export const upcomingDrivesSearch = (userToken, searchFilters) => {
 };
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////
-//? THUNK BASED ACTION CREATOR TO REGISTER USER FOR A DRIVE.
+//? ACTION CREATOR TO REGISTER USER FOR A DRIVE.
 
 export const registerUserForDrive = (userToken, driveId) => {
   return async (dispatch) => {
@@ -85,22 +85,21 @@ export const registerUserForDrive = (userToken, driveId) => {
       );
       dispatch(driveFindReq());
       const response = await axios.post(
-        'http://192.168.43.89:5000/registerUserForDrive',
+        'http://192.168.43.217:8080/upcomingdrives/registerfordrive',
         {driveId},
         {
-          headers: {Authorization: userToken},
+          headers: {Authorization: 'Bearer ' + userToken},
         },
       );
 
-      if (response.data.success) {
-        //* coordinate with backend team to fixate on the names of response object props.
+      if (response.headers.success) {
         console.log('Data fetch call responded with success!');
         dispatch(driveRegisterSuccess());
-      } else if (response.data.error) {
+      } else if (response.headers.error) {
         console.log(
           'user might already be registered for this particular drive',
         );
-        dispatch(driveFindFailure(response.data.error));
+        dispatch(driveFindFailure(response.headers.error));
       } else {
         console.log('Outlandish error on registering user for a drive post');
         dispatch(

@@ -54,9 +54,16 @@ const myDrivesReducer = (state = initialState, action) => {
 
     case DRIVE_CANCEL_SUCCESS: {
       console.log('cancelled drive data reached reducer!', action);
-      const newDrivesData = state.myDrivesData.filter(
-        (val) => val.driveId !== action.driveId,
-      );
+      
+      const cancelledDrive = state.myDrivesData.find(val => val.driveId === action.driveId);
+      const cancelledDriveIdx = state.myDrivesData.findIndex(val => val.driveId === action.driveId);
+
+
+      cancelledDrive.status = false;
+      
+
+      const newDrivesData = [...state.myDrivesData];
+      newDrivesData[cancelledDriveIdx] = cancelledDrive;
 
       return {...state, loading: false, myDrivesData: newDrivesData};
     }
@@ -64,8 +71,8 @@ const myDrivesReducer = (state = initialState, action) => {
     case DONATION_VERIFICATION: {
       const newDonorsList = [...state.donorsList];
       newDonorsList.find(
-        (val) => val.donorId === action.donorId,
-      ).hasGivenBlood = true;
+        (val) => val.useId === action.userId,
+      ).donationStatus = true;
 
       return {...state, loading: false, donorsList: newDonorsList};
     }

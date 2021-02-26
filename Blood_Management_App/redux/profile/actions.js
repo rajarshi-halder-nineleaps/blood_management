@@ -10,7 +10,7 @@ import {
   SET_DATA_SAVED,
 } from './actionTypes';
 
-export const profileReq = () => ({type: PROFILE_REQ});
+export const profileReq = () => ({ type: PROFILE_REQ });
 
 export const profileSuccess = (profileData) => ({
   type: PROFILE_SUCCESS,
@@ -37,24 +37,25 @@ export const profileUpdateSuccess = (newProfileData) => ({
   newProfileData,
 });
 
-export const setDataSaved = () => ({type: SET_DATA_SAVED});
+export const setDataSaved = () => ({ type: SET_DATA_SAVED });
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
 
 export const getUserData = (userToken) => {
   return async (dispatch) => {
     try {
-      console.log("Fetching user's minimial data.");
+      console.log("Fetching user's minimial ");
       dispatch(profileReq());
       const response = await axios.get(
-        'http://192.168.43.217:8080/profile/fetchuserprofile',
+        'http://10.0.2.2:8080/profile/fetchuserprofile',
         {
-          headers: {Authorization: 'Bearer ' + userToken},
+          headers: { Authorization: 'Bearer ' + userToken },
         },
       );
 
       if (response.headers.success) {
         console.log('response is success!');
+
         dispatch(userSuccess(response.data));
       } else if (response.headers.error) {
         console.log('response is error!');
@@ -82,13 +83,14 @@ export const getProfileData = (userToken) => {
       console.log("Fetching user's profile data.");
       dispatch(profileReq());
       const response = await axios.get(
-        'http://192.168.43.217:8080/profile/fetchuserdata',
+        'http://10.0.2.2:8080/profile/fetchuserdata',
         {
-          headers: {Authorization: 'Bearer ' + userToken},
+          headers: { Authorization: 'Bearer ' + userToken },
         },
       );
 
       if (response.headers.success) {
+        console.log("Data", response.data)
         console.log('response is success!');
         dispatch(profileSuccess(response.data));
       } else if (response.headers.error) {
@@ -123,7 +125,7 @@ export const changeDetails = (userToken, userType, newDetails) => {
           'http://192.168.43.217:8080/profile/updateindprofile',
           newDetails,
           {
-            headers: {Authorization: 'Bearer ' + userToken},
+            headers: { Authorization: 'Bearer ' + userToken },
           },
         );
       } else if (userType === 2) {
@@ -131,7 +133,7 @@ export const changeDetails = (userToken, userType, newDetails) => {
           'http://192.168.43.217:8080/profile/updatehosprofile',
           newDetails,
           {
-            headers: {Authorization: 'Bearer ' + userToken},
+            headers: { Authorization: 'Bearer ' + userToken },
           },
         );
       } else {
@@ -139,7 +141,7 @@ export const changeDetails = (userToken, userType, newDetails) => {
           'http://192.168.43.217:8080/profile/updatebbprofile',
           newDetails,
           {
-            headers: {Authorization: 'Bearer ' + userToken},
+            headers: { Authorization: 'Bearer ' + userToken },
           },
         );
       }
@@ -174,9 +176,9 @@ export const setDonorStatus = (userToken, newDonorStatus) => {
       dispatch(profileReq());
       const response = await axios.put(
         'http://192.168.43.217:8080/profile/donorstatus',
-        {donorStatus: newDonorStatus},
+        { donorStatus: newDonorStatus },
         {
-          headers: {Authorization: 'Bearer ' + userToken},
+          headers: { Authorization: 'Bearer ' + userToken },
         },
       );
 
