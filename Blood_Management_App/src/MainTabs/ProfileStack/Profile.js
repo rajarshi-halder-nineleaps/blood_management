@@ -10,6 +10,7 @@ import {
   Image,
   ActivityIndicator,
 } from 'react-native';
+import {useFocusEffect} from '@react-navigation/native';
 import {logUserOut} from '../../../redux/auth/actions';
 import {useSelector, useDispatch} from 'react-redux';
 import colors from '../../../constants/Colors';
@@ -24,17 +25,18 @@ const Profile = ({navigation}) => {
 
   const [rusure, setRusure] = useState(false);
 
-  useEffect(() => {
-    //* API call to get user data.
-    //* name
-    //* user ID
-    //* donor status  ->> ACTIVE | INACTIVE | DISABLED(when currDate - date of last donation < 3 months (DONE FROM BACK END))
-    //* lastBloodGiven (Optional)
-    //* profile picture
-    dispatch(getUserData(authState.userToken));
-    console.log('PROFILE RENDERED!');
-  }, []);
-  //* dependency array left empty
+  // useEffect(() => {
+  //   dispatch(getUserData(authState.userToken));
+  //   console.log('PROFILE RENDERED!');
+  // }, []);
+  // //* dependency array left empty
+
+  useFocusEffect(
+    React.useCallback(() => {
+      dispatch(getUserData(authState.userToken));
+      console.log('PROFILE RENDERED!');
+    }, []),
+  );
 
   console.log(profileState.userData.name);
 
@@ -57,7 +59,11 @@ const Profile = ({navigation}) => {
           <View style={styles.userInfoView}>
             <View style={styles.imageView}>
               <Image
-                style={styles.avatar}
+                style={
+                  profileState.userData.donorStatus === 1
+                    ? styles.donorAvatar
+                    : styles.avatar
+                }
                 source={
                   profileState.userData.profilePicture
                     ? {uri: profileState.userData.profilePicture}
@@ -113,7 +119,20 @@ const Profile = ({navigation}) => {
                   )}
                 </View>
                 <Text style={styles.infoText}>
-                  Click on the above button to change your donor status
+                  {profileState.userData.donorStatus === 0
+                    ? 'Click on the above button to upgarde to donor status'
+                    : profileState.userData.donorStatus === 1
+                    ? 'Click on the above button to leave donor status'
+                    : `Eligible for donation in ${Math.floor(
+                        56 -
+                          (new Date().getTime() -
+                            new Date(
+                              profileState.userData.lastDonationDate.split(
+                                'T',
+                              )[0],
+                            ).getTime()) /
+                            (1000 * 60 * 60 * 24),
+                      )} days`}
                 </Text>
               </>
             ) : null}
@@ -182,6 +201,13 @@ const styles = StyleSheet.create({
   },
   avatar: {
     borderColor: colors.primary,
+    borderWidth: 10,
+    borderRadius: 100,
+    width: 170,
+    height: 170,
+  },
+  donorAvatar: {
+    borderColor: colors.green,
     borderWidth: 10,
     borderRadius: 100,
     width: 170,

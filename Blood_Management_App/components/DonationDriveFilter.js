@@ -69,13 +69,13 @@ const styles = StyleSheet.create({
     width: '100%',
     height: '100%',
     flex: 1,
-    backgroundColor: colors.primary,
+    backgroundColor: colors.additional2,
     elevation: 5,
     justifyContent: 'center',
     alignItems: 'center',
   },
   inactiveFilterText: {
-    color: colors.additional2,
+    color: colors.primary,
     fontFamily: 'Montserrat-Regular',
   },
 
@@ -88,14 +88,15 @@ const styles = StyleSheet.create({
     width: '100%',
     height: '100%',
     flex: 1,
-    backgroundColor: colors.additional2,
+    backgroundColor: colors.primary,
     elevation: 5,
     justifyContent: 'center',
     alignItems: 'center',
   },
   activeFilterText: {
-    color: colors.primary,
-    fontFamily: 'Montserrat-Bold',
+    color: colors.additional2,
+    fontSize: 18,
+    fontFamily: 'Montserrat-Regular',
 
   },
 });

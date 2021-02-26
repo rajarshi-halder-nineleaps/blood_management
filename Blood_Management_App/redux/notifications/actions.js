@@ -53,3 +53,37 @@ export const fetchNotifications = (userToken) => {
     }
   };
 };
+
+export const setDonationEligibilityNotification = (userToken, eligibility) => {
+  return async (dispatch) => {
+    try {
+      console.log('Setting donor eligibility.');
+      dispatch(notificationReq());
+      const response = await axios.post(
+        'http://192.168.43.217:8080/setdonornotification',
+        {eligibility},
+        {
+          headers: {Authorization: 'Bearer ' + userToken},
+        },
+      );
+
+      if (response.headers.success) {
+        console.log('response is success!');
+        // dispatch(notificationSuccess(response.data));
+      } else if (response.headers.error) {
+        console.log('response is error!');
+        dispatch(notificationFailure(response.headers.error));
+      } else {
+        console.log('outlandish error!');
+        dispatch(
+          notificationFailure(
+            "Something's not right! please try again after some time.",
+          ),
+        );
+      }
+    } catch (err) {
+      console.log('caught error on notifications get request: ', err);
+      dispatch(notificationFailure(err.message));
+    }
+  };
+};

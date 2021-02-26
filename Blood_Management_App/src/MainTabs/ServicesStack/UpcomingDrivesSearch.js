@@ -15,7 +15,7 @@ import {
 import React, {useState, useEffect} from 'react';
 import {useSelector, useDispatch} from 'react-redux';
 import {Picker} from '@react-native-picker/picker';
-import Input from '../../../components/Input';
+import Fields from '../../../components/Fields';
 import Feather from 'react-native-vector-icons/Feather';
 import colors from '../../../constants/Colors';
 import * as places from '../../../assets/places.json';
@@ -115,6 +115,7 @@ const UpcomingDrivesSearch = ({navigation}) => {
             />
             <Text style={{color: colors.primary}}>All fields are optional</Text>
           </View>
+          <Text style={styles.pickerLabel}>State</Text>
           <View style={styles.pickerView}>
             <Picker
               style={styles.picker}
@@ -136,6 +137,7 @@ const UpcomingDrivesSearch = ({navigation}) => {
               <Text style={styles.errorMsg}>Please select a state</Text>
             )}
 
+          <Text style={styles.pickerLabel}>District</Text>
           <View style={styles.pickerView}>
             <Picker
               enabled={distEnb}
@@ -148,7 +150,7 @@ const UpcomingDrivesSearch = ({navigation}) => {
               ))}
             </Picker>
           </View>
-          <Input
+          <Fields
             label="Pin code"
             error="Please enter valid pincode or leave the field empty"
             returnKeyType="next"
@@ -199,18 +201,30 @@ const styles = StyleSheet.create({
   searchBoard: {
     paddingVertical: 20,
   },
+  pickerLabel: {
+    color: colors.grayishblack,
+    fontFamily: 'Montserrat-Regular',
+    marginTop: 10,
+    paddingBottom: 3,
+  },
   pickerView: {
-    marginVertical: 10,
-    paddingVertical: 3,
-    borderRadius: 100,
-    backgroundColor: colors.accent,
-    fontSize: 18,
+    borderRadius: 5,
+    backgroundColor: 'transparent',
+    borderColor: colors.grayishblack,
+    borderWidth: 2,
+    fontSize: 14,
     fontFamily: 'Montserrat-Regular',
     paddingHorizontal: 30,
     color: 'black',
   },
   picker: {
+    color: colors.grayishblack,
     fontFamily: 'Montserrat-Regular',
+  },
+  errorMsg: {
+    color: colors.dutchred,
+    fontFamily: 'qs-reg',
+    marginBottom: 10,
   },
   touchBoard: {
     borderRadius: 100,
@@ -238,10 +252,6 @@ const styles = StyleSheet.create({
   finderTouchText: {
     color: colors.additional2,
     paddingLeft: 10,
-  },
-  errorMsg: {
-    color: colors.primary,
-    fontFamily: 'Montserrat-Regular',
   },
 });
 

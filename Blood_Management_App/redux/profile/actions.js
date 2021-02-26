@@ -173,7 +173,7 @@ export const setDonorStatus = (userToken, newDonorStatus) => {
   return async (dispatch) => {
     try {
       console.log('Toggling donor.');
-      dispatch(profileReq());
+      // dispatch(profileReq());
       const response = await axios.put(
         'http://192.168.43.217:8080/profile/donorstatus',
         { donorStatus: newDonorStatus },
@@ -182,14 +182,14 @@ export const setDonorStatus = (userToken, newDonorStatus) => {
         },
       );
 
-      if (response.data.success) {
+      if (response.headers.success) {
         console.log('response is success!');
         console.log(newDonorStatus);
 
-        dispatch(donorStatusSuccess(newDonorStatus));
-      } else if (response.data.error) {
+        dispatch(donorStatusSuccess(response.data.donorStatus));
+      } else if (response.headers.error) {
         console.log('response is error!');
-        dispatch(profileFailure(response.data.error));
+        dispatch(profileFailure(response.headers.error));
       } else {
         console.log('outlandish error!');
         dispatch(
