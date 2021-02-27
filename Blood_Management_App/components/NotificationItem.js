@@ -61,8 +61,8 @@ const styles = StyleSheet.create({
   seenTab: {
     backgroundColor: colors.accent,
     elevation: 5,
-    marginBottom: 20,
     borderRadius: 10,
+    marginBottom: 20,
     flexDirection: 'row',
     alignItems: 'center',
     paddingVertical: 10,

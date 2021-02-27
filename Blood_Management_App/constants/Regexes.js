@@ -5,3 +5,4 @@ export const otpRegex = /^\d{6}$/;
 export const pincodeRegex = /^\d{6}$/;
 export const emptyPincodeRegex = /^(\d{0}|\d{6})$/;
 export const numbersOnlyRegex = /^[0-9]+$/;
+export const decimalRegex = /^[0-9]+(\.[0-9][0-9]?)?$/;

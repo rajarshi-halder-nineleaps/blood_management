@@ -1,7 +1,6 @@
 import axios from 'axios';
 
-
-import { GETDONORLIST } from "./actionTypes";
+import {GETDONORLIST} from './actionTypes';
 import {
   UPDATE_FIELDS_REG,
   STATE_CLEANUP,
@@ -9,7 +8,7 @@ import {
   REQ,
   REQ_SUCCESS,
   REQ_FAILURE,
-  UPDATE_DONOR_ARRAY
+  UPDATE_DONOR_ARRAY,
 } from './actionTypes';
 
 export const req = () => ({
@@ -33,9 +32,8 @@ export const stateCleanup = () => ({
 
 export const updateArray = (array) => ({
   type: UPDATE_DONOR_ARRAY,
-  array: array
-
-})
+  array: array,
+});
 
 export const reqSuccess = () => ({
   type: REQ_SUCCESS,
@@ -46,65 +44,67 @@ export const reqFailure = (error) => ({
   error: error,
 });
 
-
-
 export const getBuyBloodList = (object, userToken) => {
   return async (dispatch) => {
     dispatch(req());
     console.log('Getting Donor List');
     try {
       const response = await axios.post(
-        'http://10.0.2.2:8080/buyblood/findbb', {
-        bloodGroup: object.blood_group,
-        component: object.component,
-        reqUnits: object.req_units,
-        state: object.state,
-        district: object.district,
-        pincode: object.pincode
-      },
+        'http://10.0.2.2:8080/buyblood/findbb',
         {
-          headers: { Authorization: 'Bearer ' + userToken },
+          bloodGroup: object.blood_group,
+          component: object.component,
+          reqUnits: object.req_units,
+          state: object.state,
+          district: object.district,
+          pincode: object.pincode,
+        },
+        {
+          headers: {Authorization: 'Bearer ' + userToken},
         },
       );
       console.log('COMPLETE RESPONSE DATA: ', response.data);
 
       if (response.headers.error) {
         console.log(response.headers.error);
-        dispatch(reqFailure)
+        dispatch(reqFailure);
       } else if (response.headers.success) {
         console.log('Saved data to async storage!');
-        dispatch(updateArray(response.data))
-        dispatch(reqSuccess())
-
+        dispatch(updateArray(response.data));
+        dispatch(reqSuccess());
       } else {
-        console.log("Failed")
+        console.log('Failed');
       }
     } catch (err) {
       console.log(err.message);
-
     }
   };
+};
 
-
-}
-
-export const buyit = (sellerId, bloodGroup, component, price, units, userToken) => {
+export const buyit = (
+  sellerId,
+  bloodGroup,
+  component,
+  price,
+  units,
+  userToken,
+) => {
   return async (dispatch) => {
     dispatch(req());
     console.log('login works');
     try {
       const response = await axios.post(
-        'http://10.0.2.2:8080/buyblood/confirmbuy', {
-        sellerId: sellerId,
-        date: new Date().toISOString(),
-        bloodGroup: bloodGroup,
-        component: component,
-        price: price,
-        units: units
-
-      },
+        'http://10.0.2.2:8080/buyblood/confirmbuy',
         {
-          headers: { Authorization: 'Bearer ' + userToken },
+          sellerId: sellerId,
+          date: new Date().toISOString(),
+          bloodGroup: bloodGroup,
+          component: component,
+          price: price,
+          units: units,
+        },
+        {
+          headers: {Authorization: 'Bearer ' + userToken},
         },
       );
       console.log('COMPLETE RESPONSE DATA: ', response.headers);
@@ -113,7 +113,7 @@ export const buyit = (sellerId, bloodGroup, component, price, units, userToken) 
         dispatch(reqFailure('Invalid login credentials! Please try again.'));
         console.log(response.headers.error);
       } else if (response.headers.success) {
-        console.log(response.body)
+        console.log(response.body);
         // dispatch(
         //   reqSuccess(),
         // );
@@ -130,4 +130,3 @@ export const buyit = (sellerId, bloodGroup, component, price, units, userToken) 
     }
   };
 };
-

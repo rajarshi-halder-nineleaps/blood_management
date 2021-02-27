@@ -83,7 +83,8 @@ const UpcomingDrivesSearch = ({navigation}) => {
 
       if (
         fieldId === 'pincode' &&
-        !(val.trim().length === 0 || pincodeRegex.test(String(val.trim())))
+        val.trim().length === 0 &&
+        pincodeRegex.test(String(val.trim()))
       ) {
         isValid = false;
       }
@@ -113,7 +114,7 @@ const UpcomingDrivesSearch = ({navigation}) => {
               style={styles.image}
               resizeMode="center"
             />
-            <Text style={{color: colors.primary}}>All fields are optional</Text>
+            <Text style={styles.searchInfoText}>All fields are optional</Text>
           </View>
           <Text style={styles.pickerLabel}>State</Text>
           <View style={styles.pickerView}>
@@ -238,8 +239,14 @@ const styles = StyleSheet.create({
     elevation: 5,
     borderRadius: 100,
     overflow: 'hidden',
-    width: 200,
+    width: 250,
     height: 50,
+  },
+  finderTouchText: {
+    color: colors.additional2,
+    paddingLeft: 10,
+    fontSize: 15,
+    fontFamily: 'Montserrat-Regular',
   },
   imgBtnBkg: {
     width: '100%',
@@ -249,9 +256,10 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     fontFamily: 'Montserrat-Regular',
   },
-  finderTouchText: {
-    color: colors.additional2,
-    paddingLeft: 10,
+  searchInfoText: {
+    fontFamily: 'Montserrat-Regular',
+    color: colors.primary,
+    fontSize: 14,
   },
 });
 

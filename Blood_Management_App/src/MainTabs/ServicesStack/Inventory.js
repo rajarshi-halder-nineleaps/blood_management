@@ -32,7 +32,7 @@ const Inventory = ({navigation}) => {
     if (inventoryState.editing) {
       dispatch(updateInventory(authState.userToken, authState.userToken, inventoryState.invData));
     } else {
-      dispatch(editingToggle());
+      dispatch(editingToggle(true));
     }
   };
 

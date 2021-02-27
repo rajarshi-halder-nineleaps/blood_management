@@ -1,226 +1,268 @@
-import React, { useEffect, useState } from 'react'
+import React, {useEffect, useState} from 'react';
 import {
   View,
   Text,
   StyleSheet,
   TouchableOpacity,
   Modal,
-  TouchableHighlight
-} from 'react-native'
-import { useDispatch, useSelector } from 'react-redux';
-import colors from '../../../constants/Colors'
+  TouchableHighlight,
+  Image,
+  Alert,
+} from 'react-native';
+import {useDispatch, useSelector} from 'react-redux';
+import colors from '../../../constants/Colors';
 import Feather from 'react-native-vector-icons/Feather';
-import { buyit } from '../../../redux/buyblood/actions';
+import {buyit} from '../../../redux/buyblood/actions';
+import {ScrollView} from 'react-native-gesture-handler';
 
-const ConfirmBuy = ({ route, navigation }) => {
-
-  const { sellerId, blood_group, component, units, price } = route.params;
+const ConfirmBuy = ({route, navigation}) => {
+  const {sellerId, blood_group, component, units, price} = route.params;
   const buybloodFormState = useSelector((state) => state.buybloodFormState);
   const [modalVisible, setModalVisible] = useState(false);
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
   const buysuccess = buybloodFormState.boughtit;
   const buyfailure = buybloodFormState.tryagain;
-  const authState = useSelector((state) => state.authState)
+  const authState = useSelector((state) => state.authState);
 
-  const [total, setTotal] = useState(0)
+  const [total, setTotal] = useState(0);
 
   useEffect(() => {
-    setTotal((+buybloodFormState.inputValues.req_units * price).toFixed(2))
-  });
+    setTotal((+buybloodFormState.inputValues.req_units * price).toFixed(2));
+  }, [buybloodFormState.inputValues.req_units, price]);
+  //TODO CHECK WITH RAJARSHI IF DEPENDENCY ARRAY IS OK.
   return (
-    <View style={styles.container}>
-      {buysuccess ?
-        <Modal
-          animationType="slide"
-          transparent={true}
-          visible={modalVisible}
-          onRequestClose={() => {
-            Alert.alert("Modal has been closed.");
-          }}
-        >
-          <View style={styles.centeredView}>
-            <View style={styles.modalView}>{ }
-              <Text style={styles.modalText}>Purchase Confirmed!</Text>
-              <Text style={styles.modalTextmore}> Check "My Purchases" for more info</Text>
+    <ScrollView style={styles.scroll}>
+      <View style={styles.container}>
+        {buysuccess ? (
+          <Modal
+            animationType="slide"
+            transparent={true}
+            visible={modalVisible}
+            onRequestClose={() => {
+              Alert.alert('Modal has been closed.');
+            }}>
+            <View style={styles.centeredView}>
+              <View style={styles.modalView}>
+                {}
+                <Text style={styles.modalText}>Purchase Confirmed!</Text>
+                <Text style={styles.modalTextmore}>
+                  Check the "My Purchasees" section under services for details.
+                </Text>
 
-              <TouchableHighlight
-                style={{ ...styles.openButton, backgroundColor: colors.primary }}
+                <TouchableHighlight
+                  style={styles.openButton}
+                  onPress={() => {
+                    dispatch(
+                      buyit(
+                        sellerId,
+                        blood_group,
+                        component,
+                        price,
+                        units,
+                        authState.userToken,
+                      ),
+                    );
+                    setModalVisible(!modalVisible);
+                    navigation.navigate('Services');
+                  }}>
+                  <Text style={styles.textStyle}>Okay</Text>
+                </TouchableHighlight>
+              </View>
+            </View>
+          </Modal>
+        ) : null}
+
+        <View style={styles.header}>
+          <View style={styles.imageBoard}>
+            <Image
+              source={require('../../../assets/images/logotransparentbkg.png')}
+              style={styles.image}
+              resizeMode="center"
+            />
+          </View>
+          <Text style={styles.headerText}>
+            Please check all the details shown below. If there is any mistake
+            kindly go back and chnage it.
+          </Text>
+        </View>
+
+        <View style={styles.infoBoard}>
+          <View style={styles.infobox}>
+            <View style={styles.inforow}>
+              <Text style={styles.texts}>Blood Group :</Text>
+              <Text style={styles.text}>
+                {buybloodFormState.inputValues.blood_group}
+              </Text>
+            </View>
+
+            <View style={styles.inforow}>
+              <Text style={styles.texts}>Component :</Text>
+              <Text style={styles.text}>
+                {buybloodFormState.inputValues.component}
+              </Text>
+            </View>
+
+            <View style={styles.inforow}>
+              <Text style={styles.texts}>Units required :</Text>
+              <Text style={styles.text}>
+                {buybloodFormState.inputValues.req_units}
+              </Text>
+            </View>
+            <View
+              style={{
+                justifyContent: 'center',
+                alignItems: 'center',
+                marginTop: 30,
+              }}>
+              <View style={styles.inforow}>
+                <Text style={styles.texts}>Total Amount:</Text>
+              </View>
+
+              <View style={styles.inforow}>
+                <Text style={styles.bill}>₹ {total}</Text>
+              </View>
+              <TouchableOpacity
                 onPress={() => {
-                  dispatch(buyit(sellerId, blood_group, component, price, units, authState.userToken))
+                  dispatch(
+                    buyit(
+                      sellerId,
+                      blood_group,
+                      component,
+                      price,
+                      units,
+                      authState.userToken,
+                    ),
+                  );
                   setModalVisible(!modalVisible);
-                  navigation.navigate("Services")
                 }}
-              >
-                <Text style={styles.textStyle}>OK!</Text>
-              </TouchableHighlight>
+                style={styles.invite}>
+                <Text style={styles.invitebutton}>Confirm Purchase</Text>
+              </TouchableOpacity>
             </View>
           </View>
-        </Modal>
-        :
-        null
-
-      }
-
-      <View style={styles.header}>
-
+        </View>
       </View>
-
-
-
-      <View style={styles.infobox}>
-        <View style={styles.inforow}>
-          <Text style={styles.texts}>Blood Group :</Text>
-          <Text style={styles.text}>{buybloodFormState.inputValues.blood_group}</Text>
-        </View>
-
-
-        <View style={styles.inforow}>
-          <Text style={styles.texts}>Components :</Text>
-          <Text style={styles.text}>{buybloodFormState.inputValues.component}</Text>
-        </View>
-
-        <View style={styles.inforow}>
-          <Text style={styles.texts}>Units Required :</Text>
-          <Text style={styles.text}>{buybloodFormState.inputValues.req_units}</Text>
-        </View>
-
-      </View>
-      <View style={{ justifyContent: 'center', alignItems: 'center', marginTop: 30 }}>
-        <View style={styles.inforow}>
-          <Text style={styles.texts}>Total Amount:</Text>
-        </View>
-
-        <View style={styles.inforow}>
-          <Text style={styles.texts}>Rs {total}</Text>
-        </View>
-        <TouchableOpacity onPress={() => {
-          dispatch(buyit(sellerId, blood_group, component, price, units, authState.userToken))
-          setModalVisible(!modalVisible);
-        }} style={styles.invite}>
-          <Text style={styles.invitebutton}>
-            Confirm Buy
-            </Text>
-        </TouchableOpacity>
-      </View>
-
-    </View>
+    </ScrollView>
   );
-}
+};
 
 const styles = StyleSheet.create({
-  item: {
-    backgroundColor: '#f9c2ff',
-    padding: 20,
-    marginVertical: 8,
-    paddingHorizontal: 30,
-    marginHorizontal: 20,
-    borderRadius: 20
-  },
-  title: {
-    fontSize: 18,
-
-  },
-  header: {
-    marginBottom: 20,
-
-    paddingHorizontal: 30,
-    paddingTop: 10,
-
-  },
-  headertitle: {
-    fontSize: 50,
-    fontWeight: 'bold',
-    backgroundColor: colors.primary,
-    fontFamily: 'sans-serif-condensed',
-    paddingTop: 10,
-    color: 'white'
-  },
-  header2: {
-    fontSize: 50,
-    fontWeight: '500',
-    marginBottom: 20,
-    backgroundColor: colors.primary,
-    fontFamily: 'sans-serif-condensed',
-    color: 'white'
-
-
+  scroll: {
+    backgroundColor: colors.additional2,
   },
   container: {
-    flex: 1
+    flex: 1,
+    width: '100%',
+  },
+  header: {
+    width: '100%',
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingHorizontal: 20,
+  },
+  headerText: {
+    fontFamily: 'Montserrat-Bold',
+    color: colors.primary,
+    textAlign: 'center',
+  },
+  imageBoard: {
+    alignItems: 'center',
+    marginVertical: 20,
+  },
+  image: {
+    height: 70,
+    width: 80,
   },
   inforow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     paddingVertical: 5,
     alignItems: 'center',
-    alignContent: 'center'
+    alignContent: 'center',
   },
   texts: {
-    fontSize: 25,
-    fontWeight: 'bold'
+    fontSize: 20,
+    fontFamily: 'Montserrat-Bold',
+    color: colors.grayishblack,
   },
   text: {
-    fontSize: 22,
-    fontWeight: '500'
+    fontSize: 20,
+    fontFamily: 'Montserrat-Regular',
+    color: colors.grayishblack,
   },
+  bill: {
+    color: colors.primary,
+    fontFamily: 'Montserrat-Bold',
+    fontSize: 20,
+  },
+  infoBoard: {
+    marginTop: 30,
+    width: '100%',
+    padding: 20,
+  },
+
   infobox: {
-    marginHorizontal: 30,
-    marginTop: 50
+    padding: 30,
+    backgroundColor: '#eee',
+    borderRadius: 5,
   },
   invite: {
     marginTop: 30,
     paddingHorizontal: 15,
-    backgroundColor: colors.primary,
+    backgroundColor: colors.grayishblack,
     paddingVertical: 10,
-    borderRadius: 10
+    borderRadius: 5,
   },
   invitebutton: {
-    color: 'white'
+    color: 'white',
+    fontFamily: 'Montserrat-Bold',
   },
   centeredView: {
     flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    marginTop: 22
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 22,
   },
   modalView: {
     margin: 20,
-    backgroundColor: "white",
+    backgroundColor: 'white',
     borderRadius: 20,
     padding: 35,
-    alignItems: "center",
-    shadowColor: "#000",
+    alignItems: 'center',
+    shadowColor: '#000',
     shadowOffset: {
       width: 0,
-      height: 2
+      height: 2,
     },
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
-    elevation: 5
+    elevation: 5,
   },
   openButton: {
-    backgroundColor: "#F194FF",
-    borderRadius: 20,
+    backgroundColor: colors.primary,
+    borderRadius: 5,
     padding: 10,
-    elevation: 2
+    elevation: 2,
   },
   textStyle: {
-    color: "white",
-    fontWeight: "bold",
-    textAlign: "center"
+    color: 'white',
+    fontFamily: 'Montserrat-Bold',
+    textAlign: 'center',
   },
   modalText: {
     marginBottom: 15,
-    textAlign: "center",
-    fontSize: 25,
-    fontWeight: 'bold'
+    textAlign: 'center',
+    color: colors.grayishblack,
+    fontSize: 20,
+    fontFamily: 'Montserrat-Bold',
   },
   modalTextmore: {
     marginBottom: 15,
-    textAlign: "center",
-    fontSize: 20,
+    textAlign: 'center',
+    fontSize: 14,
+    color: colors.grayishblack,
+    fontFamily: 'Montserrat-Regular',
+  },
+});
 
-  }
-})
-
-export default ConfirmBuy
+export default ConfirmBuy;

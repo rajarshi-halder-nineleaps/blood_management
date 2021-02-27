@@ -43,9 +43,17 @@ const DriveDonorList = ({route, navigation}) => {
     );
   };
 
+  const listHead = () => (
+    <View style={styles.infoBoard}>
+      <Text style={styles.info}>
+        {route.params.driveStatus
+          ? "Please verify the donor's donation by clicking on the button corresponding to the donor's name"
+          : "Since the drive has been cancelled, you won't be able to set the donor's donation status."}
+      </Text>
+    </View>
+  );
+
   const renderItem = ({item}) => {
-
-
     return (
       <View style={styles.touchboard}>
         <View style={styles.touch}>
@@ -60,7 +68,7 @@ const DriveDonorList = ({route, navigation}) => {
               Blood group :<Text style={styles.content}>{item.bloodGroup}</Text>
             </Text>
 
-            {!item.donationStatus ? (
+            {!route.params.driveStatus ? null : !item.donationStatus ? (
               <TouchableOpacity
                 style={styles.completedDonationTouch}
                 onPress={() => bloodDonationHandler(item.userId)}>
@@ -117,6 +125,7 @@ const DriveDonorList = ({route, navigation}) => {
             data={myDrivesState.donorsList}
             renderItem={renderItem}
             keyExtractor={(item) => item.userId}
+            ListHeaderComponent={() => listHead()}
             refreshControl={
               <RefreshControl
                 colors={[colors.primary, colors.secondary]}
@@ -225,6 +234,16 @@ const styles = StyleSheet.create({
   completedDonationText: {
     color: colors.additional2,
     fontFamily: 'Montserrat-Regular',
+  },
+  infoBoard: {
+    width: '100%',
+    padding: 10,
+  },
+  info: {
+    fontFamily: 'Montserrat-Regular',
+    fontSize: 15,
+    color: colors.primary,
+    textAlign: 'center',
   },
 });
 
