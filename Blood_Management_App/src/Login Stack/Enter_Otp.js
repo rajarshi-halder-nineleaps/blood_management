@@ -9,6 +9,7 @@ import {
   Platform,
   Alert,
   TouchableOpacity,
+  ActivityIndicator,
   KeyboardAvoidingView,
   ToastAndroid,
   AlertIOS,
@@ -36,6 +37,7 @@ const Enterotp = ({navigation}) => {
   // }, [dispatch]);
 
   useEffect(() => {
+    dispatch(resetDoneState());
     if (forgotState.otpVerified) {
       navigation.navigate('ResetPassword');
     }
@@ -61,41 +63,53 @@ const Enterotp = ({navigation}) => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <KeyboardAvoidingView
-        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-        style={styles.container}>
-        <ScrollView>
-          <View style={styles.header}>
-            <TouchableOpacity onPress={() => navigation.goBack()}>
-              <Feather name="chevron-left" color="white" size={30} />
-            </TouchableOpacity>
-          </View>
-          <View style={styles.colorView}>
-            <Text style={styles.titlefont}>Enter OTP</Text>
-          </View>
-          <View style={styles.body}>
-            <Text style={styles.titlefontdesc}>
-              If your provided email matches with any of the accounts registered
-              with us, we will send you an OTP.
-            </Text>
-            <Fields
-              keyboardType="numeric"
-              label="OTP"
-              error="Invalid OTP"
-              secureTextEntry={true}
-              value={forgotState.inputValues.otp}
-              placeholder="Code"
-              inputIsValid={forgotState.inputValidity.otp}
-              inputIsTouched={forgotState.isTouched.otp}
-              onChangeText={(val) => handleOTP(val, 'otp')}
-              onBlur={() => {
-                dispatch(blurFields('otp'));
-              }}
-            />
-            {
-              //TODO REMOVE IF ABOVE FIELD WORKS OUT WELL
-            }
-            {/* <TextInput
+      {forgotState.loading ? (
+        <View style={styles.progressBoard}>
+          <ActivityIndicator
+            visible={forgotState.loading}
+            textContent={'Loading...'}
+            textStyle={styles.spinnerTextStyle}
+            animating={true}
+            color={colors.primary}
+            size="large"
+          />
+        </View>
+      ) : (
+        <KeyboardAvoidingView
+          behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+          style={styles.container}>
+          <ScrollView>
+            <View style={styles.header}>
+              <TouchableOpacity onPress={() => navigation.goBack()}>
+                <Feather name="chevron-left" color="white" size={30} />
+              </TouchableOpacity>
+            </View>
+            <View style={styles.colorView}>
+              <Text style={styles.titlefont}>Enter OTP</Text>
+            </View>
+            <View style={styles.body}>
+              <Text style={styles.titlefontdesc}>
+                If your provided email matches with any of the accounts
+                registered with us, we will send you an OTP.
+              </Text>
+              <Fields
+                keyboardType="numeric"
+                label="OTP"
+                error="Invalid OTP"
+                secureTextEntry={true}
+                value={forgotState.inputValues.otp}
+                placeholder="Code"
+                inputIsValid={forgotState.inputValidity.otp}
+                inputIsTouched={forgotState.isTouched.otp}
+                onChangeText={(val) => handleOTP(val, 'otp')}
+                onBlur={() => {
+                  dispatch(blurFields('otp'));
+                }}
+              />
+              {
+                //TODO REMOVE IF ABOVE FIELD WORKS OUT WELL
+              }
+              {/* <TextInput
               keyboardType="numeric"
               value={forgotState.inputValues.otp}
               style={[styles.input, {marginTop: 30}]}
@@ -108,27 +122,28 @@ const Enterotp = ({navigation}) => {
             {!forgotState.inputValidity.otp && forgotState.isTouched.otp && (
               <Text style={styles.errMsg}>Inavlid OTP!</Text>
             )} */}
-            <TouchableOpacity
-              onPress={() => {
-                if (Platform.OS === 'android') {
-                  ToastAndroid.show('Resending OTP', ToastAndroid.SHORT);
-                } else {
-                  AlertIOS.alert('Resending OTP');
-                }
-                dispatch(postEmail(forgotState.inputValues.email));
-              }}>
-              <Text style={styles.resendotp}>Resend OTP</Text>
-            </TouchableOpacity>
-            <View style={styles.button}>
               <TouchableOpacity
-                style={styles.signIn}
-                onPress={() => handleSubmit()}>
-                <Feather name="check" size={30} color="white" />
+                onPress={() => {
+                  if (Platform.OS === 'android') {
+                    ToastAndroid.show('Resending OTP', ToastAndroid.SHORT);
+                  } else {
+                    AlertIOS.alert('Resending OTP');
+                  }
+                  dispatch(postEmail(forgotState.inputValues.email));
+                }}>
+                <Text style={styles.resendotp}>Resend OTP</Text>
               </TouchableOpacity>
+              <View style={styles.button}>
+                <TouchableOpacity
+                  style={styles.signIn}
+                  onPress={() => handleSubmit()}>
+                  <Feather name="check" size={30} color="white" />
+                </TouchableOpacity>
+              </View>
             </View>
-          </View>
-        </ScrollView>
-      </KeyboardAvoidingView>
+          </ScrollView>
+        </KeyboardAvoidingView>
+      )}
     </SafeAreaView>
   );
 };
@@ -137,6 +152,11 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: 'white',
+  },
+  progressBoard: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   header: {
     padding: 20,

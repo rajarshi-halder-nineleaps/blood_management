@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import React, { useState, useEffect } from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   View,
   Text,
@@ -10,14 +10,14 @@ import {
   ActivityIndicator,
   Image,
 } from 'react-native';
-import { logUserOut } from '../../../redux/auth/actions';
-import { useSelector, useDispatch } from 'react-redux';
+import {logUserOut} from '../../../redux/auth/actions';
+import {useSelector, useDispatch} from 'react-redux';
 import colors from '../../../constants/Colors';
 import Feather from 'react-native-vector-icons/Feather';
 import AreYouSure from '../../../components/AreYouSure';
-import { getProfileData, setDonorStatus } from '../../../redux/profile/actions';
+import {getProfileData, setDonorStatus} from '../../../redux/profile/actions';
 
-const UserInfo = ({ navigation }) => {
+const UserInfo = ({navigation}) => {
   const dispatch = useDispatch();
   const profileState = useSelector((state) => state.profileState);
   const authState = useSelector((state) => state.authState);
@@ -42,9 +42,9 @@ const UserInfo = ({ navigation }) => {
           />
         </View>
       ) : (
-          <ScrollView style={styles.scroll}>
-            <View style={styles.container}>
-              {/* <View style={styles.customHeader}>
+        <ScrollView style={styles.scroll}>
+          <View style={styles.container}>
+            {/* <View style={styles.customHeader}>
               <TouchableOpacity
                 onPress={() => navigation.goBack()}
                 style={styles.customHeaderBack}>
@@ -55,274 +55,285 @@ const UserInfo = ({ navigation }) => {
                 />
               </TouchableOpacity>
             </View> */}
-              <View style={styles.detailsView}>
-                <View style={styles.userInfoView}>
-                  <View style={styles.imageView}>
-                    <Image
-                      style={profileState.userData.donorStatus === 1 ? styles.donorAvatar : styles.avatar}
-                      source={
-                        profileState.userData.profilePicture
-                          ? { uri: profileState.userData.profilePicture }
-                          : require('../../../assets/images/account/nodp.png')
-                      }
-                    />
-                  </View>
+            <View style={styles.detailsView}>
+              <View style={styles.userInfoView}>
+                <View style={styles.imageView}>
+                  <Image
+                    style={
+                      profileState.userData.donorStatus === 1
+                        ? styles.donorAvatar
+                        : styles.avatar
+                    }
+                    source={
+                      profileState.userData.profilePicture
+                        ? {uri: profileState.userData.profilePicture}
+                        : require('../../../assets/images/account/nodp.png')
+                    }
+                  />
+                </View>
 
-                  <Text style={styles.userName}>
-                    {profileState.userData.name}
-                  </Text>
-                  <Text style={styles.userId}>
-                    User ID: {profileState.userData.userId}
-                  </Text>
+                <Text style={styles.userName}>
+                  {profileState.userData.name}
+                </Text>
+                <Text style={styles.userId}>
+                  User ID: {profileState.userData.userId}
+                </Text>
+                {authState.userType === 1 ? (
+                  <>
+                    <View style={styles.donorStatusView}>
+                      {profileState.userData.donorStatus !== 1 &&
+                      profileState.userData.donorStatus !== 0 ? (
+                        <View style={styles.disabled}>
+                          <Text style={styles.donorStatusTouchText}>
+                            Donor status: Disabled
+                          </Text>
+                        </View>
+                      ) : (
+                        <TouchableOpacity
+                          onPress={() => {
+                            let newDonorStatus = 0;
+                            if (profileState.userData.donorStatus === 0) {
+                              newDonorStatus = 1;
+                            } else {
+                              newDonorStatus = 0;
+                            }
+                            dispatch(
+                              setDonorStatus(
+                                authState.userToken,
+                                newDonorStatus,
+                              ),
+                            );
+                          }}
+                          style={
+                            profileState.userData.donorStatus === 0
+                              ? styles.inactive
+                              : styles.active
+                          }>
+                          <Text style={styles.donorStatusTouchText}>
+                            Donor status:{' '}
+                            {profileState.userData.donorStatus === 0
+                              ? 'Inactive'
+                              : 'Active'}
+                          </Text>
+                          <Feather
+                            name="repeat"
+                            color={colors.additional2}
+                            size={17}
+                          />
+                        </TouchableOpacity>
+                      )}
+                    </View>
+                    <Text style={styles.infoText}>
+                      {profileState.userData.donorStatus === 0
+                        ? 'Click on the above button to upgarde to donor status'
+                        : profileState.userData.donorStatus === 1
+                        ? 'Click on the above button to leave donor status'
+                        : `Eligible for donation in ${Math.floor(
+                            56 -
+                              (new Date().getTime() -
+                                new Date(
+                                  profileState.userData.lastDonationDate.split(
+                                    'T',
+                                  )[0],
+                                ).getTime()) /
+                                (1000 * 60 * 60 * 24),
+                          )} days`}
+                    </Text>
+                  </>
+                ) : null}
+              </View>
+              <View style={styles.moreDetailsView}>
+                <View style={styles.statsView}>
                   {authState.userType === 1 ? (
                     <>
-                      <View style={styles.donorStatusView}>
-                        {profileState.userData.donorStatus !== 1 &&
-                          profileState.userData.donorStatus !== 0 ? (
-                            <View style={styles.disabled}>
-                              <Text style={styles.donorStatusTouchText}>
-                                Donor status: Disabled
-                          </Text>
-                            </View>
-                          ) : (
-                            <TouchableOpacity
-                              onPress={() => {
-                                let newDonorStatus = 0;
-                                if (profileState.userData.donorStatus === 0) {
-                                  newDonorStatus = 1;
-                                } else {
-                                  newDonorStatus = 0;
-                                }
-                                dispatch(
-                                  setDonorStatus(
-                                    authState.userToken,
-                                    newDonorStatus,
-                                  ),
-                                );
-                              }}
-                              style={
-                                profileState.userData.donorStatus === 0
-                                  ? styles.inactive
-                                  : styles.active
-                              }>
-                              <Text style={styles.donorStatusTouchText}>
-                                Donor status:{' '}
-                                {profileState.userData.donorStatus === 0
-                                  ? 'Inactive'
-                                  : 'Active'}
-                              </Text>
-                              <Feather
-                                name="repeat"
-                                color={colors.additional2}
-                                size={17}
-                              />
-                            </TouchableOpacity>
-                          )}
+                      <View style={styles.statsInsideView}>
+                        <Text style={styles.statsLabel}>Total Donations</Text>
+                        <Text style={styles.statsContent}>
+                          {profileState.profileData.donationMade}
+                        </Text>
                       </View>
-                      <Text style={styles.infoText}>
-                        {profileState.userData.donorStatus === 0
-                          ? 'Click on the above button to upgarde to donor status'
-                          : profileState.userData.donorStatus === 1
-                            ? 'Click on the above button to leave donor status'
-                            : `Eligible for donation in ${Math.floor(
-                              56 - ((new Date().getTime() -
-                              new Date(
-                                profileState.userData.lastDonationDate.split(
-                                  'T',
-                                )[0],
-                              ).getTime()) /
-                              (1000 * 60 * 60 * 24))
-                            )} days`}
-                      </Text>
+                      <View style={styles.statsInsideView}>
+                        <Text style={styles.statsLabel}>Commitments made</Text>
+                        <Text style={styles.statsContent}>
+                          {profileState.profileData.commitmentMade}
+                        </Text>
+                      </View>
+                      <View style={styles.statsInsideView}>
+                        <Text style={styles.statsLabel}>Drives attended</Text>
+                        <Text style={styles.statsContent}>
+                          {profileState.profileData.drivesAttended}
+                        </Text>
+                      </View>
                     </>
-                  ) : null}
+                  ) : authState.userType === 2 ? (
+                    <>
+                      <View style={styles.statsInsideView}>
+                        <Text style={styles.statsLabel}>Requests made</Text>
+                        <Text style={styles.statsContent}>
+                          {profileState.profileData.requestMade}
+                        </Text>
+                      </View>
+                      <View style={styles.statsInsideView}>
+                        <Text style={styles.statsLabel}>Drives conducted</Text>
+                        <Text style={styles.statsContent}>
+                          {profileState.profileData.drivesConducted}
+                        </Text>
+                      </View>
+                    </>
+                  ) : (
+                    <>
+                      <View style={styles.statsInsideView}>
+                        <Text style={styles.statsLabel}>Requests made</Text>
+                        <Text style={styles.statsContent}>
+                          {profileState.profileData.requestMade}
+                        </Text>
+                      </View>
+                      <View style={styles.statsInsideView}>
+                        <Text style={styles.statsLabel}>Drives conducted</Text>
+                        <Text style={styles.statsContent}>
+                          {profileState.profileData.drivesConducted}
+                        </Text>
+                      </View>
+                      <View style={styles.statsInsideView}>
+                        <Text style={styles.statsLabel}>Sales made</Text>
+                        <Text style={styles.statsContent}>
+                          {profileState.profileData.salesMade}
+                        </Text>
+                      </View>
+                    </>
+                  )}
                 </View>
-                <View style={styles.moreDetailsView}>
-                  <View style={styles.statsView}>
+              </View>
+              <View style={styles.aboutView}>
+                <View style={styles.addressView}>
+                  <View style={styles.editBtnView}>
+                    <Text style={styles.addressLabel}>About:</Text>
+                    <TouchableOpacity
+                      onPress={() => navigation.navigate('infoEdit')}>
+                      <Feather name="edit" color={colors.coolblue} size={19} />
+                    </TouchableOpacity>
+                  </View>
+                  <View style={styles.addressContentView}>
+                    <View style={styles.addressInsideView}>
+                      <Text style={styles.addressInsideLabel}>
+                        Recipient Email:
+                      </Text>
+                      <View style={styles.addressRightView}>
+                        <Text style={styles.addressContent}>
+                          {profileState.profileData.email}
+                        </Text>
+                      </View>
+                    </View>
+
                     {authState.userType === 1 ? (
                       <>
-                        <View style={styles.statsInsideView}>
-                          <Text style={styles.statsLabel}>Total Donations</Text>
-                          <Text style={styles.statsContent}>
-                            {profileState.profileData.donationMade}
+                        <View style={styles.addressInsideView}>
+                          <Text style={styles.addressInsideLabel}>
+                            Date Of Birth:
                           </Text>
+                          <View style={styles.addressRightView}>
+                            <Text style={styles.addressContent}>
+                              {profileState.profileData.dob
+                                ? profileState.profileData.dob.split('T')[0]
+                                : null}
+                            </Text>
+                          </View>
                         </View>
-                        <View style={styles.statsInsideView}>
-                          <Text style={styles.statsLabel}>Commitments made</Text>
-                          <Text style={styles.statsContent}>
-                            {profileState.profileData.commitmentMade}
+                        <View style={styles.addressInsideView}>
+                          <Text style={styles.addressInsideLabel}>
+                            Blood Group:
                           </Text>
+                          <View style={styles.addressRightView}>
+                            <Text style={styles.addressContent}>
+                              {profileState.profileData.bloodGroup}
+                            </Text>
+                          </View>
                         </View>
-                        <View style={styles.statsInsideView}>
-                          <Text style={styles.statsLabel}>Drives attended</Text>
-                          <Text style={styles.statsContent}>
-                            {profileState.profileData.drivesAttended}
-                          </Text>
-                        </View>
-                      </>
-                    ) : authState.userType === 2 ? (
-                      <>
-                        <View style={styles.statsInsideView}>
-                          <Text style={styles.statsLabel}>Requests made</Text>
-                          <Text style={styles.statsContent}>
-                            {profileState.profileData.requestMade}
-                          </Text>
-                        </View>
-                        <View style={styles.statsInsideView}>
-                          <Text style={styles.statsLabel}>Drives conducted</Text>
-                          <Text style={styles.statsContent}>
-                            {profileState.profileData.drivesConducted}
-                          </Text>
+                        <View style={styles.addressInsideView}>
+                          <Text style={styles.addressInsideLabel}>Phone:</Text>
+                          <View style={styles.addressRightView}>
+                            <Text style={styles.addressContent}>
+                              {profileState.profileData.phone}
+                            </Text>
+                          </View>
                         </View>
                       </>
                     ) : (
-                          <>
-                            <View style={styles.statsInsideView}>
-                              <Text style={styles.statsLabel}>Requests made</Text>
-                              <Text style={styles.statsContent}>
-                                {profileState.profileData.requestMade}
-                              </Text>
-                            </View>
-                            <View style={styles.statsInsideView}>
-                              <Text style={styles.statsLabel}>Drives conducted</Text>
-                              <Text style={styles.statsContent}>
-                                {profileState.profileData.drivesConducted}
-                              </Text>
-                            </View>
-                            <View style={styles.statsInsideView}>
-                              <Text style={styles.statsLabel}>Sales made</Text>
-                              <Text style={styles.statsContent}>
-                                {profileState.profileData.salesMade}
-                              </Text>
-                            </View>
-                          </>
-                        )}
-                  </View>
-                </View>
-                <View style={styles.aboutView}>
-                  <View style={styles.addressView}>
-                    <View style={styles.editBtnView}>
-                      <Text style={styles.addressLabel}>About:</Text>
-                      <TouchableOpacity
-                        onPress={() => navigation.navigate('infoEdit')}>
-                        <Feather name="edit" color={colors.coolblue} size={19} />
-                      </TouchableOpacity>
-                    </View>
-                    <View style={styles.addressContentView}>
                       <View style={styles.addressInsideView}>
-                        <Text style={styles.addressInsideLabel}>
-                          Recipient Email:
-                      </Text>
-                        <View style={styles.addressRightView}>
-                          <Text style={styles.addressContent}>
-                            {profileState.profileData.email}
-                          </Text>
+                        <Text style={styles.addressInsideLabel}>Phone:</Text>
+                        <View>
+                          <View style={styles.addressRightView}>
+                            <Text style={styles.addressContent}>{profileState.profileData.phone}</Text>
+                          </View>
+                          {console.log(profileState.profileData.phone)}
+                          {/* {
+                            //TODO THERE IS SOME ERROR HERE, CHECK IT OUT.
+                            profileState.profileData
+                              ? profileState.profileData.phone.map(
+                                  (val, idx) => (
+                                    <View
+                                      key={idx}
+                                      style={styles.addressRightView}>
+                                      <Text style={styles.addressContent}>
+                                        {val}
+                                      </Text>
+                                    </View>
+                                  ),
+                                )
+                              : null
+                          } */}
                         </View>
                       </View>
+                    )}
 
-                      {authState.userType === 1 ? (
-                        <>
-                          <View style={styles.addressInsideView}>
-                            <Text style={styles.addressInsideLabel}>
-                              Date Of Birth:
-                          </Text>
-                            <View style={styles.addressRightView}>
-                              <Text style={styles.addressContent}>
-                                {profileState.profileData.dob
-                                  ? profileState.profileData.dob.split('T')[0]
-                                  : null}
-                              </Text>
-                            </View>
-                          </View>
-                          <View style={styles.addressInsideView}>
-                            <Text style={styles.addressInsideLabel}>
-                              Blood Group:
-                          </Text>
-                            <View style={styles.addressRightView}>
-                              <Text style={styles.addressContent}>
-                                {profileState.profileData.bloodGroup}
-                              </Text>
-                            </View>
-                          </View>
-                          <View style={styles.addressInsideView}>
-                            <Text style={styles.addressInsideLabel}>Phone:</Text>
-                            <View style={styles.addressRightView}>
-                              <Text style={styles.addressContent}>
-                                {profileState.profileData.phone}
-                              </Text>
-                            </View>
-                          </View>
-                        </>
-                      ) : (
-                          <View style={styles.addressInsideView}>
-                            <Text style={styles.addressInsideLabel}>Phone:</Text>
-                            <View>
-                              {console.log(profileState.profileData.phone)}
-                              {
-                                //TODO THERE IS SOME ERROR HERE, CHECK IT OUT.
-                                profileState.profileData && profileState.profileData.phone.length > 0
-                                  ? profileState.profileData.phone.map(
-                                    (val, idx) => (
-                                      <View
-                                        key={idx}
-                                        style={styles.addressRightView}>
-                                        <Text style={styles.addressContent}>
-                                          {val}
-                                        </Text>
-                                      </View>
-                                    ),
-                                  )
-                                  : null
-                              }
-                            </View>
-                          </View>
-                        )}
-
-                      <View style={styles.addressInsideView}>
-                        <Text style={styles.addressInsideLabel}>Address: </Text>
-                        <View style={styles.addressRightView}>
-                          <Text style={styles.addressContent}>
-                            {profileState.profileData.address},{' '}
-                            {profileState.profileData.district}, {'\n'}
-                            {profileState.profileData.state} [
+                    <View style={styles.addressInsideView}>
+                      <Text style={styles.addressInsideLabel}>Address: </Text>
+                      <View style={styles.addressRightView}>
+                        <Text style={styles.addressContent}>
+                          {profileState.profileData.address},{' '}
+                          {profileState.profileData.district}, {'\n'}
+                          {profileState.profileData.state} [
                           {profileState.profileData.pincode}]
                         </Text>
-                        </View>
                       </View>
-                      <View style={styles.addressInsideView}>
-                        <Text style={styles.addressInsideLabel}>
-                          Registered on:
+                    </View>
+                    <View style={styles.addressInsideView}>
+                      <Text style={styles.addressInsideLabel}>
+                        Registered on:
                       </Text>
-                        <View style={styles.addressRightView}>
-                          <Text style={styles.addressContent}>
-                            {profileState.profileData.registration_date
-                              ? `${profileState.profileData.registration_date.split(
-                                'T',
-                              )[0]
-                              } at ${profileState.profileData.registration_date
-                                .split('T')[1]
-                                .split(':')[0]
-                              }:${profileState.profileData.registration_date
-                                .split('T')[1]
-                                .split(':')[1]
+                      <View style={styles.addressRightView}>
+                        <Text style={styles.addressContent}>
+                          {profileState.profileData.registration_date
+                            ? `${
+                                profileState.profileData.registration_date.split(
+                                  'T',
+                                )[0]
+                              } at ${
+                                profileState.profileData.registration_date
+                                  .split('T')[1]
+                                  .split(':')[0]
+                              }:${
+                                profileState.profileData.registration_date
+                                  .split('T')[1]
+                                  .split(':')[1]
                               }`
-                              : null}
-                          </Text>
-                        </View>
+                            : null}
+                        </Text>
                       </View>
                     </View>
                   </View>
                 </View>
               </View>
-              <View style={styles.logoView}>
-                <Image
-                  style={styles.logo}
-                  source={require('../../../assets/images/logotransparentbkg.png')}
-                />
-              </View>
             </View>
-          </ScrollView>
-        )}
+            <View style={styles.logoView}>
+              <Image
+                style={styles.logo}
+                source={require('../../../assets/images/logotransparentbkg.png')}
+              />
+            </View>
+          </View>
+        </ScrollView>
+      )}
     </>
   );
 };

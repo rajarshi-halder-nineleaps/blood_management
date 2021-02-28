@@ -7,6 +7,7 @@ import {
   ScrollView,
   StyleSheet,
   Alert,
+  ActivityIndicator,
   TouchableOpacity,
 } from 'react-native';
 import {updateFields, blurFields} from '../../redux/forgotpassword/actions';
@@ -32,7 +33,7 @@ const Findaccount = ({navigation}) => {
     if (forgotState.emailSent) {
       navigation.navigate('EnterOTP');
     }
-  }, [forgotState.emailSent, navigation]);
+  }, [forgotState.emailSent]);
 
   const handleEmail = (val, fieldId) => {
     let isValid = true;
@@ -52,6 +53,18 @@ const Findaccount = ({navigation}) => {
 
   return (
     <SafeAreaView style={styles.container}>
+      {forgotState.loading ? (
+      <View style={styles.progressBoard}>
+        <ActivityIndicator
+          visible={forgotState.loading}
+          textContent={'Loading...'}
+          textStyle={styles.spinnerTextStyle}
+          animating={true}
+          color={colors.primary}
+          size="large"
+        />
+      </View>
+      ) : (
       <ScrollView>
         <View style={{flex: 1}}>
           <View style={styles.header}>
@@ -105,6 +118,7 @@ const Findaccount = ({navigation}) => {
           </View>
         </View>
       </ScrollView>
+      )}
     </SafeAreaView>
   );
 };
@@ -125,6 +139,11 @@ const styles = StyleSheet.create({
     paddingHorizontal: 40,
     paddingBottom: 10,
     paddingTop: 80,
+  },
+  progressBoard: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   body: {
     flex: 1,

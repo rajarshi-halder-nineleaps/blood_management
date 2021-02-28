@@ -47,20 +47,27 @@ export const resetDoneState = (resettable) => ({
 //THUNK ACTION TO POST EMAIL
 
 export const postEmail = (email) => {
-  console.log('sending email');
+  console.log(email);
   return async (dispatch) => {
     dispatch(forgotReq());
     dispatch(resetDoneState('emailSent'));
     try {
       const response = await axios.post(
-        'http://192.168.43.89:5000/forgotpassword',
+        'http://192.168.43.217:8080/email/sendotp',
         {
-          recoveryEmail: email,
+          userEmail: email,
         },
       );
-      if (response.data.error) {
-        dispatch(forgotReqFailure(response.data.error));
-        console.log('Error while posting recovery email', response.data.error);
+      console.log(response.data);
+      if (!response.data.success) {
+        dispatch(
+          forgotReqFailure(
+            'The provided email is not currently registered with us.',
+          ),
+        );
+        console.log(
+          'Error while posting recovery email'
+        );
         //* COORDINATE WITH BACK END TEAM TO ADD A BOOLEAN SUCCESS FLAG HERE.
       } else if (response.data.success) {
         dispatch(forgotReqSuccess('emailSent'));
@@ -81,13 +88,16 @@ export const postOTP = (email, otp) => {
     dispatch(forgotReq());
     dispatch(resetDoneState('otp'));
     try {
-      const response = await axios.post('http://192.168.43.89:5000/otp', {
-        email,
-        otp,
-      });
-      if (response.data.error) {
-        dispatch(forgotReqFailure(response.data.error));
-        console.log('Error while posting otp', response.data.error);
+      const response = await axios.post(
+        'http://192.168.43.217:8080/email/verifyotp',
+        {
+          userEmail: email,
+          otp,
+        },
+      );
+      if (!response.data.success) {
+        dispatch(forgotReqFailure('Invalid OTP, try again!'));
+        console.log('Error while posting otp');
         //* COORDINATE WITH BACK END TEAM TO ADD A BOOLEAN SUCCESS FLAG HERE.
       } else if (response.data.success) {
         dispatch(forgotReqSuccess('otpVerified'));
@@ -107,14 +117,20 @@ export const postResetPassword = (email, password) => {
   return async (dispatch) => {
     dispatch(forgotReq());
     try {
-      const response = await axios.put('http://192.168.43.89:5000/resetpwd', {
-        email,
-        password,
-      });
-      if (response.data.error) {
-        dispatch(forgotReqFailure(response.data.error));
-        console.log('Error while posting reset password', response.data.error);
-      } else if (response.data.success) {
+      const response = await axios.put(
+        'http://192.168.43.217:8080/profile/resetpassword',
+        {
+          userEmail: email,
+          newPassword: password,
+        },
+      );
+      if (response.headers.error) {
+        dispatch(forgotReqFailure(response.headers.error));
+        console.log(
+          'Error while posting reset password',
+          response.headers.error,
+        );
+      } else if (response.headers.success) {
         dispatch(forgotReqSuccess('passwordReset'));
       } else {
         dispatch(forgotReqFailure("Something's not right!"));
