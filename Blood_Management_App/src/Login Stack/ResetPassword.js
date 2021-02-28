@@ -7,8 +7,10 @@ import {
   StyleSheet,
   ScrollView,
   Alert,
+  ActivityIndicator,
   TouchableOpacity,
 } from 'react-native';
+import Fields from '../../components/Fields';
 import {TextInput} from 'react-native-gesture-handler';
 import colors from '../../constants/Colors';
 import Feather from 'react-native-vector-icons/Feather';
@@ -71,24 +73,36 @@ const Resetpassword = ({navigation}) => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <ScrollView>
-        <View style={styles.header}>
-          <TouchableOpacity onPress={() => navigation.goBack()}>
-            <Feather name="chevron-left" color="white" size={30} />
-          </TouchableOpacity>
+      {forgotState.loading ? (
+        <View style={styles.progressBoard}>
+          <ActivityIndicator
+            visible={forgotState.loading}
+            textContent={'Loading...'}
+            textStyle={styles.spinnerTextStyle}
+            animating={true}
+            color={colors.primary}
+            size="large"
+          />
         </View>
-        <View style={styles.colorView}>
-          <Text style={styles.titlefont}>Set new password</Text>
-        </View>
-        <View style={styles.body}>
-          <Text style={styles.titlefontdesc}>Enter a new password</Text>
-          <Text style={{marginTop: 20}}>
-            Password must be at least 8 characters long and must contain at
-            least 1 number, 1 special character, 1 uppercase and 1 lowercase
-            alphabet.
-          </Text>
+      ) : (
+        <ScrollView>
+          <View style={styles.header}>
+            <TouchableOpacity onPress={() => navigation.goBack()}>
+              <Feather name="chevron-left" color="white" size={30} />
+            </TouchableOpacity>
+          </View>
+          <View style={styles.colorView}>
+            <Text style={styles.titlefont}>Set new password</Text>
+          </View>
+          <View style={styles.body}>
+            <Text style={styles.titlefontdesc}>Enter a new password</Text>
+            <Text style={{marginTop: 20}}>
+              Password must be at least 8 characters long and must contain at
+              least 1 number, 1 special character, 1 uppercase and 1 lowercase
+              alphabet.
+            </Text>
 
-          <TextInput
+            {/* <TextInput
             secureTextEntry={true}
             keyboardType="default"
             value={forgotState.inputValues.password}
@@ -103,9 +117,37 @@ const Resetpassword = ({navigation}) => {
           {!forgotState.inputValidity.password &&
             forgotState.isTouched.password && (
               <Text style={styles.errMsg}>Invalid password format!</Text>
-            )}
+            )} */}
 
-          <TextInput
+            <Fields
+              keyboardType="default"
+              label="Password"
+              error="Invalid password"
+              secureTextEntry={true}
+              value={forgotState.inputValues.password}
+              inputIsValid={forgotState.inputValidity.password}
+              inputIsTouched={forgotState.isTouched.password}
+              onChangeText={(val) => handlepassword(val, 'password')}
+              onBlur={() => {
+                dispatch(blurFields('password'));
+              }}
+            />
+
+            <Fields
+              keyboardType="default"
+              label="Password"
+              error="Password mismatch"
+              secureTextEntry={true}
+              value={forgotState.inputValues.cpassword}
+              inputIsValid={forgotState.inputValidity.cpassword}
+              inputIsTouched={forgotState.isTouched.cpassword}
+              onChangeText={(val) => handlepassword(val, 'cpassword')}
+              onBlur={() => {
+                dispatch(blurFields('cpassword'));
+              }}
+            />
+
+            {/* <TextInput
             secureTextEntry={true}
             keyboardType="default"
             value={forgotState.inputValues.cpassword}
@@ -119,19 +161,20 @@ const Resetpassword = ({navigation}) => {
           {!forgotState.inputValidity.cpassword &&
             forgotState.isTouched.cpassword && (
               <Text style={styles.errMsg}>Password mismatch!</Text>
-            )}
+            )} */}
 
-          <View style={styles.button}>
-            <TouchableOpacity
-              style={styles.signIn}
-              onPress={() => handleSubmit()}>
-              <Text style={[styles.textSign, {color: 'white'}]}>
-                Set Password
-              </Text>
-            </TouchableOpacity>
+            <View style={styles.button}>
+              <TouchableOpacity
+                style={styles.signIn}
+                onPress={() => handleSubmit()}>
+                <Text style={[styles.textSign, {color: 'white'}]}>
+                  Set Password
+                </Text>
+              </TouchableOpacity>
+            </View>
           </View>
-        </View>
-      </ScrollView>
+        </ScrollView>
+      )}
     </SafeAreaView>
   );
 };
@@ -140,6 +183,11 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: 'white',
+  },
+  progressBoard: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   header: {
     padding: 20,

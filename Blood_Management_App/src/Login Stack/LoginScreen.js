@@ -24,6 +24,7 @@ import {
   blurFields,
   stateCleanup,
 } from '../../redux/login/actions.js';
+import Fields from '../../components/Fields';
 
 const LoginScreen = ({navigation}) => {
   const dispatch = useDispatch();
@@ -33,7 +34,7 @@ const LoginScreen = ({navigation}) => {
   //? state cleanup useEffect on first render.
   useEffect(() => {
     dispatch(stateCleanup());
-  }, []);
+  }, [dispatch]);
 
   //? login touch submit handler.
   const onSubmitHandler = () => {
@@ -82,7 +83,20 @@ const LoginScreen = ({navigation}) => {
 
           <View style={styles.contentView}>
             <View style={styles.inputView}>
-              <TextInput
+              <Fields
+                keyboardType="default"
+                label="Email"
+                error="Invalid email"
+                value={loginFormState.inputValues.email}
+                inputIsValid={loginFormState.inputValidity.email}
+                inputIsTouched={loginFormState.isTouched.email}
+                onChangeText={(val) => checkValidity(val, 'email')}
+                onBlur={() => {
+                  blurListener('email');
+                }}
+              />
+
+              {/* <TextInput
                 value={loginFormState.inputValues.email}
                 keyboardType="email-address"
                 style={styles.input}
@@ -96,8 +110,9 @@ const LoginScreen = ({navigation}) => {
                 loginFormState.isTouched.email && (
                   <Text style={styles.errMsg}>Invalid email address!</Text>
                 )}
+ */}
 
-              <TextInput
+              {/* <TextInput
                 value={loginFormState.inputValues.password}
                 keyboardType="default"
                 style={styles.input}
@@ -111,12 +126,32 @@ const LoginScreen = ({navigation}) => {
               {!loginFormState.inputValidity.password &&
                 loginFormState.isTouched.password && (
                   <Text style={styles.errMsg}>Invalid password!</Text>
-                )}
+                )} */}
+
+              <Fields
+                keyboardType="default"
+                label="Password"
+                error="Invalid password"
+                secureTextEntry={true}
+                value={loginFormState.inputValues.password}
+                inputIsValid={loginFormState.inputValidity.password}
+                inputIsTouched={loginFormState.isTouched.password}
+                onChangeText={(val) => checkValidity(val, 'password')}
+                onBlur={() => {
+                  blurListener('password');
+                }}
+              />
             </View>
             <TouchableOpacity
               style={styles.forgotTouch}
               onPress={() => navigation.navigate('FindAccount')}>
-              <Text style={{color: colors.grayishblack}}>Forgot Password?</Text>
+              <Text
+                style={{
+                  color: colors.darkPrimary,
+                  fontFamily: 'Montserrat-Regular',
+                }}>
+                Forgot Password?
+              </Text>
             </TouchableOpacity>
 
             <View style={styles.button}>
@@ -130,7 +165,7 @@ const LoginScreen = ({navigation}) => {
             <TouchableOpacity
               style={styles.registerTouch}
               onPress={() => navigation.navigate('RegisterScreen')}>
-              <Text style={{fontSize: 18}}>
+              <Text style={styles.registerOuterText}>
                 New user? <Text style={styles.register}>Register Now</Text>
               </Text>
             </TouchableOpacity>
@@ -178,7 +213,7 @@ const styles = StyleSheet.create({
     borderRadius: 100,
     backgroundColor: colors.accent,
     fontSize: 18,
-    fontFamily: 'sans-serif-condensed',
+    fontFamily: 'Montserrat-Regular',
     paddingHorizontal: 30,
     color: 'black',
   },
@@ -209,11 +244,18 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     padding: 40,
   },
+  registerOuterText: {
+    color: colors.grayishblack,
+    alignItems: 'center',
+    justifyContent: 'center',
+    fontFamily: 'Montserrat-Regular',
+    fontSize: 18,
+  },
   register: {
     color: colors.primary,
     alignItems: 'center',
     justifyContent: 'center',
-    fontFamily: 'sans-serif-light',
+    fontFamily: 'Montserrat-Regular',
     fontSize: 18,
   },
 });

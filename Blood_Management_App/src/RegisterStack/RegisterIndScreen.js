@@ -19,7 +19,6 @@ import {
   stateCleanup,
 } from '../../redux/registerInd/actions';
 import colors from '../../constants/Colors';
-import Input from '../../components/Input';
 import {regUserUp} from '../../redux/auth/actions';
 import {useDispatch, useSelector} from 'react-redux';
 import {
@@ -28,6 +27,7 @@ import {
   phoneRegex,
   pincodeRegex,
 } from '../../constants/Regexes';
+import Fields from '../../components/Fields';
 import * as places from '../../assets/places.json';
 import {Picker} from '@react-native-picker/picker';
 import CheckBox from '@react-native-community/checkbox';
@@ -165,8 +165,8 @@ const RegisterBbScreen = ({navigation}) => {
             <Text style={styles.heading}>Register</Text>
           </View>
           <View style={styles.contentBoard}>
-            <Input
-              label="Name"
+            <Fields
+              label="Name*"
               error="Invalid name!"
               returnKeyType="next"
               inputIsValid={regFormState.inputValidity.name}
@@ -178,8 +178,8 @@ const RegisterBbScreen = ({navigation}) => {
               }}
             />
 
-            <Input
-              label="Email"
+            <Fields
+              label="Email*"
               error="Invalid email!"
               returnKeyType="next"
               keyboardType="email-address"
@@ -192,8 +192,8 @@ const RegisterBbScreen = ({navigation}) => {
               }}
             />
 
-            <Input
-              label="Phone"
+            <Fields
+              label="Phone*"
               error="Invalid phone!"
               returnKeyType="next"
               keyboardType="phone-pad"
@@ -206,9 +206,14 @@ const RegisterBbScreen = ({navigation}) => {
               value={regFormState.inputValues.phone}
             />
 
+            <Text style={styles.pickerLabel}>Date of birth*</Text>
             <TouchableOpacity
               onPress={showDatepicker}
-              style={styles.pickerView}>
+              style={
+                !regFormState.inputValidity.dob && regFormState.isTouched.dob
+                  ? styles.pickerViewInvalid
+                  : styles.pickerView
+              }>
               <Text
                 style={{
                   fontSize: 18,
@@ -232,8 +237,14 @@ const RegisterBbScreen = ({navigation}) => {
                 onChange={onChange}
               />
             )}
-
-            <View style={styles.pickerView}>
+            <Text style={styles.pickerLabel}>Blood group*</Text>
+            <View
+              style={
+                !regFormState.inputValidity.bloodgroup &&
+                regFormState.inputValues.bloodgroup
+                  ? styles.pickerViewInvalid
+                  : styles.pickerView
+              }>
               <Picker
                 mode="dropdown"
                 iosIcon={<Feather name="arrow-down" style={{color: 'red'}} />}
@@ -264,10 +275,12 @@ const RegisterBbScreen = ({navigation}) => {
                 </Text>
               )}
 
-            <Input
-              label="Current Address"
+            <Fields
+              label="Current Address*"
               error="This field is required"
               returnKeyType="next"
+              multiline={true}
+              numberOfLines={3}
               inputIsValid={regFormState.inputValidity.address}
               inputIsTouched={regFormState.isTouched.address}
               value={regFormState.inputValues.address}
@@ -277,7 +290,14 @@ const RegisterBbScreen = ({navigation}) => {
               }}
             />
 
-            <View style={styles.pickerView}>
+            <Text style={styles.pickerLabel}>State*</Text>
+            <View
+              style={
+                !regFormState.inputValidity.selectedState &&
+                regFormState.isTouched.selectedState
+                  ? styles.pickerViewInvalid
+                  : styles.pickerView
+              }>
               <Picker
                 selectedValue={regFormState.inputValues.selectedState}
                 onValueChange={(val, itemIndex) => {
@@ -296,7 +316,15 @@ const RegisterBbScreen = ({navigation}) => {
                 <Text style={styles.errorMsg}>Please select your state</Text>
               )}
 
-            <View style={styles.pickerView}>
+            <Text style={styles.pickerLabel}>District*</Text>
+
+            <View
+              style={
+                !regFormState.inputValidity.selectedDistrict &&
+                regFormState.isTouched.selectedDistrict
+                  ? styles.pickerViewInvalid
+                  : styles.pickerView
+              }>
               <Picker
                 enabled={distEnb}
                 selectedValue={regFormState.inputValues.selectedDistrict}
@@ -314,8 +342,8 @@ const RegisterBbScreen = ({navigation}) => {
                 <Text style={styles.errorMsg}>Please select your district</Text>
               )}
 
-            <Input
-              label="Pin code"
+            <Fields
+              label="Pin code*"
               error="Please enter valid pincode"
               keyboardType="number-pad"
               returnKeyType="next"
@@ -328,9 +356,9 @@ const RegisterBbScreen = ({navigation}) => {
               }}
             />
 
-            <Input
+            <Fields
               secureTextEntry={true}
-              label="Password"
+              label="Password*"
               error="Please enter a stronger password"
               returnKeyType="next"
               inputIsValid={regFormState.inputValidity.password}
@@ -341,9 +369,9 @@ const RegisterBbScreen = ({navigation}) => {
                 blurListener('password');
               }}
             />
-            <Input
+            <Fields
               secureTextEntry={true}
-              label="Confirm Password"
+              label="Confirm Password*"
               error="Password mismatch!"
               returnKeyType="next"
               inputIsValid={regFormState.inputValidity.cpassword}
@@ -366,7 +394,7 @@ const RegisterBbScreen = ({navigation}) => {
                     blurListener('tnc');
                   }}
                 />
-                <Text style={styles.tncText}>Accept T&C</Text>
+                <Text style={styles.tncText}>Accept Terms and Conditions.</Text>
               </View>
               {!regFormState.inputValidity.tnc &&
                 regFormState.isTouched.tnc && (
@@ -423,7 +451,7 @@ const styles = StyleSheet.create({
   heading: {
     color: colors.additional2,
     fontSize: 40,
-    fontFamily: 'sans-serif-light',
+    fontFamily: 'Montserrat-Regular',
   },
   contentBoard: {
     paddingHorizontal: 30,
@@ -456,19 +484,41 @@ const styles = StyleSheet.create({
     padding: 10,
     borderColor: colors.additional1,
   },
+  pickerLabel: {
+    color: colors.grayishblack,
+    fontFamily: 'Montserrat-Regular',
+    marginTop: 10,
+    paddingBottom: 3,
+  },
   pickerView: {
-    marginVertical: 10,
-    paddingVertical: 3,
-    borderRadius: 100,
-    backgroundColor: colors.accent,
-    fontSize: 18,
-    fontFamily: 'sans-serif-condensed',
+    borderRadius: 5,
+    backgroundColor: 'transparent',
+    borderColor: colors.grayishblack,
+    borderWidth: 2,
+    fontSize: 14,
+    fontFamily: 'Montserrat-Regular',
+    paddingHorizontal: 30,
+    color: 'black',
+    marginBottom: 10,
+  },
+  pickerViewInvalid: {
+    borderRadius: 5,
+    backgroundColor: 'transparent',
+    borderColor: colors.dutchred,
+    borderWidth: 2,
+    fontSize: 14,
+    fontFamily: 'Montserrat-Regular',
     paddingHorizontal: 30,
     color: 'black',
   },
+  picker: {
+    color: colors.grayishblack,
+    fontFamily: 'Montserrat-Regular',
+  },
   errorMsg: {
-    color: colors.primary,
+    color: colors.dutchred,
     fontFamily: 'qs-reg',
+    marginBottom: 10,
   },
   loginPress: {
     justifyContent: 'center',

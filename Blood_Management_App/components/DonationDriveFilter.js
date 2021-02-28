@@ -88,13 +88,12 @@ const styles = StyleSheet.create({
     width: '100%',
     height: '100%',
     flex: 1,
-    backgroundColor: colors.primary,
-    elevation: 5,
+    backgroundColor: colors.primaryTranslucent,
     justifyContent: 'center',
     alignItems: 'center',
   },
   activeFilterText: {
-    color: colors.additional2,
+    color: colors.primary,
     fontSize: 18,
     fontFamily: 'Montserrat-Regular',
 

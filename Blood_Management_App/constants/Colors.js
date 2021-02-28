@@ -13,6 +13,7 @@ const colors = {
   green: 'green',
   peach: '#FE5F55',
   sapphireblue: '#0f52ba',
+  primaryTranslucent: 'rgba(233, 67, 100, 0.3)',
 };
 
 export default colors;

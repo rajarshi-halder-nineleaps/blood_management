@@ -7,12 +7,14 @@ import {
   ScrollView,
   StyleSheet,
   Alert,
+  ActivityIndicator,
   TouchableOpacity,
 } from 'react-native';
 import {updateFields, blurFields} from '../../redux/forgotpassword/actions';
 import {useDispatch, useSelector} from 'react-redux';
 import {emailRegex} from '../../constants/Regexes';
 import {TextInput} from 'react-native-gesture-handler';
+import Fields from '../../components/Fields';
 import {postEmail, resetDoneState} from '../../redux/forgotpassword/actions';
 import colors from '../../constants/Colors';
 
@@ -31,7 +33,7 @@ const Findaccount = ({navigation}) => {
     if (forgotState.emailSent) {
       navigation.navigate('EnterOTP');
     }
-  }, [forgotState.emailSent, navigation]);
+  }, [forgotState.emailSent]);
 
   const handleEmail = (val, fieldId) => {
     let isValid = true;
@@ -51,6 +53,18 @@ const Findaccount = ({navigation}) => {
 
   return (
     <SafeAreaView style={styles.container}>
+      {forgotState.loading ? (
+      <View style={styles.progressBoard}>
+        <ActivityIndicator
+          visible={forgotState.loading}
+          textContent={'Loading...'}
+          textStyle={styles.spinnerTextStyle}
+          animating={true}
+          color={colors.primary}
+          size="large"
+        />
+      </View>
+      ) : (
       <ScrollView>
         <View style={{flex: 1}}>
           <View style={styles.header}>
@@ -66,7 +80,20 @@ const Findaccount = ({navigation}) => {
               Help us find your Account by entering your Registered Email
             </Text>
 
-            <TextInput
+            <Fields
+              keyboardType="default"
+              label="Recovery Email"
+              error="Invalid Email"
+              value={forgotState.inputValues.email}
+              inputIsValid={forgotState.inputValidity.email}
+              inputIsTouched={forgotState.isTouched.email}
+              onChangeText={(val) => handleEmail(val, 'email')}
+              onBlur={() => {
+                dispatch(blurFields('email'));
+              }}
+            />
+
+            {/* <TextInput
               keyboardType="email-address"
               style={[styles.input, {marginTop: 30}]}
               value={forgotState.inputValues.email}
@@ -79,7 +106,7 @@ const Findaccount = ({navigation}) => {
             {!forgotState.inputValidity.email &&
               forgotState.isTouched.email && (
                 <Text style={styles.errMsg}>Invalid email!</Text>
-              )}
+              )} */}
 
             <View style={styles.button}>
               <TouchableOpacity
@@ -91,6 +118,7 @@ const Findaccount = ({navigation}) => {
           </View>
         </View>
       </ScrollView>
+      )}
     </SafeAreaView>
   );
 };
@@ -112,6 +140,11 @@ const styles = StyleSheet.create({
     paddingBottom: 10,
     paddingTop: 80,
   },
+  progressBoard: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
   body: {
     flex: 1,
     paddingHorizontal: 40,
@@ -120,13 +153,13 @@ const styles = StyleSheet.create({
   },
   titlefont: {
     fontSize: 40,
-    fontFamily: 'sans-serif-light',
+    fontFamily: 'Montserrat-Regular',
     color: colors.additional2,
     marginBottom: 20,
   },
   titlefontdesc: {
-    fontSize: 20,
-    fontWeight: '500',
+    fontSize: 18,
+    fontFamily: 'Montserrat-Regular',
   },
   input: {
     paddingVertical: 15,
@@ -134,7 +167,7 @@ const styles = StyleSheet.create({
     borderRadius: 100,
     backgroundColor: colors.accent,
     fontSize: 18,
-    fontFamily: 'sans-serif-condensed',
+    fontFamily: 'sans-se',
     paddingHorizontal: 30,
     color: 'black',
   },
@@ -156,8 +189,7 @@ const styles = StyleSheet.create({
   },
   textSign: {
     fontSize: 25,
-    fontWeight: 'bold',
-    fontFamily: 'serif',
+    fontFamily: 'Montserrat-Regular',
   },
 });
 
