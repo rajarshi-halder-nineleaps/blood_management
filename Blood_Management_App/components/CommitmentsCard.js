@@ -32,11 +32,11 @@ const CommitmentsCard = ({item}) => {
         <View style={styles.headerIndicatorView}>
           {item.compeleted ? (
             <View style={styles.yesnoView}>
-              <Text style={styles.yes}>DONE</Text>
+              <Text style={styles.yes}>COMPLETED</Text>
             </View>
           ) : (
             <View style={styles.yesnoView}>
-              <Text style={styles.no}>TODO</Text>
+              <Text style={styles.no}>INCOMPLETE</Text>
             </View>
           )}
         </View>
@@ -69,7 +69,7 @@ const CommitmentsCard = ({item}) => {
               <Text style={styles.addressLabel}>Details:</Text>
               <View style={styles.addressContentView}>
                 <View style={styles.addressInsideView}>
-                  <Text style={styles.addressInsideLabel}>Address: </Text>
+                  <Text style={styles.addressInsideLabel}>Address of donation: </Text>
                   <View style={styles.addressRightView}>
                     <Text style={styles.addressContent}>
                       {item.recipientAddress}
@@ -124,7 +124,6 @@ const CommitmentsCard = ({item}) => {
                     <View style={styles.addressRightView}>
                       <Text style={styles.addressContent}>
                         {item.endTimeStamp ? `${item.endTimeStamp.split('T')[0]}, ${item.endTimeStamp.split('T')[1].split(':')[0]}:${item.endTimeStamp.split('T')[1].split(':')[1]}` : null}
-                        {}
                       </Text>
                     </View>
                   </View>

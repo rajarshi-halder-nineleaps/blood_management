@@ -9,6 +9,7 @@ import {
   Alert,
   TouchableOpacity,
 } from 'react-native';
+import Fields from '../../components/Fields';
 import {TextInput} from 'react-native-gesture-handler';
 import colors from '../../constants/Colors';
 import Feather from 'react-native-vector-icons/Feather';
@@ -88,7 +89,7 @@ const Resetpassword = ({navigation}) => {
             alphabet.
           </Text>
 
-          <TextInput
+          {/* <TextInput
             secureTextEntry={true}
             keyboardType="default"
             value={forgotState.inputValues.password}
@@ -103,9 +104,37 @@ const Resetpassword = ({navigation}) => {
           {!forgotState.inputValidity.password &&
             forgotState.isTouched.password && (
               <Text style={styles.errMsg}>Invalid password format!</Text>
-            )}
+            )} */}
 
-          <TextInput
+          <Fields
+            keyboardType="default"
+            label="Password"
+            error="Invalid password"
+            secureTextEntry={true}
+            value={forgotState.inputValues.password}
+            inputIsValid={forgotState.inputValidity.password}
+            inputIsTouched={forgotState.isTouched.password}
+            onChangeText={(val) => handlepassword(val, 'password')}
+            onBlur={() => {
+              dispatch(blurFields('password'));
+            }}
+          />
+
+          <Fields
+            keyboardType="default"
+            label="Password"
+            error="Password mismatch"
+            secureTextEntry={true}
+            value={forgotState.inputValues.cpassword}
+            inputIsValid={forgotState.inputValidity.cpassword}
+            inputIsTouched={forgotState.isTouched.cpassword}
+            onChangeText={(val) => handlepassword(val, 'cpassword')}
+            onBlur={() => {
+              dispatch(blurFields('cpassword'));
+            }}
+          />
+
+          {/* <TextInput
             secureTextEntry={true}
             keyboardType="default"
             value={forgotState.inputValues.cpassword}
@@ -119,7 +148,7 @@ const Resetpassword = ({navigation}) => {
           {!forgotState.inputValidity.cpassword &&
             forgotState.isTouched.cpassword && (
               <Text style={styles.errMsg}>Password mismatch!</Text>
-            )}
+            )} */}
 
           <View style={styles.button}>
             <TouchableOpacity

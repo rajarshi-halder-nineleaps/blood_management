@@ -18,6 +18,7 @@ import {
   phoneTouchSet,
   stateCleanup,
 } from '../../redux/register/actions';
+import Fields from '../../components/Fields';
 import {regUserUp} from '../../redux/auth/actions';
 import React, {useState, useEffect} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
@@ -29,7 +30,6 @@ import {
   pincodeRegex,
 } from '../../constants/Regexes';
 import colors from '../../constants/Colors';
-import Input from '../../components/Input';
 import * as places from '../../assets/places.json';
 import CheckBox from '@react-native-community/checkbox';
 import Feather from 'react-native-vector-icons/Feather';
@@ -144,8 +144,8 @@ const RegisterHosScreen = ({navigation}) => {
             <Text style={styles.heading}>Register</Text>
           </View>
           <View style={styles.contentBoard}>
-            <Input
-              label="Name of the institution"
+            <Fields
+              label="Name of the institution*"
               error="Invalid name!"
               returnKeyType="next"
               inputIsValid={regFormState.inputValidity.name}
@@ -156,8 +156,8 @@ const RegisterHosScreen = ({navigation}) => {
                 blurListener('name');
               }}
             />
-            <Input
-              label="Email"
+            <Fields
+              label="Email*"
               error="Invalid email!"
               returnKeyType="next"
               keyboardType="email-address"
@@ -172,8 +172,8 @@ const RegisterHosScreen = ({navigation}) => {
 
             {regFormState.inputValues.phone.map((val, idx) => {
               return (
-                <Input
-                  label={'Phone #' + (idx + 1)}
+                <Fields
+                  label={'Phone #' + (idx + 1) + '*'}
                   key={idx}
                   error="Invalid phone!"
                   returnKeyType="next"
@@ -202,8 +202,8 @@ const RegisterHosScreen = ({navigation}) => {
               </TouchableOpacity>
             </View>
 
-            <Input
-              label="Liscence Number"
+            <Fields
+              label="Liscence Number*"
               error="This field is required"
               returnKeyType="next"
               inputIsValid={regFormState.inputValidity.license}
@@ -214,10 +214,12 @@ const RegisterHosScreen = ({navigation}) => {
                 blurListener('license');
               }}
             />
-            <Input
-              label="Registered Address"
+            <Fields
+              label="Registered Address*"
               error="This field is required"
               returnKeyType="next"
+              multiline={true}
+              numberOfLines={3}
               inputIsValid={regFormState.inputValidity.address}
               inputIsTouched={regFormState.isTouched.address}
               value={regFormState.inputValues.address}
@@ -226,9 +228,13 @@ const RegisterHosScreen = ({navigation}) => {
                 blurListener('address');
               }}
             />
-            <View style={styles.pickerView}>
+            <Text style={styles.pickerLabel}>State*</Text>
+
+            <View style={!regFormState.inputValidity.selectedState &&
+                  regFormState.isTouched.selectedState
+                    ? styles.pickerViewInvalid
+                    : styles.pickerView}>
               <Picker
-                style={styles.picker}
                 selectedValue={regFormState.inputValues.selectedState}
                 onValueChange={(val, itemIndex) => {
                   blurListener('selectedState');
@@ -247,7 +253,12 @@ const RegisterHosScreen = ({navigation}) => {
                 <Text style={styles.errorMsg}>Please select your state</Text>
               )}
 
-            <View style={styles.pickerView}>
+            <Text style={styles.pickerLabel}>District*</Text>
+
+            <View style={!regFormState.inputValidity.selectedDistrict &&
+                regFormState.isTouched.selectedDistrict
+                  ? styles.pickerViewInvalid
+                  : styles.pickerView}>
               <Picker
                 enabled={distEnb}
                 selectedValue={regFormState.inputValues.selectedDistrict}
@@ -265,8 +276,8 @@ const RegisterHosScreen = ({navigation}) => {
               regFormState.isTouched.selectedDistrict && (
                 <Text style={styles.errorMsg}>Please select your district</Text>
               )}
-            <Input
-              label="Pin code"
+            <Fields
+              label="Pin code*"
               error="Please enter valid pincode"
               returnKeyType="next"
               inputIsValid={regFormState.inputValidity.pincode}
@@ -277,9 +288,9 @@ const RegisterHosScreen = ({navigation}) => {
                 blurListener('pincode');
               }}
             />
-            <Input
+            <Fields
               secureTextEntry={true}
-              label="Password"
+              label="Password*"
               error="Please enter a stronger password"
               returnKeyType="next"
               inputIsValid={regFormState.inputValidity.password}
@@ -290,9 +301,9 @@ const RegisterHosScreen = ({navigation}) => {
                 blurListener('password');
               }}
             />
-            <Input
+            <Fields
               secureTextEntry={true}
-              label="Confirm Password"
+              label="Confirm Password*"
               error="Password mismatch!"
               returnKeyType="next"
               inputIsValid={regFormState.inputValidity.cpassword}
@@ -314,7 +325,7 @@ const RegisterHosScreen = ({navigation}) => {
                     blurListener('tnc');
                   }}
                 />
-                <Text style={styles.tncText}>Accept T&C</Text>
+                <Text style={styles.tncText}>Accept Terms and Conditions.</Text>
               </View>
               {!regFormState.inputValidity.tnc &&
                 regFormState.isTouched.tnc && (
@@ -371,7 +382,7 @@ const styles = StyleSheet.create({
   heading: {
     color: colors.additional2,
     fontSize: 40,
-    fontFamily: 'sans-serif-light',
+    fontFamily: 'Montserrat-Regular',
   },
   btnHolder: {
     flexDirection: 'row',
@@ -394,22 +405,48 @@ const styles = StyleSheet.create({
   formInput: {
     color: colors.additional1,
     fontSize: 18,
-    fontFamily: 'qs-reg',
+    fontFamily: 'Montserrat-Regular',
     width: '100%',
     height: '100',
     borderBottomWidth: 0.5,
     padding: 10,
     borderColor: colors.additional1,
   },
+  pickerLabel: {
+    color: colors.grayishblack,
+    fontFamily: 'Montserrat-Regular',
+    marginTop: 10,
+    paddingBottom: 3,
+  },
   pickerView: {
-    marginVertical: 10,
-    paddingVertical: 3,
-    borderRadius: 100,
-    backgroundColor: colors.accent,
-    fontSize: 18,
-    fontFamily: 'sans-serif-condensed',
+    borderRadius: 5,
+    backgroundColor: 'transparent',
+    borderColor: colors.grayishblack,
+    borderWidth: 2,
+    fontSize: 14,
+    fontFamily: 'Montserrat-Regular',
     paddingHorizontal: 30,
     color: 'black',
+    marginBottom: 10,
+  },
+  pickerViewInvalid: {
+    borderRadius: 5,
+    backgroundColor: 'transparent',
+    borderColor: colors.dutchred,
+    borderWidth: 2,
+    fontSize: 14,
+    fontFamily: 'Montserrat-Regular',
+    paddingHorizontal: 30,
+    color: 'black',
+  },
+  picker: {
+    color: colors.grayishblack,
+    fontFamily: 'Montserrat-Regular',
+  },
+  errorMsg: {
+    color: colors.dutchred,
+    fontFamily: 'Montserrat-Regular',
+    marginBottom: 10,
   },
   addPhoneView: {
     width: '100%',
@@ -426,10 +463,6 @@ const styles = StyleSheet.create({
   addPhoneText: {
     color: colors.additional2,
   },
-  errorMsg: {
-    color: colors.primary,
-    fontFamily: 'qs-reg',
-  },
   loginPress: {
     justifyContent: 'center',
     alignItems: 'center',
@@ -439,7 +472,7 @@ const styles = StyleSheet.create({
   },
   forgotPassword: {
     color: colors.grayishblack,
-    fontFamily: 'qs-reg',
+    fontFamily: 'Montserrat-Regular',
   },
   registerLinkView: {
     paddingVertical: 30,
@@ -448,7 +481,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   registerLink: {
-    fontFamily: 'qs-reg',
+    fontFamily: 'Montserrat-Regular',
     color: colors.additional1,
   },
   signUpText: {
@@ -456,7 +489,7 @@ const styles = StyleSheet.create({
   },
   tncText: {
     color: colors.additional1,
-    fontFamily: 'qs-reg',
+    fontFamily: 'Montserrat-Regular',
   },
 });
 

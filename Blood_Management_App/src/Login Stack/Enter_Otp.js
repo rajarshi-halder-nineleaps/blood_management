@@ -18,6 +18,7 @@ import colors from '../../constants/Colors';
 import Feather from 'react-native-vector-icons/Feather';
 import {updateFields, blurFields} from '../../redux/forgotpassword/actions';
 import {useDispatch, useSelector} from 'react-redux';
+import Fields from '../../components/Fields';
 import {
   postEmail,
   postOTP,
@@ -77,8 +78,24 @@ const Enterotp = ({navigation}) => {
               If your provided email matches with any of the accounts registered
               with us, we will send you an OTP.
             </Text>
-
-            <TextInput
+            <Fields
+              keyboardType="numeric"
+              label="OTP"
+              error="Invalid OTP"
+              secureTextEntry={true}
+              value={forgotState.inputValues.otp}
+              placeholder="Code"
+              inputIsValid={forgotState.inputValidity.otp}
+              inputIsTouched={forgotState.isTouched.otp}
+              onChangeText={(val) => handleOTP(val, 'otp')}
+              onBlur={() => {
+                dispatch(blurFields('otp'));
+              }}
+            />
+            {
+              //TODO REMOVE IF ABOVE FIELD WORKS OUT WELL
+            }
+            {/* <TextInput
               keyboardType="numeric"
               value={forgotState.inputValues.otp}
               style={[styles.input, {marginTop: 30}]}
@@ -90,7 +107,7 @@ const Enterotp = ({navigation}) => {
             />
             {!forgotState.inputValidity.otp && forgotState.isTouched.otp && (
               <Text style={styles.errMsg}>Inavlid OTP!</Text>
-            )}
+            )} */}
             <TouchableOpacity
               onPress={() => {
                 if (Platform.OS === 'android') {
@@ -102,7 +119,6 @@ const Enterotp = ({navigation}) => {
               }}>
               <Text style={styles.resendotp}>Resend OTP</Text>
             </TouchableOpacity>
-
             <View style={styles.button}>
               <TouchableOpacity
                 style={styles.signIn}
