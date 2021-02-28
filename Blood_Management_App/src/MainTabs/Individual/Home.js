@@ -13,6 +13,7 @@ import { fetchSalesData } from '../../../redux/sales/actions';
 import {
   PieChart,
   BarChart,
+  StackedBarChart
 } from "react-native-chart-kit";
 import { color } from 'react-native-reanimated';
 import { getUserData } from '../../../redux/profile/actions'
@@ -82,14 +83,84 @@ const images = [
 
 ]
 const chartConfig = {
-  backgroundGradientFrom: colors.additional2,
-  backgroundGradientFromOpacity: 0,
-  backgroundGradientTo: colors.additional2,
-  backgroundGradientToOpacity: 10,
-  color: (opacity = 1) => `rgba(134, 8, 38, ${opacity})`,
-  strokeWidth: 100, // optional, default 3
+  backgroundGradientFrom: colors.moderategray,
+  backgroundGradientTo: colors.accent,
+  color: (opacity = 0) => `rgba(0, 0, 0, ${opacity})`,
+  strokeWidth: 3, // optional, default 3
   barPercentage: 0.5,
-  useShadowColorFromDataset: false // optional
+  useShadowColorFromDataset: false,
+  showLegend: 0, // optional
+  barRadius: 0,
+};
+
+const stackeddata = {
+  "labels": [
+    "A+",
+    "A-",
+    "B+",
+    "B-",
+    "AB+",
+    "AB-",
+    "O+",
+    "0-"
+  ],
+  "lagend": [
+    "A+",
+    "A-",
+    "B+",
+    "B-",
+    "AB+",
+    "AB-",
+    "O+",
+    "0-"
+  ],
+  "data": [
+    [
+      8,
+      10,
+      0
+    ],
+    [
+      6,
+      44,
+      0
+    ],
+    [
+      0,
+      0,
+      0
+    ],
+    [
+      0,
+      0,
+      0
+    ],
+    [
+      0,
+      0,
+      0
+    ],
+    [
+      0,
+      0,
+      0
+    ],
+    [
+      0,
+      0,
+      0
+    ],
+    [
+      0,
+      0,
+      0
+    ]
+  ],
+  "barColors": [
+    "#dfe4ea",
+    "#ced6e0",
+    "#a4b0be"
+  ]
 };
 
 
@@ -181,72 +252,7 @@ const Home = ({ navigation }) => {
       </View>
       <View>
         <Text style={styles.sectiontitle}>Our Services</Text>
-        <ScrollView
-          style={styles.services}
-          horizontal={true}
-          showsHorizontalScrollIndicator={false}>
-          <TouchableOpacity onPress={() => navigation.navigate('services', { screen: "Buy Blood" })} >
-            <View style={styles.card}>
-              <Icon name="tint" size={20} color={colors.additional2} />
-              <Text style={styles.cardtitle}>Buy</Text>
-              <Text style={styles.cardtitle}>Blood</Text>
-            </View>
-          </TouchableOpacity>
-          <TouchableOpacity onPress={() => navigation.navigate('services', { screen: 'Find Donors' })}>
-            <View style={styles.card}>
-              <Icon name="tint" size={20} color={colors.additional2} />
-              <Text style={styles.cardtitle}>Find</Text>
-              <Text style={styles.cardtitle}>Donors</Text>
-            </View>
-          </TouchableOpacity>
 
-
-          {userType === 0 ?
-            <>
-              <TouchableOpacity onPress={() => myCommitmentsHandler()} >
-                <View style={styles.card}>
-                  <Icon name="tint" size={20} color={colors.additional2} />
-                  <Text style={styles.cardtitle}>My</Text>
-                  <Text style={styles.cardtitle}>Commitments</Text>
-                </View>
-              </TouchableOpacity>
-              <TouchableOpacity onPress={() => navigation.navigate('services', { screen: 'upcomingDrivesSearch' })} >
-                <View style={styles.card}>
-                  <Icon name="tint" size={20} color={colors.additional2} />
-                  <Text style={styles.cardtitle}>Upcoming</Text>
-                  <Text style={styles.cardtitle}>Drives</Text>
-                </View>
-              </TouchableOpacity>
-            </>
-            :
-            <>
-              <TouchableOpacity onPress={() => inventoryHandler()}>
-                <View style={styles.card}>
-                  <Icon name="tint" size={20} color={colors.additional2} />
-                  <Text style={styles.cardtitle}>My</Text>
-                  <Text style={styles.cardtitle}>Inventory</Text>
-                </View>
-              </TouchableOpacity>
-              <TouchableOpacity onPress={() => myDrivesHandler()}></TouchableOpacity>
-              <View style={styles.card}>
-                <Icon name="tint" size={20} color={colors.additional2} />
-                <Text style={styles.cardtitle}>My</Text>
-                <Text style={styles.cardtitle}>Drives</Text>
-              </View>
-            </>
-          }
-          {userType == 2 ?
-            <TouchableOpacity onPress={() => salesHandler()}>
-              <View style={styles.card}>
-                <Icon name="tint" size={20} color={colors.additional2} />
-                <Text style={styles.cardtitle}>My</Text>
-                <Text style={styles.cardtitle}>Sales</Text>
-              </View>
-            </TouchableOpacity> :
-            null
-          }
-
-        </ScrollView>
         <Text style={styles.sectiontitle}>Statistics</Text>
         <BarChart
           style={styles.graphStyle}
@@ -269,6 +275,17 @@ const Home = ({ navigation }) => {
 
           center={[0, 0]}
           absolute
+        />
+        <Text style={styles.sectiontitle}>Current Month</Text>
+        <StackedBarChart
+          style={styles.graphStyle}
+          data={stackeddata}
+          width={screenWidth}
+          height={300}
+          chartConfig={chartConfig}
+          withVerticalLabels={true}
+          withHorizontalLabels={true}
+
         />
       </View>
 
@@ -377,6 +394,10 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     fontFamily: 'Montserrat-Regular',
+  },
+  graphStyle: {
+    paddingTop: 10
+
   }
 
 })
