@@ -29,7 +29,11 @@ const BuyBloodList = ({navigation}) => {
 
   return (
     <View style={styles.container}>
-      <View style={styles.header}></View>
+      <View style={styles.header}>
+        <Text>
+          The below list shows blood banks that meets your search criterion.
+        </Text>
+      </View>
       <FlatList
         data={buybloodFormState.list}
         renderItem={renderItem}

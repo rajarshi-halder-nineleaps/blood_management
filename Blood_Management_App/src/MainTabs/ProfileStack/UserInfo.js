@@ -260,7 +260,7 @@ const UserInfo = ({ navigation }) => {
                               {console.log(profileState.profileData.phone)}
                               {
                                 //TODO THERE IS SOME ERROR HERE, CHECK IT OUT.
-                                profileState.profileData.phone
+                                profileState.profileData && profileState.profileData.phone.length > 0
                                   ? profileState.profileData.phone.map(
                                     (val, idx) => (
                                       <View

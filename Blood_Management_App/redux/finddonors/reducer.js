@@ -1,3 +1,4 @@
+import {Alert} from 'react-native';
 import {
   UPDATE_FIELDS_REG,
   STATE_CLEANUP,
@@ -6,7 +7,8 @@ import {
   UPDATE_SUCCESS,
   UPDATE_SELECTED,
   SELECT_ALL,
-  INVITE_SUCCESS
+  INVITE_SUCCESS,
+  SET_SELECTED,
 } from './actionTypes';
 
 const initialState = {
@@ -28,7 +30,7 @@ const initialState = {
     address: false,
     state: false,
     district: false,
-    pincode: false,
+    pincode: true,
     blood_group: false,
   },
   isTouched: {
@@ -65,8 +67,8 @@ const finddonorReducer = (state = initialState, action) => {
       };
     }
     case BLUR_FIELDS_REG: {
-      const newInputIsTouched = { ...state.isTouched, [action.fieldId]: true };
-      return { ...state, isTouched: newInputIsTouched };
+      const newInputIsTouched = {...state.isTouched, [action.fieldId]: true};
+      return {...state, isTouched: newInputIsTouched};
     }
     case STATE_CLEANUP: {
       console.log('Cleaning state');
@@ -93,85 +95,53 @@ const finddonorReducer = (state = initialState, action) => {
       return state;
     }
     case UPDATE_SELECTED: {
-      const newState = { ...state, loading: false };
+      const newState = {...state, loading: false};
 
-      const nState = { ...state, loading: false };
+      const nState = {...state, loading: false};
 
-      newState.list.find((val) => val.userId === action.item.userId).selected = !action
-        .item.selected;
+      newState.list.find(
+        (val) => val.userId === action.item.userId,
+      ).selected = !action.item.selected;
 
-
-
-      if (newState.list.find((val) => val.userId === action.item.userId).selected) {
+      if (
+        newState.list.find((val) => val.userId === action.item.userId).selected
+      ) {
         nState.selectedids.push(action.item.userId);
       } else {
-        nState.selectedids.pop(action.item.userId)
+        nState.selectedids.pop(action.item.userId);
       }
 
       return nState;
     }
     case SELECT_ALL: {
-      console.log('updating');
-      const nState = { ...state, loading: false };
-      const newArray = action.array.map((e) => {
-
-        return {
-          ...e,
-          selected: action.action,
-        };
-
-      });
-      console.log("hi", newArray)
-
-      newArray.forEach(id => {
-        if (action.action ? true : false) {
-          nState.selectedids.push(id.userId)
-        } else {
-          nState.selectedids.pop(id.userId)
-        }
-      })
-
-      // newArray.forEach(val => val.selected = action.action){
-
-      // }
-
-      // if (newArray.find((val) => val.id === action.item.id).selected) {
-      //   nState.selectedids.push(action.item.id);
-      // } else {
-      //   nState.selectedids.pop(action.item.id)
-      // }
-
-
-      // if (action.action ? true : false) {
-      //   newArray.forEach(item => {
-      //     nState.selectedids.push(item.id)
-      //   })
-
-      // } else {
-      //   newArray.forEach(item => {
-      //     nState.selectedids.pop()
-      //   })
-      // }
-
-      console.log('done', nState.selectedids);
-
-      return {
-        ...state,
-        list: newArray,
-        allselected: !initialState.allselected,
-      };
-
-
-
-    }
-    case INVITE_SUCCESS: {
-      console.log("invite sent successfully");
-      return {
-        ...state,
-        success: action.action
+      let newList = state.list;
+      if (newList.find((val) => !val.selected)) {
+        newList.forEach((val) => (val.selected = true));
+      } else {
+        newList.forEach((val) => (val.selected = false));
       }
+      return {...state, list: newList};
     }
 
+    case SET_SELECTED: {
+      const newList = [...state.list];
+      if (!newList[action.idx].selected) {
+        newList[action.idx].selected = true;
+        console.log('setting to true');
+      } else {
+        newList[action.idx].selected = false;
+        console.log('setting to false');
+      }
+      return {...state, list: newList};
+    }
+
+    case INVITE_SUCCESS: {
+      Alert.alert('Success', 'Invites sent!');
+      return {
+        ...state,
+        success: action.action,
+      };
+    }
 
     default:
       return state;

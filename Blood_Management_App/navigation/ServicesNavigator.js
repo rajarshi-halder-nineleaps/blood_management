@@ -24,7 +24,7 @@ import SalesNavigator from './SalesNavigator';
 import MoreInfo from '../src/Service Stack/BuyBlood/MoreInfo';
 import MyPurchases from '../src/Service Stack/MyPurchases/MyPurchases';
 import ActiveDonorRequest from '../src/Service Stack/ActiveDonorRequest/ActiveDonorRequest';
-import DonationRequestList from '../src/Service Stack/ActiveDonorRequest/DonationRequestList'
+import DonationRequestList from '../src/Service Stack/ActiveDonorRequest/DonationRequestList';
 
 const ServicesNavigator = createStackNavigator();
 

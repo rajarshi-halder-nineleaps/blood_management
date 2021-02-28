@@ -123,7 +123,8 @@ const Profile = ({navigation}) => {
                     ? 'Click on the above button to upgarde to donor status'
                     : profileState.userData.donorStatus === 1
                     ? 'Click on the above button to leave donor status'
-                    : `Eligible for donation in ${Math.floor(
+                    : profileState.userData.lastDonationDate
+                    ? `Eligible for donation in ${Math.floor(
                         56 -
                           (new Date().getTime() -
                             new Date(
@@ -132,7 +133,8 @@ const Profile = ({navigation}) => {
                               )[0],
                             ).getTime()) /
                             (1000 * 60 * 60 * 24),
-                      )} days`}
+                      )} days`
+                    : null}
                 </Text>
               </>
             ) : null}

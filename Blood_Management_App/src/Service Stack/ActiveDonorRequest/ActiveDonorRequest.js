@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, {useEffect} from 'react';
 import {
   View,
   Text,
@@ -8,21 +8,21 @@ import {
   ActivityIndicator,
   RefreshControl,
   Image,
-  Dimensions
-} from 'react-native'
-import colors from '../../../constants/Colors'
+  Dimensions,
+} from 'react-native';
+import colors from '../../../constants/Colors';
 import Feather from 'react-native-vector-icons/Feather';
-import { useDispatch, useSelector } from 'react-redux';
-import {
-  getactivedonorList
-} from '../../../redux/activedonorrequest/actions'
+import {useDispatch, useSelector} from 'react-redux';
+import {getactivedonorList} from '../../../redux/activedonorrequest/actions';
 import DonorRequestCard from '../../../components/DonorRequestCard';
-import { Colors } from 'react-native/Libraries/NewAppScreen';
+import {Colors} from 'react-native/Libraries/NewAppScreen';
 
-const ActiveDonorRequest = ({ navigation }) => {
+const ActiveDonorRequest = ({navigation}) => {
   const authState = useSelector((state) => state.authState);
   const dispatch = useDispatch();
-  const activedonorFormState = useSelector((state) => state.activedonorFormState);
+  const activedonorFormState = useSelector(
+    (state) => state.activedonorFormState,
+  );
 
   const [refreshing, setRefreshing] = React.useState(false);
   const onRefresh = React.useCallback(
@@ -38,18 +38,21 @@ const ActiveDonorRequest = ({ navigation }) => {
 
   useEffect(() => {
     dispatch(getactivedonorList(authState.userToken));
-  }, [dispatch]);
+  }, [authState.userToken, dispatch]);
+  //* UPDATES DEPENDENCY ARRAY.
 
-  const renderItem = ({ item }) => {
-
-
+  const renderItem = ({item}) => {
     return (
-      <DonorRequestCard item={item} onPress={() => navigation.navigate("DonationRequestList", {
-        donationId: item.donationId
-      })} />
+      <DonorRequestCard
+        item={item}
+        onPress={() =>
+          navigation.navigate('DonationRequestList', {
+            donationId: item.donationId,
+          })
+        }
+      />
     );
   };
-
 
   return (
     <View style={styles.container}>
@@ -78,36 +81,32 @@ const ActiveDonorRequest = ({ navigation }) => {
           <Text style={styles.emptyInfo}>
             You don't have any donor requests yet!
           </Text>
-          <Text style={styles.emptyInfo}>
-            Check back in a while!
-          </Text>
+          <Text style={styles.emptyInfo}>Check back in a while!</Text>
         </View>
       ) : (
-            <FlatList
-              data={activedonorFormState.donorList}
-              renderItem={renderItem}
-              keyExtractor={(item) => item.id}
-              refreshControl={
-                <RefreshControl
-                  colors={[colors.primary, colors.secondary]}
-                  refreshing={refreshing}
-                  onRefresh={onRefresh}
-                />
-              }
-
+        <FlatList
+          data={activedonorFormState.donorList}
+          renderItem={renderItem}
+          keyExtractor={(item) => item.donationId}
+          refreshControl={
+            <RefreshControl
+              colors={[colors.primary, colors.secondary]}
+              refreshing={refreshing}
+              onRefresh={onRefresh}
             />
-          )}
+          }
+        />
+      )}
     </View>
-  )
-}
+  );
+};
 
 const styles = StyleSheet.create({
   header: {
     marginBottom: 20,
     backgroundColor: 'transparent',
     paddingTop: 10,
-    flexDirection: 'row'
-
+    flexDirection: 'row',
   },
   headertitle: {
     fontSize: 40,
@@ -122,39 +121,36 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     backgroundColor: colors.primary,
     fontFamily: 'sans-serif-condensed',
-    color: 'white'
+    color: 'white',
   },
   container: {
     flex: 1,
-    backgroundColor: "white"
-
+    backgroundColor: 'white',
   },
   item: {
     backgroundColor: '#f9c2ff',
     padding: 20,
     marginVertical: 8,
-    paddingHorizontal: 30,
+    paddingHorizontal: 50,
     marginHorizontal: 20,
     borderRadius: 20,
     elevation: 10,
-    paddingHorizontal: 50
   },
   suchEmpty: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    alignContent: 'center'
+    alignContent: 'center',
   },
   suchEmptyImg: {
     width: Dimensions.get('window').width,
-    height: 300
+    height: 300,
   },
   emptyInfo: {
     marginTop: 10,
     fontFamily: 'Montserrat-Regular',
-    fontSize: 16
+    fontSize: 16,
+  },
+});
 
-  }
-})
-
-export default ActiveDonorRequest
+export default ActiveDonorRequest;

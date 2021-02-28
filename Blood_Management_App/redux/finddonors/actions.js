@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-import { GETDONORLIST, INVITE_SUCCESS } from './actionTypes';
+import {GETDONORLIST, INVITE_SUCCESS} from './actionTypes';
 import {
   UPDATE_FIELDS_REG,
   STATE_CLEANUP,
@@ -11,6 +11,7 @@ import {
   UPDATE_DONOR_ARRAY,
   UPDATE_SELECTED,
   SELECT_ALL,
+  SET_SELECTED,
 } from './actionTypes';
 
 export const req = () => ({
@@ -37,21 +38,23 @@ export const updateArray = (array) => ({
   array: array,
 });
 
-export const updateselected = (item) => ({
+export const updateSelected = (item) => ({
   type: UPDATE_SELECTED,
   item: item,
 });
 
-export const selectall = (action, array) => ({
-  type: SELECT_ALL,
-  action: action,
-  array: array,
+export const setSelected = (idx) => ({
+  type: SET_SELECTED,
+  idx,
 });
 
-export const invitesuccess = (action) => ({
+export const selectAllToggle = () => ({
+  type: SELECT_ALL,
+});
+
+export const invitesuccess = () => ({
   type: INVITE_SUCCESS,
-  action: action
-})
+});
 
 export const getDonorList = (userToken, formData) => {
   return async (dispatch) => {
@@ -59,35 +62,31 @@ export const getDonorList = (userToken, formData) => {
     console.log('Getting Donor List');
     try {
       const response = await axios.post(
-        'http://10.0.2.2:8080/finddonors/donorslist', {
-        address: formData.address,
-        state: formData.state,
-        district: formData.district,
-        pincode: formData.pincode,
-        bloodGroup: formData.blood_group
-
-      },
+        'http://10.0.2.2:8080/finddonors/donorslist',
         {
-          headers: { Authorization: 'Bearer ' + userToken },
+          address: formData.address,
+          state: formData.state,
+          district: formData.district,
+          pincode: formData.pincode,
+          bloodGroup: formData.blood_group,
         },
-
+        {
+          headers: {Authorization: 'Bearer ' + userToken},
+        },
       );
       console.log('COMPLETE RESPONSE DATA: ', response.data);
 
       if (response.data.error) {
-
         console.log(response.headers.error);
       } else if (response.headers.success) {
         console.log('Updating Array');
-        dispatch(updateArray(response.data))
-        console.log(response.data)
-
+        dispatch(updateArray(response.data));
+        console.log(response.data);
       } else {
-        console.log("Failed")
+        console.log('Failed');
       }
     } catch (err) {
       console.log(err.message);
-
     }
     // try {
     //   const response = await axios.post(
@@ -123,26 +122,26 @@ export const getDonorList = (userToken, formData) => {
 export const submitinvite = (userToken, formData, array) => {
   return async (dispatch) => {
     dispatch(req());
-    console.log('Submitting Invites', userToken, formData, array);
+    console.log('Submitting Invites', formData, array);
     try {
       const response = await axios.post(
-        'http://10.0.2.2:8080/finddonors/sendnotification',//API INTEGRATION
+        'http://192.168.43.217:8080/finddonors/sendnotification', //API INTEGRATION
         {
           address: formData.address,
           state: formData.state,
           district: formData.district,
           pincode: formData.pincode,
           bloodGroup: formData.blood_group,
-          idList: array
+          idList: array,
         },
-        { headers: { Authorization: 'Bearer ' + userToken } },
+        {headers: {Authorization: 'Bearer ' + userToken}},
       );
       console.log('COMPLETE RESPONSE DATA: ', response.data);
 
       if (response.headers.error) {
         console.log(response.headers.error);
       } else if (response.headers.success) {
-        dispatch(invitesuccess(true))
+        dispatch(invitesuccess());
 
         // console.log(response.data);
       } else {
@@ -152,5 +151,4 @@ export const submitinvite = (userToken, formData, array) => {
       console.log(err.message);
     }
   };
-
-}
+};

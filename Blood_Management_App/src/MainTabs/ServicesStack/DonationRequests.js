@@ -54,23 +54,19 @@ const DonationRequests = ({navigation}) => {
             style={styles.suchEmptyImg}
             source={require('../../../assets/images/empty.png')}
           />
-          <Text style={styles.emptyInfo}>
-            You don't have any donation requests yet.
-          </Text>
+          <Text style={styles.emptyInfo}>You don't have any invites yet.</Text>
         </View>
       ) : (
         <>
+          <DonationDriveFilter active={active} setActive={setActive} />
 
-          <DonationDriveFilter active = {active} setActive = {setActive}/>
-
-          <FlatList 
+          <FlatList
             style={styles.scroll}
-            data={invitesState.invitesList.filter(val =>{
-              if(active){
-                return val.inviteType === "drive";
-              }
-              else{
-                return val.inviteType === "donation";
+            data={invitesState.invitesList.filter((val) => {
+              if (active) {
+                return val.inviteType === 'drive';
+              } else {
+                return val.inviteType === 'donation';
               }
             })}
             renderItem={({item}) => <DonationRequestsCard item={item} />}

@@ -62,7 +62,6 @@ const Services = ({navigation}) => {
     navigation.navigate('My Purchases');
   };
 
-
   const donationRequestsHandler = () => {
     dispatch(fetchInvitesList(authState.userToken));
     navigation.navigate('donationRequests');
@@ -87,8 +86,7 @@ const Services = ({navigation}) => {
         <View style={styles.row}>
           <TouchTabs
             label="Buy Blood"
-            source={require('../../../assets/images/servicesScreen/findDonors.png')}
-            imgSrc="../assets/images/servicesScreen/findDonors.png"
+            source={require('../../../assets/images/servicesScreen/buyBlood.png')}
             touchHandler={() => navigation.navigate('Buy Blood')}
           />
           <TouchTabs
@@ -99,32 +97,33 @@ const Services = ({navigation}) => {
         </View>
         <View style={styles.row}>
           <TouchTabs
-            label="My Blood Requests"
-            source={require('../../../assets/images/servicesScreen/findDonors.png')}
-            imgSrc="../assets/images/servicesScreen/findDonors.png"
+            label="My Donation Requests"
+            source={require('../../../assets/images/servicesScreen/donorRequests.png')}
             touchHandler={() => navigation.navigate('Active Donor Request')}
           />
           <TouchTabs
             label="My Purchases"
-            imgSrc="../assets/images/servicesScreen/findDonors.png"
+            source={require('../../../assets/images/servicesScreen/purchases.png')}
             touchHandler={() => purchasesHandler()}
           />
         </View>
         {userType === 1 ? (
           <>
-            <TouchTabs
-              label="My Commitments"
-              source={require('../../../assets/images/servicesScreen/findDonors.png')}
-              touchHandler={() => myCommitmentsHandler()}
-            />
-            <TouchTabs
-              label="Upcoming Drives"
-              source={require('../../../assets/images/servicesScreen/findDonors.png')}
-              touchHandler={() => navigation.navigate('upcomingDrivesSearch')}
-            />
+            <View style={styles.row}>
+              <TouchTabs
+                label="My Commitments"
+                source={require('../../../assets/images/servicesScreen/commitments.png')}
+                touchHandler={() => myCommitmentsHandler()}
+              />
+              <TouchTabs
+                label="Upcoming Drives"
+                source={require('../../../assets/images/servicesScreen/drives.png')}
+                touchHandler={() => navigation.navigate('upcomingDrivesSearch')}
+              />
+            </View>
             <TouchTabs
               label="Invites"
-              source={require('../../../assets/images/servicesScreen/findDonors.png')}
+              source={require('../../../assets/images/servicesScreen/invites.png')}
               touchHandler={() => donationRequestsHandler()}
             />
           </>
@@ -132,19 +131,21 @@ const Services = ({navigation}) => {
           <>
             <TouchTabs
               label="Organize a Drive"
-              source={require('../../../assets/images/servicesScreen/findDonors.png')}
+              source={require('../../../assets/images/servicesScreen/drives2.png')}
               touchHandler={() => navigation.navigate('driveOrganizer')}
             />
-            <TouchTabs
-              label="My Donation Drives"
-              source={require('../../../assets/images/servicesScreen/findDonors.png')}
-              touchHandler={() => myDrivesHandler()}
-            />
-            <TouchTabs
-              label="My Inventory"
-              source={require('../../../assets/images/servicesScreen/inventory.png')}
-              touchHandler={() => inventoryHandler()}
-            />
+            <View style={styles.row}>
+              <TouchTabs
+                label="My Donation Drives"
+                source={require('../../../assets/images/servicesScreen/drives.png')}
+                touchHandler={() => myDrivesHandler()}
+              />
+              <TouchTabs
+                label="My Inventory"
+                source={require('../../../assets/images/servicesScreen/inventory.png')}
+                touchHandler={() => inventoryHandler()}
+              />
+            </View>
           </>
         )}
         {userType === 3 ? (

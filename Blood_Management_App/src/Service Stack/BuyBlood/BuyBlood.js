@@ -130,7 +130,7 @@ const FindDonors = ({navigation}) => {
       <View>
         <View style={styles.imageBoard}>
           <Image
-            source={require('../../../assets/images/findDrives.png')}
+            source={require('../../../assets/images/servicesScreen/buyBlood.png')}
             style={styles.image}
             resizeMode="center"
           />
