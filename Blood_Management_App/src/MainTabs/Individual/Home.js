@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import React, {useEffect} from 'react';
+import React, { useEffect } from 'react';
 import {
   SafeAreaView,
   ScrollView,
@@ -12,18 +12,31 @@ import {
   FlatList,
 } from 'react-native';
 import colors from '../../../constants/Colors';
-import {useDispatch, useSelector} from 'react-redux';
-import {FlatListSlider} from 'react-native-flatlist-slider';
+import { useDispatch, useSelector } from 'react-redux';
+import { FlatListSlider } from 'react-native-flatlist-slider';
 import HomeSlider from '../../../components/HomeSlider';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import {setDonationEligibilityNotification} from '../../../redux/notifications/actions';
+import { setDonationEligibilityNotification } from '../../../redux/notifications/actions';
 
+<<<<<<< HEAD
+import { fetchCommitments } from '../../../redux/commitments/actions';
+import { getInventory } from '../../../redux/inventory/actions';
+import { fetchSalesData } from '../../../redux/sales/actions';
+import {
+  PieChart,
+  BarChart,
+  StackedBarChart
+} from "react-native-chart-kit";
+import { color } from 'react-native-reanimated';
+import { getUserData } from '../../../redux/profile/actions'
+=======
 import {fetchCommitments} from '../../../redux/commitments/actions';
 import {getInventory} from '../../../redux/inventory/actions';
 import {fetchSalesData} from '../../../redux/sales/actions';
 import {PieChart, BarChart} from 'react-native-chart-kit';
 import {color} from 'react-native-reanimated';
 import {getUserData, setDonorStatus} from '../../../redux/profile/actions';
+>>>>>>> 54cf4dd8b71a201d280985408b0a81d37cd22f54
 const data = {
   labels: ['January', 'February', 'March', 'April', 'May', 'June'],
   datasets: [
@@ -89,17 +102,15 @@ const images = [
   },
 ];
 const chartConfig = {
-  backgroundGradientFrom: colors.additional2,
-  backgroundGradientFromOpacity: 0,
-  backgroundGradientTo: colors.additional2,
-  backgroundGradientToOpacity: 10,
-  color: (opacity = 1) => `rgba(134, 8, 38, ${opacity})`,
-  strokeWidth: 100, // optional, default 3
+  backgroundGradientFrom: colors.moderategray,
+  backgroundGradientTo: colors.accent,
+  color: (opacity = 0) => `rgba(0, 0, 0, ${opacity})`,
+  strokeWidth: 3, // optional, default 3
   barPercentage: 0.5,
   useShadowColorFromDataset: false, // optional
 };
 
-const Home = ({navigation}) => {
+const Home = ({ navigation }) => {
   const authState = useSelector((state) => state.authState);
   const userType = authState.userType;
   const dispatch = useDispatch();
@@ -124,7 +135,7 @@ const Home = ({navigation}) => {
       const eligible =
         (new Date().getTime() -
           new Date(lastDonationDate.split('T')[0]).getTime()) /
-          (1000 * 60 * 60 * 24) >
+        (1000 * 60 * 60 * 24) >
         56;
       if (eligible) {
         dispatch(setDonorStatus(authState.userToken, 0));
@@ -138,23 +149,23 @@ const Home = ({navigation}) => {
 
   const salesHandler = () => {
     dispatch(fetchSalesData(authState.userToken));
-    navigation.navigate('services', {screen: 'sales'});
+    navigation.navigate('services', { screen: 'sales' });
     navigation.navigate('sales');
   };
 
   const myCommitmentsHandler = () => {
     dispatch(fetchCommitments(authState.userToken));
-    navigation.navigate('services', {screen: 'commitments'});
+    navigation.navigate('services', { screen: 'commitments' });
   };
 
   const inventoryHandler = () => {
     dispatch(getInventory(authState.userToken));
-    navigation.navigate('services', {screen: 'inventory'});
+    navigation.navigate('services', { screen: 'inventory' });
   };
 
   const myDrivesHandler = () => {
     dispatch(getDriveData(authState.userToken));
-    navigation.navigate('services', {screen: 'myDrives'});
+    navigation.navigate('services', { screen: 'myDrives' });
   };
   return (
     <ScrollView style={styles.container}>
@@ -186,12 +197,12 @@ const Home = ({navigation}) => {
           component={<HomeSlider />}
           onPress={{}}
           indicatorActiveWidth={50}
-          contentContainerStyle={{paddingHorizontal: 16}}
-          indicatorContainerStyle={{position: 'absolute', bottom: -15}}
+          contentContainerStyle={{ paddingHorizontal: 16 }}
+          indicatorContainerStyle={{ position: 'absolute', bottom: -15 }}
         />
       </View>
       <View style={styles.donateblood}>
-        <View style={{flexDirection: 'row-reverse', alignItems: 'center'}}>
+        <View style={{ flexDirection: 'row-reverse', alignItems: 'center' }}>
           <Text style={styles.title}>
             {userType === 1 ? 'Donate Blood' : 'Organize Drive'}
           </Text>
@@ -203,81 +214,6 @@ const Home = ({navigation}) => {
       </View>
       <View>
         <Text style={styles.sectiontitle}>Our Services</Text>
-        <ScrollView
-          style={styles.services}
-          horizontal={true}
-          showsHorizontalScrollIndicator={false}>
-          <TouchableOpacity
-            onPress={() =>
-              navigation.navigate('services', {screen: 'Buy Blood'})
-            }>
-            <View style={styles.card}>
-              <Icon name="tint" size={20} color={colors.additional2} />
-              <Text style={styles.cardtitle}>Buy</Text>
-              <Text style={styles.cardtitle}>Blood</Text>
-            </View>
-          </TouchableOpacity>
-          <TouchableOpacity
-            onPress={() =>
-              navigation.navigate('services', {screen: 'Find Donors'})
-            }>
-            <View style={styles.card}>
-              <Icon name="tint" size={20} color={colors.additional2} />
-              <Text style={styles.cardtitle}>Find</Text>
-              <Text style={styles.cardtitle}>Donors</Text>
-            </View>
-          </TouchableOpacity>
-
-          {userType === 0 ? (
-            <>
-              <TouchableOpacity onPress={() => myCommitmentsHandler()}>
-                <View style={styles.card}>
-                  <Icon name="tint" size={20} color={colors.additional2} />
-                  <Text style={styles.cardtitle}>My</Text>
-                  <Text style={styles.cardtitle}>Commitments</Text>
-                </View>
-              </TouchableOpacity>
-              <TouchableOpacity
-                onPress={() =>
-                  navigation.navigate('services', {
-                    screen: 'upcomingDrivesSearch',
-                  })
-                }>
-                <View style={styles.card}>
-                  <Icon name="tint" size={20} color={colors.additional2} />
-                  <Text style={styles.cardtitle}>Upcoming</Text>
-                  <Text style={styles.cardtitle}>Drives</Text>
-                </View>
-              </TouchableOpacity>
-            </>
-          ) : (
-            <>
-              <TouchableOpacity onPress={() => inventoryHandler()}>
-                <View style={styles.card}>
-                  <Icon name="tint" size={20} color={colors.additional2} />
-                  <Text style={styles.cardtitle}>My</Text>
-                  <Text style={styles.cardtitle}>Inventory</Text>
-                </View>
-              </TouchableOpacity>
-              <TouchableOpacity
-                onPress={() => myDrivesHandler()}></TouchableOpacity>
-              <View style={styles.card}>
-                <Icon name="tint" size={20} color={colors.additional2} />
-                <Text style={styles.cardtitle}>My</Text>
-                <Text style={styles.cardtitle}>Drives</Text>
-              </View>
-            </>
-          )}
-          {userType == 2 ? (
-            <TouchableOpacity onPress={() => salesHandler()}>
-              <View style={styles.card}>
-                <Icon name="tint" size={20} color={colors.additional2} />
-                <Text style={styles.cardtitle}>My</Text>
-                <Text style={styles.cardtitle}>Sales</Text>
-              </View>
-            </TouchableOpacity>
-          ) : null}
-        </ScrollView>
         <Text style={styles.sectiontitle}>Statistics</Text>
         <BarChart
           style={styles.graphStyle}
@@ -299,6 +235,17 @@ const Home = ({navigation}) => {
           backgroundColor={'transparent'}
           center={[0, 0]}
           absolute
+        />
+        <Text style={styles.sectiontitle}>Current Month</Text>
+        <StackedBarChart
+          style={styles.graphStyle}
+          data={stackeddata}
+          width={screenWidth}
+          height={300}
+          chartConfig={chartConfig}
+          withVerticalLabels={true}
+          withHorizontalLabels={true}
+
         />
       </View>
     </ScrollView>
@@ -402,6 +349,11 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     fontFamily: 'Montserrat-Regular',
   },
-});
+  graphStyle: {
+    paddingTop: 10
+
+  }
+
+})
 
 export default Home;

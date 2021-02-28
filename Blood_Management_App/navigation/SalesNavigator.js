@@ -1,9 +1,9 @@
 /* eslint-disable prettier/prettier */
-import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
+import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import React from 'react';
 import colors from '../constants/Colors';
 import Feather from 'react-native-vector-icons/Feather';
-import {Text} from 'react-native';
+import { Text } from 'react-native';
 
 //? screnn imports:
 
@@ -12,7 +12,7 @@ import SalesAnalytics from '../src/MainTabs/ServicesStack/SalesAnalytics';
 
 const SalesTabs = createMaterialTopTabNavigator();
 
-const SalesNavigator = () => {
+const SalesNavigator = ({ navigation }) => {
   return (
     <SalesTabs.Navigator initialRouteName="sales">
       <SalesTabs.Screen
@@ -20,7 +20,7 @@ const SalesNavigator = () => {
         component={Sales}
         options={{
           tabBarLabel: () => (
-            <Text style={{fontFamily: 'Montserrat-Regular'}}>Sales</Text>
+            <Text style={{ fontFamily: 'Montserrat-Regular' }}>Sales</Text>
           ),
         }}
       />
@@ -29,12 +29,13 @@ const SalesNavigator = () => {
         component={SalesAnalytics}
         options={{
           tabBarLabel: () => (
-            <Text style={{fontFamily: 'Montserrat-Regular'}}>
+            <Text style={{ fontFamily: 'Montserrat-Regular' }}>
               Sales Analytics
             </Text>
           ),
         }}
       />
+
     </SalesTabs.Navigator>
   );
 };
