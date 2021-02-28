@@ -1,12 +1,24 @@
 /* eslint-disable prettier/prettier */
 import React, { useEffect } from 'react';
-import { SafeAreaView, ScrollView, View, Text, Dimensions, TouchableOpacity, StyleSheet, Image, FlatList } from 'react-native';
+import {
+  SafeAreaView,
+  ScrollView,
+  View,
+  Text,
+  Dimensions,
+  TouchableOpacity,
+  StyleSheet,
+  Image,
+  FlatList,
+} from 'react-native';
 import colors from '../../../constants/Colors';
-import { useDispatch, useSelector } from 'react-redux'
-import { FlatListSlider } from 'react-native-flatlist-slider'
-import HomeSlider from '../../../components/HomeSlider'
-import Icon from 'react-native-vector-icons/FontAwesome'
+import { useDispatch, useSelector } from 'react-redux';
+import { FlatListSlider } from 'react-native-flatlist-slider';
+import HomeSlider from '../../../components/HomeSlider';
+import Icon from 'react-native-vector-icons/FontAwesome';
+import { setDonationEligibilityNotification } from '../../../redux/notifications/actions';
 
+<<<<<<< HEAD
 import { fetchCommitments } from '../../../redux/commitments/actions';
 import { getInventory } from '../../../redux/inventory/actions';
 import { fetchSalesData } from '../../../redux/sales/actions';
@@ -17,51 +29,59 @@ import {
 } from "react-native-chart-kit";
 import { color } from 'react-native-reanimated';
 import { getUserData } from '../../../redux/profile/actions'
+=======
+import {fetchCommitments} from '../../../redux/commitments/actions';
+import {getInventory} from '../../../redux/inventory/actions';
+import {fetchSalesData} from '../../../redux/sales/actions';
+import {PieChart, BarChart} from 'react-native-chart-kit';
+import {color} from 'react-native-reanimated';
+import {getUserData, setDonorStatus} from '../../../redux/profile/actions';
+>>>>>>> 54cf4dd8b71a201d280985408b0a81d37cd22f54
 const data = {
-  labels: ["January", "February", "March", "April", "May", "June"],
+  labels: ['January', 'February', 'March', 'April', 'May', 'June'],
   datasets: [
     {
-      data: [20, 45, 28, 80, 99, 43]
-    }
-  ]
+      data: [20, 45, 28, 80, 99, 43],
+    },
+  ],
 };
 
 const piedata = [
   {
-    name: "Blood",
+    name: 'Blood',
     quantity: 1012,
-    color: "rgba(131, 167, 234, 1)",
-    legendFontColor: "#7F7F7F",
-    legendFontSize: 15
+    color: 'rgba(131, 167, 234, 1)',
+    legendFontColor: '#7F7F7F',
+    legendFontSize: 15,
   },
   {
-    name: "Plasma",
+    name: 'Plasma',
     quantity: 1243,
-    color: "#F00",
-    legendFontColor: "#7F7F7F",
-    legendFontSize: 15
+    color: '#F00',
+    legendFontColor: '#7F7F7F',
+    legendFontSize: 15,
   },
   {
-    name: "Platelet",
+    name: 'Platelet',
     quantity: 527,
     color: colors.moderategray,
-    legendFontColor: "#7F7F7F",
-    legendFontSize: 15
+    legendFontColor: '#7F7F7F',
+    legendFontSize: 15,
   },
   {
-    name: "RBC",
+    name: 'RBC',
     quantity: 853,
     color: colors.dutchred,
-    legendFontColor: "#7F7F7F",
-    legendFontSize: 15
+    legendFontColor: '#7F7F7F',
+    legendFontSize: 15,
   },
   {
-    name: "WBC",
+    name: 'WBC',
     quantity: 1190,
-    color: "rgb(0, 0, 255)",
-    legendFontColor: "#7F7F7F",
-    legendFontSize: 15
-  }
+    color: 'rgb(0, 0, 255)',
+    legendFontColor: '#7F7F7F',
+    legendFontSize: 15,
+  },
 ];
 
 const images = [
@@ -80,145 +100,90 @@ const images = [
     number: 79,
     title: 'Active Blood Banks',
   },
-
-]
+];
 const chartConfig = {
   backgroundGradientFrom: colors.moderategray,
   backgroundGradientTo: colors.accent,
   color: (opacity = 0) => `rgba(0, 0, 0, ${opacity})`,
   strokeWidth: 3, // optional, default 3
   barPercentage: 0.5,
-  useShadowColorFromDataset: false,
-  showLegend: 0, // optional
-  barRadius: 0,
+  useShadowColorFromDataset: false, // optional
 };
-
-const stackeddata = {
-  "labels": [
-    "A+",
-    "A-",
-    "B+",
-    "B-",
-    "AB+",
-    "AB-",
-    "O+",
-    "0-"
-  ],
-  "lagend": [
-    "A+",
-    "A-",
-    "B+",
-    "B-",
-    "AB+",
-    "AB-",
-    "O+",
-    "0-"
-  ],
-  "data": [
-    [
-      8,
-      10,
-      0
-    ],
-    [
-      6,
-      44,
-      0
-    ],
-    [
-      0,
-      0,
-      0
-    ],
-    [
-      0,
-      0,
-      0
-    ],
-    [
-      0,
-      0,
-      0
-    ],
-    [
-      0,
-      0,
-      0
-    ],
-    [
-      0,
-      0,
-      0
-    ],
-    [
-      0,
-      0,
-      0
-    ]
-  ],
-  "barColors": [
-    "#dfe4ea",
-    "#ced6e0",
-    "#a4b0be"
-  ]
-};
-
-
 
 const Home = ({ navigation }) => {
   const authState = useSelector((state) => state.authState);
   const userType = authState.userType;
-  const dispatch = useDispatch()
-  const profileState = useSelector((state) => state.profileState)
+  const dispatch = useDispatch();
+  const profileState = useSelector((state) => state.profileState);
 
   useEffect(() => {
     dispatch(getUserData(authState.userToken));
+    console.log('got user data');
   }, [dispatch]);
 
-  // useEffect(() => {
-  //   const lastDonationDate = "2021-02-26T05:55:13.197+0000";
-  //   lastDonationDate = new Date(lastDonationDate.split('T')[0]);
-  //   console.log(lastDonationDate)
-  //   dispatch();
-  // }, [dispatch, profileState.userData]);
+  useEffect(() => {
+    if (
+      authState.userType === 1 &&
+      profileState.userData &&
+      profileState.userData.lastDonationDate &&
+      profileState.userData.donorStatus === 2
+    ) {
+      const lastDonationDate = profileState.userData.lastDonationDate;
+
+      //? CONVERTING MILLISECONDS TO DAYS.
+      //* 56 days is the minimum required number of days between blood donations
+      const eligible =
+        (new Date().getTime() -
+          new Date(lastDonationDate.split('T')[0]).getTime()) /
+        (1000 * 60 * 60 * 24) >
+        56;
+      if (eligible) {
+        dispatch(setDonorStatus(authState.userToken, 0));
+        dispatch(setDonationEligibilityNotification(authState.userType, true));
+        console.log('Changing donor status to: ' + eligible);
+      }
+    }
+    console.log("It's fine if printed once");
+    //! DO NOT CHANGE DEPENDENCY ARRAY HERE OR ANYWHERE IN THE APP.
+  }, [authState.userType, dispatch, profileState.userData.name]);
 
   const salesHandler = () => {
     dispatch(fetchSalesData(authState.userToken));
-    navigation.navigate('services', { screen: 'sales' })
+    navigation.navigate('services', { screen: 'sales' });
     navigation.navigate('sales');
   };
 
   const myCommitmentsHandler = () => {
     dispatch(fetchCommitments(authState.userToken));
-    navigation.navigate('services', { screen: 'commitments' })
+    navigation.navigate('services', { screen: 'commitments' });
   };
 
   const inventoryHandler = () => {
     dispatch(getInventory(authState.userToken));
-    navigation.navigate('services', { screen: 'inventory' })
+    navigation.navigate('services', { screen: 'inventory' });
   };
 
   const myDrivesHandler = () => {
     dispatch(getDriveData(authState.userToken));
-    navigation.navigate('services', { screen: 'myDrives' })
+    navigation.navigate('services', { screen: 'myDrives' });
   };
   return (
-    <ScrollView
-      style={styles.container}>
+    <ScrollView style={styles.container}>
       <View style={styles.header}>
         <View style={styles.profileImage}>
           <Image
             style={styles.image}
-            resizeMode='center'
-            source={require("../../../assets/images/account/avatar.png")} />
+            resizeMode="center"
+            source={require('../../../assets/images/account/avatar.png')}
+          />
         </View>
         <View style={styles.userinfo}>
           <Text style={styles.name}>{profileState.userData.name}</Text>
 
           <Text style={styles.other}>
-            {userType === 1 ? "Individual" : null}
-            {userType === 2 ? "Hospital" : null}
-            {userType === 3 ? "Blood Bank" : null}
+            {userType === 1 ? 'Individual' : null}
+            {userType === 2 ? 'Hospital' : null}
+            {userType === 3 ? 'Blood Bank' : null}
           </Text>
           <Text style={styles.other}>{profileState.userData.userId}</Text>
         </View>
@@ -233,26 +198,22 @@ const Home = ({ navigation }) => {
           onPress={{}}
           indicatorActiveWidth={50}
           contentContainerStyle={{ paddingHorizontal: 16 }}
-          indicatorContainerStyle={{ position: "absolute", bottom: -15 }} />
+          indicatorContainerStyle={{ position: 'absolute', bottom: -15 }}
+        />
       </View>
       <View style={styles.donateblood}>
         <View style={{ flexDirection: 'row-reverse', alignItems: 'center' }}>
           <Text style={styles.title}>
-            {userType === 1 ? "Donate Blood" : "Organize Drive"}
-
+            {userType === 1 ? 'Donate Blood' : 'Organize Drive'}
           </Text>
           <Icon name="tint" size={20} color={colors.primary} />
         </View>
-        <TouchableOpacity
-          style={styles.button}>
-          <Text style={styles.buttontitle}>
-            Get Started
-            </Text>
+        <TouchableOpacity style={styles.button}>
+          <Text style={styles.buttontitle}>Get Started</Text>
         </TouchableOpacity>
       </View>
       <View>
         <Text style={styles.sectiontitle}>Our Services</Text>
-
         <Text style={styles.sectiontitle}>Statistics</Text>
         <BarChart
           style={styles.graphStyle}
@@ -270,9 +231,8 @@ const Home = ({ navigation }) => {
           width={screenWidth}
           height={220}
           chartConfig={chartConfig}
-          accessor={"quantity"}
-          backgroundColor={"transparent"}
-
+          accessor={'quantity'}
+          backgroundColor={'transparent'}
           center={[0, 0]}
           absolute
         />
@@ -288,30 +248,26 @@ const Home = ({ navigation }) => {
 
         />
       </View>
-
-
     </ScrollView>
   );
 };
 
-const screenWidth = Dimensions.get("window").width;
+const screenWidth = Dimensions.get('window').width;
 const styles = StyleSheet.create({
-  container: {
-
-  },
+  container: {},
   header: {
     backgroundColor: colors.primary,
-    width: "100%",
+    width: '100%',
     height: 140,
     flexDirection: 'row',
     justifyContent: 'space-evenly',
     borderBottomLeftRadius: 20,
-    borderBottomRightRadius: 20
+    borderBottomRightRadius: 20,
   },
   image: {
     flex: 1,
     width: undefined,
-    height: undefined
+    height: undefined,
   },
   profileImage: {
     width: 100,
@@ -322,26 +278,26 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     alignSelf: 'flex-start',
     marginTop: 20,
-    marginLeft: 20
+    marginLeft: 20,
   },
   name: {
     alignSelf: 'center',
     marginTop: 20,
     fontSize: 22,
     fontWeight: 'bold',
-    color: colors.additional2
+    color: colors.additional2,
   },
   other: {
     alignSelf: 'center',
     fontSize: 16,
     fontWeight: '600',
-    color: colors.additional2
+    color: colors.additional2,
   },
   sectiontitle: {
     fontFamily: 'Montserrat-Regular',
     fontSize: 25,
     marginLeft: 10,
-    marginTop: 10
+    marginTop: 10,
   },
   donateblood: {
     flexDirection: 'row',
@@ -350,26 +306,25 @@ const styles = StyleSheet.create({
     height: 70,
     backgroundColor: 'transparent',
     alignItems: 'center',
-
   },
   button: {
     backgroundColor: colors.primary,
     paddingHorizontal: 10,
     paddingVertical: 10,
-    borderRadius: 10
+    borderRadius: 10,
   },
   title: {
     color: colors.primary,
     fontWeight: 'bold',
     fontSize: 20,
     marginLeft: 10,
-    fontFamily: 'Montserrat-Regular'
+    fontFamily: 'Montserrat-Regular',
   },
   buttontitle: {
     color: colors.additional2,
     fontWeight: '800',
     fontSize: 20,
-    fontFamily: 'Montserrat-Regular'
+    fontFamily: 'Montserrat-Regular',
   },
   card: {
     backgroundColor: colors.primary,
@@ -380,7 +335,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     flexDirection: 'column',
-
   },
   services: {
     marginTop: 10,
@@ -403,4 +357,3 @@ const styles = StyleSheet.create({
 })
 
 export default Home;
-

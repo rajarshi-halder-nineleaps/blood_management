@@ -93,7 +93,7 @@ const MyDrives = ({navigation}) => {
                 console.log('navigating to the list of accepted donors screen');
                 dispatch(getDonorList(authState.userToken, item.driveId));
                 navigation.navigate('driveDonorList', {
-                  driveId: item.driveId,
+                  driveId: item.driveId, driveStatus: item.status,
                 });
               }}>
               <View style={styles.touchContainerView}>

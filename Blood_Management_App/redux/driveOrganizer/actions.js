@@ -62,10 +62,10 @@ export const organizeDriveConfirm = (userToken, newDriveData) => {
         endTimeStamp: null,
         bloodGroups: newDriveData.bloodgroup,
         address: newDriveData.address,
-        state: newDriveData.state,
-        district: newDriveData.district,
+        state: newDriveData.selectedState,
+        district: newDriveData.selectedDistrict,
         pincode: newDriveData.pincode,
-        message: newDriveData.message
+        message: newDriveData.message,
 
       },
         {

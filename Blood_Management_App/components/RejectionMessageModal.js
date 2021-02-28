@@ -130,6 +130,7 @@ const styles = StyleSheet.create({
   modalText: {
     marginBottom: 15,
     textAlign: 'center',
+    fontFamily: 'Montserrat-Bold',
     fontSize: 15,
     padding: 20,
   },

@@ -5,7 +5,7 @@ import {useSelector, useDispatch} from 'react-redux';
 import {updateFields} from '../redux/inventory/actions';
 import InventoryInput from './InventoryInput';
 import colors from '../constants/Colors';
-import {numbersOnlyRegex} from '../constants/Regexes';
+import {numbersOnlyRegex, decimalRegex} from '../constants/Regexes';
 
 const InventoryCard = (props) => {
   const {cardData} = props;
@@ -63,7 +63,9 @@ const InventoryCard = (props) => {
           style={styles.inventoryInput}
           value={props.cardData.bPosUnits + ''}
           onChangeText={(newVal) => {
-            dispatch(updateFields(newVal, props.id, 'bPosUnits'));
+            if (numbersOnlyRegex.test(newVal) || newVal === '') {
+              dispatch(updateFields(newVal, props.id, 'bPosUnits'));
+            }
           }}
         />
         {authState.userType === 3 ? (
@@ -71,7 +73,9 @@ const InventoryCard = (props) => {
             style={styles.inventoryInput}
             value={props.cardData.bPosPrice + ''}
             onChangeText={(newVal) => {
-              dispatch(updateFields(newVal, props.id, 'bPosPrice'));
+              if (decimalRegex.test(newVal) || newVal === '') {
+                dispatch(updateFields(newVal, props.id, 'bPosPrice'));
+              }
             }}
           />
         ) : null}
@@ -85,7 +89,9 @@ const InventoryCard = (props) => {
           style={styles.inventoryInput}
           value={props.cardData.bNegUnits + ''}
           onChangeText={(newVal) => {
-            dispatch(updateFields(newVal, props.id, 'bNegUnits'));
+            if (numbersOnlyRegex.test(newVal) || newVal === '') {
+              dispatch(updateFields(newVal, props.id, 'bNegUnits'));
+            }
           }}
         />
         {authState.userType === 3 ? (
@@ -93,7 +99,9 @@ const InventoryCard = (props) => {
             style={styles.inventoryInput}
             value={props.cardData.bNegPrice + ''}
             onChangeText={(newVal) => {
-              dispatch(updateFields(newVal, props.id, 'bNegPrice'));
+              if (decimalRegex.test(newVal) || newVal === '') {
+                dispatch(updateFields(newVal, props.id, 'bNegPrice'));
+              }
             }}
           />
         ) : null}
@@ -107,7 +115,9 @@ const InventoryCard = (props) => {
           style={styles.inventoryInput}
           value={props.cardData.aPosUnits + ''}
           onChangeText={(newVal) => {
-            dispatch(updateFields(newVal, props.id, 'aPosUnits'));
+            if (numbersOnlyRegex.test(newVal) || newVal === '') {
+              dispatch(updateFields(newVal, props.id, 'aPosUnits'));
+            }
           }}
         />
         {authState.userType === 3 ? (
@@ -115,7 +125,9 @@ const InventoryCard = (props) => {
             style={styles.inventoryInput}
             value={props.cardData.aPosPrice + ''}
             onChangeText={(newVal) => {
-              dispatch(updateFields(newVal, props.id, 'aPosPrice'));
+              if (decimalRegex.test(newVal) || newVal === '') {
+                dispatch(updateFields(newVal, props.id, 'aPosPrice'));
+              }
             }}
           />
         ) : null}
@@ -129,7 +141,9 @@ const InventoryCard = (props) => {
           style={styles.inventoryInput}
           value={props.cardData.aNegUnits + ''}
           onChangeText={(newVal) => {
-            dispatch(updateFields(newVal, props.id, 'aNegUnits'));
+            if (numbersOnlyRegex.test(newVal) || newVal === '') {
+              dispatch(updateFields(newVal, props.id, 'aNegUnits'));
+            }
           }}
         />
         {authState.userType === 3 ? (
@@ -137,7 +151,9 @@ const InventoryCard = (props) => {
             style={styles.inventoryInput}
             value={props.cardData.aNegPrice + ''}
             onChangeText={(newVal) => {
-              dispatch(updateFields(newVal, props.id, 'aNegPrice'));
+              if (numbersOnlyRegex.test(newVal) || newVal === '') {
+                dispatch(updateFields(newVal, props.id, 'aNegPrice'));
+              }
             }}
           />
         ) : null}
@@ -151,7 +167,9 @@ const InventoryCard = (props) => {
           style={styles.inventoryInput}
           value={props.cardData.oPosUnits + ''}
           onChangeText={(newVal) => {
-            dispatch(updateFields(newVal, props.id, 'oPosUnits'));
+            if (numbersOnlyRegex.test(newVal) || newVal === '') {
+              dispatch(updateFields(newVal, props.id, 'oPosUnits'));
+            }
           }}
         />
         {authState.userType === 3 ? (
@@ -159,7 +177,9 @@ const InventoryCard = (props) => {
             style={styles.inventoryInput}
             value={props.cardData.oPosPrice + ''}
             onChangeText={(newVal) => {
-              dispatch(updateFields(newVal, props.id, 'oPosPrice'));
+              if (numbersOnlyRegex.test(newVal) || newVal === '') {
+                dispatch(updateFields(newVal, props.id, 'oPosPrice'));
+              }
             }}
           />
         ) : null}
@@ -173,7 +193,9 @@ const InventoryCard = (props) => {
           style={styles.inventoryInput}
           value={props.cardData.oNegUnits + ''}
           onChangeText={(newVal) => {
-            dispatch(updateFields(newVal, props.id, 'oNegUnits'));
+            if (numbersOnlyRegex.test(newVal) || newVal === '') {
+              dispatch(updateFields(newVal, props.id, 'oNegUnits'));
+            }
           }}
         />
         {authState.userType === 3 ? (
@@ -181,7 +203,9 @@ const InventoryCard = (props) => {
             style={styles.inventoryInput}
             value={props.cardData.oNegPrice + ''}
             onChangeText={(newVal) => {
-              dispatch(updateFields(newVal, props.id, 'oNegPrice'));
+              if (numbersOnlyRegex.test(newVal) || newVal === '') {
+                dispatch(updateFields(newVal, props.id, 'oNegPrice'));
+              }
             }}
           />
         ) : null}
@@ -195,7 +219,9 @@ const InventoryCard = (props) => {
           style={styles.inventoryInput}
           value={props.cardData.abPosUnits + ''}
           onChangeText={(newVal) => {
-            dispatch(updateFields(newVal, props.id, 'abPosUnits'));
+            if (numbersOnlyRegex.test(newVal) || newVal === '') {
+              dispatch(updateFields(newVal, props.id, 'abPosUnits'));
+            }
           }}
         />
         {authState.userType === 3 ? (
@@ -203,7 +229,9 @@ const InventoryCard = (props) => {
             style={styles.inventoryInput}
             value={props.cardData.abPosPrice + ''}
             onChangeText={(newVal) => {
-              dispatch(updateFields(newVal, props.id, 'abPosPrice'));
+              if (numbersOnlyRegex.test(newVal) || newVal === '') {
+                dispatch(updateFields(newVal, props.id, 'abPosPrice'));
+              }
             }}
           />
         ) : null}
@@ -217,7 +245,9 @@ const InventoryCard = (props) => {
           style={styles.inventoryInput}
           value={props.cardData.abNegUnits + ''}
           onChangeText={(newVal) => {
-            dispatch(updateFields(newVal, props.id, 'abNegUnits'));
+            if (numbersOnlyRegex.test(newVal) || newVal === '') {
+              dispatch(updateFields(newVal, props.id, 'abNegUnits'));
+            }
           }}
         />
         {authState.userType === 3 ? (
@@ -225,7 +255,9 @@ const InventoryCard = (props) => {
             style={styles.inventoryInput}
             value={props.cardData.abNegPrice + ''}
             onChangeText={(newVal) => {
-              dispatch(updateFields(newVal, props.id, 'abNegPrice'));
+              if (numbersOnlyRegex.test(newVal) || newVal === '') {
+                dispatch(updateFields(newVal, props.id, 'abNegPrice'));
+              }
             }}
           />
         ) : null}

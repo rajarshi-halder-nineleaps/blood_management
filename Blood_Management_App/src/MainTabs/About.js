@@ -207,6 +207,9 @@ const styles = StyleSheet.create({
     padding: 40,
     backgroundColor: colors.additional2,
     borderTopLeftRadius: 90,
+    borderTopWidth: 10,
+    borderLeftWidth: 10,
+    borderColor: colors.primary,
     elevation: 10,
   },
   heading: {

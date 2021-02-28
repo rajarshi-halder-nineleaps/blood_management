@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, {useState, useEffect} from 'react';
 import axios from 'axios';
-import { useDispatch, useSelector } from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import Feather from 'react-native-vector-icons/Feather';
 
 import {
@@ -9,23 +9,25 @@ import {
   StyleSheet,
   FlatList,
   ScrollView,
+  Image,
   SafeAreaView,
+  ImageBackground,
   Alert,
 } from 'react-native';
-import { Picker } from '@react-native-picker/picker';
-import { TouchableOpacity } from 'react-native-gesture-handler';
+import {Picker} from '@react-native-picker/picker';
+import {TouchableOpacity} from 'react-native-gesture-handler';
+import {pincodeRegex, numbersOnlyRegex} from '../../../constants/Regexes';
 import * as places from '../../../assets/places.json';
 import colors from '../../../constants/Colors';
-import { getDonorList } from '../../../redux/finddonors/actions';
+import {getDonorList} from '../../../redux/finddonors/actions';
 import {
   updateFields,
   stateCleanup,
   blurFields,
 } from '../../../redux/finddonors/actions';
-import Input from '../../../components/Input'
 import Fields from '../../../components/Fields';
 
-const FindDonors = ({ navigation }) => {
+const FindDonors = ({navigation}) => {
   const dispatch = useDispatch();
   const authState = useSelector((state) => state.authState);
   const finddonorFormState = useSelector((state) => state.finddonorFormState);
@@ -54,11 +56,11 @@ const FindDonors = ({ navigation }) => {
     if (fieldId === 'district' && val === 'Select district') {
       isValid = false;
     }
-    if (fieldId === 'address' && val === "") {
+    if (fieldId === 'address' && val === '') {
       isValid = false;
     }
 
-    if (fieldId === 'pincode' && val.trim().length !== 6) {
+    if (fieldId === 'pincode' && val.length !== 0 && !pincodeRegex.test(val)) {
       isValid = false;
     }
 
@@ -69,36 +71,53 @@ const FindDonors = ({ navigation }) => {
     dispatch(updateFields(val, fieldId, isValid));
   };
 
-  const sumbitHandler = () => {
+  const submitHandler = () => {
     console.log(finddonorFormState.inputValues);
-    if (finddonorFormState.inputValidity.blood_group) {
-      if (finddonorFormState.inputValidity.address) {
-        dispatch(
-          getDonorList(authState.userToken, finddonorFormState.inputValues),
-        );
-        navigation.navigate('Donor List');
+    if (finddonorFormState.inputValidity.pincode) {
+      if (finddonorFormState.inputValidity.blood_group) {
+        if (finddonorFormState.inputValidity.address) {
+          dispatch(
+            getDonorList(authState.userToken, finddonorFormState.inputValues),
+          );
+          navigation.navigate('Donor List');
+        } else {
+          Alert.alert(
+            'Invalid Input',
+            'Please input Donation Address to continue',
+            [{text: 'Okay'}],
+          );
+        }
       } else {
-        Alert.alert('Invalid Input', 'Please input Donation Address to continue', [
-          { text: 'Okay' },
+        Alert.alert('Invalid Input', 'Please select Blood Group to continue', [
+          {text: 'Okay'},
         ]);
       }
     } else {
-      Alert.alert('Invalid Input', 'Please select Blood Group to continue', [
-        { text: 'Okay' },
-      ]);
+      Alert.alert(
+        'Invalid Input',
+        'Please enter a valid pincode or leave the field empty',
+        [{text: 'Okay'}],
+      );
     }
   };
 
   return (
     <ScrollView style={styles.container}>
-      <View style={styles.header}>
-        <TouchableOpacity onPress={() => navigation.goBack()}>
-          <Feather name="chevron-left" color={colors.primary} size={30} />
-        </TouchableOpacity>
-        <Text style={styles.headertitle}>Find Donors</Text>
+      <View>
+        <View style={styles.imageBoard}>
+          <Image
+            source={require('../../../assets/images/findDrives.png')}
+            style={styles.image}
+            resizeMode="center"
+          />
+          <Text style={{...styles.searchInfoText}}>
+            Please input the required details below
+          </Text>
+        </View>
       </View>
 
-      <View style={{ marginHorizontal: 20 }}>
+      <View style={{marginHorizontal: 20}}>
+        <Text style={styles.pickerLabel}>Blood group</Text>
         <View style={styles.pickerView}>
           <Picker
             style={styles.picker}
@@ -121,6 +140,27 @@ const FindDonors = ({ navigation }) => {
             <Picker.Item label="AB-" value="AB-" />
           </Picker>
         </View>
+
+        <Fields
+          label="Address of Donation"
+          error="Invalid address!"
+          numberOfLines={3}
+          returnKeyType="next"
+          multiline={true}
+          inputIsValid={finddonorFormState.inputValidity.address}
+          inputIsTouched={finddonorFormState.isTouched.address}
+          value={finddonorFormState.inputValues.address}
+          onChangeText={(val) => checkValidity(val, 'address')}
+          onBlur={() => {
+            blurListener('address');
+          }}
+        />
+
+        <View style={styles.filterInfoBoard}>
+          <Text style={styles.filterInfoText}>Optional Filters</Text>
+        </View>
+
+        <Text style={styles.pickerLabel}>State</Text>
         <View style={styles.pickerView}>
           <Picker
             style={styles.picker}
@@ -142,6 +182,7 @@ const FindDonors = ({ navigation }) => {
             <Text style={styles.errorMsg}>Please select your state</Text>
           )}
 
+        <Text style={styles.pickerLabel}>District</Text>
         <View style={styles.pickerView}>
           <Picker
             enabled={distEnb}
@@ -161,7 +202,7 @@ const FindDonors = ({ navigation }) => {
             <Text style={styles.errorMsg}>Please select your district</Text>
           )}
 
-        <Input
+        <Fields
           label="Pincode"
           error="Invalid pincode!"
           returnKeyType="next"
@@ -173,27 +214,17 @@ const FindDonors = ({ navigation }) => {
             blurListener('pincode');
           }}
         />
-
-        <Fields
-          label="Address of Donation"
-          error="Invalid address!"
-          returnKeyType="next"
-          inputIsValid={finddonorFormState.inputValidity.address}
-          inputIsTouched={finddonorFormState.isTouched.address}
-          value={finddonorFormState.inputValues.address}
-          onChangeText={(val) => checkValidity(val, 'address')}
-          onBlur={() => {
-            blurListener('address');
-          }}
-        />
       </View>
-
-      <View style={styles.button}>
+      <View style={styles.touchBoard}>
         <TouchableOpacity
-          onPress={() => {
-            sumbitHandler();
-          }}>
-          <Text style={styles.buttontext}>Find</Text>
+          style={styles.finderTouch}
+          onPress={() => submitHandler()}>
+          <ImageBackground
+            style={styles.imgBtnBkg}
+            source={require('../../../assets/images/invBkg.png')}>
+            <Feather name="search" color={colors.additional2} size={20} />
+            <Text style={styles.finderTouchText}>Find donors</Text>
+          </ImageBackground>
         </TouchableOpacity>
       </View>
     </ScrollView>
@@ -203,7 +234,15 @@ const FindDonors = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    color: colors.additional2,
+    backgroundColor: colors.additional2,
+  },
+  imageBoard: {
+    alignItems: 'center',
+    marginBottom: 10,
+  },
+  image: {
+    height: 150,
+    width: 150,
   },
   header: {
     marginBottom: 20,
@@ -218,19 +257,30 @@ const styles = StyleSheet.create({
     color: colors.primary,
     fontFamily: 'Montserrat-Regular',
   },
+  pickerLabel: {
+    color: colors.grayishblack,
+    fontFamily: 'Montserrat-Regular',
+    marginTop: 10,
+    paddingBottom: 3,
+  },
   pickerView: {
-    marginVertical: 10,
-    paddingVertical: 3,
-    borderRadius: 100,
-    backgroundColor: colors.additional2,
-    fontSize: 18,
+    borderRadius: 5,
+    backgroundColor: 'transparent',
+    borderColor: colors.grayishblack,
+    borderWidth: 2,
+    fontSize: 14,
     fontFamily: 'Montserrat-Regular',
     paddingHorizontal: 30,
     color: 'black',
   },
   picker: {
-    fontSize: 18,
+    color: colors.grayishblack,
     fontFamily: 'Montserrat-Regular',
+  },
+  errorMsg: {
+    color: colors.dutchred,
+    fontFamily: 'Montserrat-Regular',
+    marginBottom: 10,
   },
   item: {
     backgroundColor: '#f9c2ff',
@@ -241,6 +291,15 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 25,
+  },
+  filterInfoBoard: {
+    width: '100%',
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderBottomColor: colors.primary,
+    borderBottomWidth: 1,
+    paddingVertical: 10,
+    marginRight: 10,
   },
   button: {
     backgroundColor: colors.primary,
@@ -258,6 +317,46 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     fontFamily: 'Montserrat-Regular',
     color: colors.additional2,
+  },
+  filterInfoText: {
+    fontFamily: 'Montserrat-Regular',
+    color: colors.primary,
+    fontSize: 18,
+  },
+  searchInfoText: {
+    fontFamily: 'Montserrat-Regular',
+    color: colors.primary,
+    fontSize: 14,
+  },
+  touchBoard: {
+    borderRadius: 100,
+    marginTop: 10,
+    backgroundColor: 'transparent',
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingBottom: 55,
+  },
+  finderTouch: {
+    backgroundColor: colors.primary,
+    elevation: 5,
+    borderRadius: 100,
+    overflow: 'hidden',
+    width: 200,
+    height: 50,
+  },
+  imgBtnBkg: {
+    width: '100%',
+    height: '100%',
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    fontFamily: 'Montserrat-Regular',
+  },
+  finderTouchText: {
+    color: colors.additional2,
+    paddingLeft: 10,
+    fontSize: 15,
+    fontFamily: 'Montserrat-Regular',
   },
 });
 

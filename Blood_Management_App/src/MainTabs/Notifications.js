@@ -9,6 +9,7 @@ import {
   ActivityIndicator,
   RefreshControl,
 } from 'react-native';
+import {useFocusEffect} from '@react-navigation/native';
 import renderItem from '../../components/NotificationItem';
 import colors from '../../constants/Colors';
 import {useSelector, useDispatch} from 'react-redux';
@@ -29,9 +30,16 @@ const Notifications = ({navigation}) => {
     }
   }, [authState.userToken, dispatch, notificationsState.loading]);
 
-  useEffect(() => {
-    dispatch(fetchNotifications(authState.userToken));
-  }, [authState.userToken, dispatch]);
+  // useEffect(() => {
+  //   dispatch(fetchNotifications(authState.userToken));
+  // }, [authState.userToken, dispatch]);
+
+  useFocusEffect(
+    React.useCallback(() => {
+      dispatch(fetchNotifications(authState.userToken));
+      console.log('PROFILE RENDERED!');
+    }, [authState.userToken, dispatch]),
+  );
 
   return (
     <View

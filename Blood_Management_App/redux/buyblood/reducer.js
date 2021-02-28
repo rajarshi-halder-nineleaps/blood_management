@@ -1,9 +1,11 @@
 import {
-  UPDATE_FIELDS_REG, STATE_CLEANUP, BLUR_FIELDS_REG,
+  UPDATE_FIELDS_REG,
+  STATE_CLEANUP,
+  BLUR_FIELDS_REG,
   UPDATE_DONOR_ARRAY,
   REQ_FAILURE,
-  REQ_SUCCESS
-} from './actionTypes'
+  REQ_SUCCESS,
+} from './actionTypes';
 
 const initialState = {
   list: [],
@@ -26,7 +28,7 @@ const initialState = {
     req_units: false,
     state: false,
     district: false,
-    pincode: false,
+    pincode: true,
   },
   isTouched: {
     blood_group: false,
@@ -36,8 +38,6 @@ const initialState = {
     district: false,
     pincode: false,
   },
-
-
 };
 
 const buybloodReducer = (state = initialState, action) => {
@@ -65,8 +65,8 @@ const buybloodReducer = (state = initialState, action) => {
       };
     }
     case BLUR_FIELDS_REG: {
-      const newInputIsTouched = { ...state.isTouched, [action.fieldId]: true };
-      return { ...state, isTouched: newInputIsTouched };
+      const newInputIsTouched = {...state.isTouched, [action.fieldId]: true};
+      return {...state, isTouched: newInputIsTouched};
     }
     case STATE_CLEANUP: {
       console.log('Cleaning state');
@@ -74,35 +74,32 @@ const buybloodReducer = (state = initialState, action) => {
     }
 
     case UPDATE_DONOR_ARRAY: {
-      console.log("updating")
+      console.log('updating');
 
       return {
         ...state,
         list: action.array,
-        display_results: true
-      }
-
-
-
+        display_results: true,
+      };
     }
     case REQ_SUCCESS: {
       return {
         ...state,
         boughtit: true,
-        tryagain: false
-      }
+        tryagain: false,
+      };
     }
     case REQ_FAILURE: {
       return {
         ...state,
         boughtit: false,
-        tryagain: true
-      }
+        tryagain: true,
+      };
     }
 
     default:
       return state;
   }
-}
+};
 
-export default buybloodReducer
+export default buybloodReducer;

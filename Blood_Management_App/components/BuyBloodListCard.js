@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import React, { useEffect } from 'react';
+import React, {useEffect} from 'react';
 import {
   View,
   ScrollView,
@@ -16,11 +16,12 @@ import {
   CollapseHeader,
   CollapseBody,
 } from 'accordion-collapse-react-native';
-import { TouchableOpacity } from 'react-native-gesture-handler';
-import { useNavigation } from '@react-navigation/native';
+import {TouchableOpacity} from 'react-native-gesture-handler';
+import {useNavigation} from '@react-navigation/native';
+import {useSelector} from 'react-redux';
 
-const BuyBloodListCard = ({ item, onPress }) => {
-
+const BuyBloodListCard = ({item, onPress}) => {
+  const buybloodFormState = useSelector((state) => state.buybloodFormState);
 
   return (
     <Collapse>
@@ -32,54 +33,58 @@ const BuyBloodListCard = ({ item, onPress }) => {
           <View style={styles.nameView}>
             <Text style={styles.nameText}>{item.bbName}</Text>
           </View>
+          <View style={styles.miniAddressView}>
+            <Text style={styles.miniAddressContent}>
+              Total amount: ₹{' '}
+              {item.price * buybloodFormState.inputValues.req_units}
+            </Text>
+          </View>
         </View>
         <TouchableOpacity onPress={onPress} style={styles.invite}>
           <Text style={styles.invitebutton}>Buy Now</Text>
         </TouchableOpacity>
-        <View style={styles.headerIndicatorView}>
-
-        </View>
       </CollapseHeader>
       <CollapseBody style={styles.collBody}>
-
-
         <View style={styles.detailsBoard}>
-
           <View style={styles.detailsView}>
             <View style={styles.addressContentView}>
               <View style={styles.addressInsideView}>
                 <Text style={styles.addressInsideLabel}>Name:</Text>
                 <View style={styles.addressRightView}>
-                  <Text style={styles.addressContent}>
-                    {item.bbName}
-                  </Text>
+                  <Text style={styles.addressContent}>{item.bbName}</Text>
                 </View>
               </View>
               <View style={styles.addressInsideView}>
                 <Text style={styles.addressInsideLabel}>Email:</Text>
                 <View style={styles.addressRightView}>
+                  <Text style={styles.addressContent}>{item.email}</Text>
+                </View>
+              </View>
+
+              <View style={styles.addressInsideView}>
+                <Text style={styles.addressInsideLabel}>Contact:</Text>
+                <View style={styles.addressRightView}>
+                  <Text style={styles.addressContent}>{item.phoneNo}</Text>
+                </View>
+              </View>
+
+              <View style={styles.addressInsideView}>
+                <Text style={styles.addressInsideLabel}>Address: </Text>
+                <View style={styles.addressRightView}>
                   <Text style={styles.addressContent}>
-                    {item.email}
+                    {item.address}, {item.district}, {item.state} [
+                    {item.pincode}]
                   </Text>
                 </View>
               </View>
 
               <View style={styles.addressInsideView}>
-                <Text style={styles.addressInsideLabel}>
-                  Price per unit:
-                </Text>
+                <Text style={styles.addressInsideLabel}>Price per unit:</Text>
                 <View style={styles.addressRightView}>
-                  <Text style={styles.addressContent}>
-                    {item.price}
-                  </Text>
+                  <Text style={styles.addressContent}>₹ {item.price}</Text>
                 </View>
               </View>
-
             </View>
-          </View>
-          <View style={styles.headerIndicatorView}>
-
-
           </View>
         </View>
       </CollapseBody>
@@ -134,7 +139,7 @@ const styles = StyleSheet.create({
     color: colors.additional1,
   },
   headerIndicatorView: {
-    justifyContent: 'center'
+    justifyContent: 'center',
   },
   yesnoView: {
     flexDirection: 'row',
@@ -222,10 +227,9 @@ const styles = StyleSheet.create({
     color: colors.additional1,
   },
   invite: {
-    paddingHorizontal: 15,
+    padding: 10,
     backgroundColor: colors.primary,
-    paddingVertical: 10,
-    borderRadius: 10
+    borderRadius: 5,
   },
   invitebutton: {
     color: 'white',
@@ -233,7 +237,7 @@ const styles = StyleSheet.create({
     alignContent: 'center',
     alignSelf: 'center',
     fontFamily: 'Montserrat-Regular',
-    fontSize: 20
+    fontSize: 14,
   },
 });
 

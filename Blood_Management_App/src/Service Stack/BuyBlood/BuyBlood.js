@@ -1,55 +1,49 @@
-import React, { useState, useEffect } from 'react'
-import axios from 'axios'
-import { useDispatch, useSelector } from 'react-redux';
+import React, {useState, useEffect} from 'react';
+import {useDispatch, useSelector} from 'react-redux';
 import Feather from 'react-native-vector-icons/Feather';
-
 
 import {
   View,
   Text,
   StyleSheet,
   ScrollView,
-  Alert
-} from 'react-native'
-import { Picker } from '@react-native-picker/picker';
-import { TouchableOpacity } from 'react-native-gesture-handler';
+  Alert,
+  Image,
+  ImageBackground,
+} from 'react-native';
+import {Picker} from '@react-native-picker/picker';
+import {TouchableOpacity} from 'react-native-gesture-handler';
+import {pincodeRegex, numbersOnlyRegex} from '../../../constants/Regexes';
 import * as places from '../../../assets/places.json';
-import colors from '../../../constants/Colors'
-import { getBuyBloodList } from '../../../redux/buyblood/actions';
+import colors from '../../../constants/Colors';
+import {getBuyBloodList} from '../../../redux/buyblood/actions';
 import {
   updateFields,
   stateCleanup,
-  blurFields
+  blurFields,
 } from '../../../redux/buyblood/actions';
 
-import Input from '../../../components/Input';
+import Fields from '../../../components/Fields';
 
-
-
-const FindDonors = ({ navigation }) => {
-
+const FindDonors = ({navigation}) => {
   const dispatch = useDispatch();
   const buybloodFormState = useSelector((state) => state.buybloodFormState);
   const [selectedStateindex, setselectedStateindex] = useState(0);
   const [distEnb, setdistEnb] = useState(false);
-  const authState = useSelector((state) => state.authState)
+  const authState = useSelector((state) => state.authState);
   const word = places.states;
-
 
   useEffect(() => {
     dispatch(stateCleanup());
   }, [dispatch]);
 
-
   const blurListener = (fieldId) => {
     dispatch(blurFields(fieldId));
   };
 
-
   const checkValidity = (val, fieldId) => {
     console.log(fieldId);
     let isValid = true;
-
 
     if (fieldId === 'state' && val === 'Select state') {
       isValid = false;
@@ -61,7 +55,7 @@ const FindDonors = ({ navigation }) => {
       isValid = false;
     }
 
-    if (fieldId === 'pincode' && val.trim().length !== 6) {
+    if (fieldId === 'pincode' && val.length !== 0 && !pincodeRegex.test(val)) {
       isValid = false;
     }
 
@@ -73,63 +67,82 @@ const FindDonors = ({ navigation }) => {
       isValid = false;
     }
 
-    if (fieldId === 'req_units' && val === 0) {
+    if (fieldId === 'req_units' && (val === 0 || !numbersOnlyRegex.test(val))) {
       isValid = false;
+      //todo reduxify this field for only int.
     }
-
-
-
 
     dispatch(updateFields(val, fieldId, isValid));
   };
 
-
-  const sumbitHandler = () => {
-    console.log(buybloodFormState.inputValues)
-    if (buybloodFormState.inputValidity.blood_group) {
-      if (buybloodFormState.inputValidity.component) {
-        if (buybloodFormState.inputValidity.req_units) {
-          dispatch(getBuyBloodList(buybloodFormState.inputValues, authState.userToken));
-          navigation.navigate("Buy Blood List")
+  const submitHandler = () => {
+    console.log(buybloodFormState.inputValues);
+    if (buybloodFormState.inputValidity.pincode) {
+      if (buybloodFormState.inputValidity.blood_group) {
+        if (buybloodFormState.inputValidity.component) {
+          if (buybloodFormState.inputValidity.req_units) {
+            dispatch(
+              getBuyBloodList(
+                buybloodFormState.inputValues,
+                authState.userToken,
+              ),
+            );
+            navigation.navigate('Buy Blood List');
+          } else {
+            Alert.alert(
+              'Missing Units',
+              'Please input required number of units to continue',
+              [{text: 'Okay'}],
+            );
+          }
         } else {
           Alert.alert(
-            'Invalid Input',
-            'Please select Units to continue',
-            [{ text: 'Okay' }],
+            'Invalid Blood group',
+            'Please select a Blood Component to continue',
+            [{text: 'Okay'}],
           );
         }
-
       } else {
         Alert.alert(
           'Invalid Input',
-          'Please select Blood Component to continue',
-          [{ text: 'Okay' }],
+          'Please select a Blood Group to continue',
+          [{text: 'Okay'}],
         );
       }
-
     } else {
       Alert.alert(
         'Invalid Input',
-        'Please select Blood Group to continue',
-        [{ text: 'Okay' }],
+        'Please enter a valid pincode or leave the field empty.',
+        [{text: 'Okay'}],
       );
     }
   };
 
-
-
   return (
     <ScrollView style={styles.container}>
-      <View style={styles.header}>
+      {/* <View style={styles.header}>
         <TouchableOpacity onPress={() => navigation.goBack()}>
           <Feather name="chevron-left" color={colors.primary} size={30} />
         </TouchableOpacity>
         <Text style={styles.headertitle}>Buy Blood</Text>
+      </View> */}
 
+      <View>
+        <View style={styles.imageBoard}>
+          <Image
+            source={require('../../../assets/images/servicesScreen/buyBlood.png')}
+            style={styles.image}
+            resizeMode="center"
+          />
+          <Text style={{...styles.searchInfoText}}>
+            Please input the required details below
+          </Text>
+        </View>
       </View>
 
-      <View style={{ marginHorizontal: 30 }}>
-        <View style={styles.pickerView} >
+      <View style={{marginHorizontal: 30}}>
+        <Text style={styles.pickerLabel}>*Blood group</Text>
+        <View style={styles.pickerView}>
           <Picker
             style={styles.picker}
             selectedValue={buybloodFormState.inputValues.blood_group}
@@ -137,7 +150,10 @@ const FindDonors = ({ navigation }) => {
               blurListener('blood_group');
               checkValidity(val, 'blood_group');
             }}>
-            <Picker.Item label="Select Blood Group" value="Select Blood Group" />
+            <Picker.Item
+              label="Select Blood Group"
+              value="Select Blood Group"
+            />
             <Picker.Item label="A+" value="A+" />
             <Picker.Item label="A-" value="A-" />
             <Picker.Item label="B+" value="B+" />
@@ -146,10 +162,11 @@ const FindDonors = ({ navigation }) => {
             <Picker.Item label="O-" value="O-" />
             <Picker.Item label="AB+" value="AB+" />
             <Picker.Item label="AB-" value="AB-" />
-
           </Picker>
         </View>
-        <View style={styles.pickerView} >
+
+        <Text style={styles.pickerLabel}>*Component</Text>
+        <View style={styles.pickerView}>
           <Picker
             style={styles.picker}
             selectedValue={buybloodFormState.inputValues.component}
@@ -157,14 +174,16 @@ const FindDonors = ({ navigation }) => {
               blurListener('component');
               checkValidity(val, 'component');
             }}>
-            <Picker.Item label="Select Blood Component" value="Select Blood Component" />
+            <Picker.Item
+              label="Select Blood Component"
+              value="Select Blood Component"
+            />
             <Picker.Item label="Blood" value="Blood" />
             <Picker.Item label="Plasma" value="Plasma" />
             <Picker.Item label="Platelet" value="Platelet" />
-
           </Picker>
         </View>
-        <View style={styles.pickerView} >
+        {/* <View style={styles.pickerView}>
           <Picker
             style={styles.picker}
             selectedValue={buybloodFormState.inputValues.req_units}
@@ -178,10 +197,28 @@ const FindDonors = ({ navigation }) => {
             <Picker.Item label="2" value={2} />
             <Picker.Item label="3" value={3} />
             <Picker.Item label="4" value={4} />
-
           </Picker>
+        </View> */}
+
+        <Fields
+          label="*Units"
+          error="Invalid input"
+          returnKeyType="next"
+          keyboardType="number-pad"
+          inputIsValid={buybloodFormState.inputValidity.req_units}
+          inputIsTouched={buybloodFormState.isTouched.req_units}
+          value={buybloodFormState.inputValues.req_units}
+          onChangeText={(val) => checkValidity(val, 'req_units')}
+          onBlur={() => {
+            blurListener('req_units');
+          }}
+        />
+
+        <View style={styles.filterInfoBoard}>
+          <Text style={styles.filterInfoText}>Optional Filters</Text>
         </View>
 
+        <Text style={styles.pickerLabel}>State</Text>
         <View style={styles.pickerView}>
           <Picker
             style={styles.picker}
@@ -203,6 +240,7 @@ const FindDonors = ({ navigation }) => {
             <Text style={styles.errorMsg}>Please select your state</Text>
           )}
 
+        <Text style={styles.pickerLabel}>District</Text>
         <View style={styles.pickerView}>
           <Picker
             enabled={distEnb}
@@ -222,10 +260,11 @@ const FindDonors = ({ navigation }) => {
             <Text style={styles.errorMsg}>Please select your district</Text>
           )}
 
-        <Input
+        <Fields
           label="Pincode"
-          error="Invalid pincode!"
+          error="Please enter a valid pincode or leave the field empty"
           returnKeyType="next"
+          keyboardType="number-pad"
           inputIsValid={buybloodFormState.inputValidity.pincode}
           inputIsTouched={buybloodFormState.isTouched.pincode}
           value={buybloodFormState.inputValues.pincode}
@@ -236,43 +275,49 @@ const FindDonors = ({ navigation }) => {
         />
       </View>
 
-      <View style={styles.button}>
-        <TouchableOpacity onPress={() => { sumbitHandler() }}>
-          <Text style={styles.buttontext}>Find</Text>
+      <View style={styles.touchBoard}>
+        <TouchableOpacity
+          style={styles.finderTouch}
+          onPress={() => submitHandler()}>
+          <ImageBackground
+            style={styles.imgBtnBkg}
+            source={require('../../../assets/images/invBkg.png')}>
+            <Feather name="search" color={colors.additional2} size={20} />
+            <Text style={styles.finderTouchText}>Find blood banks</Text>
+          </ImageBackground>
         </TouchableOpacity>
       </View>
 
-
-
-
-
-
-
-
-
-
-
-
+      {/* <View style={styles.button}>
+        <TouchableOpacity
+          onPress={() => {
+            submitHandler();
+          }}>
+          <Text style={styles.buttontext}>Find </Text>
+        </TouchableOpacity>
+      </View> */}
     </ScrollView>
   );
-}
+};
 
 const styles = StyleSheet.create({
   container: {
-
-
     flex: 1,
-
-
-
-
+    backgroundColor: colors.additional2,
+  },
+  imageBoard: {
+    alignItems: 'center',
+    marginBottom: 10,
+  },
+  image: {
+    height: 150,
+    width: 150,
   },
   header: {
     marginBottom: 20,
     backgroundColor: 'transparent',
     paddingTop: 10,
-    flexDirection: 'row'
-
+    flexDirection: 'row',
   },
   headertitle: {
     fontSize: 50,
@@ -281,25 +326,40 @@ const styles = StyleSheet.create({
     color: colors.primary,
     fontFamily: 'Montserrat-Regular',
   },
-  pickerView: {
-    marginVertical: 10,
-    paddingVertical: 3,
-    borderRadius: 100,
-    backgroundColor: colors.accent,
-    fontSize: 18,
-    fontFamily: 'sans-serif-condensed',
-    paddingHorizontal: 30,
-    color: 'black',
-  },
   item: {
     backgroundColor: '#f9c2ff',
     padding: 20,
     marginVertical: 8,
     marginHorizontal: 16,
-    borderRadius: 20
+    borderRadius: 20,
   },
   title: {
     fontSize: 25,
+  },
+  pickerLabel: {
+    color: colors.grayishblack,
+    fontFamily: 'Montserrat-Regular',
+    marginTop: 10,
+    paddingBottom: 3,
+  },
+  pickerView: {
+    borderRadius: 5,
+    backgroundColor: 'transparent',
+    borderColor: colors.grayishblack,
+    borderWidth: 2,
+    fontSize: 14,
+    fontFamily: 'Montserrat-Regular',
+    paddingHorizontal: 30,
+    color: 'black',
+  },
+  picker: {
+    color: colors.grayishblack,
+    fontFamily: 'Montserrat-Regular',
+  },
+  errorMsg: {
+    color: colors.dutchred,
+    fontFamily: 'Montserrat-Regular',
+    marginBottom: 10,
   },
   button: {
     backgroundColor: colors.primary,
@@ -310,7 +370,7 @@ const styles = StyleSheet.create({
     fontFamily: 'Montserrat-Regular',
     paddingHorizontal: 30,
     color: colors.additional2,
-    paddingVertical: 10
+    paddingVertical: 10,
   },
   buttontext: {
     fontSize: 20,
@@ -319,11 +379,60 @@ const styles = StyleSheet.create({
     color: colors.additional2,
   },
   backbutton: {
-    backgroundColor: colors.primary
+    backgroundColor: colors.primary,
   },
   icon: {
     color: colors.additional2,
   },
-})
+  filterInfoBoard: {
+    width: '100%',
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderBottomColor: colors.primary,
+    borderBottomWidth: 1,
+    paddingVertical: 10,
+    marginRight: 10,
+  },
+  filterInfoText: {
+    fontFamily: 'Montserrat-Regular',
+    color: colors.primary,
+    fontSize: 18,
+  },
+  searchInfoText: {
+    fontFamily: 'Montserrat-Regular',
+    color: colors.primary,
+    fontSize: 14,
+  },
+  touchBoard: {
+    borderRadius: 100,
+    marginTop: 10,
+    backgroundColor: 'transparent',
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingBottom: 55,
+  },
+  finderTouch: {
+    backgroundColor: colors.primary,
+    elevation: 5,
+    borderRadius: 100,
+    overflow: 'hidden',
+    width: 200,
+    height: 50,
+  },
+  imgBtnBkg: {
+    width: '100%',
+    height: '100%',
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    fontFamily: 'Montserrat-Regular',
+  },
+  finderTouchText: {
+    color: colors.additional2,
+    paddingLeft: 10,
+    fontSize: 15,
+    fontFamily: 'Montserrat-Regular',
+  },
+});
 
-export default FindDonors
+export default FindDonors;
