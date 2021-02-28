@@ -11,6 +11,8 @@ const colors = {
   dutchred: '#EA2027',
   coolblue: '#0d58d1',
   green: 'green',
+  peach: '#FE5F55',
+  sapphireblue: '#0f52ba',
 };
 
 export default colors;

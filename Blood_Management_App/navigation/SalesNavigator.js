@@ -9,8 +9,9 @@ import { Text } from 'react-native';
 
 import Sales from '../src/MainTabs/ServicesStack/Sales';
 import SalesAnalytics from '../src/MainTabs/ServicesStack/SalesAnalytics';
-
+//import salesAnalyticsNavigator from './SalesAnalyticsNavigator'
 const SalesTabs = createMaterialTopTabNavigator();
+
 
 const SalesNavigator = ({ navigation }) => {
   return (
@@ -39,5 +40,6 @@ const SalesNavigator = ({ navigation }) => {
     </SalesTabs.Navigator>
   );
 };
+
 
 export default SalesNavigator;

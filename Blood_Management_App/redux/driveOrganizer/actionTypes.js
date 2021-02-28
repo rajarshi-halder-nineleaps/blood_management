@@ -4,3 +4,4 @@ export const STATE_CLEANUP = 'STATE_CLEANUP';
 export const ORGANIZE_REQ = 'ORGANIZE_REQ';
 export const ORGANIZE_SUCCESS = 'ORGANIZE_SUCCESS';
 export const ORGANIZE_FAILURE = 'ORGANIZE_FAILURE';
+export const SET_DATE = 'SET_DATE';

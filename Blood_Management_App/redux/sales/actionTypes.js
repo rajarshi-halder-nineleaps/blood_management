@@ -5,3 +5,5 @@ export const UPDATE_MONTH = 'UPDATE_MONTH';
 export const UPDATE_YEAR = 'UPDATE_YEAR';
 export const GET_CURRENT_MONTH = 'GET_CURRENT_MONTH';
 export const GET_REQUESTED_MONTH = 'CURRENT_MONTH_SUCCESS';
+export const GET_THIS_MONTH = 'GET_THIS_MONTH';
+export const SET_TODAY = 'SET_TODAY';

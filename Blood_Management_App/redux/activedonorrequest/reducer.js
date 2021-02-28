@@ -16,6 +16,7 @@ const initialState = {
   donorList: [],
   donorDetailsList: [],
   error: '',
+  expired: false
 };
 
 const activedonorReducer = (state = initialState, action) => {
@@ -75,6 +76,7 @@ const activedonorReducer = (state = initialState, action) => {
         ...state,
         loading: false,
         error: action.error,
+        expired: true
       };
     }
     default: {

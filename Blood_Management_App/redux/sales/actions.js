@@ -1,6 +1,6 @@
 /* eslint-disable prettier/prettier */
 import axios from 'axios';
-import { SALES_REQ, SALES_SUCCESS, SALES_FAILURE, UPDATE_MONTH, UPDATE_YEAR, GET_CURRENT_MONTH } from './actionTypes';
+import { SALES_REQ, SALES_SUCCESS, SALES_FAILURE, UPDATE_MONTH, UPDATE_YEAR, GET_CURRENT_MONTH, GET_THIS_MONTH, SET_TODAY } from './actionTypes';
 
 export const salesReq = () => ({ type: SALES_REQ });
 export const salesSuccess = (salesData, analyticsData) => ({
@@ -24,6 +24,15 @@ export const currentMonthSuccess = (array) => ({
   array
 })
 
+export const thisMonthSuccess = (array) => ({
+  type: GET_THIS_MONTH,
+  array
+})
+
+export const todaySuccess = (array) => ({
+  type: SET_TODAY,
+  array
+})
 
 
 
@@ -76,6 +85,73 @@ export const getCurrentMonthAnalytics = (month, userToken) => {
         //* coordinate with backend for fixing prop names.
         dispatch(
           currentMonthSuccess(response.data),
+        );
+      } else if (response.headers.error) {
+        console.log('response is error!');
+        dispatch(salesFailure(response.data.error));
+      } else {
+        console.log('outlandish error!');
+        dispatch(
+          salesFailure(
+            "Something's not right! please try again after some time.",
+          ),
+        );
+      }
+    } catch (err) {
+      console.log('caught Analytics on myDriveData get request: ', err);
+      dispatch(salesFailure(err.message));
+    }
+  };
+}
+
+export const getToday = (userToken) => {
+  return async (dispatch) => {
+    try {
+      dispatch(salesReq());
+      console.log('making current m API call');
+      const response = await axios.get(`http://10.0.2.2:8080/salesanalytics/fetchnow`, {
+        headers: { Authorization: 'Bearer ' + userToken }
+      });
+
+      if (response.headers.success) {
+        console.log('Today is success!', response.headers);
+        //* coordinate with backend for fixing prop names.
+        dispatch(
+          todaySuccess(response.data),
+        );
+      } else if (response.headers.error) {
+        console.log('response is error!');
+        dispatch(salesFailure(response.data.error));
+      } else {
+        console.log('outlandish error!');
+        dispatch(
+          salesFailure(
+            "Something's not right! please try again after some time.",
+          ),
+        );
+      }
+    } catch (err) {
+      console.log('caught Analytics on myDriveData get request: ', err);
+      dispatch(salesFailure(err.message));
+    }
+
+  }
+}
+
+export const getThisMonth = (month, userToken) => {
+  return async (dispatch) => {
+    try {
+      dispatch(salesReq());
+      console.log('making current m API call');
+      const response = await axios.get(`http://10.0.2.2:8080/salesanalytics/fetchcurrentmonth/${month}`, {
+        headers: { Authorization: 'Bearer ' + userToken }
+      });
+
+      if (response.headers.success) {
+        console.log('Analytics is success!', response.headers);
+        //* coordinate with backend for fixing prop names.
+        dispatch(
+          thisMonthSuccess(response.data),
         );
       } else if (response.headers.error) {
         console.log('response is error!');

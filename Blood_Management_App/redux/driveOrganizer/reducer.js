@@ -8,14 +8,14 @@ import {
   ORGANIZE_REQ,
   ORGANIZE_SUCCESS,
   ORGANIZE_FAILURE,
+  SET_DATE
 } from './actionTypes';
 
 const initialState = {
+  start: new Date,
   inputValues: {
     startDate: new Date(),
-    startTime: '00:00:00',
     endDate: new Date(),
-    endTime: '00:00:00',
     bloodgroup: [],
     address: '',
     selectedState: '',
@@ -99,6 +99,13 @@ const driveOrganizerReducer = (state = initialState, action) => {
     case ORGANIZE_FAILURE: {
       Alert.alert('Error', action.error);
       return { ...state, loading: false, error: action.error, driveId: '' };
+    }
+    case SET_DATE: {
+      console.log("setting date")
+      return {
+        ...state,
+        start: action.date
+      }
     }
 
     default:

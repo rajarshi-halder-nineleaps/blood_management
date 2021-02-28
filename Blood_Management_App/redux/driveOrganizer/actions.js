@@ -9,6 +9,7 @@ import {
   ORGANIZE_SUCCESS,
   ORGANIZE_FAILURE,
   TOGGLE_BLOOD_GROUP,
+  SET
 } from './actionTypes';
 
 export const updateFields = (val, fieldId, isValid) => ({
@@ -48,6 +49,16 @@ export const organizeFailure = (error) => ({
 });
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////
+export const setDateTime = (date) => {
+  return {
+    type: SET_DATE,
+    date
+  }
+
+}
+
+
+
 
 export const organizeDriveConfirm = (userToken, newDriveData) => {
   console.log('data reached organizeDriveConfirm');

@@ -18,10 +18,9 @@ import HomeSlider from '../../../components/HomeSlider';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { setDonationEligibilityNotification } from '../../../redux/notifications/actions';
 
-<<<<<<< HEAD
 import { fetchCommitments } from '../../../redux/commitments/actions';
 import { getInventory } from '../../../redux/inventory/actions';
-import { fetchSalesData } from '../../../redux/sales/actions';
+import { fetchSalesData, getToday } from '../../../redux/sales/actions';
 import {
   PieChart,
   BarChart,
@@ -29,95 +28,21 @@ import {
 } from "react-native-chart-kit";
 import { color } from 'react-native-reanimated';
 import { getUserData } from '../../../redux/profile/actions'
-=======
-import {fetchCommitments} from '../../../redux/commitments/actions';
-import {getInventory} from '../../../redux/inventory/actions';
-import {fetchSalesData} from '../../../redux/sales/actions';
-import {PieChart, BarChart} from 'react-native-chart-kit';
-import {color} from 'react-native-reanimated';
-import {getUserData, setDonorStatus} from '../../../redux/profile/actions';
->>>>>>> 54cf4dd8b71a201d280985408b0a81d37cd22f54
-const data = {
-  labels: ['January', 'February', 'March', 'April', 'May', 'June'],
-  datasets: [
-    {
-      data: [20, 45, 28, 80, 99, 43],
-    },
-  ],
-};
 
-const piedata = [
-  {
-    name: 'Blood',
-    quantity: 1012,
-    color: 'rgba(131, 167, 234, 1)',
-    legendFontColor: '#7F7F7F',
-    legendFontSize: 15,
-  },
-  {
-    name: 'Plasma',
-    quantity: 1243,
-    color: '#F00',
-    legendFontColor: '#7F7F7F',
-    legendFontSize: 15,
-  },
-  {
-    name: 'Platelet',
-    quantity: 527,
-    color: colors.moderategray,
-    legendFontColor: '#7F7F7F',
-    legendFontSize: 15,
-  },
-  {
-    name: 'RBC',
-    quantity: 853,
-    color: colors.dutchred,
-    legendFontColor: '#7F7F7F',
-    legendFontSize: 15,
-  },
-  {
-    name: 'WBC',
-    quantity: 1190,
-    color: 'rgb(0, 0, 255)',
-    legendFontColor: '#7F7F7F',
-    legendFontSize: 15,
-  },
-];
-
-const images = [
-  {
-    icon: 'home',
-    number: 23,
-    title: 'Blood Camps',
-  },
-  {
-    icon: 'tint',
-    number: 56,
-    title: 'Active Donors',
-  },
-  {
-    icon: 'flag',
-    number: 79,
-    title: 'Active Blood Banks',
-  },
-];
-const chartConfig = {
-  backgroundGradientFrom: colors.moderategray,
-  backgroundGradientTo: colors.accent,
-  color: (opacity = 0) => `rgba(0, 0, 0, ${opacity})`,
-  strokeWidth: 3, // optional, default 3
-  barPercentage: 0.5,
-  useShadowColorFromDataset: false, // optional
-};
 
 const Home = ({ navigation }) => {
   const authState = useSelector((state) => state.authState);
   const userType = authState.userType;
   const dispatch = useDispatch();
   const profileState = useSelector((state) => state.profileState);
+  const salesState = useSelector((state) => state.salesState);
 
   useEffect(() => {
     dispatch(getUserData(authState.userToken));
+    console.log('got user data');
+  }, [dispatch]);
+  useEffect(() => {
+    dispatch(getToday(authState.userToken));
     console.log('got user data');
   }, [dispatch]);
 
@@ -165,41 +90,36 @@ const Home = ({ navigation }) => {
 
   const myDrivesHandler = () => {
     dispatch(getDriveData(authState.userToken));
-    navigation.navigate('services', { screen: 'myDrives' });
+    navigation.navigate('services', { screen: 'driveOrganizer' });
   };
+
+  const organizeDriveHandler = () => {
+
+    navigation.navigate('driveOrganizer');
+  };
+  const upcomingDrivesHandler = () => {
+    navigation.navigate("upcomingDrivesSearch")
+  }
   return (
     <ScrollView style={styles.container}>
       <View style={styles.header}>
-        <View style={styles.profileImage}>
-          <Image
-            style={styles.image}
-            resizeMode="center"
-            source={require('../../../assets/images/account/avatar.png')}
-          />
+        <View style={{ flexDirection: 'row', alignContent: 'center' }}>
+          {userType === 1 ? <Icon name="user" color={colors.peach} size={30} /> : null}
+          {userType === 2 ? <Icon name="ambulance" color={colors.whi} size={30} /> : null}
+          {userType === 3 ? <Icon name="university" color={colors.peach} size={30} /> : null}
+          <View style={{ flexDirection: 'column', marginLeft: 10 }}>
+            <Text style={styles.name}>{profileState.userData.name}</Text>
+            <Text style={styles.other}>#{profileState.userData.userId}</Text>
+          </View>
         </View>
-        <View style={styles.userinfo}>
-          <Text style={styles.name}>{profileState.userData.name}</Text>
-
-          <Text style={styles.other}>
-            {userType === 1 ? 'Individual' : null}
-            {userType === 2 ? 'Hospital' : null}
-            {userType === 3 ? 'Blood Bank' : null}
-          </Text>
-          <Text style={styles.other}>{profileState.userData.userId}</Text>
-        </View>
-      </View>
-      <View>
-        <Text style={styles.sectiontitle}></Text>
-        <FlatListSlider
-          data={images}
-          width={150}
-          timer={5000}
-          component={<HomeSlider />}
-          onPress={{}}
-          indicatorActiveWidth={50}
-          contentContainerStyle={{ paddingHorizontal: 16 }}
-          indicatorContainerStyle={{ position: 'absolute', bottom: -15 }}
-        />
+        {userType === 3 ?
+          <TouchableOpacity style={styles.iconview} onPress={() => dispatch(getToday(authState.userToken))}>
+            <Icon name="superpowers" color={colors.primary} size={30} />
+            <Text style={styles.refreshText}>Refresh</Text>
+          </TouchableOpacity>
+          :
+          null
+        }
       </View>
       <View style={styles.donateblood}>
         <View style={{ flexDirection: 'row-reverse', alignItems: 'center' }}>
@@ -208,46 +128,43 @@ const Home = ({ navigation }) => {
           </Text>
           <Icon name="tint" size={20} color={colors.primary} />
         </View>
-        <TouchableOpacity style={styles.button}>
+        <TouchableOpacity onPress={() => { userType === 1 ? upcomingDrivesHandler() : organizeDriveHandler() }} style={styles.button}>
           <Text style={styles.buttontitle}>Get Started</Text>
         </TouchableOpacity>
       </View>
+
+
+
       <View>
-        <Text style={styles.sectiontitle}>Our Services</Text>
-        <Text style={styles.sectiontitle}>Statistics</Text>
-        <BarChart
-          style={styles.graphStyle}
-          data={data}
-          width={screenWidth - 30}
-          height={220}
-          yAxisLabel="Rs"
-          chartConfig={chartConfig}
-          verticalLabelRotation={30}
-        />
-        <Text style={styles.sectiontitle}>Blood Inventory</Text>
 
-        <PieChart
-          data={piedata}
-          width={screenWidth}
-          height={220}
-          chartConfig={chartConfig}
-          accessor={'quantity'}
-          backgroundColor={'transparent'}
-          center={[0, 0]}
-          absolute
-        />
-        <Text style={styles.sectiontitle}>Current Month</Text>
-        <StackedBarChart
-          style={styles.graphStyle}
-          data={stackeddata}
-          width={screenWidth}
-          height={300}
-          chartConfig={chartConfig}
-          withVerticalLabels={true}
-          withHorizontalLabels={true}
 
-        />
+
       </View>
+      {userType === 1 ?
+        <>
+          <View>
+
+          </View>
+        </>
+        :
+        <>
+          <View>
+            <Text style={styles.sectiontitle}>Today's Readings</Text>
+            <Text style={styles.sectionline}>
+              Units Sold : {salesState.todaysData.unitsSold}
+            </Text>
+            <Text style={styles.sectionline}>
+              Units Bought : {salesState.todaysData.unitsBought}
+            </Text>
+            <Text style={styles.sectionline}>
+              Amount Collected: {salesState.todaysData.amountCollected}
+            </Text>
+            <Text style={styles.sectionline}>
+              Amount Spent : {salesState.todaysData.amountSpent}
+            </Text>
+          </View>
+        </>
+      }
     </ScrollView>
   );
 };
@@ -256,13 +173,13 @@ const screenWidth = Dimensions.get('window').width;
 const styles = StyleSheet.create({
   container: {},
   header: {
-    backgroundColor: colors.primary,
+    backgroundColor: colors.additional2,
+    paddingHorizontal: 30,
+    paddingVertical: 40,
     width: '100%',
-    height: 140,
     flexDirection: 'row',
-    justifyContent: 'space-evenly',
-    borderBottomLeftRadius: 20,
-    borderBottomRightRadius: 20,
+    justifyContent: 'space-between',
+    alignItems: 'center',
   },
   image: {
     flex: 1,
@@ -281,23 +198,38 @@ const styles = StyleSheet.create({
     marginLeft: 20,
   },
   name: {
-    alignSelf: 'center',
-    marginTop: 20,
-    fontSize: 22,
-    fontWeight: 'bold',
-    color: colors.additional2,
+    fontFamily: 'Montserrat-Regular',
+    alignSelf: 'flex-start',
+    fontSize: 24,
+    color: colors.primary,
   },
   other: {
-    alignSelf: 'center',
-    fontSize: 16,
+    fontFamily: 'Montserrat-Regular',
+    alignSelf: 'flex-start',
+    fontSize: 15,
     fontWeight: '600',
-    color: colors.additional2,
+    color: colors.dutchred,
   },
   sectiontitle: {
     fontFamily: 'Montserrat-Regular',
     fontSize: 25,
     marginLeft: 10,
-    marginTop: 10,
+    marginBottom: 10
+
+  },
+  sectionline: {
+    fontFamily: 'Montserrat-Regular',
+    fontSize: 20,
+    marginLeft: 10,
+    marginBottom: 5
+
+  },
+  iconview: {
+    alignItems: 'center'
+  },
+  refreshText: {
+    fontFamily: 'Montserrat-Regular',
+    fontSize: 15,
   },
   donateblood: {
     flexDirection: 'row',

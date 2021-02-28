@@ -68,13 +68,13 @@ const DriveOrganizer = ({ navigation }) => {
       console.log("problem")
       const currentDate = selectedDate || date;
       setstartShow(Platform.OS === 'ios');
-      dispatch(updateFields(currentDate, 'startDate', false));
       dispatch(blurListener('startDate'))
+      dispatch(updateFields(currentDate, 'startDate', false));
     } else {
       const currentDate = selectedDate || date;
       setstartShow(Platform.OS === 'ios');
-      dispatch(updateFields(currentDate, 'startDate', true));
       dispatch(blurListener('startDate'))
+      dispatch(updateFields(currentDate, 'startDate', true));
     }
 
   };

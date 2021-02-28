@@ -1,6 +1,6 @@
-import React, {useState, useEffect} from 'react';
-import {View, Text, FlatList, TouchableOpacity, StyleSheet} from 'react-native';
-import {useDispatch, useSelector} from 'react-redux';
+import React, { useState, useEffect } from 'react';
+import { View, Text, FlatList, TouchableOpacity, StyleSheet } from 'react-native';
+import { useDispatch, useSelector } from 'react-redux';
 import colors from '../../../constants/Colors';
 import CheckBox from '@react-native-community/checkbox';
 import Feather from 'react-native-vector-icons/Feather';
@@ -12,8 +12,8 @@ import {
 //import BuyBloodListCard from '../../../components/BuyBloodListCard'
 import DonorRequestDetailsCard from '../../../components/DonorRequestDetailsCard';
 
-const DonationRequestList = ({navigation, route}) => {
-  const {donationId} = route.params;
+const DonationRequestList = ({ navigation, route }) => {
+  const { donationId } = route.params;
   const [selectedId, setSelectedId] = useState(null);
   const activedonorFormState = useSelector(
     (state) => state.activedonorFormState,
@@ -25,7 +25,7 @@ const DonationRequestList = ({navigation, route}) => {
   }, [authState.userToken, dispatch, donationId]);
   //* UPDATES DEPENDENCY ARRAY.
 
-  const renderItem = ({item}) => {
+  const renderItem = ({ item }) => {
     return (
       <DonorRequestDetailsCard
         item={item}
@@ -39,7 +39,7 @@ const DonationRequestList = ({navigation, route}) => {
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <Text> Update Drive Status </Text>
+        <Text style={styles.texts}> Update Drive Status </Text>
 
         <TouchableOpacity
           style={styles.typeView}
@@ -49,6 +49,12 @@ const DonationRequestList = ({navigation, route}) => {
           <Text style={styles.invitebutton}>Expire Drive</Text>
         </TouchableOpacity>
       </View>
+      {activedonorFormState.expired &&
+        <Text>
+          This donation has expired.
+      </Text>
+
+      }
       <FlatList
         data={activedonorFormState.donorDetailsList}
         renderItem={renderItem}
@@ -67,6 +73,11 @@ const styles = StyleSheet.create({
     marginHorizontal: 20,
     borderRadius: 20,
   },
+  texts: {
+    fontSize: 18,
+    fontFamily: 'Montserrat-Bold',
+    color: colors.grayishblack,
+  },
   title: {
     fontSize: 18,
   },
@@ -77,7 +88,8 @@ const styles = StyleSheet.create({
     alignContent: 'space-around',
     alignItems: 'center',
     paddingHorizontal: 30,
-    paddingTop: 10,
+    paddingVertical: 10,
+    backgroundColor: colors.additional2
   },
   headertitle: {
     fontSize: 50,
@@ -119,7 +131,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-around',
   },
   typeView: {
-    backgroundColor: colors.moderategray,
+    backgroundColor: colors.sapphireblue,
     width: 100,
     alignItems: 'center',
     justifyContent: 'center',

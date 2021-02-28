@@ -1,10 +1,10 @@
 /* eslint-disable prettier/prettier */
 import React, { useEffect, useState } from 'react';
-import { Text, StyleSheet, View, Dimensions, ScrollView } from 'react-native';
+import { Text, StyleSheet, View, Alert, Dimensions, ScrollView } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import colors from '../../../constants/Colors';
 import font from '../../../'
-import { getCurrentMonthAnalytics, updateMonth, updateYear } from '../../../redux/sales/actions';
+import { getThisMonth, getCurrentMonthAnalytics, updateMonth, updateYear } from '../../../redux/sales/actions';
 import { Picker } from '@react-native-picker/picker';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import * as figures from '../../../assets/salesanalytics.json';
@@ -29,11 +29,29 @@ const SalesAnalytics = ({ navigation }) => {
   const [list, setlist] = useState([])
   const monthdata = salesState.currentMonthData;
   const [selectedMonth, setSelectedMonth] = useState("")
-
+  const [month, setMonth] = useState(false)
 
   useEffect(() => {
     dispatch(getCurrentMonthAnalytics(new Date().getMonth(), authState.userToken));
   }, [dispatch]);
+
+  const submitMonth = () => {
+    if (month) {
+      console.log("ok")
+
+      dispatch(getThisMonth(selectedMonth, authState.userToken))
+      if (salesState.thisMonthSuccess) {
+        // navigation.navigate("infoEdit")
+      }
+    } else {
+      Alert.alert(
+        'Select month',
+        'Please select monthto continue',
+        [{ text: 'Okay' }],
+      );
+    }
+
+  }
 
 
   const chartConfig = {
@@ -107,9 +125,9 @@ const SalesAnalytics = ({ navigation }) => {
         <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginHorizontal: 20 }}>
           <View style={styles.header_text}>
             <Text style={styles.sectiontitle}>Current Month</Text>
-            <Text style={styles.sectiontext}>Amount Collected: Rs {list.monthname}</Text>
+            {/* <Text style={styles.sectiontext}>Amount Collected: Rs {list.monthName}</Text>
             <Text style={styles.sectiontext}>Units sold: Rs {list.monthname}</Text>
-            <Text style={styles.sectiontext}>Units board: Rs {list.monthname}</Text>
+            <Text style={styles.sectiontext}>Units board: Rs {list.monthname}</Text> */}
           </View>
           <View style={styles.iconview}>
             <Icon name="superpowers" color={colors.primary} size={30} />
@@ -146,6 +164,7 @@ const SalesAnalytics = ({ navigation }) => {
                 selectedValue={selectedMonth}
                 onValueChange={(val, itemIndex) => {
                   setSelectedMonth(val)
+                  setMonth(true)
                   // blurListener('blood_group');
                   // checkValidity(val, 'blood_group');
                 }}>
@@ -168,30 +187,28 @@ const SalesAnalytics = ({ navigation }) => {
               </Picker>
 
             </View>
-            <TouchableOpacity
+            <TouchableOpacity onPress={() => submitMonth()}
               style={styles.button}>
               <Text style={styles.buttontitle}>
                 Get Started
             </Text>
             </TouchableOpacity>
-            <TouchableOpacity onPress={() => dispatch(getSelectedMonth(selectedMonth))}
-              style={styles.button}>
-              <Text style={styles.buttontitle}>
-                Get Started
-            </Text>
-            </TouchableOpacity>
-            <Text>
-              Find Now!
-            </Text>
-            <LineChart
-              data={data}
-              width={screenWidth}
-              height={256}
-              verticalLabelRotation={30}
-              chartConfig={chartConfig}
-              bezier
-            />
 
+
+          </View>
+
+          <View style={styles.graphView}>
+            {salesState.thisMonthSuccess &&
+              <StackedBarChart
+                style={styles.graphStyle}
+                data={salesState.thisMonthData}
+                width={screenWidth}
+                height={300}
+                chartConfig={chartConfig}
+                withVerticalLabels={true}
+                withHorizontalLabels={true}
+              />
+            }
 
           </View>
         </View>

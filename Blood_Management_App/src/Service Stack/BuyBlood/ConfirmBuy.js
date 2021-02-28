@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   View,
   Text,
@@ -9,14 +9,14 @@ import {
   Image,
   Alert,
 } from 'react-native';
-import {useDispatch, useSelector} from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import colors from '../../../constants/Colors';
 import Feather from 'react-native-vector-icons/Feather';
-import {buyit} from '../../../redux/buyblood/actions';
-import {ScrollView} from 'react-native-gesture-handler';
+import { buyit } from '../../../redux/buyblood/actions';
+import { ScrollView } from 'react-native-gesture-handler';
 
-const ConfirmBuy = ({route, navigation}) => {
-  const {sellerId, blood_group, component, units, price} = route.params;
+const ConfirmBuy = ({ route, navigation }) => {
+  const { sellerId, blood_group, component, units, price } = route.params;
   const buybloodFormState = useSelector((state) => state.buybloodFormState);
   const [modalVisible, setModalVisible] = useState(false);
   const dispatch = useDispatch();
@@ -43,7 +43,7 @@ const ConfirmBuy = ({route, navigation}) => {
             }}>
             <View style={styles.centeredView}>
               <View style={styles.modalView}>
-                {}
+                { }
                 <Text style={styles.modalText}>Purchase Confirmed!</Text>
                 <Text style={styles.modalTextmore}>
                   Check the "My Purchasees" section under services for details.
@@ -82,7 +82,7 @@ const ConfirmBuy = ({route, navigation}) => {
           </View>
           <Text style={styles.headerText}>
             Please check all the details shown below. If there is any mistake
-            kindly go back and chnage it.
+            kindly go back and change it.
           </Text>
         </View>
 
