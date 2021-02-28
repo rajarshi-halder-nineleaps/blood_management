@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import React, { useEffect } from 'react';
+import React, {useEffect} from 'react';
 import {
   SafeAreaView,
   ScrollView,
@@ -12,31 +12,18 @@ import {
   FlatList,
 } from 'react-native';
 import colors from '../../../constants/Colors';
-import { useDispatch, useSelector } from 'react-redux';
-import { FlatListSlider } from 'react-native-flatlist-slider';
+import {useDispatch, useSelector} from 'react-redux';
+import {FlatListSlider} from 'react-native-flatlist-slider';
 import HomeSlider from '../../../components/HomeSlider';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import { setDonationEligibilityNotification } from '../../../redux/notifications/actions';
+import {setDonationEligibilityNotification} from '../../../redux/notifications/actions';
 
-<<<<<<< HEAD
-import { fetchCommitments } from '../../../redux/commitments/actions';
-import { getInventory } from '../../../redux/inventory/actions';
-import { fetchSalesData } from '../../../redux/sales/actions';
-import {
-  PieChart,
-  BarChart,
-  StackedBarChart
-} from "react-native-chart-kit";
-import { color } from 'react-native-reanimated';
-import { getUserData } from '../../../redux/profile/actions'
-=======
 import {fetchCommitments} from '../../../redux/commitments/actions';
 import {getInventory} from '../../../redux/inventory/actions';
 import {fetchSalesData} from '../../../redux/sales/actions';
 import {PieChart, BarChart} from 'react-native-chart-kit';
 import {color} from 'react-native-reanimated';
 import {getUserData, setDonorStatus} from '../../../redux/profile/actions';
->>>>>>> 54cf4dd8b71a201d280985408b0a81d37cd22f54
 const data = {
   labels: ['January', 'February', 'March', 'April', 'May', 'June'],
   datasets: [
@@ -110,7 +97,7 @@ const chartConfig = {
   useShadowColorFromDataset: false, // optional
 };
 
-const Home = ({ navigation }) => {
+const Home = ({navigation}) => {
   const authState = useSelector((state) => state.authState);
   const userType = authState.userType;
   const dispatch = useDispatch();
@@ -135,7 +122,7 @@ const Home = ({ navigation }) => {
       const eligible =
         (new Date().getTime() -
           new Date(lastDonationDate.split('T')[0]).getTime()) /
-        (1000 * 60 * 60 * 24) >
+          (1000 * 60 * 60 * 24) >
         56;
       if (eligible) {
         dispatch(setDonorStatus(authState.userToken, 0));
@@ -147,26 +134,26 @@ const Home = ({ navigation }) => {
     //! DO NOT CHANGE DEPENDENCY ARRAY HERE OR ANYWHERE IN THE APP.
   }, [authState.userType, dispatch, profileState.userData.name]);
 
-  const salesHandler = () => {
-    dispatch(fetchSalesData(authState.userToken));
-    navigation.navigate('services', { screen: 'sales' });
-    navigation.navigate('sales');
-  };
+  // const salesHandler = () => {
+  //   dispatch(fetchSalesData(authState.userToken));
+  //   navigation.navigate('services', { screen: 'sales' });
+  //   navigation.navigate('sales');
+  // };
 
-  const myCommitmentsHandler = () => {
-    dispatch(fetchCommitments(authState.userToken));
-    navigation.navigate('services', { screen: 'commitments' });
-  };
+  // const myCommitmentsHandler = () => {
+  //   dispatch(fetchCommitments(authState.userToken));
+  //   navigation.navigate('services', { screen: 'commitments' });
+  // };
 
-  const inventoryHandler = () => {
-    dispatch(getInventory(authState.userToken));
-    navigation.navigate('services', { screen: 'inventory' });
-  };
+  // const inventoryHandler = () => {
+  //   dispatch(getInventory(authState.userToken));
+  //   navigation.navigate('services', { screen: 'inventory' });
+  // };
 
-  const myDrivesHandler = () => {
-    dispatch(getDriveData(authState.userToken));
-    navigation.navigate('services', { screen: 'myDrives' });
-  };
+  // const myDrivesHandler = () => {
+  //   dispatch(getDriveData(authState.userToken));
+  //   navigation.navigate('services', { screen: 'myDrives' });
+  // };
   return (
     <ScrollView style={styles.container}>
       <View style={styles.header}>
@@ -197,12 +184,12 @@ const Home = ({ navigation }) => {
           component={<HomeSlider />}
           onPress={{}}
           indicatorActiveWidth={50}
-          contentContainerStyle={{ paddingHorizontal: 16 }}
-          indicatorContainerStyle={{ position: 'absolute', bottom: -15 }}
+          contentContainerStyle={{paddingHorizontal: 16}}
+          indicatorContainerStyle={{position: 'absolute', bottom: -15}}
         />
       </View>
       <View style={styles.donateblood}>
-        <View style={{ flexDirection: 'row-reverse', alignItems: 'center' }}>
+        <View style={{flexDirection: 'row-reverse', alignItems: 'center'}}>
           <Text style={styles.title}>
             {userType === 1 ? 'Donate Blood' : 'Organize Drive'}
           </Text>
@@ -237,16 +224,16 @@ const Home = ({ navigation }) => {
           absolute
         />
         <Text style={styles.sectiontitle}>Current Month</Text>
-        <StackedBarChart
+        {/* <StackedBarChart
           style={styles.graphStyle}
           data={stackeddata}
           width={screenWidth}
           height={300}
           chartConfig={chartConfig}
           withVerticalLabels={true}
-          withHorizontalLabels={true}
+          withHorizontalLabels={true} */}
 
-        />
+        {/* /> */}
       </View>
     </ScrollView>
   );
@@ -350,10 +337,8 @@ const styles = StyleSheet.create({
     fontFamily: 'Montserrat-Regular',
   },
   graphStyle: {
-    paddingTop: 10
-
-  }
-
-})
+    paddingTop: 10,
+  },
+});
 
 export default Home;
