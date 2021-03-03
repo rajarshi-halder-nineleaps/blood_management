@@ -18,6 +18,7 @@ import {
   phoneStateSet,
   phoneTouchSet,
   stateCleanup,
+  removePhone,
 } from '../../redux/register/actions';
 import {regUserUp} from '../../redux/auth/actions';
 import React, {useState, useEffect} from 'react';
@@ -194,14 +195,24 @@ const RegisterBbScreen = ({navigation}) => {
             })}
 
             <View style={styles.addPhoneView}>
-              <TouchableOpacity
-                style={styles.addPhoneTouch}
-                onPress={() => {
-                  phoneAdder();
-                }}>
-                <Feather name="plus" color="white" size={20} />
-                <Text style={styles.addPhoneText}>Add new number</Text>
-              </TouchableOpacity>
+              {regFormState.inputValues.phone.length < 5 ? (
+                <TouchableOpacity
+                  style={styles.addPhoneTouch}
+                  onPress={() => {
+                    phoneAdder();
+                  }}>
+                  <Feather name="plus" color="white" size={20} />
+                  <Text style={styles.addPhoneText}>Add new number</Text>
+                </TouchableOpacity>
+              ) : null}
+              {regFormState.inputValues.phone.length > 1 ? (
+                <TouchableOpacity
+                  style={styles.addPhoneTouch}
+                  onPress={() => dispatch(removePhone())}>
+                  <Feather name="x" color={colors.additional2} size={20} />
+                  <Text style={styles.addPhoneText}>Remove Phone</Text>
+                </TouchableOpacity>
+              ) : null}
             </View>
 
             <Fields
@@ -459,6 +470,7 @@ const styles = StyleSheet.create({
   addPhoneView: {
     width: '100%',
     flexDirection: 'row',
+    justifyContent: 'space-between',
     marginBottom: 20,
   },
   addPhoneTouch: {
@@ -481,7 +493,6 @@ const styles = StyleSheet.create({
   forgotPassword: {
     color: colors.grayishblack,
     fontFamily: 'Montserrat-Regular',
-
   },
   registerLinkView: {
     paddingVertical: 30,
@@ -489,7 +500,7 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-end',
     alignItems: 'center',
   },
-  registerLink: { 
+  registerLink: {
     fontFamily: 'Montserrat-Regular',
     color: colors.additional1,
   },

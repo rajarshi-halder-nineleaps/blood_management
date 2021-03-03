@@ -4,3 +4,4 @@ export const ADD_PHONE_STATE = 'ADD_PHONE_STATE';
 export const PHONE_STATE_SET = 'PHONE_STATE_SET';
 export const PHONE_TOUCH_SET = 'PHONE_TOUCH_SET';
 export const STATE_CLEANUP = 'STATE_CLEANUP';
+export const REMOVE_PHONE = 'REMOVE_PHONE';

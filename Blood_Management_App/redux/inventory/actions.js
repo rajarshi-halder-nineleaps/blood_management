@@ -119,8 +119,7 @@ export const updateInventory = (userToken, userType, inventory) => {
             headers: { Authorization: 'Bearer ' + userToken },
           },
         );
-      }
-      else {
+      } else {
         response = await axios.put(
           'http://10.0.2.2:8080/inventory/updatebbinventory',
           inventory,

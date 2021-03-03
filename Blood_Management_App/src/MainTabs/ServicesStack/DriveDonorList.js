@@ -68,7 +68,9 @@ const DriveDonorList = ({route, navigation}) => {
               Blood group :<Text style={styles.content}>{item.bloodGroup}</Text>
             </Text>
 
-            {!route.params.driveStatus ? null : !item.donationStatus ? (
+            {route.params.driveStatus &&
+            !item.donationStatus &&
+            item.acceptance === 1 ? (
               <TouchableOpacity
                 style={styles.completedDonationTouch}
                 onPress={() => bloodDonationHandler(item.userId)}>
@@ -82,7 +84,9 @@ const DriveDonorList = ({route, navigation}) => {
                   </View>
                 </ImageBackground>
               </TouchableOpacity>
-            ) : (
+            ) : route.params.driveStatus &&
+              item.donationStatus &&
+              item.acceptance === 1 ? (
               <View style={styles.completedDonationTouchDonated}>
                 <Feather
                   name="check-square"
@@ -90,7 +94,15 @@ const DriveDonorList = ({route, navigation}) => {
                   size={20}
                 />
               </View>
-            )}
+            ) : route.params.driveStatus && item.acceptance === 0 ? (
+              <View style={styles.noAcceptanceView}>
+                <Text style={styles.rejectedText}>INVITATION REJECTED</Text>
+              </View>
+            ) : route.params.driveStatus && item.acceptance === 2 ? (
+              <View style={styles.noAcceptanceView}>
+                <Text style={styles.pendingText}>RESPONSE PENDING</Text>
+              </View>
+            ) : null}
           </View>
         </View>
       </View>
@@ -188,8 +200,7 @@ const styles = StyleSheet.create({
     padding: 2,
     color: colors.primary,
     fontSize: 14,
-    fontWeight: 'bold',
-    fontFamily: 'Montserrat-Regular',
+    fontFamily: 'Montserrat-Bold',
   },
   content: {
     color: colors.additional1,
@@ -243,6 +254,26 @@ const styles = StyleSheet.create({
     fontFamily: 'Montserrat-Regular',
     fontSize: 15,
     color: colors.primary,
+    textAlign: 'center',
+  },
+  noAcceptanceView: {
+    backgroundColor: colors.accent,
+    borderRadius: 5,
+    padding: 10,
+    alignItems: 'center',
+    marginTop: 10,
+    elevation: 5,
+  },
+  rejectedText: {
+    fontFamily: 'Montserrat-Bold',
+    fontSize: 15,
+    color: colors.dutchred,
+    textAlign: 'center',
+  },
+  pendingText: {
+    fontFamily: 'Montserrat-Bold',
+    fontSize: 15,
+    color: colors.coolblue,
     textAlign: 'center',
   },
 });

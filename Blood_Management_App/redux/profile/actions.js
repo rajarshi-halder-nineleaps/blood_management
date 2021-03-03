@@ -8,6 +8,7 @@ import {
   DONOR_STATUS_SUCCESS,
   PROFILE_UPDATE_SUCCESS,
   SET_DATA_SAVED,
+  REMOVE_PHONE,
 } from './actionTypes';
 
 export const profileReq = () => ({ type: PROFILE_REQ });
@@ -47,7 +48,7 @@ export const getUserData = (userToken) => {
       console.log("Fetching user's minimial ");
       dispatch(profileReq());
       const response = await axios.get(
-        'http://10.0.2.2:8080/profile/fetchuserprofile',
+        'http://192.168.43.217:8080/profile/fetchuserprofile',
         {
           headers: { Authorization: 'Bearer ' + userToken },
         },
@@ -83,14 +84,14 @@ export const getProfileData = (userToken) => {
       console.log("Fetching user's profile data.");
       dispatch(profileReq());
       const response = await axios.get(
-        'http://10.0.2.2:8080/profile/fetchuserdata',
+        'http://192.168.43.217:8080/profile/fetchuserdata',
         {
           headers: { Authorization: 'Bearer ' + userToken },
         },
       );
 
       if (response.headers.success) {
-        console.log("Data", response.data)
+        console.log('Data', response.data);
         console.log('response is success!');
         dispatch(profileSuccess(response.data));
       } else if (response.headers.error) {

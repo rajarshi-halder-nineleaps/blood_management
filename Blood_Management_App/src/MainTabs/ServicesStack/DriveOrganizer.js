@@ -14,7 +14,7 @@ import {
   Modal,
   Alert,
   Button,
-  Dimensions
+  Dimensions,
 } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
 import * as places from '../../../assets/places.json';
@@ -56,7 +56,6 @@ const DriveOrganizer = ({ navigation }) => {
     dispatch(stateCleanup());
   }, [dispatch]);
 
-
   const [startmode, setstartMode] = useState('date');
   const [startshow, setstartShow] = useState(false);
 
@@ -76,7 +75,6 @@ const DriveOrganizer = ({ navigation }) => {
       dispatch(updateFields(currentDate, 'startDate', true));
       dispatch(blurListener('startDate'))
     }
-
   };
 
   const showstartMode = (currentMode) => {
@@ -93,18 +91,17 @@ const DriveOrganizer = ({ navigation }) => {
   };
 
   const onChangeend = (event, selectedDate) => {
-    //todo date is not defined
     if (selectedDate >= driveOrganizerState.inputValues.startDate) {
       console.log("problem")
       const currentDate = selectedDate || new Date();
       setendShow(Platform.OS === 'ios');
       dispatch(updateFields(currentDate, 'endDate', false));
-      dispatch(blurListener('endDate'))
+      dispatch(blurListener('endDate'));
     } else {
       const currentDate = selectedDate || new Date();
       setendShow(Platform.OS === 'ios');
       dispatch(updateFields(currentDate, 'endDate', true));
-      dispatch(blurListener('endDate'))
+      dispatch(blurListener('endDate'));
     }
   };
 
@@ -168,7 +165,7 @@ const DriveOrganizer = ({ navigation }) => {
     }
 
     if (fieldId === 'startdate') {
-      isValid = false
+      isValid = false;
     }
     if (fieldId === 'starttime') {
       isValid = false;
@@ -203,10 +200,12 @@ const DriveOrganizer = ({ navigation }) => {
         />
         {/* //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// */}
 
-
         <View style={styles.holderView}>
           <Text style={styles.holderText}>Blood groups to invite</Text>
-          <ScrollView horizontal={true} showsHorizontalScrollIndicator={false} style={styles.rowView}>
+          <ScrollView
+            horizontal={true}
+            showsHorizontalScrollIndicator={false}
+            style={styles.rowView}>
             {bloodGroupsList.map((val, idx) => (
               <View key={idx} style={styles.openBtnView}>
                 <TouchableOpacity
@@ -219,7 +218,14 @@ const DriveOrganizer = ({ navigation }) => {
                     itemClickHandler(val);
                     blurListener('bloodgroup');
                   }}>
-                  <Text style={{ color: colors.additional2, fontSize: 20, fontFamily: 'Montserrat-Regular' }}>{val}</Text>
+                  <Text
+                    style={{
+                      color: colors.additional2,
+                      fontSize: 20,
+                      fontFamily: 'Montserrat-Regular',
+                    }}>
+                    {val}
+                  </Text>
                 </TouchableOpacity>
               </View>
             ))}
@@ -233,12 +239,13 @@ const DriveOrganizer = ({ navigation }) => {
             </Text>
           )}
 
-
         {/* ////////////////////////////////////////////////////////////////////////// */}
         <View style={{ paddingVertical: 10 }}>
           <View style={{ flexDirection: 'row', paddingBottom: 10 }}>
             <View style={styles.box}>
-              <TouchableOpacity style={styles.boxButton} onPress={showstartDatepicker}>
+              <TouchableOpacity
+                style={styles.boxButton}
+                onPress={showstartDatepicker}>
                 <Text style={styles.datepickerttext}>Set Start Date</Text>
                 <Text style={styles.datepickerttextoutput}>
                   {driveOrganizerState.inputValues.startDate.toDateString()}
@@ -250,50 +257,45 @@ const DriveOrganizer = ({ navigation }) => {
                     </Text>
                   )}
               </TouchableOpacity>
-
             </View>
             <View style={styles.box}>
-              <TouchableOpacity style={styles.boxButton} onPress={showstartTimepicker}>
+              <TouchableOpacity
+                style={styles.boxButton}
+                onPress={showstartTimepicker}>
                 <Text style={styles.datepickerttext}>Set Start Time</Text>
                 <Text style={styles.datepickerttextoutput}>
                   {driveOrganizerState.inputValues.startDate.toLocaleTimeString()}
                 </Text>
-
               </TouchableOpacity>
-
-
             </View>
           </View>
           <View style={{ flexDirection: 'row' }}>
             <View style={styles.box}>
-              <TouchableOpacity style={styles.boxButton} onPress={showendDatepicker}>
+              <TouchableOpacity
+                style={styles.boxButton}
+                onPress={showendDatepicker}>
                 <Text style={styles.datepickerttext}>Set End Date</Text>
                 <Text style={styles.datepickerttextoutput}>
                   {driveOrganizerState.inputValues.endDate.toDateString()}
                 </Text>
                 {driveOrganizerState.inputValidity.endDate &&
                   driveOrganizerState.isTouched.endDate && (
-                    <Text style={styles.errorMsg}>
-                      Invalid End Date
-                    </Text>
+                    <Text style={styles.errorMsg}>Invalid End Date</Text>
                   )}
-
               </TouchableOpacity>
-
             </View>
             <View style={styles.box}>
-              <TouchableOpacity style={styles.boxButton} onPress={showendTimepicker}>
+              <TouchableOpacity
+                style={styles.boxButton}
+                onPress={showendTimepicker}>
                 <Text style={styles.datepickerttext}>Set End Time</Text>
                 <Text style={styles.datepickerttextoutput}>
                   {driveOrganizerState.inputValues.endDate.toLocaleTimeString()}
                 </Text>
               </TouchableOpacity>
-
-
             </View>
           </View>
         </View>
-
 
         <View>
           {startshow && (
@@ -309,7 +311,6 @@ const DriveOrganizer = ({ navigation }) => {
         </View>
 
         <View>
-
           {endshow && (
             <DateTimePicker
               testID="dateTimePicker"
@@ -412,8 +413,8 @@ const DriveOrganizer = ({ navigation }) => {
     </ScrollView>
   );
 };
-const screenWidth = Dimensions.get("window").width;
-const screenHeight = Dimensions.get("window").height;
+const screenWidth = Dimensions.get('window').width;
+const screenHeight = Dimensions.get('window').height;
 
 const styles = StyleSheet.create({
   selectedView: {
@@ -424,14 +425,19 @@ const styles = StyleSheet.create({
     marginHorizontal: 2,
     justifyContent: 'center',
   },
-  boxButton: { flex: 1, justifyContent: 'center', alignItems: 'center', alignContent: 'center', },
+  boxButton: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    alignContent: 'center',
+  },
   groupTouch: {
     alignItems: 'center',
     backgroundColor: '#777',
     borderRadius: 100,
     width: 60,
     height: 60,
-    justifyContent: 'center'
+    justifyContent: 'center',
   },
   pickerView: {
     marginVertical: 10,
@@ -444,15 +450,14 @@ const styles = StyleSheet.create({
     fontFamily: 'Montserrat-Regular',
     paddingHorizontal: 10,
     color: 'black',
-
   },
   box: {
     height: 100,
-    width: (screenWidth / 2) - 40,
+    width: screenWidth / 2 - 40,
     backgroundColor: colors.accent,
     borderBottomColor: colors.darkPrimary,
     borderBottomWidth: 2,
-    marginHorizontal: 5
+    marginHorizontal: 5,
   },
   groupTouchSelected: {
     alignItems: 'center',
@@ -468,28 +473,25 @@ const styles = StyleSheet.create({
   },
   errorMsg: {
     color: colors.primary,
-    fontFamily: 'qs-reg',
     paddingVertical: 5,
     fontFamily: 'Montserrat-Regular',
-
   },
   holderView: {
     width: '100%',
-    paddingVertical: 10
+    paddingVertical: 10,
   },
   holderText: {
     fontFamily: 'Montserrat-Regular',
     fontSize: 25,
     marginLeft: 10,
-    marginTop: 0
+    marginTop: 0,
   },
   rowView: {
     width: '100%',
-    marginTop: 10
+    marginTop: 10,
   },
   openBtnView: {
     marginHorizontal: 7,
-
   },
   inviteTouch: {
     flexDirection: 'row',
@@ -518,12 +520,12 @@ const styles = StyleSheet.create({
     fontSize: 18,
     marginLeft: 10,
     marginTop: 0,
-    color: "black"
+    color: 'black',
   },
   datepickerttextoutput: {
     fontSize: 18,
     fontFamily: 'sans-serif-condensed',
-    color: "black",
+    color: 'black',
   },
 
   datepickerbutton: {

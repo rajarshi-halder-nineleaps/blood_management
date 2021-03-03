@@ -263,12 +263,10 @@ const UserInfo = ({navigation}) => {
                         <Text style={styles.addressInsideLabel}>Phone:</Text>
                         <View>
                           <View style={styles.addressRightView}>
-                            <Text style={styles.addressContent}>{profileState.profileData.phone}</Text>
-                          </View>
-                          {console.log(profileState.profileData.phone)}
-                          {/* {
+                            {/* <Text style={styles.addressContent}>{profileState.profileData.phone}</Text> */}
+                            {
                             //TODO THERE IS SOME ERROR HERE, CHECK IT OUT.
-                            profileState.profileData
+                            profileState.profileData.phone.length > 0
                               ? profileState.profileData.phone.map(
                                   (val, idx) => (
                                     <View
@@ -281,7 +279,9 @@ const UserInfo = ({navigation}) => {
                                   ),
                                 )
                               : null
-                          } */}
+                          }
+                          </View>
+                          {console.log(profileState.profileData.phone)}
                         </View>
                       </View>
                     )}

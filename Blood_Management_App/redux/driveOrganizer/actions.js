@@ -9,7 +9,7 @@ import {
   ORGANIZE_SUCCESS,
   ORGANIZE_FAILURE,
   TOGGLE_BLOOD_GROUP,
-  SET
+  SET_DATE,
 } from './actionTypes';
 
 export const updateFields = (val, fieldId, isValid) => ({
@@ -52,13 +52,9 @@ export const organizeFailure = (error) => ({
 export const setDateTime = (date) => {
   return {
     type: SET_DATE,
-    date
-  }
-
-}
-
-
-
+    date,
+  };
+};
 
 export const organizeDriveConfirm = (userToken, newDriveData) => {
   console.log('data reached organizeDriveConfirm');
@@ -68,19 +64,19 @@ export const organizeDriveConfirm = (userToken, newDriveData) => {
     try {
       dispatch(organizeReq());
       const response = await axios.post(
-        'http://10.0.2.2:8080/conductadrive/savedrivedetails', {
-        startTimeStamp: null,
-        endTimeStamp: null,
-        bloodGroups: newDriveData.bloodgroup,
-        address: newDriveData.address,
-        state: newDriveData.selectedState,
-        district: newDriveData.selectedDistrict,
-        pincode: newDriveData.pincode,
-        message: newDriveData.message,
-
-      },
+        'http://192.168.43.217:8080/conductadrive/savedrivedetails',
         {
-          headers: { Authorization: 'Bearer ' + userToken },
+          startTimeStamp: null,
+          endTimeStamp: null,
+          bloodGroups: newDriveData.bloodgroup,
+          address: newDriveData.address,
+          state: newDriveData.selectedState,
+          district: newDriveData.selectedDistrict,
+          pincode: newDriveData.pincode,
+          message: newDriveData.message,
+        },
+        {
+          headers: {Authorization: 'Bearer ' + userToken},
         },
       );
 

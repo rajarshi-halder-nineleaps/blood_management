@@ -103,7 +103,7 @@ export const regUserUp = (regData) => {
         };
 
         response = await axios.post(
-          'http://10.0.2.2:8080/registerind',
+          'http://192.168.43.217:8080/registerind',
           requestObject,
         );
       } else if (regData.userType === 2) {
@@ -120,7 +120,7 @@ export const regUserUp = (regData) => {
         };
 
         response = await axios.post(
-          'http://10.0.2.2:8080/registerhos',
+          'http://192.168.43.217:8080/registerhos',
           requestObject,
         );
       } else {
@@ -137,7 +137,7 @@ export const regUserUp = (regData) => {
         };
 
         response = await axios.post(
-          'http://10.0.2.2:8080/registerbb',
+          'http://192.168.43.217:8080/registerbb',
           requestObject,
         );
       }

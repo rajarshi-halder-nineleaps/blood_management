@@ -73,9 +73,9 @@ const InventoryCard = (props) => {
             style={styles.inventoryInput}
             value={props.cardData.bPosPrice + ''}
             onChangeText={(newVal) => {
-              if (decimalRegex.test(newVal) || newVal === '') {
+              // if (decimalRegex.test(newVal) || newVal === '') {
                 dispatch(updateFields(newVal, props.id, 'bPosPrice'));
-              }
+              // }
             }}
           />
         ) : null}
@@ -99,9 +99,9 @@ const InventoryCard = (props) => {
             style={styles.inventoryInput}
             value={props.cardData.bNegPrice + ''}
             onChangeText={(newVal) => {
-              if (decimalRegex.test(newVal) || newVal === '') {
+              // if (decimalRegex.test(newVal) || newVal === '') {
                 dispatch(updateFields(newVal, props.id, 'bNegPrice'));
-              }
+              // }
             }}
           />
         ) : null}
@@ -125,9 +125,9 @@ const InventoryCard = (props) => {
             style={styles.inventoryInput}
             value={props.cardData.aPosPrice + ''}
             onChangeText={(newVal) => {
-              if (decimalRegex.test(newVal) || newVal === '') {
+              // if (decimalRegex.test(newVal) || newVal === '') {
                 dispatch(updateFields(newVal, props.id, 'aPosPrice'));
-              }
+              // }
             }}
           />
         ) : null}
@@ -151,9 +151,9 @@ const InventoryCard = (props) => {
             style={styles.inventoryInput}
             value={props.cardData.aNegPrice + ''}
             onChangeText={(newVal) => {
-              if (numbersOnlyRegex.test(newVal) || newVal === '') {
+              // if (numbersOnlyRegex.test(newVal) || newVal === '') {
                 dispatch(updateFields(newVal, props.id, 'aNegPrice'));
-              }
+              // }
             }}
           />
         ) : null}
@@ -177,9 +177,9 @@ const InventoryCard = (props) => {
             style={styles.inventoryInput}
             value={props.cardData.oPosPrice + ''}
             onChangeText={(newVal) => {
-              if (numbersOnlyRegex.test(newVal) || newVal === '') {
+              // if (numbersOnlyRegex.test(newVal) || newVal === '') {
                 dispatch(updateFields(newVal, props.id, 'oPosPrice'));
-              }
+              // }
             }}
           />
         ) : null}
@@ -203,9 +203,9 @@ const InventoryCard = (props) => {
             style={styles.inventoryInput}
             value={props.cardData.oNegPrice + ''}
             onChangeText={(newVal) => {
-              if (numbersOnlyRegex.test(newVal) || newVal === '') {
+              // if (numbersOnlyRegex.test(newVal) || newVal === '') {
                 dispatch(updateFields(newVal, props.id, 'oNegPrice'));
-              }
+              // }
             }}
           />
         ) : null}
@@ -229,9 +229,9 @@ const InventoryCard = (props) => {
             style={styles.inventoryInput}
             value={props.cardData.abPosPrice + ''}
             onChangeText={(newVal) => {
-              if (numbersOnlyRegex.test(newVal) || newVal === '') {
+              // if (numbersOnlyRegex.test(newVal) || newVal === '') {
                 dispatch(updateFields(newVal, props.id, 'abPosPrice'));
-              }
+              // }
             }}
           />
         ) : null}
@@ -255,9 +255,9 @@ const InventoryCard = (props) => {
             style={styles.inventoryInput}
             value={props.cardData.abNegPrice + ''}
             onChangeText={(newVal) => {
-              if (numbersOnlyRegex.test(newVal) || newVal === '') {
+              // if (numbersOnlyRegex.test(newVal) || newVal === '') {
                 dispatch(updateFields(newVal, props.id, 'abNegPrice'));
-              }
+              // }
             }}
           />
         ) : null}

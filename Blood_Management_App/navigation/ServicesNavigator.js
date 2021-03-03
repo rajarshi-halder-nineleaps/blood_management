@@ -1,8 +1,8 @@
 /* eslint-disable prettier/prettier */
 import React from 'react';
-import { TouchableOpacity, Text } from 'react-native';
+import {TouchableOpacity, Text} from 'react-native';
 import Feather from 'react-native-vector-icons/Feather';
-import { createStackNavigator } from '@react-navigation/stack';
+import {createStackNavigator} from '@react-navigation/stack';
 import colors from '../constants/Colors';
 
 //? Importing the screens
@@ -21,6 +21,7 @@ import BuyBlood from '../src/Service Stack/BuyBlood/BuyBlood';
 import BuyBloodList from '../src/Service Stack/BuyBlood/BuyBloodList';
 import ConfirmBuy from '../src/Service Stack/BuyBlood/ConfirmBuy';
 import SalesNavigator from './SalesNavigator';
+import Sales from '../src/MainTabs/ServicesStack/Sales';
 import MoreInfo from '../src/Service Stack/BuyBlood/MoreInfo';
 import MyPurchases from '../src/Service Stack/MyPurchases/MyPurchases';
 import ActiveDonorRequest from '../src/Service Stack/ActiveDonorRequest/ActiveDonorRequest';
@@ -161,7 +162,7 @@ const ServicesStackNavigator = () => {
 
       <ServicesNavigator.Screen
         name="sales"
-        component={SalesNavigator}
+        component={Sales}
         options={{
           headerTitle: 'Sales',
           headerTitleStyle: {
@@ -176,45 +177,57 @@ const ServicesStackNavigator = () => {
           },
         }}
       />
-      <ServicesNavigator.Screen name="Find Donors" component={FindDonors} options = {{
-        headerTitle: 'Find donors',
-        headerTitleStyle: {
-          fontFamily: 'Montserrat-Bold',
-          fontSize: 24,
-          color: colors.additional2,
-        },
-        headerTintColor: colors.additional2,
-        headerStyle: {
-          elevation: 0,
-          backgroundColor: colors.primary,
-        },
-      }}/>
-      <ServicesNavigator.Screen name="Donor List" component={DonorList}  options = {{
-        headerTitle: 'Find donors',
-        headerTitleStyle: {
-          fontFamily: 'Montserrat-Bold',
-          fontSize: 24,
-          color: colors.additional2,
-        },
-        headerTintColor: colors.additional2,
-        headerStyle: {
-          elevation: 0,
-          backgroundColor: colors.primary,
-        },
-      }}/>
-      <ServicesNavigator.Screen name="Buy Blood" component={BuyBlood}  options = {{
-        headerTitle: 'Buy Blood',
-        headerTitleStyle: {
-          fontFamily: 'Montserrat-Bold',
-          fontSize: 24,
-          color: colors.additional2,
-        },
-        headerTintColor: colors.additional2,
-        headerStyle: {
-          elevation: 0,
-          backgroundColor: colors.primary,
-        },
-      }}/>
+      <ServicesNavigator.Screen
+        name="Find Donors"
+        component={FindDonors}
+        options={{
+          headerTitle: 'Find donors',
+          headerTitleStyle: {
+            fontFamily: 'Montserrat-Bold',
+            fontSize: 24,
+            color: colors.additional2,
+          },
+          headerTintColor: colors.additional2,
+          headerStyle: {
+            elevation: 0,
+            backgroundColor: colors.primary,
+          },
+        }}
+      />
+      <ServicesNavigator.Screen
+        name="Donor List"
+        component={DonorList}
+        options={{
+          headerTitle: 'Find donors',
+          headerTitleStyle: {
+            fontFamily: 'Montserrat-Bold',
+            fontSize: 24,
+            color: colors.additional2,
+          },
+          headerTintColor: colors.additional2,
+          headerStyle: {
+            elevation: 0,
+            backgroundColor: colors.primary,
+          },
+        }}
+      />
+      <ServicesNavigator.Screen
+        name="Buy Blood"
+        component={BuyBlood}
+        options={{
+          headerTitle: 'Buy Blood',
+          headerTitleStyle: {
+            fontFamily: 'Montserrat-Bold',
+            fontSize: 24,
+            color: colors.additional2,
+          },
+          headerTintColor: colors.additional2,
+          headerStyle: {
+            elevation: 0,
+            backgroundColor: colors.primary,
+          },
+        }}
+      />
 
       <ServicesNavigator.Screen
         name="donationRequests"
@@ -236,7 +249,7 @@ const ServicesStackNavigator = () => {
       <ServicesNavigator.Screen
         name="Buy Blood List"
         component={BuyBloodList}
-        options = {{
+        options={{
           headerTitle: 'Available blood banks',
           headerTitleStyle: {
             fontFamily: 'Montserrat-Bold',
@@ -250,49 +263,61 @@ const ServicesStackNavigator = () => {
           },
         }}
       />
-      <ServicesNavigator.Screen name="Confirm Buy" component={ConfirmBuy}  options = {{
-        headerTitle: 'Confirm purchase',
-        headerTitleStyle: {
-          fontFamily: 'Montserrat-Bold',
-          fontSize: 24,
-          color: colors.additional2,
-        },
-        headerTintColor: colors.additional2,
-        headerStyle: {
-          elevation: 0,
-          backgroundColor: colors.primary,
-        },
-      }}/>
-      <ServicesNavigator.Screen name="More Info" component={MoreInfo}  options={{
-        headerTitle: 'More Info',
-         headerTitleStyle: {
-          fontFamily: 'Montserrat-Bold',
-          fontSize: 24,
-          color: colors.additional2,
-        },
-        headerTintColor: colors.additional2,
-        headerStyle: {
-          elevation: 0,
-          backgroundColor: colors.primary,
-        },
-      }}/>
-      <ServicesNavigator.Screen name="My Purchases" component={MyPurchases} options={{
-        headerTitle: 'My Purchases',
-         headerTitleStyle: {
-          fontFamily: 'Montserrat-Bold',
-          fontSize: 24,
-          color: colors.additional2,
-        },
-        headerTintColor: colors.additional2,
-        headerStyle: {
-          elevation: 0,
-          backgroundColor: colors.primary,
-        },
-      }}/>
+      <ServicesNavigator.Screen
+        name="Confirm Buy"
+        component={ConfirmBuy}
+        options={{
+          headerTitle: 'Confirm purchase',
+          headerTitleStyle: {
+            fontFamily: 'Montserrat-Bold',
+            fontSize: 24,
+            color: colors.additional2,
+          },
+          headerTintColor: colors.additional2,
+          headerStyle: {
+            elevation: 0,
+            backgroundColor: colors.primary,
+          },
+        }}
+      />
+      <ServicesNavigator.Screen
+        name="More Info"
+        component={MoreInfo}
+        options={{
+          headerTitle: 'More Info',
+          headerTitleStyle: {
+            fontFamily: 'Montserrat-Bold',
+            fontSize: 24,
+            color: colors.additional2,
+          },
+          headerTintColor: colors.additional2,
+          headerStyle: {
+            elevation: 0,
+            backgroundColor: colors.primary,
+          },
+        }}
+      />
+      <ServicesNavigator.Screen
+        name="My Purchases"
+        component={MyPurchases}
+        options={{
+          headerTitle: 'My Purchases',
+          headerTitleStyle: {
+            fontFamily: 'Montserrat-Bold',
+            fontSize: 24,
+            color: colors.additional2,
+          },
+          headerTintColor: colors.additional2,
+          headerStyle: {
+            elevation: 0,
+            backgroundColor: colors.primary,
+          },
+        }}
+      />
       <ServicesNavigator.Screen
         name="Active Donor Request"
         component={ActiveDonorRequest}
-        options = {{
+        options={{
           headerTitle: 'My Donation Requests',
           headerTitleStyle: {
             fontFamily: 'Montserrat-Bold',
@@ -309,7 +334,7 @@ const ServicesStackNavigator = () => {
       <ServicesNavigator.Screen
         name="DonationRequestList"
         component={DonationRequestList}
-        options = {{
+        options={{
           headerTitle: 'My Donation Requests',
           headerTitleStyle: {
             fontFamily: 'Montserrat-Bold',

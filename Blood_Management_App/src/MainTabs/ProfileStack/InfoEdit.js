@@ -18,10 +18,15 @@ import colors from '../../../constants/Colors';
 import Feather from 'react-native-vector-icons/Feather';
 import Fields from '../../../components/Fields';
 import {useSelector, useDispatch} from 'react-redux';
-import {changeDetails, setDataSaved} from '../../../redux/profile/actions';
+import {
+  changeDetails,
+  setDataSaved,
+  removePhone,
+} from '../../../redux/profile/actions';
 import {Picker} from '@react-native-picker/picker';
 import * as places from '../../../assets/places.json';
 import {phoneRegex, pincodeRegex} from '../../../constants/Regexes';
+import PhoneField from '../../../components/PhoneField';
 
 const InfoEdit = ({navigation}) => {
   const word = places.states;
@@ -132,24 +137,10 @@ const InfoEdit = ({navigation}) => {
       const newInputValues = {...prevState.inputValues, [fieldId]: val};
       const newInputValidity = {...prevState.inputValidity, [fieldId]: isValid};
 
-      let newFinalFormState = true;
-
-      if (authState.userType !== 1) {
-        for (const key in newInputValidity.phone) {
-          newFinalFormState = newFinalFormState && newInputValidity.phone[key];
-        }
-      }
-      for (const key in newInputValidity) {
-        if (typeof newInputValidity[key] === 'boolean') {
-          newFinalFormState = newFinalFormState && newInputValidity[key];
-        }
-      }
-
       return {
         ...prevState,
         inputValues: newInputValues,
         inputValidity: newInputValidity,
-        finalFormState: newFinalFormState,
       };
     });
   };
@@ -166,6 +157,7 @@ const InfoEdit = ({navigation}) => {
           false,
         ];
         newFormState.isTouched.phone = [...prevState.isTouched.phone, false];
+        console.log(formState);
 
         return newFormState;
       });
@@ -173,6 +165,27 @@ const InfoEdit = ({navigation}) => {
       Alert.alert(
         'Maximum limit reached',
         'You have added the maximum possible phone number fields.',
+        [{text: 'Okay'}],
+      );
+    }
+  };
+
+  const phoneRemover = (idx) => {
+    // const idx = formState.inputValues.phone.length - 1;
+    if (formState.inputValues.phone.length > 1) {
+      setFormState((prevState) => {
+        const newFormState = {...prevState};
+        newFormState.inputValues.phone.splice(idx, 1);
+        newFormState.inputValidity.phone.splice(idx, 1);
+        newFormState.isTouched.phone.splice(idx, 1);
+        console.log(formState);
+
+        return newFormState;
+      });
+    } else {
+      Alert.alert(
+        'Phone nummber required',
+        'A minimum of 1 phone number is required.',
         [{text: 'Okay'}],
       );
     }
@@ -229,7 +242,30 @@ const InfoEdit = ({navigation}) => {
   };
 
   const submitHandler = () => {
-    if (formState.finalFormState) {
+    let newFinalFormState = true;
+
+    if (authState.userType !== 1) {
+      for (const key in formState.inputValidity.phone) {
+        newFinalFormState =
+          newFinalFormState && formState.inputValidity.phone[key];
+        setFormState((prevState) => {
+          let newFormState = {...prevState};
+          newFormState.isTouched.phone[key] = true;
+          return newFormState;
+        });
+      }
+    }
+    for (const key in formState.inputValidity) {
+      if (typeof formState.inputValidity[key] === 'boolean') {
+        newFinalFormState = newFinalFormState && formState.inputValidity[key];
+        setFormState((prevState) => {
+          let newFormState = {...prevState};
+          newFormState.isTouched[key] = true;
+          return newFormState;
+        });
+      }
+    }
+    if (newFinalFormState) {
       dispatch(
         changeDetails(
           authState.userToken,
@@ -239,9 +275,10 @@ const InfoEdit = ({navigation}) => {
       );
 
       console.log(formState.inputValues);
-    } else {
-      Alert.alert('Invalid Inputs', 'Please check all inputs before saving.');
     }
+    // else {
+    //   Alert.alert('Invalid Inputs', 'Please check all inputs before saving.');
+    // }
   };
 
   return (
@@ -301,11 +338,14 @@ const InfoEdit = ({navigation}) => {
               <>
                 {formState.inputValues.phone.map((val, idx) => {
                   return (
-                    <Fields
+                    <PhoneField
                       label={'Phone #' + (idx + 1)}
                       key={idx}
+                      idx={idx}
                       error="Invalid phone!"
                       returnKeyType="next"
+                      phoneRemover={phoneRemover}
+                      length={formState.inputValues.phone.length}
                       keyboardType="phone-pad"
                       value={val}
                       inputIsValid={formState.inputValidity.phone[idx]}
@@ -318,12 +358,18 @@ const InfoEdit = ({navigation}) => {
                   );
                 })}
                 <View style={styles.phoneAddView}>
-                  <TouchableOpacity
-                    style={styles.phoneAdd}
-                    onPress={() => phoneAdder()}>
-                    <Text style={styles.phoneAddText}>Add new Phone</Text>
-                    <Feather name="plus" color={colors.additional2} size={15} />
-                  </TouchableOpacity>
+                  {formState.inputValues.phone.length < 5 ? (
+                    <TouchableOpacity
+                      style={styles.phoneAdd}
+                      onPress={() => phoneAdder()}>
+                      <Text style={styles.phoneAddText}>Add new Phone</Text>
+                      <Feather
+                        name="plus"
+                        color={colors.additional2}
+                        size={15}
+                      />
+                    </TouchableOpacity>
+                  ) : null}
                 </View>
               </>
             )}

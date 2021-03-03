@@ -1,14 +1,16 @@
 import axios from 'axios';
-import { Alert } from 'react-native';
+import {Alert} from 'react-native';
 import {
   DONORLIST_SUCCESS,
   DONORLIST_REQ,
   DONORLIST_FAILURE,
   DONORLIST_UPDATE,
+  EXPIRE_SUCCESS,
+  EXPIRE_FAILURE,
   DONOR_DETAILS_LIST_REQ,
   DONOR_DETAILS_LIST_FAILURE,
   DONOR_DETAILS_LIST_SUCCESS,
-  DONOR_DETAILS_LIST_UPDATE
+  DONOR_DETAILS_LIST_UPDATE,
 } from './actionTypes';
 
 export const donorListreq = () => ({
@@ -31,29 +33,27 @@ export const listUpdate = (udata) => ({
 });
 
 export const donorDetailsListreq = (detailsList) => ({
-  type: DONOR_DETAILS_LIST_REQ
-})
+  type: DONOR_DETAILS_LIST_REQ,
+});
 
 export const donorDetailsListSuccess = (donorDetailsList) => ({
   type: DONOR_DETAILS_LIST_SUCCESS,
-  donorDetailsList
-})
+  donorDetailsList,
+});
 
 export const donorDetailsListFailure = (error) => ({
   type: DONOR_DETAILS_LIST_FAILURE,
-  error
-})
+  error,
+});
 
 export const expireFailure = (error) => ({
   type: EXPIRE_FAILURE,
-  error
-})
+  error,
+});
 
 export const expireSuccess = () => ({
   type: EXPIRE_SUCCESS,
-})
-
-
+});
 
 export const getactivedonorList = (userToken) => {
   return async (dispatch) => {
@@ -61,37 +61,32 @@ export const getactivedonorList = (userToken) => {
     console.log('Getting Active Donor List');
     try {
       const response = await axios.get(
-        'http://10.0.2.2:8080/donationrequests/fetchrequests',
+        'http://192.168.43.217:8080/donationrequests/fetchrequests',
         {
-          headers: { Authorization: 'Bearer ' + userToken },
+          headers: {Authorization: 'Bearer ' + userToken},
         },
       );
       console.log('COMPLETE RESPONSE DATA: ', response.headers);
 
       if (response.headers.error) {
-        dispatch(donorListFailure(response.data.error))
+        dispatch(donorListFailure(response.data.error));
 
         console.log(response.headers.error);
       } else if (response.headers.success) {
         //? SAVING USER DATA TO ASYNC STORAGE ON SUCCESSFUL LOGIN.
 
-
         console.log('Saved data to async storage!', response.data);
-        dispatch(donorListSuccess(response.data))
-
+        dispatch(donorListSuccess(response.data));
       } else {
-        dispatch(donorListFailure("Something went wrong!"))
-        console.log("Failed")
+        dispatch(donorListFailure('Something went wrong!'));
+        console.log('Failed');
       }
     } catch (err) {
       console.log(err.message);
-      dispatch(donorListFailure(err))
-
+      dispatch(donorListFailure(err));
     }
   };
-
-
-}
+};
 
 export const getdonationdetails = (userToken, donationId) => {
   return async (dispatch) => {
@@ -99,48 +94,44 @@ export const getdonationdetails = (userToken, donationId) => {
     console.log('Getting Active Donor List');
     try {
       const response = await axios.get(
-        `http://10.0.2.2:8080/donationrequests/fetchdonationdonorlist/${donationId}`,
+        `http://192.168.43.217:8080/donationrequests/fetchdonationdonorlist/${donationId}`,
         {
-          headers: { Authorization: 'Bearer ' + userToken },
+          headers: {Authorization: 'Bearer ' + userToken},
         },
       );
       console.log('COMPLETE RESPONSE DATA: ', response.headers);
 
       if (response.headers.error) {
-        dispatch(donorDetailsListFailure(response.data.error))
+        dispatch(donorDetailsListFailure(response.data.error));
 
         console.log(response.headers.error);
       } else if (response.headers.success) {
         //? SAVING USER DATA TO ASYNC STORAGE ON SUCCESSFUL LOGIN.
 
-
         console.log('Saved data to async storage!', response.data);
-        dispatch(donorDetailsListSuccess(response.data))
-
+        dispatch(donorDetailsListSuccess(response.data));
       } else {
-        dispatch(donorDetailsListFailure("Something went wrong!"))
-        console.log("Failed")
+        dispatch(donorDetailsListFailure('Something went wrong!'));
+        console.log('Failed');
       }
     } catch (err) {
       console.log(err.message);
-      dispatch(donorDetailsListFailure(err))
-
+      dispatch(donorDetailsListFailure(err));
     }
   };
-
-
-}
+};
 
 export const expirerequest = (userToken, donationId) => {
   return async (dispatch) => {
     console.log('Expiring Donation');
     try {
       const response = await axios.put(
-        `http://10.0.2.2:8080/donationrequests/expirerequest`, {
-        donationId: donationId
-      },
+        `http://192.168.43.217:8080/donationrequests/expirerequest`,
         {
-          headers: { Authorization: 'Bearer ' + userToken },
+          donationId: donationId,
+        },
+        {
+          headers: {Authorization: 'Bearer ' + userToken},
         },
       );
       console.log('COMPLETE RESPONSE DATA: ', response.headers);
@@ -151,37 +142,33 @@ export const expirerequest = (userToken, donationId) => {
         console.log(response.headers.error);
       } else if (response.headers.success) {
         //? SAVING USER DATA TO ASYNC STORAGE ON SUCCESSFUL LOGIN.
-        dispatch(getactivedonorList(userToken))
-        Alert.alert(
-          'Drive has Expired',
-          'Drived has been expired',
-          [{ text: 'Okay' }],
-        );
-
-
+        dispatch(getactivedonorList(userToken));
+        Alert.alert('Drive has Expired', 'Drived has been expired', [
+          {text: 'Okay'},
+        ]);
       } else {
-        dispatch(expireFailure("Something went wrong!"))
-        console.log("Failed")
+        dispatch(expireFailure('Something went wrong!'));
+        console.log('Failed');
       }
     } catch (err) {
       console.log(err.message);
-      dispatch(expireFailure(err))
-
+      dispatch(expireFailure(err));
     }
   };
-}
+};
 
 export const verifydonor = (userToken, userId, donationId) => {
   return async (dispatch) => {
     console.log('Expiring Donation');
     try {
       const response = await axios.put(
-        `http://10.0.2.2:8080/donationrequests/donationdonorverification`, {
-        donationId: donationId,
-        userId: userId
-      },
+        `http://192.168.43.217:8080/donationrequests/donationdonorverification`,
         {
-          headers: { Authorization: 'Bearer ' + userToken },
+          donationId: donationId,
+          userId: userId,
+        },
+        {
+          headers: {Authorization: 'Bearer ' + userToken},
         },
       );
       console.log('COMPLETE RESPONSE DATA: ', response.headers);
@@ -192,30 +179,18 @@ export const verifydonor = (userToken, userId, donationId) => {
         console.log(response.headers.error);
       } else if (response.headers.success) {
         //? SAVING USER DATA TO ASYNC STORAGE ON SUCCESSFUL LOGIN.
-        dispatch(getdonationdetails(userToken, donationId))
-        Alert.alert(
-          'Verified',
-          'User Successfully Verified',
-          [{ text: 'Okay' }],
-        );
-
-
+        dispatch(getdonationdetails(userToken, donationId));
+        Alert.alert('Verified', 'User Successfully Verified', [{text: 'Okay'}]);
       } else {
-        dispatch(Failure("Something went wrong!"))
-        console.log("Failed")
+        dispatch(donorListFailure('Something went wrong!'));
+        console.log('Failed');
       }
     } catch (err) {
       console.log(err.message);
-      dispatch(expireFailure(err))
-
+      dispatch(expireFailure(err));
     }
   };
-}
-
-
-
-
-
+};
 
 export const updateRequestList = (userToken, updatedData) => {
   console.log('Updater dispatched!');
@@ -224,17 +199,17 @@ export const updateRequestList = (userToken, updatedData) => {
       console.log('updating list of invites.');
       dispatch(donorListreq());
       const response = await axios.put(
-        'http://10.0.2.2:8000/activedonorrequest',
+        'http://192.168.43.217:8000/activedonorrequest',
         updatedData,
         {
-          headers: { Authorization: userToken },
+          headers: {Authorization: userToken},
         },
       );
 
       if (response.data.success) {
         console.log('response is success!');
         dispatch(listUpdate(updatedData));
-        console.log("ok")
+        console.log('ok');
       } else if (response.data.error) {
         console.log('response is error!');
         dispatch(donorListFailure(response.data.error));
@@ -252,4 +227,3 @@ export const updateRequestList = (userToken, updatedData) => {
     }
   };
 };
-

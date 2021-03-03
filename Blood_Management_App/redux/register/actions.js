@@ -5,6 +5,7 @@ import {
   PHONE_STATE_SET,
   PHONE_TOUCH_SET,
   STATE_CLEANUP,
+  REMOVE_PHONE,
 } from './actionTypes';
 
 export const updateFields = (val, fieldId, isValid) => ({
@@ -21,6 +22,10 @@ export const blurFields = (fieldId) => ({
 
 export const addPhoneState = () => ({
   type: ADD_PHONE_STATE,
+});
+
+export const removePhone = () => ({
+  type: REMOVE_PHONE,
 });
 
 export const phoneStateSet = (val, idx) => ({

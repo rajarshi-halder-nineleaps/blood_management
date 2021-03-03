@@ -12,7 +12,7 @@ const SalesCard = ({item}) => {
           source={require('../assets/images/invBkg.png')}>
           <View style={styles.header}>
             <View style={styles.titleView}>
-              <Text style={styles.headerText}>SALE ID :</Text>
+              <Text style={styles.headerText}>TRANSACTION ID :</Text>
               <View style={styles.idView}>
                 <Text style={styles.headerContent}>{item.salesId}</Text>
               </View>
@@ -35,28 +35,37 @@ const SalesCard = ({item}) => {
           <View style={styles.contentView}>
             <View style={styles.detailsView}>
               <Text style={styles.label}>
-                Purchase date:{' '}
+                Sale date:{' '}
                 <Text style={styles.content}>
-                {item.dateOfTransaction ? `${item.dateOfTransaction.split('T')[0]}, ${item.dateOfTransaction.split('T')[1].split(':')[0]}:${item.dateOfTransaction.split('T')[1].split(':')[1]}` : null}
-
+                  {item.dateOfTransaction
+                    ? `${item.dateOfTransaction.split('T')[0]}, ${
+                        item.dateOfTransaction.split('T')[1].split(':')[0]
+                      }:${item.dateOfTransaction.split('T')[1].split(':')[1]}`
+                    : null}
                 </Text>
               </Text>
               <Text style={styles.label}>
-                Purchased blood group:{' '}
+                Sold blood group:{' '}
                 <Text style={styles.content}>{item.purchasedGroup}</Text>
               </Text>
               <Text style={styles.label}>
-                Purchased component:{' '}
+                Sold component:{' '}
                 <Text style={styles.content}>{item.purchasedComponent}</Text>
               </Text>
               <Text style={styles.label}>
-                Purchased quantity:{' '}
-                <Text style={styles.content}>{item.purchasedQty} Units</Text>
+                Sold quantity:{' '}
+                <Text style={styles.content}>{item.purchasedQuantity} Units</Text>
+              </Text>
+              <Text style={styles.label}>
+                Price per unit:{' '}
+                <Text style={styles.content}>₹ {item.pricePerUnit}</Text>
               </Text>
             </View>
             <View style={styles.billView}>
               <Text style={styles.billLabel}>Total bill amount: </Text>
-              <Text style={styles.bill}>₹ {item.pricePerUnit * item.purchasedQty}</Text>
+              <Text style={styles.bill}>
+                ₹ {item.pricePerUnit * item.purchasedQuantity}
+              </Text>
             </View>
           </View>
         </ImageBackground>
@@ -114,7 +123,7 @@ const styles = StyleSheet.create({
   },
   headerContent: {
     color: colors.primary,
-    fontWeight: 'bold',
+    fontFamily: 'Montserrat-Regular',
     fontSize: 18,
   },
   buyerView: {
@@ -122,11 +131,11 @@ const styles = StyleSheet.create({
   },
   buyerLabel: {
     color: colors.additional2,
-    fontWeight: 'bold',
+    fontFamily: 'Montserrat-Bold',
   },
   buyerContent: {
     color: colors.additional2,
-    fontWeight: '100',
+    fontFamily: 'Montserrat-Regular',
   },
   contentView: {
     backgroundColor: colors.additional2,
@@ -136,10 +145,10 @@ const styles = StyleSheet.create({
   },
   detailsView: {},
   label: {
-    fontFamily: 'sans-serif',
+    fontFamily: 'Montserrat-Bold',
   },
   content: {
-    fontFamily: 'sans-serif-light',
+    fontFamily: 'Montserrat-Regular',
   },
   billView: {
     width: '100%',
@@ -147,14 +156,12 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   billLabel: {
-    fontFamily: 'sans-serif',
-    fontWeight: 'bold',
+    fontFamily: 'Montserrat-Bold',
     fontSize: 18,
     color: colors.primary,
   },
   bill: {
-    fontFamily: 'sans-serif',
-    fontWeight: 'bold',
+    fontFamily: 'Montserrat-Bold',
     fontSize: 22,
     color: colors.moderategray,
   },

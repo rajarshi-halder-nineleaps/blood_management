@@ -37,7 +37,7 @@ const Services = ({navigation}) => {
   //   }
   // }, [myDrivesState.gotData, navigation]);
 
-  //TODO convert all this to useEffect
+  //TODO convert all this to useEffect - DONE
 
   const myDrivesHandler = () => {
     navigation.navigate('myDrives');
@@ -48,7 +48,7 @@ const Services = ({navigation}) => {
   };
 
   const inventoryHandler = () => {
-    dispatch(getInventory(authState.userToken));
+    // dispatch(getInventory(authState.userToken));
     setRusure(true);
   };
 

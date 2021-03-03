@@ -11,7 +11,7 @@ import {
 } from './actionTypes';
 
 const initialState = {
-  profileData: {},
+  profileData: {phone: []},
   userData: {},
   error: '',
   loading: false,
@@ -75,6 +75,7 @@ const profileReducer = (state = initialState, action) => {
         dataSaved: false,
       };
     }
+
     default: {
       return state;
     }
