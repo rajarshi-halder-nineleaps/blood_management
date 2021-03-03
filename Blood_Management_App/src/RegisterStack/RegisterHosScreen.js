@@ -17,6 +17,7 @@ import {
   phoneStateSet,
   phoneTouchSet,
   stateCleanup,
+  removePhone,
 } from '../../redux/register/actions';
 import Fields from '../../components/Fields';
 import {regUserUp} from '../../redux/auth/actions';
@@ -192,14 +193,25 @@ const RegisterHosScreen = ({navigation}) => {
             })}
 
             <View style={styles.addPhoneView}>
-              <TouchableOpacity
-                style={styles.addPhoneTouch}
-                onPress={() => {
-                  phoneAdder();
-                }}>
-                <Feather name="plus" color="white" size={20} />
-                <Text style={styles.addPhoneText}>Add new number</Text>
-              </TouchableOpacity>
+              {regFormState.inputValues.phone.length < 5 ? (
+                <TouchableOpacity
+                  style={styles.addPhoneTouch}
+                  onPress={() => {
+                    phoneAdder();
+                  }}>
+                  <Feather name="plus" color="white" size={20} />
+                  <Text style={styles.addPhoneText}>Add new number</Text>
+                </TouchableOpacity>
+              ) : null}
+
+              {regFormState.inputValues.phone.length > 1 ? (
+                <TouchableOpacity
+                  style={styles.addPhoneTouch}
+                  onPress={() => dispatch(removePhone())}>
+                  <Feather name="x" color={colors.additional2} size={20} />
+                  <Text style={styles.addPhoneText}>Remove Phone</Text>
+                </TouchableOpacity>
+              ) : null}
             </View>
 
             <Fields
@@ -230,10 +242,13 @@ const RegisterHosScreen = ({navigation}) => {
             />
             <Text style={styles.pickerLabel}>State*</Text>
 
-            <View style={!regFormState.inputValidity.selectedState &&
-                  regFormState.isTouched.selectedState
-                    ? styles.pickerViewInvalid
-                    : styles.pickerView}>
+            <View
+              style={
+                !regFormState.inputValidity.selectedState &&
+                regFormState.isTouched.selectedState
+                  ? styles.pickerViewInvalid
+                  : styles.pickerView
+              }>
               <Picker
                 selectedValue={regFormState.inputValues.selectedState}
                 onValueChange={(val, itemIndex) => {
@@ -255,10 +270,13 @@ const RegisterHosScreen = ({navigation}) => {
 
             <Text style={styles.pickerLabel}>District*</Text>
 
-            <View style={!regFormState.inputValidity.selectedDistrict &&
+            <View
+              style={
+                !regFormState.inputValidity.selectedDistrict &&
                 regFormState.isTouched.selectedDistrict
                   ? styles.pickerViewInvalid
-                  : styles.pickerView}>
+                  : styles.pickerView
+              }>
               <Picker
                 enabled={distEnb}
                 selectedValue={regFormState.inputValues.selectedDistrict}
@@ -451,6 +469,7 @@ const styles = StyleSheet.create({
   addPhoneView: {
     width: '100%',
     flexDirection: 'row',
+    justifyContent: 'space-between',
     marginBottom: 20,
   },
   addPhoneTouch: {

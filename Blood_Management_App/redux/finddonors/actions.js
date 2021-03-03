@@ -62,7 +62,7 @@ export const getDonorList = (userToken, formData) => {
     console.log('Getting Donor List');
     try {
       const response = await axios.post(
-        'http://10.0.2.2:8080/finddonors/donorslist',
+        'http://192.168.43.217:8080/finddonors/donorslist',
         {
           address: formData.address,
           state: formData.state,

@@ -16,6 +16,7 @@ import {
   updateInventory,
   editingToggle,
   getInventory,
+  toggleSecure,
 } from '../../../redux/inventory/actions';
 import colors from '../../../constants/Colors';
 import {useSelector, useDispatch} from 'react-redux';
@@ -28,9 +29,22 @@ const Inventory = ({navigation}) => {
   //   console.log(inventoryState.invData);
   const [refreshing, setRefreshing] = React.useState(false);
 
+  //todo set secure(false) on leaving screen.
+  useEffect(() => {
+    return () => {
+      dispatch(toggleSecure(false));
+    };
+  }, [dispatch]);
+
   const toggleTouchHandler = () => {
     if (inventoryState.editing) {
-      dispatch(updateInventory(authState.userToken, authState.userToken, inventoryState.invData));
+      dispatch(
+        updateInventory(
+          authState.userToken,
+          authState.userToken,
+          inventoryState.invData,
+        ),
+      );
     } else {
       dispatch(editingToggle(true));
     }

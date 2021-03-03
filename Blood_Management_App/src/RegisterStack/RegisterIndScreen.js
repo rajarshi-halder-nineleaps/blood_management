@@ -217,7 +217,7 @@ const RegisterBbScreen = ({navigation}) => {
               <Text
                 style={{
                   fontSize: 18,
-                  fontFamily: 'sans-serif-condensed',
+                  fontFamily: 'Montserrat-Regular',
                   paddingVertical: 15,
                 }}>
                 Date of birth:

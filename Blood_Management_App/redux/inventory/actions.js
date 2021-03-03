@@ -76,9 +76,12 @@ export const getInventory = (userToken) => {
   return async (dispatch) => {
     try {
       dispatch(invReq());
-      const response = await axios.get('http://192.168.43.217:8080/inventory/receieveinventory', {
-        headers: {Authorization: 'Bearer ' + userToken},
-      });
+      const response = await axios.get(
+        'http://192.168.43.217:8080/inventory/receieveinventory',
+        {
+          headers: {Authorization: 'Bearer ' + userToken},
+        },
+      );
 
       if (response.headers.success) {
         console.log('response is success!');
@@ -111,7 +114,7 @@ export const updateInventory = (userToken, userType, inventory) => {
 
       let response = [];
 
-      if (userType === 2){
+      if (userType === 2) {
         response = await axios.put(
           'http://192.168.43.217:8080/inventory/updatehosinventory',
           inventory,
@@ -119,8 +122,7 @@ export const updateInventory = (userToken, userType, inventory) => {
             headers: {Authorization: 'Bearer ' + userToken},
           },
         );
-      }
-      else {
+      } else {
         response = await axios.put(
           'http://192.168.43.217:8080/inventory/updatebbinventory',
           inventory,
@@ -129,8 +131,6 @@ export const updateInventory = (userToken, userType, inventory) => {
           },
         );
       }
-
-    
 
       if (response.headers.success) {
         console.log('response is success!');

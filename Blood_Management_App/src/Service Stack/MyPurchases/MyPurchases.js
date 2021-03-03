@@ -180,6 +180,7 @@ const styles = StyleSheet.create({
   label: {
     fontSize: 20,
     color: colors.primary,
+    fontFamily: 'Montserrat-Regular',
     paddingTop: 10,
   },
   addressContentView: {

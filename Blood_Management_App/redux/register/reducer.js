@@ -5,6 +5,7 @@ import {
   PHONE_STATE_SET,
   PHONE_TOUCH_SET,
   STATE_CLEANUP,
+  REMOVE_PHONE,
 } from './actionTypes';
 import {phoneRegex} from '../../constants/Regexes';
 
@@ -143,6 +144,22 @@ const regIndReducer = (state = initialState, action) => {
       return {
         ...state,
         isTouched: {...state.isTouched, phone: newisTouchedPhoneState},
+      };
+    }
+
+    case REMOVE_PHONE: {
+      console.log('REMOVING PHONE');
+      const newPhoneInputs = [...state.inputValues.phone];
+      const newPhoneValidity = [...state.inputValidity.phone];
+      const newPhoneTouched = [...state.isTouched.phone];
+      newPhoneInputs.pop();
+      newPhoneValidity.pop();
+      newPhoneTouched.pop();
+      return {
+        ...state,
+        inputValues: {...state.inputValues, phone: newPhoneInputs},
+        inputValidity: {...state.inputValidity, phone: newPhoneValidity},
+        isTouched: {...state.isTouched, phone: newPhoneTouched},
       };
     }
 

@@ -5,7 +5,7 @@ import colors from '../constants/Colors';
 
 const Fields = (props) => {
   return (
-    <View style = {styles.outerView}>
+    <View style={styles.outerView}>
       <View style={styles.inputView}>
         <Text style={styles.labelText}>{props.label}</Text>
         <TextInput

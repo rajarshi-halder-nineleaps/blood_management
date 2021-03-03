@@ -14,7 +14,7 @@ const PurchasesCard = ({item}) => {
           source={require('../assets/images/invBkg.png')}>
           <View style={styles.header}>
             <View style={styles.titleView}>
-              <Text style={styles.headerText}>SALE ID :</Text>
+              <Text style={styles.headerText}>TRANSACTION ID :</Text>
               <View style={styles.idView}>
                 <Text style={styles.headerContent}>{item.purchaseId}</Text>
               </View>
@@ -29,7 +29,7 @@ const PurchasesCard = ({item}) => {
                 <Text style={styles.buyerContent}>{item.sellerEmail}</Text>
               </Text>
               <Text style={styles.buyerLabel}>
-                Buyer contact:{'  '}
+                Seller contact:{'  '}
                 <Text style={styles.buyerContent}>{item.sellerContact}</Text>
               </Text>
             </View>
@@ -54,6 +54,10 @@ const PurchasesCard = ({item}) => {
               <Text style={styles.label}>
                 Purchased quantity:{' '}
                 <Text style={styles.content}>{item.soldQuantity} Units</Text>
+              </Text>
+              <Text style={styles.label}>
+                Price per unit:{' '}
+                <Text style={styles.content}>₹ {item.pricePerUnit}</Text>
               </Text>
             </View>
             <View style={styles.billView}>
@@ -101,7 +105,7 @@ const styles = StyleSheet.create({
   },
   headerText: {
     color: colors.additional2,
-    fontWeight: 'bold',
+    fontFamily: 'Montserrat-Bold',
     fontSize: 18,
     alignItems: 'center',
     justifyContent: 'center',
@@ -116,7 +120,7 @@ const styles = StyleSheet.create({
   },
   headerContent: {
     color: colors.primary,
-    fontWeight: 'bold',
+    fontFamily: 'Montserrat-Bold',
     fontSize: 18,
   },
   buyerView: {
@@ -124,11 +128,11 @@ const styles = StyleSheet.create({
   },
   buyerLabel: {
     color: colors.additional2,
-    fontWeight: 'bold',
+    fontFamily: 'Montserrat-Bold',
   },
   buyerContent: {
     color: colors.additional2,
-    fontWeight: '100',
+    fontFamily: 'Montserrat-Regular',
   },
   contentView: {
     backgroundColor: colors.additional2,
@@ -138,10 +142,12 @@ const styles = StyleSheet.create({
   },
   detailsView: {},
   label: {
-    fontFamily: 'sans-serif',
+    color:colors.grayishblack,
+    fontFamily: 'Montserrat-Bold',
   },
   content: {
-    fontFamily: 'sans-serif-light',
+    fontFamily: 'Montserrat-Regular',
+    color:colors.moderategray,
   },
   billView: {
     width: '100%',
@@ -149,14 +155,12 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   billLabel: {
-    fontFamily: 'sans-serif',
-    fontWeight: 'bold',
+    fontFamily: 'Montserrat-Bold',
     fontSize: 18,
     color: colors.primary,
   },
   bill: {
-    fontFamily: 'sans-serif',
-    fontWeight: 'bold',
+    fontFamily: 'Montserrat-Bold',
     fontSize: 22,
     color: colors.moderategray,
   },

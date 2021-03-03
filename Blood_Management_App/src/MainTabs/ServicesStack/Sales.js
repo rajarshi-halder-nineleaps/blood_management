@@ -15,9 +15,17 @@ import colors from '../../../constants/Colors';
 import {useSelector, useDispatch} from 'react-redux';
 import renderItem from '../../../components/SalesCard';
 import Feather from 'react-native-vector-icons/Feather';
+import {fetchSalesData} from '../../../redux/sales/actions';
 
 const Sales = () => {
   const salesState = useSelector((state) => state.salesState);
+  const authState = useSelector((state) => state.authState);
+  const dispatch = useDispatch();
+
+  // useEffect(() => {
+  //   dispatch(fetchSalesData(authState.userToken));
+  // }, []);
+
   console.log(salesState);
   return (
     <View style={styles.container}>
@@ -68,7 +76,7 @@ const styles = StyleSheet.create({
   },
   headerText: {
     color: colors.additional2,
-    fontWeight: 'bold',
+    fontFamily: 'Montserrat-Bold',
     fontSize: 18,
     alignItems: 'center',
     justifyContent: 'center',
@@ -83,7 +91,7 @@ const styles = StyleSheet.create({
   },
   headerContent: {
     color: colors.primary,
-    fontWeight: 'bold',
+    fontFamily: 'Montserrat-Regular',
     fontSize: 18,
   },
   dateTimeView: {
@@ -91,11 +99,12 @@ const styles = StyleSheet.create({
   },
   dateTimeLabel: {
     color: colors.additional2,
-    fontWeight: 'bold',
+    fontFamily: 'Montserrat-Bold',
   },
   dateTimeContent: {
     color: colors.additional2,
     fontWeight: '100',
+    fontFamily: 'Montserrat-Regular',
   },
   container: {
     flex: 1,
@@ -118,6 +127,7 @@ const styles = StyleSheet.create({
   emptyInfo: {
     color: colors.primary,
     fontSize: 10,
+    fontFamily: 'Montserrat-Regular',
   },
   touchboard: {
     flex: 1,
@@ -167,7 +177,7 @@ const styles = StyleSheet.create({
   },
   touchText: {
     color: colors.additional2,
-    fontFamily: 'sans-serif-light',
+    fontFamily: 'Montserrat-Regular',
   },
   iconView: {
     alignItems: 'center',
@@ -199,10 +209,11 @@ const styles = StyleSheet.create({
   indGroupContent: {
     color: colors.additional2,
     fontSize: 12,
+    fontFamily: 'Montserrat-Regular',
   },
   content: {
     color: colors.additional1,
-    fontFamily: 'sans-serif',
+    fontFamily: 'Montserrat-Regular',
     fontSize: 15,
   },
   statePincodeView: {

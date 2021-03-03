@@ -72,16 +72,15 @@ const ActiveDonorRequest = ({navigation}) => {
           color={colors.primary}
           size="large"
         />
-      ) : activedonorFormState.donorList === null ? (
+      ) : activedonorFormState.donorList.length === 0 ? (
         <View style={styles.suchEmpty}>
           <Image
             style={styles.suchEmptyImg}
             source={require('../../../assets/images/empty.png')}
           />
           <Text style={styles.emptyInfo}>
-            You don't have any donor requests yet!
+            You haven't made any donation requests yet!
           </Text>
-          <Text style={styles.emptyInfo}>Check back in a while!</Text>
         </View>
       ) : (
         <FlatList
@@ -143,13 +142,14 @@ const styles = StyleSheet.create({
     alignContent: 'center',
   },
   suchEmptyImg: {
-    width: Dimensions.get('window').width,
-    height: 300,
+    height: 150,
+    width: 150,
   },
   emptyInfo: {
     marginTop: 10,
     fontFamily: 'Montserrat-Regular',
-    fontSize: 16,
+    color: colors.primary,
+    fontSize: 12,
   },
 });
 

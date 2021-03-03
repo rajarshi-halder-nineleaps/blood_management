@@ -2,7 +2,7 @@
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-import { REQ, REQ_SUCCESS, REQ_FAILURE, LOGOUT } from './actionTypes';
+import {REQ, REQ_SUCCESS, REQ_FAILURE, LOGOUT} from './actionTypes';
 
 export const req = () => ({
   type: REQ,
@@ -28,12 +28,11 @@ export const logUserIn = (loginData) => {
     console.log('login works');
     try {
       const response = await axios.post(
-        'http://192.168.43.217:8080/authenticate', {
-        email: loginData.email,
-        password: loginData.password
-
-      }
-
+        'http://192.168.43.217:8080/authenticate',
+        {
+          email: loginData.email,
+          password: loginData.password,
+        },
       );
       console.log('COMPLETE RESPONSE DATA: ', response.headers);
 
@@ -103,7 +102,7 @@ export const regUserUp = (regData) => {
         };
 
         response = await axios.post(
-          'http://10.0.2.2:8080/registerind',
+          'http://192.168.43.217:8080/registerind',
           requestObject,
         );
       } else if (regData.userType === 2) {
@@ -120,7 +119,7 @@ export const regUserUp = (regData) => {
         };
 
         response = await axios.post(
-          'http://10.0.2.2:8080/registerhos',
+          'http://192.168.43.217:8080/registerhos',
           requestObject,
         );
       } else {
@@ -137,7 +136,7 @@ export const regUserUp = (regData) => {
         };
 
         response = await axios.post(
-          'http://10.0.2.2:8080/registerbb',
+          'http://192.168.43.217:8080/registerbb',
           requestObject,
         );
       }
@@ -207,7 +206,7 @@ export const tokenRetriever = () => {
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-export const logout = () => ({ type: LOGOUT });
+export const logout = () => ({type: LOGOUT});
 
 export const logUserOut = () => {
   console.log('logging out');

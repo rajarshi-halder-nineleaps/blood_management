@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
-import { View, Text, FlatList, TouchableOpacity, StyleSheet } from 'react-native';
-import { useDispatch, useSelector } from 'react-redux';
+import React, {useState, useEffect} from 'react';
+import {View, Text, FlatList, TouchableOpacity, StyleSheet} from 'react-native';
+import {useDispatch, useSelector} from 'react-redux';
 import colors from '../../../constants/Colors';
 import CheckBox from '@react-native-community/checkbox';
 import Feather from 'react-native-vector-icons/Feather';
@@ -12,8 +12,8 @@ import {
 //import BuyBloodListCard from '../../../components/BuyBloodListCard'
 import DonorRequestDetailsCard from '../../../components/DonorRequestDetailsCard';
 
-const DonationRequestList = ({ navigation, route }) => {
-  const { donationId } = route.params;
+const DonationRequestList = ({navigation, route}) => {
+  const {donationId} = route.params;
   const [selectedId, setSelectedId] = useState(null);
   const activedonorFormState = useSelector(
     (state) => state.activedonorFormState,
@@ -25,7 +25,7 @@ const DonationRequestList = ({ navigation, route }) => {
   }, [authState.userToken, dispatch, donationId]);
   //* UPDATES DEPENDENCY ARRAY.
 
-  const renderItem = ({ item }) => {
+  const renderItem = ({item}) => {
     return (
       <DonorRequestDetailsCard
         item={item}
@@ -49,12 +49,7 @@ const DonationRequestList = ({ navigation, route }) => {
           <Text style={styles.invitebutton}>Expire Drive</Text>
         </TouchableOpacity>
       </View>
-      {activedonorFormState.expired &&
-        <Text>
-          This donation has expired.
-      </Text>
-
-      }
+      {activedonorFormState.expired && <Text>This donation has expired.</Text>}
       <FlatList
         data={activedonorFormState.donorDetailsList}
         renderItem={renderItem}
@@ -89,7 +84,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingHorizontal: 30,
     paddingVertical: 10,
-    backgroundColor: colors.additional2
+    backgroundColor: colors.additional2,
   },
   headertitle: {
     fontSize: 50,

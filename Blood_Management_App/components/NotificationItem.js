@@ -56,7 +56,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     paddingVertical: 10,
-    borderWidth: 5,
   },
   seenTab: {
     backgroundColor: colors.accent,
@@ -68,7 +67,7 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
   },
   eligibilityTab: {
-    backgroundColor: colors.additional2,
+    backgroundColor: colors.moderategray,
     elevation: 5,
     marginBottom: 20,
     borderRadius: 10,

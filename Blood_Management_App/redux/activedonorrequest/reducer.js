@@ -8,22 +8,21 @@ import {
   DONOR_DETAILS_LIST_SUCCESS,
   DONOR_DETAILS_LIST_UPDATE,
   EXPIRE_FAILURE,
-  EXPIRE_SUCCESS
-} from './actionTypes'
+  EXPIRE_SUCCESS,
+} from './actionTypes';
 
 const initialState = {
   loading: false,
   donorList: [],
   donorDetailsList: [],
   error: '',
-  expired: false
+  expired: false,
 };
 
 const activedonorReducer = (state = initialState, action) => {
   switch (action.type) {
-
     case DONORLIST_REQ: {
-      return { ...state, loading: true };
+      return {...state, loading: true};
     }
     case DONORLIST_SUCCESS: {
       return {
@@ -42,17 +41,15 @@ const activedonorReducer = (state = initialState, action) => {
       };
     }
     case DONORLIST_UPDATE: {
-      const newState = { ...state, loading: false };
+      const newState = {...state, loading: false};
 
-
-      newState.donorList.find(
-        (val) => val.id === action.udata.id,
-      ).hasgiven = action.udata.hasgiven;
+      newState.donorList.find((val) => val.id === action.udata.id).hasgiven =
+        action.udata.hasgiven;
 
       return newState;
     }
     case DONOR_DETAILS_LIST_REQ: {
-      return { ...state, loading: true };
+      return {...state, loading: true};
     }
 
     case DONOR_DETAILS_LIST_SUCCESS: {
@@ -76,13 +73,13 @@ const activedonorReducer = (state = initialState, action) => {
         ...state,
         loading: false,
         error: action.error,
-        expired: true
+        expired: true,
       };
     }
     default: {
       return state;
     }
   }
-}
+};
 
-export default activedonorReducer
+export default activedonorReducer;
