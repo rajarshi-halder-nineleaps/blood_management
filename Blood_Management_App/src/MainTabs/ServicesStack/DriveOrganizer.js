@@ -66,15 +66,15 @@ const DriveOrganizer = ({ navigation }) => {
   const onChangestart = (event, selectedDate) => {
     if (selectedDate > new Date()) {
       console.log("problem")
-      const currentDate = selectedDate || date;
+      const currentDate = selectedDate || new Date();
       setstartShow(Platform.OS === 'ios');
-      dispatch(blurListener('startDate'))
       dispatch(updateFields(currentDate, 'startDate', false));
-    } else {
-      const currentDate = selectedDate || date;
-      setstartShow(Platform.OS === 'ios');
       dispatch(blurListener('startDate'))
+    } else {
+      const currentDate = selectedDate || new Date();
+      setstartShow(Platform.OS === 'ios');
       dispatch(updateFields(currentDate, 'startDate', true));
+      dispatch(blurListener('startDate'))
     }
 
   };
@@ -96,12 +96,12 @@ const DriveOrganizer = ({ navigation }) => {
     //todo date is not defined
     if (selectedDate >= driveOrganizerState.inputValues.startDate) {
       console.log("problem")
-      const currentDate = selectedDate || date;
+      const currentDate = selectedDate || new Date();
       setendShow(Platform.OS === 'ios');
       dispatch(updateFields(currentDate, 'endDate', false));
       dispatch(blurListener('endDate'))
     } else {
-      const currentDate = selectedDate || date;
+      const currentDate = selectedDate || new Date();
       setendShow(Platform.OS === 'ios');
       dispatch(updateFields(currentDate, 'endDate', true));
       dispatch(blurListener('endDate'))
@@ -179,7 +179,7 @@ const DriveOrganizer = ({ navigation }) => {
 
   const submitHandler = () => {
     console.log(driveOrganizerState.inputValidity);
-    if (driveOrganizerState.finalFormState) {
+    if (driveOrganizerState.inputValidity) {
       setRusure(true);
       console.log('starting request for new drive!');
     } else {

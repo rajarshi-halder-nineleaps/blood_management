@@ -26,8 +26,6 @@ const initialState = {
   inputValidity: {
     startDate: true,
     endDate: true,
-    startTime: true,
-    endTime: true,
     bloodgroup: false,
     address: false,
     selectedState: false,
@@ -38,8 +36,6 @@ const initialState = {
   isTouched: {
     startDate: false,
     endDate: false,
-    startTime: false,
-    endTime: false,
     bloodgroup: false,
     address: false,
     selectedState: false,

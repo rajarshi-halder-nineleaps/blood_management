@@ -11,7 +11,7 @@ import {
 } from './actionTypes';
 
 //? sets loading to true thereby showing activityIndicator
-export const driveFindReq = () => ({type: DRIVE_FIND_REQ});
+export const driveFindReq = () => ({ type: DRIVE_FIND_REQ });
 
 export const driveFindFailure = (error) => ({
   type: DRIVE_FIND_FAILURE,
@@ -40,14 +40,14 @@ export const upcomingDrivesSearch = (userToken, searchFilters) => {
     try {
       dispatch(driveFindReq());
       const response = await axios.post(
-        'http://192.168.43.217:8080/upcomingdrives/fetchdriveslist',
+        'http://10.0.2.2:8080/upcomingdrives/fetchdriveslist',
         {
           state: searchFilters.selectedState,
           district: searchFilters.selectedDistrict,
           pincode: searchFilters.pincode,
         },
         {
-          headers: {Authorization: 'Bearer ' + userToken},
+          headers: { Authorization: 'Bearer ' + userToken },
         },
       );
 
@@ -85,10 +85,10 @@ export const registerUserForDrive = (userToken, driveId) => {
       );
       dispatch(driveFindReq());
       const response = await axios.post(
-        'http://192.168.43.217:8080/upcomingdrives/registerfordrive',
-        {driveId},
+        'http://10.0.2.2:8080/upcomingdrives/registerfordrive',
+        { driveId },
         {
-          headers: {Authorization: 'Bearer ' + userToken},
+          headers: { Authorization: 'Bearer ' + userToken },
         },
       );
 

@@ -49,9 +49,9 @@ export const getDriveData = (userToken) => {
     try {
       console.log('sending axios get request!');
       const response = await axios.get(
-        'http://192.168.43.217:8080/mydrives/fetchdrives',
+        'http://10.0.2.2:8080/mydrives/fetchdrives',
         {
-          headers: {Authorization: 'Bearer ' + userToken},
+          headers: { Authorization: 'Bearer ' + userToken },
         },
       );
 
@@ -87,9 +87,9 @@ export const getDonorList = (userToken, driveId) => {
     try {
       console.log('sending axios list get request!');
       const response = await axios.get(
-        `http://192.168.43.217:8080/mydrives/fetchdrivedonorlist/${driveId}`,
+        `http://10.0.2.2:8080/mydrives/fetchdrivedonorlist/${driveId}`,
         {
-          headers: {Authorization: 'Bearer ' + userToken},
+          headers: { Authorization: 'Bearer ' + userToken },
         },
       );
 
@@ -128,13 +128,13 @@ export const donorVerification = (userToken, driveId, donorId) => {
       dispatch(fetchDrivesReq());
       console.log("posting updated data to current user's records");
       const response = await axios.put(
-        'http://192.168.43.217:8080/mydrives/drivedonorverification',
+        'http://10.0.2.2:8080/mydrives/drivedonorverification',
         {
           driveId: driveId,
           userId: donorId,
         },
         {
-          headers: {Authorization: 'Bearer ' + userToken},
+          headers: { Authorization: 'Bearer ' + userToken },
         },
       );
 
@@ -170,10 +170,10 @@ export const driveCancellation = (userToken, driveId) => {
       dispatch(fetchDrivesReq());
       console.log("posting updated data to current user's records");
       const response = await axios.put(
-        'http://192.168.43.217:8080/mydrives/canceldrive',
-        {driveId},
+        'http://10.0.2.2:8080/mydrives/canceldrive',
+        { driveId },
         {
-          headers: {Authorization: 'Bearer ' + userToken},
+          headers: { Authorization: 'Bearer ' + userToken },
         },
       );
 

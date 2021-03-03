@@ -22,11 +22,11 @@ export const blurFields = (fieldId) => ({
   fieldId: fieldId,
 });
 
-export const stateCleanup = () => ({type: STATE_CLEANUP_CHANGE});
+export const stateCleanup = () => ({ type: STATE_CLEANUP_CHANGE });
 
 /////////////////////////////////////////////////////////////////////////////////////////////////
 
-export const changeReq = () => ({type: CHANGE_REQ});
+export const changeReq = () => ({ type: CHANGE_REQ });
 
 export const changeReqFailure = (error) => ({
   type: CHANGE_REQ_FAILURE,
@@ -52,10 +52,10 @@ export const postCurrentPassword = (userToken, password) => {
 
     try {
       const response = await axios.post(
-        'http://192.168.43.217:8080/profile/verifycurrentpassword',
-        {currentPassword : password},
+        'http://10.0.2.2:8080/profile/verifycurrentpassword',
+        { currentPassword: password },
         {
-          headers: {Authorization: 'Bearer ' + userToken},
+          headers: { Authorization: 'Bearer ' + userToken },
         },
       );
       if (!response.data.success) {
@@ -85,10 +85,10 @@ export const postResetPassword = (userToken, password) => {
 
     try {
       const response = await axios.put(
-        'http://192.168.43.217:8080/profile/changepassword',
-        {newPassword : password},
+        'http://10.0.2.2:8080/profile/changepassword',
+        { newPassword: password },
         {
-          headers: {Authorization: 'Bearer ' + userToken},
+          headers: { Authorization: 'Bearer ' + userToken },
         },
       );
       if (!response.data.success) {

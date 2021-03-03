@@ -37,10 +37,10 @@ export const makeContact = (userToken, contactData) => {
       console.log('Fetching list of commitments.');
       dispatch(contactReq());
       const response = await axios.post(
-        'http://192.168.43.217:8080/contactus/addmessage',
+        'http://10.0.2.2:8080/contactus/addmessage',
         contactData,
         {
-          headers: {Authorization: 'Bearer ' + userToken},
+          headers: { Authorization: 'Bearer ' + userToken },
         },
       );
 

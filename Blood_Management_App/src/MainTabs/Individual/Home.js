@@ -105,7 +105,7 @@ const Home = ({ navigation }) => {
       <View style={styles.header}>
         <View style={{ flexDirection: 'row', alignContent: 'center' }}>
           {userType === 1 ? <Icon name="user" color={colors.peach} size={30} /> : null}
-          {userType === 2 ? <Icon name="ambulance" color={colors.whi} size={30} /> : null}
+          {userType === 2 ? <Icon name="ambulance" color={colors.peach} size={30} /> : null}
           {userType === 3 ? <Icon name="university" color={colors.peach} size={30} /> : null}
           <View style={{ flexDirection: 'column', marginLeft: 10 }}>
             <Text style={styles.name}>{profileState.userData.name}</Text>
@@ -143,6 +143,10 @@ const Home = ({ navigation }) => {
       {userType === 1 ?
         <>
           <View>
+            <Image
+              style={styles.suchEmptyImg}
+              source={require('../../../assets/compatibility.jpg')}
+            />
 
           </View>
         </>
@@ -163,6 +167,8 @@ const Home = ({ navigation }) => {
               Amount Spent : {salesState.todaysData.amountSpent}
             </Text>
           </View>
+
+
         </>
       }
     </ScrollView>
