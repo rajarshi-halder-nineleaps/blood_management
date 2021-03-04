@@ -56,7 +56,7 @@ export const checkPassword = (userToken, password) => {
         dispatch(getInventory(userToken));
       } else if (!response.data.success) {
         console.log('response is error!');
-        dispatch(invFailure('Invalid password! Please try again.'));
+        dispatch(invFailure(''));
       } else {
         console.log('outlandish error!');
         dispatch(

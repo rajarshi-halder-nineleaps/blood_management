@@ -1,23 +1,22 @@
 /* eslint-disable prettier/prettier */
 import React from 'react';
-import {View, Text, TextInput, StyleSheet} from 'react-native';
+import {View, Text, StyleSheet} from 'react-native';
+import {TextInput} from 'react-native-paper';
 import colors from '../constants/Colors';
 
 const Fields = (props) => {
   return (
     <View style={styles.outerView}>
       <View style={styles.inputView}>
-        <Text style={styles.labelText}>{props.label}</Text>
+        {/* <Text style={styles.labelText}>{props.label}</Text> */}
         <TextInput
           {...props}
-          style={
-            !props.inputIsValid && props.inputIsTouched
-              ? styles.formInputInvalid
-              : styles.formInput
-          }
-          // placeholder={props.label}
-          placeholderTextColor={colors.grayishblack}
-          onFocus={() => {}}
+          mode="outlined"
+          error={!props.inputIsValid && props.inputIsTouched}
+          selectionColor={colors.primary}
+          underlineColor={colors.grayishblack}
+          theme={{colors: {primary: colors.grayishblack}}}
+          style = {styles.formInput}
         />
       </View>
       {!props.inputIsValid && props.inputIsTouched && (
@@ -39,30 +38,33 @@ const styles = StyleSheet.create({
     paddingBottom: 3, //* REMOVE THIS IF INTERFACE GETS MESSED UP
   },
   formInput: {
-    paddingVertical: 10,
-    borderRadius: 5,
-    backgroundColor: 'transparent',
-    borderColor: colors.grayishblack,
-    borderWidth: 2,
-    fontSize: 14,
-    fontFamily: 'Montserrat-Regular',
-    paddingHorizontal: 30,
-    color: 'black',
+    backgroundColor: colors.additional2,
   },
-  formInputInvalid: {
-    paddingVertical: 10,
-    borderRadius: 5,
-    backgroundColor: 'transparent',
-    borderColor: colors.dutchred,
-    borderWidth: 2,
-    fontSize: 14,
-    fontFamily: 'Montserrat-Regular',
-    paddingHorizontal: 30,
-    color: 'black',
-  },
+  // formInput: {
+  //   paddingVertical: 10,
+  //   borderRadius: 5,
+  //   backgroundColor: 'transparent',
+  //   borderColor: colors.grayishblack,
+  //   borderWidth: 2,
+  //   fontSize: 14,
+  //   fontFamily: 'Montserrat-Regular',
+  //   paddingHorizontal: 30,
+  //   color: 'black',
+  // },
+  // formInputInvalid: {
+  //   paddingVertical: 10,
+  //   borderRadius: 5,
+  //   backgroundColor: 'transparent',
+  //   borderColor: colors.dutchred,
+  //   borderWidth: 2,
+  //   fontSize: 14,
+  //   fontFamily: 'Montserrat-Regular',
+  //   paddingHorizontal: 30,
+  //   color: 'black',
+  // },
   errorMsg: {
     color: colors.dutchred,
-    fontFamily: 'qs-reg',
+    fontFamily: 'Montserrat-Regular',
   },
 });
 

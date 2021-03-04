@@ -182,7 +182,7 @@ const DriveOrganizer = ({ navigation }) => {
   };
 
   return (
-    <ScrollView>
+    <ScrollView styke = {styles.scroll}>
       <View style={styles.container}>
         <AreYouSure
           visibleState={rusure}
@@ -373,6 +373,7 @@ const DriveOrganizer = ({ navigation }) => {
           label="Address"
           error="Invalid address!"
           multiline={true}
+          numberOfLines={3}
           returnKeyType="next"
           keyboardType="default"
           inputIsValid={driveOrganizerState.inputValidity.address}
@@ -386,6 +387,7 @@ const DriveOrganizer = ({ navigation }) => {
         <Fields
           label="Message (Optional)"
           multiline={true}
+          numberOfLines={3}
           returnKeyType="next"
           keyboardType="default"
           inputIsValid={driveOrganizerState.inputValidity.message}
@@ -410,6 +412,9 @@ const screenWidth = Dimensions.get('window').width;
 const screenHeight = Dimensions.get('window').height;
 
 const styles = StyleSheet.create({
+  scroll:{
+    backgroundColor: colors.additional2,
+  },
   selectedView: {
     marginTop: 10,
     backgroundColor: colors.primary,
@@ -437,12 +442,13 @@ const styles = StyleSheet.create({
     flex: 1,
     borderRadius: 5,
     backgroundColor: 'transparent',
-    borderColor: colors.grayishblack,
+    borderColor: colors.accent,
     borderWidth: 2,
     fontSize: 14,
     fontFamily: 'Montserrat-Regular',
     paddingHorizontal: 10,
     color: 'black',
+
   },
   box: {
     height: 100,
@@ -463,6 +469,7 @@ const styles = StyleSheet.create({
   container: {
     paddingVertical: 10,
     paddingHorizontal: 30,
+    backgroundColor: colors.additional2,
   },
   errorMsg: {
     color: colors.primary,

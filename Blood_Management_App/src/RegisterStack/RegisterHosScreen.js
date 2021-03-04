@@ -241,7 +241,7 @@ const RegisterHosScreen = ({navigation}) => {
                 blurListener('address');
               }}
             />
-            <Text style={styles.pickerLabel}>State*</Text>
+            {/* <Text style={styles.pickerLabel}>State*</Text> */}
 
             <View
               style={
@@ -275,7 +275,7 @@ const RegisterHosScreen = ({navigation}) => {
                 <Text style={styles.errorMsg}>Please select your state</Text>
               )}
 
-            <Text style={styles.pickerLabel}>District*</Text>
+            {/* <Text style={styles.pickerLabel}>District*</Text> */}
 
             <View
               style={
@@ -446,13 +446,14 @@ const styles = StyleSheet.create({
   pickerView: {
     borderRadius: 5,
     backgroundColor: 'transparent',
-    borderColor: colors.grayishblack,
+    borderColor: colors.accent,
     borderWidth: 2,
     fontSize: 14,
     fontFamily: 'Montserrat-Regular',
-    paddingHorizontal: 30,
+    paddingHorizontal: 10,
     color: 'black',
     marginBottom: 10,
+    marginTop: 10,
   },
   pickerViewInvalid: {
     borderRadius: 5,

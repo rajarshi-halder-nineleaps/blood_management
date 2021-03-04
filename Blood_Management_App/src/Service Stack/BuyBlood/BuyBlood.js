@@ -141,7 +141,7 @@ const FindDonors = ({navigation}) => {
       </View>
 
       <View style={{marginHorizontal: 30}}>
-        <Text style={styles.pickerLabel}>*Blood group</Text>
+        {/* <Text style={styles.pickerLabel}>*Blood group</Text> */}
         <View style={styles.pickerView}>
           <Picker
             style={styles.picker}
@@ -165,7 +165,7 @@ const FindDonors = ({navigation}) => {
           </Picker>
         </View>
 
-        <Text style={styles.pickerLabel}>*Component</Text>
+        {/* <Text style={styles.pickerLabel}>*Component</Text> */}
         <View style={styles.pickerView}>
           <Picker
             style={styles.picker}
@@ -218,7 +218,7 @@ const FindDonors = ({navigation}) => {
           <Text style={styles.filterInfoText}>Optional Filters</Text>
         </View>
 
-        <Text style={styles.pickerLabel}>State</Text>
+        {/* <Text style={styles.pickerLabel}>State</Text> */}
         <View style={styles.pickerView}>
           <Picker
             style={styles.picker}
@@ -240,7 +240,7 @@ const FindDonors = ({navigation}) => {
             <Text style={styles.errorMsg}>Please select your state</Text>
           )}
 
-        <Text style={styles.pickerLabel}>District</Text>
+        {/* <Text style={styles.pickerLabel}>District</Text> */}
         <View style={styles.pickerView}>
           <Picker
             enabled={distEnb}
@@ -345,12 +345,14 @@ const styles = StyleSheet.create({
   pickerView: {
     borderRadius: 5,
     backgroundColor: 'transparent',
-    borderColor: colors.grayishblack,
+    borderColor: colors.accent,
     borderWidth: 2,
     fontSize: 14,
     fontFamily: 'Montserrat-Regular',
-    paddingHorizontal: 30,
+    paddingHorizontal: 10,
     color: 'black',
+    marginTop: 10,
+    marginBottom: 10,
   },
   picker: {
     color: colors.grayishblack,
@@ -392,6 +394,7 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     paddingVertical: 10,
     marginRight: 10,
+    marginBottom: 20,
   },
   filterInfoText: {
     fontFamily: 'Montserrat-Regular',

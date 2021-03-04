@@ -98,6 +98,7 @@ const Enterotp = ({navigation}) => {
                   dispatch(blurFields('otp'));
                 }}
               />
+
               {
                 //TODO REMOVE IF ABOVE FIELD WORKS OUT WELL
               }

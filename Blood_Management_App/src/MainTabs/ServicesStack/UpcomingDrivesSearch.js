@@ -113,7 +113,7 @@ const UpcomingDrivesSearch = ({navigation}) => {
             />
             <Text style={styles.searchInfoText}>All fields are optional</Text>
           </View>
-          <Text style={styles.pickerLabel}>State</Text>
+          {/* <Text style={styles.pickerLabel}>State</Text> */}
           <View style={styles.pickerView}>
             <Picker
               style={styles.picker}
@@ -135,7 +135,7 @@ const UpcomingDrivesSearch = ({navigation}) => {
               <Text style={styles.errorMsg}>Please select a state</Text>
             )}
 
-          <Text style={styles.pickerLabel}>District</Text>
+          {/* <Text style={styles.pickerLabel}>District</Text> */}
           <View style={styles.pickerView}>
             <Picker
               enabled={distEnb}
@@ -208,12 +208,14 @@ const styles = StyleSheet.create({
   pickerView: {
     borderRadius: 5,
     backgroundColor: 'transparent',
-    borderColor: colors.grayishblack,
+    borderColor: colors.accent,
     borderWidth: 2,
     fontSize: 14,
     fontFamily: 'Montserrat-Regular',
-    paddingHorizontal: 30,
+    paddingHorizontal: 10,
     color: 'black',
+    marginBottom: 10,
+    marginTop: 10,
   },
   picker: {
     color: colors.grayishblack,
