@@ -34,6 +34,7 @@ import colors from '../../constants/Colors';
 import * as places from '../../assets/places.json';
 import CheckBox from '@react-native-community/checkbox';
 import Feather from 'react-native-vector-icons/Feather';
+import { Colors } from 'react-native/Libraries/NewAppScreen';
 
 const RegisterHosScreen = ({navigation}) => {
   const [selectedStateindex, setselectedStateindex] = useState(0);
@@ -251,6 +252,7 @@ const RegisterHosScreen = ({navigation}) => {
               }>
               <Picker
                 selectedValue={regFormState.inputValues.selectedState}
+                itemStyle={{fontSize: 100}}
                 onValueChange={(val, itemIndex) => {
                   blurListener('selectedState');
                   checkValidity(val, 'selectedState');
@@ -258,7 +260,12 @@ const RegisterHosScreen = ({navigation}) => {
                   setselectedStateindex(itemIndex);
                 }}>
                 {word.map((item, id) => (
-                  <Picker.Item label={item.state} value={item.state} key={id} />
+                  <Picker.Item
+                    label={item.state}
+                    value={item.state}
+                    color={colors.grayishblack}
+                    key={id}
+                  />
                 ))}
               </Picker>
             </View>

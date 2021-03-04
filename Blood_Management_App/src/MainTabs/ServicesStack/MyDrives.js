@@ -2,18 +2,16 @@
 import React, {useState, useEffect} from 'react';
 import {
   View,
-  ScrollView,
   FlatList,
   Text,
   Image,
   StyleSheet,
-  ImageBackground,
   TouchableOpacity,
-  ActivityIndicator,
   RefreshControl,
 } from 'react-native';
 import {useSelector, useDispatch} from 'react-redux';
 import colors from '../../../constants/Colors';
+import {SkypeIndicator} from 'react-native-indicators';
 import Feather from 'react-native-vector-icons/Feather';
 import {
   Collapse,
@@ -72,7 +70,11 @@ const MyDrives = ({navigation}) => {
               <Text style={styles.miniAddressContent}>
                 From: {'  '}
                 <Text style={styles.miniDateTimeContent}>
-                {item.startTimestamp ? `${item.startTimestamp.split('T')[0]}, ${item.startTimestamp.split('T')[1].split(':')[0]}:${item.startTimestamp.split('T')[1].split(':')[1]}` : null}
+                  {item.startTimestamp
+                    ? `${item.startTimestamp.split('T')[0]}, ${
+                        item.startTimestamp.split('T')[1].split(':')[0]
+                      }:${item.startTimestamp.split('T')[1].split(':')[1]}`
+                    : null}
                 </Text>
               </Text>
             </View>
@@ -80,7 +82,11 @@ const MyDrives = ({navigation}) => {
               <Text style={styles.miniAddressContent}>
                 To: {'  '}
                 <Text style={styles.miniDateTimeContent}>
-                {item.endTimestamp ? `${item.endTimestamp.split('T')[0]}, ${item.endTimestamp.split('T')[1].split(':')[0]}:${item.endTimestamp.split('T')[1].split(':')[1]}` : null}
+                  {item.endTimestamp
+                    ? `${item.endTimestamp.split('T')[0]}, ${
+                        item.endTimestamp.split('T')[1].split(':')[0]
+                      }:${item.endTimestamp.split('T')[1].split(':')[1]}`
+                    : null}
                 </Text>
               </Text>
             </View>
@@ -93,7 +99,8 @@ const MyDrives = ({navigation}) => {
                 console.log('navigating to the list of accepted donors screen');
                 dispatch(getDonorList(authState.userToken, item.driveId));
                 navigation.navigate('driveDonorList', {
-                  driveId: item.driveId, driveStatus: item.status,
+                  driveId: item.driveId,
+                  driveStatus: item.status,
                 });
               }}>
               <View style={styles.touchContainerView}>
@@ -131,10 +138,16 @@ const MyDrives = ({navigation}) => {
                     </View>
                   </View>
                   <View style={styles.addressInsideView}>
-                    <Text style={styles.addressInsideLabel}>Organized on: </Text>
+                    <Text style={styles.addressInsideLabel}>
+                      Organized on:{' '}
+                    </Text>
                     <View style={styles.addressRightView}>
                       <Text style={styles.addressContent}>
-                      {item.organizeDate ? `${item.organizeDate.split('T')[0]}, ${item.organizeDate.split('T')[1].split(':')[0]}:${item.organizeDate.split('T')[1].split(':')[1]}` : null}
+                        {item.organizeDate
+                          ? `${item.organizeDate.split('T')[0]}, ${
+                              item.organizeDate.split('T')[1].split(':')[0]
+                            }:${item.organizeDate.split('T')[1].split(':')[1]}`
+                          : null}
                       </Text>
                     </View>
                   </View>
@@ -156,26 +169,26 @@ const MyDrives = ({navigation}) => {
               {new Date(item.startDate).getTime() <=
               new Date().getTime() ? null : (
                 <View style={styles.cancelDriveView}>
-                  {item.status ? (<TouchableOpacity
-                    style={styles.cancelDriveTouch}
-                    onPress={() => {
-                      setCancelId(item.driveId);
-                      setRusure(true);
-                    }}>
-                    <Text style={styles.cancelDriveText}>
-                      Cancel This drive
-                    </Text>
-                  </TouchableOpacity>) : (
+                  {item.status ? (
+                    <TouchableOpacity
+                      style={styles.cancelDriveTouch}
+                      onPress={() => {
+                        setCancelId(item.driveId);
+                        setRusure(true);
+                      }}>
+                      <Text style={styles.cancelDriveText}>
+                        Cancel This drive
+                      </Text>
+                    </TouchableOpacity>
+                  ) : (
                     <View
-                    style={styles.cancelledDriveMockTouch}
-                    onPress={() => {
-                      setCancelId(item.driveId);
-                      setRusure(true);
-                    }}>
-                    <Text style={styles.cancelDriveText}>
-                      CANCELLED
-                    </Text>
-                  </View>
+                      style={styles.cancelledDriveMockTouch}
+                      onPress={() => {
+                        setCancelId(item.driveId);
+                        setRusure(true);
+                      }}>
+                      <Text style={styles.cancelDriveText}>CANCELLED</Text>
+                    </View>
                   )}
                 </View>
               )}
@@ -189,14 +202,7 @@ const MyDrives = ({navigation}) => {
   return (
     <View style={styles.container}>
       {myDrivesState.loading ? (
-        <ActivityIndicator
-          visible={myDrivesState.loading}
-          textContent={'Loading...'}
-          textStyle={styles.spinnerTextStyle}
-          animating={true}
-          color={colors.primary}
-          size="large"
-        />
+        <SkypeIndicator color={colors.primary} />
       ) : myDrivesState.myDrivesData.length === 0 ? (
         <View style={styles.suchEmpty}>
           <Image
@@ -446,7 +452,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     marginBottom: 10,
   },
-  cancelledDriveMockTouch:{
+  cancelledDriveMockTouch: {
     backgroundColor: colors.accent,
     padding: 10,
     borderRadius: 5,

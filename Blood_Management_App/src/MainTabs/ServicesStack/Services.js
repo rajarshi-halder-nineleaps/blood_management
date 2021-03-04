@@ -53,7 +53,7 @@ const Services = ({navigation}) => {
   };
 
   const salesHandler = () => {
-    dispatch(fetchSalesData(authState.userToken));
+    // dispatch(fetchSalesData(authState.userToken));
     navigation.navigate('sales');
   };
 

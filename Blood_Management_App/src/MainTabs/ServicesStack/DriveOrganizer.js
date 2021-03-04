@@ -3,24 +3,17 @@ import React, { useState, useEffect } from 'react';
 import {
   View,
   ScrollView,
-  FlatList,
   Text,
-  Image,
   StyleSheet,
   Platform,
   TouchableOpacity,
-  TouchableHighlight,
-  ActivityIndicator,
-  Modal,
   Alert,
-  Button,
   Dimensions,
 } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
 import * as places from '../../../assets/places.json';
 import colors from '../../../constants/Colors';
 import Feather from 'react-native-vector-icons/Feather';
-import Input from '../../../components/Input';
 import AreYouSure from '../../../components/AreYouSure';
 import { pincodeRegex } from '../../../constants/Regexes';
 import { Picker } from '@react-native-picker/picker';

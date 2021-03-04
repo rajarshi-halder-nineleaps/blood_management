@@ -7,9 +7,9 @@ import {
   StyleSheet,
   ScrollView,
   ImageBackground,
-  ActivityIndicator,
   Image,
 } from 'react-native';
+import {SkypeIndicator} from 'react-native-indicators';
 import {logUserOut} from '../../../redux/auth/actions';
 import {useSelector, useDispatch} from 'react-redux';
 import colors from '../../../constants/Colors';
@@ -32,14 +32,7 @@ const UserInfo = ({navigation}) => {
     <>
       {profileState.loading ? (
         <View style={styles.progressBoard}>
-          <ActivityIndicator
-            visible={profileState.loading}
-            textContent={'Loading...'}
-            textStyle={styles.spinnerTextStyle}
-            animating={true}
-            color={colors.primary}
-            size="large"
-          />
+          <SkypeIndicator color={colors.primary} />
         </View>
       ) : (
         <ScrollView style={styles.scroll}>
@@ -265,21 +258,21 @@ const UserInfo = ({navigation}) => {
                           <View style={styles.addressRightView}>
                             {/* <Text style={styles.addressContent}>{profileState.profileData.phone}</Text> */}
                             {
-                            //TODO THERE IS SOME ERROR HERE, CHECK IT OUT.
-                            profileState.profileData.phone.length > 0
-                              ? profileState.profileData.phone.map(
-                                  (val, idx) => (
-                                    <View
-                                      key={idx}
-                                      style={styles.addressRightView}>
-                                      <Text style={styles.addressContent}>
-                                        {val}
-                                      </Text>
-                                    </View>
-                                  ),
-                                )
-                              : null
-                          }
+                              //TODO THERE IS SOME ERROR HERE, CHECK IT OUT.
+                              profileState.profileData.phone.length > 0
+                                ? profileState.profileData.phone.map(
+                                    (val, idx) => (
+                                      <View
+                                        key={idx}
+                                        style={styles.addressRightView}>
+                                        <Text style={styles.addressContent}>
+                                          {val}
+                                        </Text>
+                                      </View>
+                                    ),
+                                  )
+                                : null
+                            }
                           </View>
                           {console.log(profileState.profileData.phone)}
                         </View>

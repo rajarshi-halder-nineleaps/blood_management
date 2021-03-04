@@ -7,9 +7,9 @@ import {
   StyleSheet,
   ScrollView,
   Alert,
-  ActivityIndicator,
   TouchableOpacity,
 } from 'react-native';
+import {SkypeIndicator} from 'react-native-indicators';
 import Fields from '../../components/Fields';
 import {TextInput} from 'react-native-gesture-handler';
 import colors from '../../constants/Colors';
@@ -75,14 +75,7 @@ const Resetpassword = ({navigation}) => {
     <SafeAreaView style={styles.container}>
       {forgotState.loading ? (
         <View style={styles.progressBoard}>
-          <ActivityIndicator
-            visible={forgotState.loading}
-            textContent={'Loading...'}
-            textStyle={styles.spinnerTextStyle}
-            animating={true}
-            color={colors.primary}
-            size="large"
-          />
+          <SkypeIndicator color={colors.primary} />
         </View>
       ) : (
         <ScrollView>

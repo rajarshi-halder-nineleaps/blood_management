@@ -8,7 +8,6 @@ import {
   ScrollView,
   ImageBackground,
   Image,
-  ActivityIndicator,
 } from 'react-native';
 import {useFocusEffect} from '@react-navigation/native';
 import {logUserOut} from '../../../redux/auth/actions';
@@ -37,7 +36,7 @@ const Profile = ({navigation}) => {
       console.log('PROFILE RENDERED!');
     }, []),
   );
-
+  //! FILLING DEPENDENCY ARRAY HERE WILL THROW 401 AT LOGOUT.
   console.log(profileState.userData.name);
 
   return (

@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import React, {useState, useEffect} from 'react';
+import React, {useState} from 'react';
 import {
   View,
   Text,
@@ -7,8 +7,6 @@ import {
   StyleSheet,
   ScrollView,
   Image,
-  TextInput,
-  Alert,
   ImageBackground,
 } from 'react-native';
 import colors from '../../constants/Colors';

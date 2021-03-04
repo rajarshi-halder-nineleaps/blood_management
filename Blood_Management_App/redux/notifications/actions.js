@@ -24,18 +24,15 @@ export const fetchNotifications = (userToken) => {
     try {
       console.log('Fetching list of notifications.');
       dispatch(notificationReq());
-      const response = await axios.get(
-        'http://10.0.2.2:8080/notifications',
-        {
-          headers: { Authorization: 'Bearer ' + userToken },
-        },
-      );
+      const response = await axios.get('http://10.0.2.2:8080/notifications', {
+        headers: {Authorization: 'Bearer ' + userToken},
+      });
 
       if (response.headers.success) {
         console.log('response is success!');
         // console.log('RESPONSE DATA: ' + response.data[0].district);
         console.log(response.data);
-        dispatch(notificationSuccess(response.data));
+        dispatch(notificationSuccess(response.data.reverse()));
       } else if (response.headers.error) {
         console.log('response is error!');
         dispatch(notificationFailure(response.headers.error));
@@ -61,9 +58,9 @@ export const setDonationEligibilityNotification = (userToken, eligibility) => {
       dispatch(notificationReq());
       const response = await axios.post(
         'http://10.0.2.2:8080/setdonornotification',
-        { eligibility },
+        {eligibility},
         {
-          headers: { Authorization: 'Bearer ' + userToken },
+          headers: {Authorization: 'Bearer ' + userToken},
         },
       );
 

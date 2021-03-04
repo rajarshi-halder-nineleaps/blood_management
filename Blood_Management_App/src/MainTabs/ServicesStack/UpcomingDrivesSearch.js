@@ -7,12 +7,9 @@ import {
   Image,
   TouchableOpacity,
   ImageBackground,
-  FlatList,
   Alert,
-  ActivityIndicator,
-  KeyboardAvoidingView,
 } from 'react-native';
-import React, {useState, useEffect} from 'react';
+import React, {useState} from 'react';
 import {useSelector, useDispatch} from 'react-redux';
 import {Picker} from '@react-native-picker/picker';
 import Fields from '../../../components/Fields';

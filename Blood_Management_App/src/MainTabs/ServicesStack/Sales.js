@@ -2,17 +2,15 @@
 import React, {useEffect} from 'react';
 import {
   View,
-  ScrollView,
   FlatList,
   Text,
   Image,
-  ImageBackground,
   StyleSheet,
-  TouchableOpacity,
   ActivityIndicator,
 } from 'react-native';
 import colors from '../../../constants/Colors';
 import {useSelector, useDispatch} from 'react-redux';
+import {SkypeIndicator} from 'react-native-indicators';
 import renderItem from '../../../components/SalesCard';
 import Feather from 'react-native-vector-icons/Feather';
 import {fetchSalesData} from '../../../redux/sales/actions';
@@ -22,22 +20,17 @@ const Sales = () => {
   const authState = useSelector((state) => state.authState);
   const dispatch = useDispatch();
 
-  // useEffect(() => {
-  //   dispatch(fetchSalesData(authState.userToken));
-  // }, []);
+  useEffect(() => {
+    dispatch(fetchSalesData(authState.userToken));
+  }, [authState.userToken, dispatch]);
 
   console.log(salesState);
   return (
     <View style={styles.container}>
       {salesState.loading ? (
-        <ActivityIndicator
-          visible={salesState.loading}
-          textContent={'Loading...'}
-          textStyle={styles.spinnerTextStyle}
-          animating={true}
-          color={colors.primary}
-          size="large"
-        />
+        <View style={styles.progressBoard}>
+          <SkypeIndicator color={colors.primary} />
+        </View>
       ) : salesState.salesData.length === 0 ? (
         <View style={styles.suchEmpty}>
           <Image
@@ -66,6 +59,11 @@ const styles = StyleSheet.create({
     paddingBottom: 30,
     width: '100%',
     height: '100%',
+  },
+  progressBoard: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   header: {
     paddingTop: 50,
