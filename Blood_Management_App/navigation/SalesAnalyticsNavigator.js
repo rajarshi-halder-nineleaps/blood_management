@@ -1,31 +1,47 @@
+/* eslint-disable prettier/prettier */
+import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import React from 'react';
-import {createStackNavigator} from '@react-navigation/stack';
-import SalesAnalytics from '../src/MainTabs/ServicesStack/SalesAnalytics';
 import colors from '../constants/Colors';
-import SearchByMonth from '../src/AnalyticsStack/SearchByMonth';
-const salesAnalyticsTab = createStackNavigator();
+import Feather from 'react-native-vector-icons/Feather';
+import { Text } from 'react-native';
 
-const salesAnalyticsNavigator = ({navigation}) => {
+//? screnn imports:
+
+import Sales from '../src/MainTabs/ServicesStack/Sales';
+import SalesAnalytics from '../src/MainTabs/ServicesStack/SalesAnalytics';
+import Revenue from '../src/AnalyticsStack/Revenue';
+import Stock from '../src/AnalyticsStack/Stock';
+//import salesAnalyticsNavigator from './SalesAnalyticsNavigator'
+const SalesTabs = createMaterialTopTabNavigator();
+
+
+const SalesAnalyticsNavigator = ({ navigation }) => {
   return (
-    <salesAnalyticsTab.Navigator>
-      <salesAnalyticsTab.Screen
-        name="salesAnalytics"
-        component={SalesAnalytics}
+    <SalesTabs.Navigator initialRouteName="Revenue">
+      <SalesTabs.Screen
+        name="Revenue"
+        component={Revenue}
         options={{
-          headerTitle: 'Sales Analytics',
-          headerShown: false,
+          tabBarLabel: () => (
+            <Text style={{ fontFamily: 'Montserrat-Regular' }}>Revenue</Text>
+          ),
+        }}
+      />
+      <SalesTabs.Screen
+        name="Stock"
+        component={Stock}
+        options={{
+          tabBarLabel: () => (
+            <Text style={{ fontFamily: 'Montserrat-Regular' }}>
+              Stock
+            </Text>
+          ),
         }}
       />
 
-      <salesAnalyticsTab.Screen
-        name="searchByMonth"
-        component={SearchByMonth}
-        options={{
-          headerShown: false,
-        }}
-      />
-    </salesAnalyticsTab.Navigator>
+    </SalesTabs.Navigator>
   );
 };
 
-export default salesAnalyticsNavigator;
+
+export default SalesAnalyticsNavigator;

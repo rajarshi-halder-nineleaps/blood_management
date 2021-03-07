@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Text,
   StyleSheet,
@@ -8,7 +8,7 @@ import {
   Dimensions,
   ScrollView,
 } from 'react-native';
-import {useDispatch, useSelector} from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import colors from '../../../constants/Colors';
 import font from '../../../';
 import {
@@ -17,8 +17,8 @@ import {
   updateMonth,
   updateYear,
 } from '../../../redux/sales/actions';
-import {Picker} from '@react-native-picker/picker';
-import {TouchableOpacity} from 'react-native-gesture-handler';
+import { Picker } from '@react-native-picker/picker';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 import * as figures from '../../../assets/salesanalytics.json';
 
 import {
@@ -30,7 +30,7 @@ import {
 import Feather from 'react-native-vector-icons/Feather';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
-const SalesAnalytics = ({navigation}) => {
+const SalesAnalytics = ({ navigation }) => {
   const authState = useSelector((state) => state.authState);
   const salesState = useSelector((state) => state.salesState);
   const dispatch = useDispatch();
@@ -57,7 +57,7 @@ const SalesAnalytics = ({navigation}) => {
       }
     } else {
       Alert.alert('Select month', 'Please select monthto continue', [
-        {text: 'Okay'},
+        { text: 'Okay' },
       ]);
     }
   };
@@ -212,8 +212,8 @@ const SalesAnalytics = ({navigation}) => {
             )}
           </View>
         </View>
-      </View>{' '}
-      */}
+      </View>
+
     </ScrollView>
   );
 };

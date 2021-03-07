@@ -63,18 +63,30 @@ const DriveOrganizer = ({ navigation }) => {
   const [endshow, setendShow] = useState(false);
 
   const onChangestart = (event, selectedDate) => {
-    if (selectedDate > new Date()) {
-      console.log("problem")
-      const currentDate = selectedDate || new Date();
-      setstartShow(Platform.OS === 'ios');
-      dispatch(updateFields(currentDate, 'startDate', false));
-      dispatch(blurListener('startDate'))
-    } else {
-      const currentDate = selectedDate || new Date();
-      setstartShow(Platform.OS === 'ios');
-      dispatch(updateFields(currentDate, 'startDate', true));
-      dispatch(blurListener('startDate'))
-    }
+    const currentDate = selectedDate || new Date();
+    setstartShow(Platform.OS === 'ios');
+    checkValidity(currentDate, 'startDate');
+    dispatch(blurListener('startDate'));
+    //dispatch(blurListener('endDate'));
+  };
+
+  const onChangeend = (event, selectedDate) => {
+    const currentDate = selectedDate || new Date();
+    setendShow(Platform.OS === 'ios');
+    checkValidity(currentDate, 'endDate');
+    dispatch(blurListener('endDate'));
+    // if (selectedDate >= driveOrganizerState.inputValues.startDate) {
+    //   console.log("problem")
+    //   const currentDate = selectedDate || new Date();
+    //   setendShow(Platform.OS === 'ios');
+    //   checkValidity(currentDate, 'startDate')
+    //   dispatch(blurListener('endDate'));
+    // } else {
+    //   const currentDate = selectedDate || new Date();
+    //   setendShow(Platform.OS === 'ios');
+    //   dispatch(updateFields(currentDate, 'endDate', true));
+    //   dispatch(blurListener('endDate'));
+    // }
   };
 
   const showstartMode = (currentMode) => {
@@ -90,20 +102,7 @@ const DriveOrganizer = ({ navigation }) => {
     showstartMode('time');
   };
 
-  const onChangeend = (event, selectedDate) => {
-    if (selectedDate >= driveOrganizerState.inputValues.startDate) {
-      console.log("problem")
-      const currentDate = selectedDate || new Date();
-      setendShow(Platform.OS === 'ios');
-      dispatch(updateFields(currentDate, 'endDate', false));
-      dispatch(blurListener('endDate'));
-    } else {
-      const currentDate = selectedDate || new Date();
-      setendShow(Platform.OS === 'ios');
-      dispatch(updateFields(currentDate, 'endDate', true));
-      dispatch(blurListener('endDate'));
-    }
-  };
+
 
   const showendMode = (currentMode) => {
     setendShow(true);
@@ -164,10 +163,10 @@ const DriveOrganizer = ({ navigation }) => {
       isValid = false;
     }
 
-    if (fieldId === 'startdate') {
+    if (fieldId === 'startDate' && val < new Date()) {
       isValid = false;
     }
-    if (fieldId === 'starttime') {
+    if (fieldId === 'endDate' && val < driveOrganizerState.inputValues.startDate) {
       isValid = false;
     }
 
@@ -175,8 +174,8 @@ const DriveOrganizer = ({ navigation }) => {
   };
 
   const submitHandler = () => {
-    console.log(driveOrganizerState.inputValidity);
-    if (driveOrganizerState.inputValidity) {
+    console.log(driveOrganizerState.finalFormState);
+    if (driveOrganizerState.finalFormState) {
       setRusure(true);
       console.log('starting request for new drive!');
     } else {
@@ -250,7 +249,7 @@ const DriveOrganizer = ({ navigation }) => {
                 <Text style={styles.datepickerttextoutput}>
                   {driveOrganizerState.inputValues.startDate.toDateString()}
                 </Text>
-                {driveOrganizerState.inputValidity.startDate &&
+                {!driveOrganizerState.inputValidity.startDate &&
                   driveOrganizerState.isTouched.startDate && (
                     <Text style={styles.errorMsg}>
                       Date should be greater than today
@@ -278,7 +277,7 @@ const DriveOrganizer = ({ navigation }) => {
                 <Text style={styles.datepickerttextoutput}>
                   {driveOrganizerState.inputValues.endDate.toDateString()}
                 </Text>
-                {driveOrganizerState.inputValidity.endDate &&
+                {!driveOrganizerState.inputValidity.endDate &&
                   driveOrganizerState.isTouched.endDate && (
                     <Text style={styles.errorMsg}>Invalid End Date</Text>
                   )}

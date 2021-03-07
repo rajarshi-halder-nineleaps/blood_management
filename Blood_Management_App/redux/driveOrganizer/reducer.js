@@ -24,8 +24,8 @@ const initialState = {
     message: '',
   },
   inputValidity: {
-    startDate: true,
-    endDate: true,
+    startDate: false,
+    endDate: false,
     bloodgroup: false,
     address: false,
     selectedState: false,

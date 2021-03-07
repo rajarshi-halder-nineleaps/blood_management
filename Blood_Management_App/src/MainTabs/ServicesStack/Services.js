@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   View,
   ScrollView,
@@ -8,17 +8,17 @@ import {
   ImageBackground,
 } from 'react-native';
 import PasswordModal from '../../../components/PasswordModal';
-import {useSelector, useDispatch} from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import TouchTabs from '../../../components/TouchTabs';
 import colors from '../../../constants/Colors';
-import {getDriveData, resetDoneState} from '../../../redux/myDrives/actions';
-import {fetchCommitments} from '../../../redux/commitments/actions';
-import {getInventory, checkPassword} from '../../../redux/inventory/actions';
-import {fetchSalesData} from '../../../redux/sales/actions';
-import {fetchPurchasesData} from '../../../redux/purchases/actions';
-import {fetchInvitesList} from '../../../redux/invites/actions';
+import { getDriveData, resetDoneState } from '../../../redux/myDrives/actions';
+import { fetchCommitments } from '../../../redux/commitments/actions';
+import { getInventory, checkPassword } from '../../../redux/inventory/actions';
+import { fetchSalesData, getCurrentMonthAnalytics, getMonthlyBreakout } from '../../../redux/sales/actions';
+import { fetchPurchasesData } from '../../../redux/purchases/actions';
+import { fetchInvitesList } from '../../../redux/invites/actions';
 
-const Services = ({navigation}) => {
+const Services = ({ navigation }) => {
   const authState = useSelector((state) => state.authState);
   const dispatch = useDispatch();
 
@@ -56,6 +56,14 @@ const Services = ({navigation}) => {
     dispatch(fetchSalesData(authState.userToken));
     navigation.navigate('sales');
   };
+  var year = new Date().getFullYear();
+  var mon = new Date().getMonth;
+  const salesAnalyticsHandler = () => {
+    console.log(year)
+    dispatch(getCurrentMonthAnalytics(year, authState.userToken));
+    dispatch(getMonthlyBreakout(year, mon, authState.userToken))
+    navigation.navigate('salesAnalytics');
+  }
 
   const purchasesHandler = () => {
     dispatch(fetchPurchasesData(authState.userToken));
@@ -128,32 +136,39 @@ const Services = ({navigation}) => {
             />
           </>
         ) : (
+            <>
+              <TouchTabs
+                label="Organize a Drive"
+                source={require('../../../assets/images/servicesScreen/drives2.png')}
+                touchHandler={() => navigation.navigate('driveOrganizer')}
+              />
+              <View style={styles.row}>
+                <TouchTabs
+                  label="My Donation Drives"
+                  source={require('../../../assets/images/servicesScreen/drives.png')}
+                  touchHandler={() => myDrivesHandler()}
+                />
+                <TouchTabs
+                  label="My Inventory"
+                  source={require('../../../assets/images/servicesScreen/inventory.png')}
+                  touchHandler={() => inventoryHandler()}
+                />
+              </View>
+            </>
+          )}
+        {userType === 3 ? (
           <>
             <TouchTabs
-              label="Organize a Drive"
-              source={require('../../../assets/images/servicesScreen/drives2.png')}
-              touchHandler={() => navigation.navigate('driveOrganizer')}
+              label="My Sales"
+              source={require('../../../assets/images/servicesScreen/sales.png')}
+              touchHandler={() => salesHandler()}
             />
-            <View style={styles.row}>
-              <TouchTabs
-                label="My Donation Drives"
-                source={require('../../../assets/images/servicesScreen/drives.png')}
-                touchHandler={() => myDrivesHandler()}
-              />
-              <TouchTabs
-                label="My Inventory"
-                source={require('../../../assets/images/servicesScreen/inventory.png')}
-                touchHandler={() => inventoryHandler()}
-              />
-            </View>
+            <TouchTabs
+              label="Sales Analytics"
+              source={require('../../../assets/images/servicesScreen/sales.png')}
+              touchHandler={() => salesAnalyticsHandler()}
+            />
           </>
-        )}
-        {userType === 3 ? (
-          <TouchTabs
-            label="My Sales"
-            source={require('../../../assets/images/servicesScreen/sales.png')}
-            touchHandler={() => salesHandler()}
-          />
         ) : null}
       </ScrollView>
     </View>

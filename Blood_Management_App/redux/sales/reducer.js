@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import { SALES_REQ, SALES_SUCCESS, SALES_FAILURE, UPDATE_YEAR, UPDATE_MONTH, GET_CURRENT_MONTH, GET_THIS_MONTH, SET_TODAY } from './actionTypes';
+import { SALES_REQ, SALES_SUCCESS, SALES_FAILURE, UPDATE_YEAR, UPDATE_MONTH, GET_CURRENT_MONTH, GET_THIS_MONTH, SET_TODAY, GET_REQUESTED_BREAKOUT, STOCK_INFO } from './actionTypes';
 
 const initialState = {
   loading: false,
@@ -15,6 +15,8 @@ const initialState = {
   thisMonthSuccess: false,
   todaysData: {},
   todayLoading: false,
+  breakoutData: [],
+  stockinfo: []
 
 };
 
@@ -61,7 +63,7 @@ const salesReducer = (state = initialState, action) => {
       return {
         ...state,
         currentMonthData: action.array,
-        currentMonthSuccess: true
+        currentMonthSuccess: true,
         //currentMonthAnalyticsArray: action.array.data
       }
     }
@@ -78,6 +80,18 @@ const salesReducer = (state = initialState, action) => {
         ...state,
         todaysData: action.array,
         todayLoading: false
+      }
+    }
+    case GET_REQUESTED_BREAKOUT: {
+      return {
+        ...state,
+        breakoutData: action.array
+      }
+    }
+    case STOCK_INFO: {
+      return {
+        ...state,
+        stockinfo: action.array
       }
     }
   }

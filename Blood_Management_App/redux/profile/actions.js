@@ -48,7 +48,7 @@ export const getUserData = (userToken) => {
       console.log("Fetching user's minimial ");
       dispatch(profileReq());
       const response = await axios.get(
-        'http://192.168.43.217:8080/profile/fetchuserprofile',
+        'http://10.0.2.2:8080/profile/fetchuserprofile',
         {
           headers: { Authorization: 'Bearer ' + userToken },
         },
@@ -84,7 +84,7 @@ export const getProfileData = (userToken) => {
       console.log("Fetching user's profile data.");
       dispatch(profileReq());
       const response = await axios.get(
-        'http://192.168.43.217:8080/profile/fetchuserdata',
+        'http://10.0.2.2:8080:8080/profile/fetchuserdata',
         {
           headers: { Authorization: 'Bearer ' + userToken },
         },

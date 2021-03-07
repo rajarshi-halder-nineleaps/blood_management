@@ -1,8 +1,8 @@
 /* eslint-disable prettier/prettier */
 import React from 'react';
-import {TouchableOpacity, Text} from 'react-native';
+import { TouchableOpacity, Text } from 'react-native';
 import Feather from 'react-native-vector-icons/Feather';
-import {createStackNavigator} from '@react-navigation/stack';
+import { createStackNavigator } from '@react-navigation/stack';
 import colors from '../constants/Colors';
 
 //? Importing the screens
@@ -26,6 +26,7 @@ import MoreInfo from '../src/Service Stack/BuyBlood/MoreInfo';
 import MyPurchases from '../src/Service Stack/MyPurchases/MyPurchases';
 import ActiveDonorRequest from '../src/Service Stack/ActiveDonorRequest/ActiveDonorRequest';
 import DonationRequestList from '../src/Service Stack/ActiveDonorRequest/DonationRequestList';
+import SalesAnalyticsNavigator from './SalesAnalyticsNavigator';
 
 const ServicesNavigator = createStackNavigator();
 
@@ -165,6 +166,23 @@ const ServicesStackNavigator = () => {
         component={Sales}
         options={{
           headerTitle: 'Sales',
+          headerTitleStyle: {
+            fontFamily: 'Montserrat-Bold',
+            fontSize: 24,
+            color: colors.additional2,
+          },
+          headerTintColor: colors.additional2,
+          headerStyle: {
+            elevation: 0,
+            backgroundColor: colors.primary,
+          },
+        }}
+      />
+      <ServicesNavigator.Screen
+        name="salesAnalytics"
+        component={SalesAnalyticsNavigator}
+        options={{
+          headerTitle: 'Analytics',
           headerTitleStyle: {
             fontFamily: 'Montserrat-Bold',
             fontSize: 24,

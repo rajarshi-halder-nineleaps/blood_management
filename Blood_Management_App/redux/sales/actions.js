@@ -9,15 +9,18 @@ import {
   GET_CURRENT_MONTH,
   GET_THIS_MONTH,
   SET_TODAY,
+  GET_REQUESTED_MONTH,
+  GET_REQUESTED_BREAKOUT,
+  STOCK_INFO
 } from './actionTypes';
 
-export const salesReq = () => ({type: SALES_REQ});
+export const salesReq = () => ({ type: SALES_REQ });
 export const salesSuccess = (salesData, analyticsData) => ({
   type: SALES_SUCCESS,
   salesData,
   analyticsData,
 });
-export const salesFailure = (error) => ({type: SALES_FAILURE, error});
+export const salesFailure = (error) => ({ type: SALES_FAILURE, error });
 
 export const updateMonth = (selectedMonth) => ({
   type: UPDATE_MONTH,
@@ -33,6 +36,11 @@ export const currentMonthSuccess = (array) => ({
   array,
 });
 
+export const StockInfoSucess = (array) => ({
+  type: STOCK_INFO,
+  array,
+});
+
 export const thisMonthSuccess = (array) => ({
   type: GET_THIS_MONTH,
   array,
@@ -40,6 +48,11 @@ export const thisMonthSuccess = (array) => ({
 
 export const todaySuccess = (array) => ({
   type: SET_TODAY,
+  array,
+});
+
+export const breakoutSuccess = (array) => ({
+  type: GET_REQUESTED_BREAKOUT,
   array,
 });
 
@@ -53,7 +66,7 @@ export const fetchSalesData = (userToken) => {
       const response = await axios.get(
         'http://192.168.43.217:8080/transactions/fetchsaleslist',
         {
-          headers: {Authorization: 'Bearer ' + userToken},
+          headers: { Authorization: 'Bearer ' + userToken },
         },
       );
 
@@ -79,22 +92,23 @@ export const fetchSalesData = (userToken) => {
   };
 };
 
-export const getCurrentMonthAnalytics = (month, userToken) => {
+export const getCurrentMonthAnalytics = (year, userToken) => {
   return async (dispatch) => {
     try {
       dispatch(salesReq());
       console.log('making current m API call');
       const response = await axios.get(
-        `http://192.168.43.217:8080/salesanalytics/fetchcurrentmonth/${month}`,
+        `http://10.0.2.2:8080/salesanalytics/yearly/${year}/0`,
         {
-          headers: {Authorization: 'Bearer ' + userToken},
+          headers: { Authorization: 'Bearer ' + userToken },
         },
       );
 
       if (response.headers.success) {
-        console.log('Analytics is success!', response.headers);
+        console.log('Analytics is success!', response.data.datasets[0].data);
         //* coordinate with backend for fixing prop names.
-        dispatch(currentMonthSuccess(response.data));
+        dispatch(currentMonthSuccess(response.data.datasets[0].data));
+        console.log(response.data.datasets)
       } else if (response.headers.error) {
         console.log('response is error!');
         dispatch(salesFailure(response.data.error));
@@ -113,6 +127,103 @@ export const getCurrentMonthAnalytics = (month, userToken) => {
   };
 };
 
+export const getMonthlyBreakout = (year, month, userToken) => {
+  return async (dispatch) => {
+    try {
+      dispatch(salesReq());
+      console.log('making current m API call');
+      const response = await axios.get(
+        `http://10.0.2.2:8080/salesanalytics/monthly/${year}/${month}/0`,
+        {
+          headers: { Authorization: 'Bearer ' + userToken },
+        },
+      );
+
+      if (response.headers.success) {
+        console.log('Analytics breakout is success!', response.data.datasets[0]);
+        //* coordinate with backend for fixing prop names.
+        dispatch(breakoutSuccess(response.data.datasets[0].data));
+        console.log(response.data.datasets)
+      } else if (response.headers.error) {
+        console.log('response is error!');
+        dispatch(salesFailure(response.data.error));
+      } else {
+        console.log('outlandish error!');
+        dispatch(
+          salesFailure(
+            "Something's not right! please try again after some time.",
+          ),
+        );
+      }
+    } catch (err) {
+      console.log('caught Analytics on myDriveData get request: ', err);
+      dispatch(salesFailure(err.message));
+    }
+  };
+};
+
+export const getStockInfo = (userToken, year, month, type) => {
+  return async (dispatch) => {
+    try {
+      if (month == "All") {
+        dispatch(salesReq());
+        console.log('making current m API call');
+        const response = await axios.get(
+          `http://10.0.2.2:8080/salesanalytics/yearly/${year}/${type}`,
+          {
+            headers: { Authorization: 'Bearer ' + userToken },
+          },
+        );
+        if (response.headers.success) {
+          console.log('Analytics is success!', response.data.datasets[0].data);
+          //* coordinate with backend for fixing prop names.
+          dispatch(StockInfoSucess(response.data.datasets[0].data));
+          console.log(response.data.datasets)
+        } else if (response.headers.error) {
+          console.log('response is error!');
+          dispatch(salesFailure(response.data.error));
+        } else {
+          console.log('outlandish error!');
+          dispatch(
+            salesFailure(
+              "Something's not right! please try again after some time.",
+            ),
+          );
+        }
+
+      } else {
+        dispatch(salesReq());
+        console.log('making current m API call');
+        const response = await axios.get(
+          `http://10.0.2.2:8080/salesanalytics/monthly/${year}/${month}/${type}`,
+          {
+            headers: { Authorization: 'Bearer ' + userToken },
+          },
+        );
+        if (response.headers.success) {
+          console.log('Analytics is success!', response.data.datasets[0].data);
+          //* coordinate with backend for fixing prop names.
+          dispatch(StockInfoSucess(response.data.datasets[0].data));
+          console.log(response.data.datasets)
+        } else if (response.headers.error) {
+          console.log('response is error!');
+          dispatch(salesFailure(response.data.error));
+        } else {
+          console.log('outlandish error!');
+          dispatch(
+            salesFailure(
+              "Something's not right! please try again after some time.",
+            ),
+          );
+        }
+      }
+    } catch (err) {
+      console.log('caught Analytics on myDriveData get request: ', err);
+      dispatch(salesFailure(err.message));
+    }
+  };
+};
+
 export const getToday = (userToken) => {
   return async (dispatch) => {
     try {
@@ -121,7 +232,7 @@ export const getToday = (userToken) => {
       const response = await axios.get(
         `http://192.168.43.217:8080/salesanalytics/fetchnow`,
         {
-          headers: {Authorization: 'Bearer ' + userToken},
+          headers: { Authorization: 'Bearer ' + userToken },
         },
       );
 
@@ -155,7 +266,7 @@ export const getThisMonth = (month, userToken) => {
       const response = await axios.get(
         `http://192.168.43.217:8080/salesanalytics/fetchcurrentmonth/${month}`,
         {
-          headers: {Authorization: 'Bearer ' + userToken},
+          headers: { Authorization: 'Bearer ' + userToken },
         },
       );
 
