@@ -206,7 +206,7 @@ const RegisterBbScreen = ({navigation}) => {
               value={regFormState.inputValues.phone}
             />
 
-            <Text style={styles.pickerLabel}>Date of birth*</Text>
+            {/* <Text style={styles.pickerLabel}>Date of birth*</Text> */}
             <TouchableOpacity
               onPress={showDatepicker}
               style={
@@ -216,12 +216,12 @@ const RegisterBbScreen = ({navigation}) => {
               }>
               <Text
                 style={{
-                  fontSize: 18,
+                  fontSize: 14,
                   fontFamily: 'Montserrat-Regular',
                   paddingVertical: 15,
                 }}>
-                Date of birth:
-                {regFormState.inputValues.dob.toLocaleDateString()}
+                {'Date of birth*:   ' +
+                  regFormState.inputValues.dob.toLocaleDateString()}
               </Text>
             </TouchableOpacity>
             {!regFormState.inputValidity.dob && regFormState.isTouched.dob && (
@@ -237,7 +237,7 @@ const RegisterBbScreen = ({navigation}) => {
                 onChange={onChange}
               />
             )}
-            <Text style={styles.pickerLabel}>Blood group*</Text>
+            {/* <Text style={styles.pickerLabel}>Select blood group*</Text> */}
             <View
               style={
                 !regFormState.inputValidity.bloodgroup &&
@@ -290,7 +290,7 @@ const RegisterBbScreen = ({navigation}) => {
               }}
             />
 
-            <Text style={styles.pickerLabel}>State*</Text>
+            {/* <Text style={styles.pickerLabel}>State*</Text> */}
             <View
               style={
                 !regFormState.inputValidity.selectedState &&
@@ -316,7 +316,7 @@ const RegisterBbScreen = ({navigation}) => {
                 <Text style={styles.errorMsg}>Please select your state</Text>
               )}
 
-            <Text style={styles.pickerLabel}>District*</Text>
+            {/* <Text style={styles.pickerLabel}>District*</Text> */}
 
             <View
               style={
@@ -493,13 +493,14 @@ const styles = StyleSheet.create({
   pickerView: {
     borderRadius: 5,
     backgroundColor: 'transparent',
-    borderColor: colors.grayishblack,
+    borderColor: colors.accent,
     borderWidth: 2,
     fontSize: 14,
     fontFamily: 'Montserrat-Regular',
-    paddingHorizontal: 30,
+    paddingHorizontal: 10,
     color: 'black',
     marginBottom: 10,
+    marginTop: 10,
   },
   pickerViewInvalid: {
     borderRadius: 5,

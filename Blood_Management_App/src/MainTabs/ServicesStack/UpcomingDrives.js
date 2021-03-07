@@ -1,19 +1,16 @@
 /* eslint-disable prettier/prettier */
 import {
   View,
-  ScrollView,
   Text,
   StyleSheet,
   Image,
-  TouchableOpacity,
   FlatList,
-  Alert,
   RefreshControl,
   ActivityIndicator,
-  KeyboardAvoidingView,
 } from 'react-native';
 import React, {useState, useEffect} from 'react';
 import {useSelector, useDispatch} from 'react-redux';
+import {SkypeIndicator} from 'react-native-indicators';
 import colors from '../../../constants/Colors';
 import {registerUserForDrive} from '../../../redux/upcomingDrives/actions';
 import {upcomingDrivesSearch} from '../../../redux/upcomingDrives/actions';
@@ -44,16 +41,9 @@ const UpcomingDrives = ({navigation, route}) => {
   return (
     <View style={styles.container}>
       {upcomingDrivesState.loading ? (
-        <View style={styles.indicatorView}>
-          <ActivityIndicator
-            visible={upcomingDrivesState.loading}
-            textContent={'Loading...'}
-            textStyle={styles.spinnerTextStyle}
-            animating={true}
-            color={colors.primary}
-            size="large"
-          />
-        </View>
+        <View style={styles.progressBoard}>
+        <SkypeIndicator color={colors.primary} />
+      </View>
       ) : upcomingDrivesState.gotData &&
         upcomingDrivesState.upcomingDrivesList.length === 0 ? (
         <View style={styles.suchEmpty}>
@@ -110,10 +100,10 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#eee',
   },
-  indicatorView: {
+  progressBoard: {
     flex: 1,
-    alignItems: 'center',
     justifyContent: 'center',
+    alignItems: 'center',
   },
   imageBoard: {
     alignItems: 'center',

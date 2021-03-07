@@ -8,9 +8,9 @@ import {
   StyleSheet,
   TouchableOpacity,
   ImageBackground,
-  ActivityIndicator,
   RefreshControl,
 } from 'react-native';
+import {SkypeIndicator} from 'react-native-indicators';
 import {useSelector, useDispatch} from 'react-redux';
 import {donorVerification} from '../../../redux/myDrives/actions';
 import colors from '../../../constants/Colors';
@@ -113,14 +113,7 @@ const DriveDonorList = ({route, navigation}) => {
     <View style={styles.container}>
       {myDrivesState.loading ? (
         <View style={styles.progressBoard}>
-          <ActivityIndicator
-            visible={myDrivesState.loading}
-            textContent={'Loading...'}
-            textStyle={styles.spinnerTextStyle}
-            animating={true}
-            color={colors.primary}
-            size="large"
-          />
+          <SkypeIndicator color={colors.primary} />
         </View>
       ) : myDrivesState.donorsList.length === 0 ? (
         <View style={styles.suchEmpty}>

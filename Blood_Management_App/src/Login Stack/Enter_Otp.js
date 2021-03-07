@@ -9,12 +9,11 @@ import {
   Platform,
   Alert,
   TouchableOpacity,
-  ActivityIndicator,
   KeyboardAvoidingView,
   ToastAndroid,
   AlertIOS,
 } from 'react-native';
-import {TextInput} from 'react-native-gesture-handler';
+import {SkypeIndicator} from 'react-native-indicators';
 import colors from '../../constants/Colors';
 import Feather from 'react-native-vector-icons/Feather';
 import {updateFields, blurFields} from '../../redux/forgotpassword/actions';
@@ -41,7 +40,7 @@ const Enterotp = ({navigation}) => {
     if (forgotState.otpVerified) {
       navigation.navigate('ResetPassword');
     }
-  }, [forgotState.otpVerified, navigation]);
+  }, [dispatch, forgotState.otpVerified, navigation]);
 
   const handleOTP = (val, fieldId) => {
     let isValid = true;
@@ -65,14 +64,7 @@ const Enterotp = ({navigation}) => {
     <SafeAreaView style={styles.container}>
       {forgotState.loading ? (
         <View style={styles.progressBoard}>
-          <ActivityIndicator
-            visible={forgotState.loading}
-            textContent={'Loading...'}
-            textStyle={styles.spinnerTextStyle}
-            animating={true}
-            color={colors.primary}
-            size="large"
-          />
+          <SkypeIndicator color={colors.primary} />
         </View>
       ) : (
         <KeyboardAvoidingView
@@ -106,6 +98,7 @@ const Enterotp = ({navigation}) => {
                   dispatch(blurFields('otp'));
                 }}
               />
+
               {
                 //TODO REMOVE IF ABOVE FIELD WORKS OUT WELL
               }

@@ -3,6 +3,7 @@ import React from 'react';
 
 //? screens:
 import SplashScreen from '../src/Login Stack/SplashScreen';
+import IntroSlider from '../src/Login Stack/IntroSlider';
 import LoginScreen from '../src/Login Stack/LoginScreen';
 import findaccount from '../src/Login Stack/Find_account';
 import enterotp from '../src/Login Stack/Enter_Otp';
@@ -17,6 +18,7 @@ const RootStack = createStackNavigator();
 const RootStackNavigator = () => {
   return (
     <RootStack.Navigator headerMode="none" initialRouteName="SplashScreen">
+      <RootStack.Screen name="IntroSlider" component={IntroSlider} />
       <RootStack.Screen name="SplashScreen" component={SplashScreen} />
       <RootStack.Screen name="LoginScreen" component={LoginScreen} />
       <RootStack.Screen name="FindAccount" component={findaccount} />

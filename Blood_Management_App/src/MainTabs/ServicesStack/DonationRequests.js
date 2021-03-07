@@ -6,9 +6,9 @@ import {
   StyleSheet,
   Image,
   FlatList,
-  ActivityIndicator,
   RefreshControl,
 } from 'react-native';
+import {SkypeIndicator} from 'react-native-indicators';
 import React, {useState} from 'react';
 import {useSelector, useDispatch} from 'react-redux';
 import colors from '../../../constants/Colors';
@@ -40,14 +40,9 @@ const DonationRequests = ({navigation}) => {
   return (
     <View style={styles.container}>
       {invitesState.loading ? (
-        <ActivityIndicator
-          visible={invitesState.loading}
-          textContent={'Loading...'}
-          textStyle={styles.spinnerTextStyle}
-          animating={true}
-          color={colors.primary}
-          size="large"
-        />
+        <View style={styles.progressBoard}>
+          <SkypeIndicator color={colors.primary} />
+        </View>
       ) : invitesState.invitesList.length === 0 ? (
         <View style={styles.suchEmpty}>
           <Image
@@ -92,6 +87,11 @@ const styles = StyleSheet.create({
   },
   scroll: {
     paddingHorizontal: 0,
+  },
+  progressBoard: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   suchEmpty: {
     flex: 1,

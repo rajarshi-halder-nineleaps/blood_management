@@ -8,9 +8,9 @@ import {
   Image,
   FlatList,
   RefreshControl,
-  ActivityIndicator,
 } from 'react-native';
 import {useSelector, useDispatch} from 'react-redux';
+import {SkypeIndicator} from 'react-native-indicators';
 import colors from '../../../constants/Colors';
 import renderItem from '../../../components/CommitmentsCard';
 import DonationDriveFilter from '../../../components/DonationDriveFilter';
@@ -42,15 +42,8 @@ const Commitments = () => {
     <View style={styles.container}>
       {commitmentsState.loading ? (
         <View style={styles.progressBoard}>
-        <ActivityIndicator
-          visible={commitmentsState.loading}
-          textContent={'Loading...'}
-          textStyle={styles.spinnerTextStyle}
-          animating={true}
-          color={colors.primary}
-          size="large"
-        />
-      </View>
+          <SkypeIndicator color={colors.primary} />
+        </View>
       ) : commitmentsState.commitmentsList.length === 0 ? (
         <View style={styles.suchEmpty}>
           <Image

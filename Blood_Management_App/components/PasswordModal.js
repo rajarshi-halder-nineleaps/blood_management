@@ -11,6 +11,7 @@ import {
   ToastAndroid,
   Platform,
   AlertIOS,
+  TextInput,
 } from 'react-native';
 import colors from '../constants/Colors';
 import Fields from './Fields';
@@ -54,15 +55,22 @@ const AreYouSure = (props) => {
             your password below.
           </Text>
 
-          <Fields
-            label="Password"
-            error="Invalid Password!"
+          <TextInput
+            style={
+              inventoryState.passwordValidity
+                ? styles.formInput
+                : styles.formInputInvalid
+            }
+            placeholder="Password"
             value={passwordVal}
             onChangeText={(val) => {
               setPasswordVal(val);
             }}
             secureTextEntry={true}
           />
+          {!inventoryState.passwordValidity && (
+            <Text style={styles.errorMsg}>Invalid password!</Text>
+          )}
 
           <View style={styles.touchBoard}>
             <TouchableHighlight
@@ -137,6 +145,39 @@ const styles = StyleSheet.create({
     fontFamily: 'Montserrat-Regular',
     fontSize: 15,
     padding: 20,
+  },
+  labelText: {
+    fontFamily: 'Montserrat-Regular',
+    paddingBottom: 3, //* REMOVE THIS IF INTERFACE GETS MESSED UP
+  },
+  formInput: {
+    paddingVertical: 10,
+    borderRadius: 5,
+    backgroundColor: 'transparent',
+    borderColor: colors.grayishblack,
+    borderWidth: 2,
+    fontSize: 14,
+    fontFamily: 'Montserrat-Regular',
+    paddingHorizontal: 15,
+    color: 'black',
+    marginBottom: 30,
+  },
+  formInputInvalid: {
+    paddingVertical: 10,
+    borderRadius: 5,
+    backgroundColor: 'transparent',
+    borderColor: colors.dutchred,
+    borderWidth: 2,
+    fontSize: 14,
+    fontFamily: 'Montserrat-Regular',
+    paddingHorizontal: 15,
+    color: 'black',
+  },
+  errorMsg: {
+    color: colors.dutchred,
+    fontFamily: 'Montserrat-Regular',
+    marginBottom: 30,
+    padding: 5,
   },
 });
 

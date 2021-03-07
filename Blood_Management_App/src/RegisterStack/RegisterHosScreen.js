@@ -34,6 +34,7 @@ import colors from '../../constants/Colors';
 import * as places from '../../assets/places.json';
 import CheckBox from '@react-native-community/checkbox';
 import Feather from 'react-native-vector-icons/Feather';
+import { Colors } from 'react-native/Libraries/NewAppScreen';
 
 const RegisterHosScreen = ({navigation}) => {
   const [selectedStateindex, setselectedStateindex] = useState(0);
@@ -240,7 +241,7 @@ const RegisterHosScreen = ({navigation}) => {
                 blurListener('address');
               }}
             />
-            <Text style={styles.pickerLabel}>State*</Text>
+            {/* <Text style={styles.pickerLabel}>State*</Text> */}
 
             <View
               style={
@@ -251,6 +252,7 @@ const RegisterHosScreen = ({navigation}) => {
               }>
               <Picker
                 selectedValue={regFormState.inputValues.selectedState}
+                itemStyle={{fontSize: 100}}
                 onValueChange={(val, itemIndex) => {
                   blurListener('selectedState');
                   checkValidity(val, 'selectedState');
@@ -258,7 +260,12 @@ const RegisterHosScreen = ({navigation}) => {
                   setselectedStateindex(itemIndex);
                 }}>
                 {word.map((item, id) => (
-                  <Picker.Item label={item.state} value={item.state} key={id} />
+                  <Picker.Item
+                    label={item.state}
+                    value={item.state}
+                    color={colors.grayishblack}
+                    key={id}
+                  />
                 ))}
               </Picker>
             </View>
@@ -268,7 +275,7 @@ const RegisterHosScreen = ({navigation}) => {
                 <Text style={styles.errorMsg}>Please select your state</Text>
               )}
 
-            <Text style={styles.pickerLabel}>District*</Text>
+            {/* <Text style={styles.pickerLabel}>District*</Text> */}
 
             <View
               style={
@@ -439,13 +446,14 @@ const styles = StyleSheet.create({
   pickerView: {
     borderRadius: 5,
     backgroundColor: 'transparent',
-    borderColor: colors.grayishblack,
+    borderColor: colors.accent,
     borderWidth: 2,
     fontSize: 14,
     fontFamily: 'Montserrat-Regular',
-    paddingHorizontal: 30,
+    paddingHorizontal: 10,
     color: 'black',
     marginBottom: 10,
+    marginTop: 10,
   },
   pickerViewInvalid: {
     borderRadius: 5,

@@ -15,21 +15,36 @@ const initialState = {
   loading: false,
   editing: false,
   secure: false,
+  passwordValidity: true,
 };
 
 const inventoryReducer = (state = initialState, action) => {
   switch (action.type) {
-
     case TOGGLE_SECURE: {
-      return {...state, secure: action.newSecure}
+      let newPasswordValidity = false;
+      if (action.newSecure === true) {
+        newPasswordValidity = true;
+      }
+      return {
+        ...state,
+        secure: action.newSecure,
+        passwordValidity: newPasswordValidity,
+      };
     }
 
     case INV_REQ: {
       return {...state, loading: true};
     }
     case INV_FAILURE: {
-      Alert.alert('Error', action.error);
-      return {...state, loading: false, error: action.error};
+      if (action.error) {
+        Alert.alert('Error', action.error);
+      }
+      return {
+        ...state,
+        loading: false,
+        error: action.error,
+        newPasswordValidity: false,
+      };
     }
     case INV_SUCCESS: {
       return {

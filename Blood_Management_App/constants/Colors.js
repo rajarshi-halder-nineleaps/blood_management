@@ -9,6 +9,7 @@ const colors = {
   grayishblack: '#282B3A',
   moderategray: '#999',
   dutchred: '#EA2027',
+  darkRed: '#a62d21',
   coolblue: '#0d58d1',
   green: 'green',
   peach: '#FE5F55',

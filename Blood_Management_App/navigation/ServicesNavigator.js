@@ -95,7 +95,7 @@ const ServicesStackNavigator = () => {
         name="upcomingDrives"
         component={UpcomingDrives}
         options={{
-          headerTitle: 'Upcoming donation drives',
+          headerTitle: 'Upcoming drives',
           headerTitleStyle: {
             fontFamily: 'Montserrat-Bold',
             fontSize: 24,

@@ -10,6 +10,7 @@ import {
   ActivityIndicator,
   TouchableOpacity,
 } from 'react-native';
+import {SkypeIndicator} from 'react-native-indicators';
 import {updateFields, blurFields} from '../../redux/forgotpassword/actions';
 import {useDispatch, useSelector} from 'react-redux';
 import {emailRegex} from '../../constants/Regexes';
@@ -54,46 +55,39 @@ const Findaccount = ({navigation}) => {
   return (
     <SafeAreaView style={styles.container}>
       {forgotState.loading ? (
-      <View style={styles.progressBoard}>
-        <ActivityIndicator
-          visible={forgotState.loading}
-          textContent={'Loading...'}
-          textStyle={styles.spinnerTextStyle}
-          animating={true}
-          color={colors.primary}
-          size="large"
-        />
-      </View>
+        <View style={styles.progressBoard}>
+          <SkypeIndicator color={colors.primary} />
+        </View>
       ) : (
-      <ScrollView>
-        <View style={{flex: 1}}>
-          <View style={styles.header}>
-            <TouchableOpacity onPress={() => navigation.goBack()}>
-              <Feather name="chevron-left" color="white" size={30} />
-            </TouchableOpacity>
-          </View>
-          <View style={styles.colorView}>
-            <Text style={styles.titlefont}>Find Your Account</Text>
-          </View>
-          <View style={styles.body}>
-            <Text style={styles.titlefontdesc}>
-              Help us find your Account by entering your Registered Email
-            </Text>
+        <ScrollView>
+          <View style={{flex: 1}}>
+            <View style={styles.header}>
+              <TouchableOpacity onPress={() => navigation.goBack()}>
+                <Feather name="chevron-left" color="white" size={30} />
+              </TouchableOpacity>
+            </View>
+            <View style={styles.colorView}>
+              <Text style={styles.titlefont}>Find Your Account</Text>
+            </View>
+            <View style={styles.body}>
+              <Text style={styles.titlefontdesc}>
+                Help us find your Account by entering your Registered Email
+              </Text>
 
-            <Fields
-              keyboardType="default"
-              label="Recovery Email"
-              error="Invalid Email"
-              value={forgotState.inputValues.email}
-              inputIsValid={forgotState.inputValidity.email}
-              inputIsTouched={forgotState.isTouched.email}
-              onChangeText={(val) => handleEmail(val, 'email')}
-              onBlur={() => {
-                dispatch(blurFields('email'));
-              }}
-            />
+              <Fields
+                keyboardType="default"
+                label="Recovery Email"
+                error="Invalid Email"
+                value={forgotState.inputValues.email}
+                inputIsValid={forgotState.inputValidity.email}
+                inputIsTouched={forgotState.isTouched.email}
+                onChangeText={(val) => handleEmail(val, 'email')}
+                onBlur={() => {
+                  dispatch(blurFields('email'));
+                }}
+              />
 
-            {/* <TextInput
+              {/* <TextInput
               keyboardType="email-address"
               style={[styles.input, {marginTop: 30}]}
               value={forgotState.inputValues.email}
@@ -108,16 +102,16 @@ const Findaccount = ({navigation}) => {
                 <Text style={styles.errMsg}>Invalid email!</Text>
               )} */}
 
-            <View style={styles.button}>
-              <TouchableOpacity
-                style={styles.signIn}
-                onPress={() => submitHandler()}>
-                <Feather name="arrow-right" size={30} color="white" />
-              </TouchableOpacity>
+              <View style={styles.button}>
+                <TouchableOpacity
+                  style={styles.signIn}
+                  onPress={() => submitHandler()}>
+                  <Feather name="arrow-right" size={30} color="white" />
+                </TouchableOpacity>
+              </View>
             </View>
           </View>
-        </View>
-      </ScrollView>
+        </ScrollView>
       )}
     </SafeAreaView>
   );
