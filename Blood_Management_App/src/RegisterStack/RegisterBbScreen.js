@@ -48,9 +48,8 @@ const RegisterBbScreen = ({navigation}) => {
   useEffect(() => {
 
     //* SETTING USER TYPE STATE TO FALSE ON FIRST RENDER.
-    dispatch(setUserVerified(3));
-
     dispatch(stateCleanup());
+    dispatch(setUserVerified(3));
   }, [dispatch]);
 
   const blurListener = (fieldId) => {

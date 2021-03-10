@@ -48,9 +48,8 @@ const RegisterBbScreen = ({navigation}) => {
   //* cleans up the state on first render.
   useEffect(() => {
     //* SETTING USER TYPE STATE TO FALSE ON FIRST RENDER.
-    dispatch(setUserVerified(1));
-
     dispatch(stateCleanup());
+    dispatch(setUserVerified(1));
   }, [dispatch]);
 
   const [mode, setMode] = useState('date');
