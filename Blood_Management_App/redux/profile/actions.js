@@ -48,7 +48,7 @@ export const getUserData = (userToken) => {
       console.log("Fetching user's minimial ");
       dispatch(profileReq());
       const response = await axios.get(
-        'http://10.0.2.2:8080/profile/fetchuserprofile',
+        'http://192.168.43.217:8080/profile/fetchuserprofile',
         {
           headers: { Authorization: 'Bearer ' + userToken },
         },
@@ -84,7 +84,7 @@ export const getProfileData = (userToken) => {
       console.log("Fetching user's profile data.");
       dispatch(profileReq());
       const response = await axios.get(
-        'http://10.0.2.2:8080:8080/profile/fetchuserdata',
+        'http://192.168.43.217:8080/profile/fetchuserdata',
         {
           headers: { Authorization: 'Bearer ' + userToken },
         },
@@ -123,7 +123,7 @@ export const changeDetails = (userToken, userType, newDetails) => {
 
       if (userType === 1) {
         response = await axios.put(
-          'http://10.0.2.2:8080/profile/updateindprofile',
+          'http://192.168.43.217:8080/profile/updateindprofile',
           newDetails,
           {
             headers: { Authorization: 'Bearer ' + userToken },
@@ -131,7 +131,7 @@ export const changeDetails = (userToken, userType, newDetails) => {
         );
       } else if (userType === 2) {
         response = await axios.put(
-          'http://10.0.2.2:8080/profile/updatehosprofile',
+          'http://192.168.43.217:8080/profile/updatehosprofile',
           newDetails,
           {
             headers: { Authorization: 'Bearer ' + userToken },
@@ -139,7 +139,7 @@ export const changeDetails = (userToken, userType, newDetails) => {
         );
       } else {
         response = await axios.put(
-          'http://10.0.2.2:8080/profile/updatebbprofile',
+          'http://192.168.43.217:8080/profile/updatebbprofile',
           newDetails,
           {
             headers: { Authorization: 'Bearer ' + userToken },
@@ -176,7 +176,7 @@ export const setDonorStatus = (userToken, newDonorStatus) => {
       console.log('Toggling donor.');
       // dispatch(profileReq());
       const response = await axios.put(
-        'http://10.0.2.2:8080/profile/donorstatus',
+        'http://192.168.43.217:8080/profile/donorstatus',
         { donorStatus: newDonorStatus },
         {
           headers: { Authorization: 'Bearer ' + userToken },

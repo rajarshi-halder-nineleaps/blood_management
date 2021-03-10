@@ -7,6 +7,8 @@ import {
   COMMITMENTS_FAILURE,
 } from './actionTypes';
 
+
+//? REGULAR ACTION CREATORS.
 export const commitmentsReq = () => ({ type: COMMITMENTS_REQ });
 export const commitmentsSuccess = (commitmentsList) => ({
   type: COMMITMENTS_SUCCESS,
@@ -19,6 +21,7 @@ export const commitmentsFailure = (error) => ({
 
 ////////////////////////////////////////////////////////////////////////////
 
+//? ASYNCHRONOUS ACTION CREATORS.
 export const fetchCommitments = (userToken) => {
   return async (dispatch) => {
     try {

@@ -18,6 +18,8 @@ import {
   blurFields,
   stateCleanup,
 } from '../../redux/registerInd/actions';
+import {SkypeIndicator} from 'react-native-indicators';
+import {setUserVerified, sendOtp} from '../../redux/register/actions';
 import colors from '../../constants/Colors';
 import {regUserUp} from '../../redux/auth/actions';
 import {useDispatch, useSelector} from 'react-redux';
@@ -43,7 +45,11 @@ const RegisterBbScreen = ({navigation}) => {
   const dispatch = useDispatch();
   const regFormState = useSelector((state) => state.regIndFormState);
 
+  //* cleans up the state on first render.
   useEffect(() => {
+    //* SETTING USER TYPE STATE TO FALSE ON FIRST RENDER.
+    dispatch(setUserVerified(1));
+
     dispatch(stateCleanup());
   }, [dispatch]);
 
@@ -141,8 +147,12 @@ const RegisterBbScreen = ({navigation}) => {
 
   const sumbitHandler = () => {
     if (regFormState.finalFormState) {
-      dispatch(regUserUp({formData: regFormState.inputValues, userType: 1}));
-      console.log('Registration Successful');
+      // dispatch(regUserUp({formData: regFormState.inputValues, userType: 1}));
+      dispatch(
+        sendOtp(regFormState.inputValues.email, () => {
+          navigation.navigate('OtpScreen');
+        }),
+      );
     } else {
       Alert.alert(
         'Invalid Input',
@@ -159,6 +169,11 @@ const RegisterBbScreen = ({navigation}) => {
           <Feather name="chevron-left" color="white" size={30} style={{}} />
         </TouchableOpacity>
       </View>
+      {regFormState.loading ? (
+        <View style={styles.progressBoard}>
+          <SkypeIndicator color={colors.primary} />
+        </View>
+      ) : (
       <ScrollView style={styles.container}>
         <View style={styles.board}>
           <View style={styles.titleBoard}>
@@ -192,20 +207,6 @@ const RegisterBbScreen = ({navigation}) => {
               }}
             />
 
-            <Fields
-              label="Phone*"
-              error="Invalid phone!"
-              returnKeyType="next"
-              keyboardType="phone-pad"
-              onChangeText={(val) => checkValidity(val, 'phone')}
-              onBlur={() => {
-                blurListener('phone');
-              }}
-              inputIsValid={regFormState.inputValidity.phone}
-              inputIsTouched={regFormState.isTouched.phone}
-              value={regFormState.inputValues.phone}
-            />
-
             {/* <Text style={styles.pickerLabel}>Date of birth*</Text> */}
             <TouchableOpacity
               onPress={showDatepicker}
@@ -216,9 +217,10 @@ const RegisterBbScreen = ({navigation}) => {
               }>
               <Text
                 style={{
-                  fontSize: 14,
                   fontFamily: 'Montserrat-Regular',
-                  paddingVertical: 15,
+                  fontSize: 15,
+                  paddingVertical: 18,
+                  color: colors.grayishblack,
                 }}>
                 {'Date of birth*:   ' +
                   regFormState.inputValues.dob.toLocaleDateString()}
@@ -238,6 +240,21 @@ const RegisterBbScreen = ({navigation}) => {
               />
             )}
             {/* <Text style={styles.pickerLabel}>Select blood group*</Text> */}
+
+            <Fields
+              label="Phone*"
+              error="Invalid phone!"
+              returnKeyType="next"
+              keyboardType="phone-pad"
+              onChangeText={(val) => checkValidity(val, 'phone')}
+              onBlur={() => {
+                blurListener('phone');
+              }}
+              inputIsValid={regFormState.inputValidity.phone}
+              inputIsTouched={regFormState.isTouched.phone}
+              value={regFormState.inputValues.phone}
+            />
+
             <View
               style={
                 !regFormState.inputValidity.bloodgroup &&
@@ -428,11 +445,17 @@ const RegisterBbScreen = ({navigation}) => {
           </TouchableWithoutFeedback>
         </View>
       </ScrollView>
+      )}
     </>
   );
 };
 
 const styles = StyleSheet.create({
+  progressBoard: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
   container: {
     flex: 1,
     backgroundColor: colors.additional2,
@@ -501,6 +524,7 @@ const styles = StyleSheet.create({
     color: 'black',
     marginBottom: 10,
     marginTop: 10,
+    paddingVertical: 3,
   },
   pickerViewInvalid: {
     borderRadius: 5,
@@ -510,7 +534,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontFamily: 'Montserrat-Regular',
     paddingHorizontal: 30,
-    color: 'black',
+    paddingVertical: 3,
   },
   picker: {
     color: colors.grayishblack,

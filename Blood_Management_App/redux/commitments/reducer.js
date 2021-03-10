@@ -5,12 +5,16 @@ import {
   COMMITMENTS_FAILURE,
 } from './actionTypes';
 
+
+//? INITIAL STATE.
 const initialState = {
   loading: false,
   commitmentsList: [],
   error: '',
 };
 
+
+//? REDUCER FUNCTION.
 const commitmentsReducer = (state = initialState, action) => {
   switch (action.type) {
     case COMMITMENTS_REQ: {

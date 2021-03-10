@@ -12,6 +12,8 @@ import {
   SET_DATE,
 } from './actionTypes';
 
+
+//? REGULAR ACTION CREATORS.
 export const updateFields = (val, fieldId, isValid) => ({
   type: UPDATE_FIELDS_ORGANIZER,
   val: val,
@@ -33,7 +35,6 @@ export const toggleBloodGroup = (item) => ({
   item: item,
 });
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 export const organizeReq = () => ({
   type: ORGANIZE_REQ,
@@ -48,13 +49,16 @@ export const organizeFailure = (error) => ({
   error: error,
 });
 
-//////////////////////////////////////////////////////////////////////////////////////////////////////////
 export const setDateTime = (date) => {
   return {
     type: SET_DATE,
     date,
   };
 };
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+//? ASYNCHRONOUS ACTION CREATORS.
 
 export const organizeDriveConfirm = (userToken, newDriveData) => {
   console.log('data reached organizeDriveConfirm');

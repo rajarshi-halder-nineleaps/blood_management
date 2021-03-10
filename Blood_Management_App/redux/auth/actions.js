@@ -2,7 +2,9 @@
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-import { REQ, REQ_SUCCESS, REQ_FAILURE, LOGOUT } from './actionTypes';
+import {REQ, REQ_SUCCESS, REQ_FAILURE, LOGOUT} from './actionTypes';
+
+//? REGULAR ACTION CREATORS.
 
 export const req = () => ({
   type: REQ,
@@ -20,21 +22,23 @@ export const reqFailure = (error) => ({
   error: error,
 });
 
+export const logout = () => ({type: LOGOUT});
+
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+//? ASYNCHRONOUS ACTION CREATORS.
+
+//? LOGIN ACTION.
 
 export const logUserIn = (loginData) => {
   return async (dispatch) => {
     dispatch(req());
     console.log('login works');
     try {
-      const response = await axios.post(
-        'http://10.0.2.2:8080/authenticate', {
+      const response = await axios.post('http://192.168.43.217:8080/authenticate', {
         email: loginData.email,
-        password: loginData.password
-
-      }
-
-      );
+        password: loginData.password,
+      });
       console.log('COMPLETE RESPONSE DATA: ', response.headers);
 
       if (response.headers.error) {
@@ -77,6 +81,8 @@ export const logUserIn = (loginData) => {
 };
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+//? REGISTER ACTION.
 
 export const regUserUp = (regData) => {
   return async (dispatch) => {
@@ -207,7 +213,7 @@ export const tokenRetriever = () => {
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-export const logout = () => ({ type: LOGOUT });
+//? LOGOOUT ACTION.
 
 export const logUserOut = () => {
   console.log('logging out');

@@ -1,13 +1,8 @@
 /* eslint-disable prettier/prettier */
 import React from 'react';
-import {
-  View,
-  Text,
-  TextInput,
-  StyleSheet,
-  TouchableOpacity,
-} from 'react-native';
+import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
 import colors from '../constants/Colors';
+import {TextInput} from 'react-native-paper';
 import Feather from 'react-native-vector-icons/Feather';
 
 const Fields = (props) => {
@@ -18,20 +13,18 @@ const Fields = (props) => {
         <View style={styles.removerView}>
           <TextInput
             {...props}
-            style={
-              !props.inputIsValid && props.inputIsTouched
-                ? styles.formInputInvalid
-                : styles.formInput
-            }
-            // placeholder={props.label}
-            placeholderTextColor={colors.grayishblack}
-            onFocus={() => {}}
+            style={styles.formInput}
+            mode="outlined"
+            error={!props.inputIsValid && props.inputIsTouched}
+            selectionColor={colors.primary}
+            underlineColor={colors.grayishblack}
+            theme={{colors: {primary: colors.grayishblack}}}
           />
           {props.length > 1 ? (
             <TouchableOpacity
               style={styles.removePhoneTouch}
               onPress={() => props.phoneRemover(props.idx)}>
-              <Feather name="x" color={colors.additional2} size={15} />
+              <Feather name="x" color={colors.grayishblack} size={35} />
             </TouchableOpacity>
           ) : null}
         </View>
@@ -55,29 +48,33 @@ const styles = StyleSheet.create({
     paddingBottom: 3, //* REMOVE THIS IF INTERFACE GETS MESSED UP
   },
   formInput: {
-    paddingVertical: 10,
-    borderRadius: 5,
-    backgroundColor: 'transparent',
-    borderColor: colors.grayishblack,
-    borderWidth: 2,
-    fontSize: 14,
-    fontFamily: 'Montserrat-Regular',
-    paddingHorizontal: 30,
-    color: 'black',
+    backgroundColor: colors.additional2,
     flex: 1,
   },
-  formInputInvalid: {
-    paddingVertical: 10,
-    borderRadius: 5,
-    backgroundColor: 'transparent',
-    borderColor: colors.dutchred,
-    borderWidth: 2,
-    fontSize: 14,
-    fontFamily: 'Montserrat-Regular',
-    paddingHorizontal: 30,
-    color: 'black',
-    flex: 1,
-  },
+  // formInput: {
+  //   paddingVertical: 10,
+  //   borderRadius: 5,
+  //   backgroundColor: 'transparent',
+  //   borderColor: colors.grayishblack,
+  //   borderWidth: 2,
+  //   fontSize: 14,
+  //   fontFamily: 'Montserrat-Regular',
+  //   paddingHorizontal: 30,
+  //   color: 'black',
+  //   flex: 1,
+  // },
+  // formInputInvalid: {
+  //   paddingVertical: 10,
+  //   borderRadius: 5,
+  //   backgroundColor: 'transparent',
+  //   borderColor: colors.dutchred,
+  //   borderWidth: 2,
+  //   fontSize: 14,
+  //   fontFamily: 'Montserrat-Regular',
+  //   paddingHorizontal: 30,
+  //   color: 'black',
+  //   flex: 1,
+  // },
   errorMsg: {
     color: colors.dutchred,
     fontFamily: 'Montserrat-Regular',
@@ -93,10 +90,8 @@ const styles = StyleSheet.create({
   },
   removePhoneTouch: {
     flexDirection: 'row',
-    marginLeft: 5,
-    backgroundColor: colors.grayishblack,
-    paddingHorizontal: 18,
-    paddingVertical: 5,
+    marginLeft: 15,
+    backgroundColor: colors.additional2,
     borderRadius: 5,
     alignItems: 'center',
     justifyContent: 'center',

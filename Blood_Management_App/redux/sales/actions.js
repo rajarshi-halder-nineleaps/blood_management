@@ -11,16 +11,16 @@ import {
   SET_TODAY,
   GET_REQUESTED_MONTH,
   GET_REQUESTED_BREAKOUT,
-  STOCK_INFO
+  STOCK_INFO,
 } from './actionTypes';
 
-export const salesReq = () => ({ type: SALES_REQ });
+export const salesReq = () => ({type: SALES_REQ});
 export const salesSuccess = (salesData, analyticsData) => ({
   type: SALES_SUCCESS,
   salesData,
   analyticsData,
 });
-export const salesFailure = (error) => ({ type: SALES_FAILURE, error });
+export const salesFailure = (error) => ({type: SALES_FAILURE, error});
 
 export const updateMonth = (selectedMonth) => ({
   type: UPDATE_MONTH,
@@ -66,7 +66,7 @@ export const fetchSalesData = (userToken) => {
       const response = await axios.get(
         'http://192.168.43.217:8080/transactions/fetchsaleslist',
         {
-          headers: { Authorization: 'Bearer ' + userToken },
+          headers: {Authorization: 'Bearer ' + userToken},
         },
       );
 
@@ -98,9 +98,9 @@ export const getCurrentMonthAnalytics = (year, userToken) => {
       dispatch(salesReq());
       console.log('making current m API call');
       const response = await axios.get(
-        `http://10.0.2.2:8080/salesanalytics/yearly/${year}/0`,
+        `http://192.168.43.217:8080/salesanalytics/yearly/${year}/0`,
         {
-          headers: { Authorization: 'Bearer ' + userToken },
+          headers: {Authorization: 'Bearer ' + userToken},
         },
       );
 
@@ -108,7 +108,7 @@ export const getCurrentMonthAnalytics = (year, userToken) => {
         console.log('Analytics is success!', response.data.datasets[0].data);
         //* coordinate with backend for fixing prop names.
         dispatch(currentMonthSuccess(response.data.datasets[0].data));
-        console.log(response.data.datasets)
+        console.log(response.data.datasets);
       } else if (response.headers.error) {
         console.log('response is error!');
         dispatch(salesFailure(response.data.error));
@@ -133,17 +133,20 @@ export const getMonthlyBreakout = (year, month, userToken) => {
       dispatch(salesReq());
       console.log('making current m API call');
       const response = await axios.get(
-        `http://10.0.2.2:8080/salesanalytics/monthly/${year}/${month}/0`,
+        `http://192.168.43.217:8080/salesanalytics/monthly/${year}/${month}/0`,
         {
-          headers: { Authorization: 'Bearer ' + userToken },
+          headers: {Authorization: 'Bearer ' + userToken},
         },
       );
 
       if (response.headers.success) {
-        console.log('Analytics breakout is success!', response.data.datasets[0]);
+        console.log(
+          'Analytics breakout is success!',
+          response.data.datasets[0],
+        );
         //* coordinate with backend for fixing prop names.
         dispatch(breakoutSuccess(response.data.datasets[0].data));
-        console.log(response.data.datasets)
+        console.log(response.data.datasets);
       } else if (response.headers.error) {
         console.log('response is error!');
         dispatch(salesFailure(response.data.error));
@@ -165,20 +168,20 @@ export const getMonthlyBreakout = (year, month, userToken) => {
 export const getStockInfo = (userToken, year, month, type) => {
   return async (dispatch) => {
     try {
-      if (month == "All") {
+      if (month === 'All') {
         dispatch(salesReq());
         console.log('making current m API call');
         const response = await axios.get(
-          `http://10.0.2.2:8080/salesanalytics/yearly/${year}/${type}`,
+          `http://192.168.43.217:8080/salesanalytics/yearly/${year}/${type}`,
           {
-            headers: { Authorization: 'Bearer ' + userToken },
+            headers: {Authorization: 'Bearer ' + userToken},
           },
         );
         if (response.headers.success) {
           console.log('Analytics is success!', response.data.datasets[0].data);
           //* coordinate with backend for fixing prop names.
           dispatch(StockInfoSucess(response.data.datasets[0].data));
-          console.log(response.data.datasets)
+          console.log(response.data.datasets);
         } else if (response.headers.error) {
           console.log('response is error!');
           dispatch(salesFailure(response.data.error));
@@ -190,21 +193,20 @@ export const getStockInfo = (userToken, year, month, type) => {
             ),
           );
         }
-
       } else {
         dispatch(salesReq());
         console.log('making current m API call');
         const response = await axios.get(
-          `http://10.0.2.2:8080/salesanalytics/monthly/${year}/${month}/${type}`,
+          `http://192.168.43.217:8080/salesanalytics/monthly/${year}/${month}/${type}`,
           {
-            headers: { Authorization: 'Bearer ' + userToken },
+            headers: {Authorization: 'Bearer ' + userToken},
           },
         );
         if (response.headers.success) {
           console.log('Analytics is success!', response.data.datasets[0].data);
           //* coordinate with backend for fixing prop names.
           dispatch(StockInfoSucess(response.data.datasets[0].data));
-          console.log(response.data.datasets)
+          console.log(response.data.datasets);
         } else if (response.headers.error) {
           console.log('response is error!');
           dispatch(salesFailure(response.data.error));
@@ -230,9 +232,9 @@ export const getToday = (userToken) => {
       dispatch(salesReq());
       console.log('making current m API call');
       const response = await axios.get(
-        `http://192.168.43.217:8080/salesanalytics/fetchnow`,
+        'http:/192.168.43.217:8080/salesanalytics/fetchnow',
         {
-          headers: { Authorization: 'Bearer ' + userToken },
+          headers: {Authorization: 'Bearer ' + userToken},
         },
       );
 
@@ -266,7 +268,7 @@ export const getThisMonth = (month, userToken) => {
       const response = await axios.get(
         `http://192.168.43.217:8080/salesanalytics/fetchcurrentmonth/${month}`,
         {
-          headers: { Authorization: 'Bearer ' + userToken },
+          headers: {Authorization: 'Bearer ' + userToken},
         },
       );
 
