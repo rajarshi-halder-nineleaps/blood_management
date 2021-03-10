@@ -25,19 +25,6 @@ const Services = ({ navigation }) => {
   const userType = authState.userType;
   const [rusure, setRusure] = useState(false);
 
-  //* THIS HAS BEEN CHANGED
-  // useEffect(() => {
-  // dispatch(resetDoneState());
-  // console.log('gotData state set to false');
-  // }, [dispatch]);
-
-  // useEffect(() => {
-  //   if (myDrivesState.gotData) {
-  //     navigation.navigate('myDrives');
-  //   }
-  // }, [myDrivesState.gotData, navigation]);
-
-  //TODO convert all this to useEffect - DONE
 
   const myDrivesHandler = () => {
     navigation.navigate('myDrives');
@@ -48,12 +35,10 @@ const Services = ({ navigation }) => {
   };
 
   const inventoryHandler = () => {
-    // dispatch(getInventory(authState.userToken));
     setRusure(true);
   };
 
   const salesHandler = () => {
-    // dispatch(fetchSalesData(authState.userToken));
     navigation.navigate('sales');
   };
   var year = new Date().getFullYear();
@@ -165,7 +150,7 @@ const Services = ({ navigation }) => {
             />
             <TouchTabs
               label="Sales Analytics"
-              source={require('../../../assets/images/servicesScreen/sales.png')}
+              source={require('../../../assets/images/servicesScreen/analytics.png')}
               touchHandler={() => salesAnalyticsHandler()}
             />
           </>

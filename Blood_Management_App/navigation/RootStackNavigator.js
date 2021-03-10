@@ -12,6 +12,7 @@ import RegisterSelectScreen from '../src/RegisterStack/RegisterSelectScreen';
 import RegisterBbScreen from '../src/RegisterStack/RegisterBbScreen';
 import RegisterHosScreen from '../src/RegisterStack/RegisterHosScreen';
 import RegisterIndScreen from '../src/RegisterStack/RegisterIndScreen';
+import OtpScreen from '../src/RegisterStack/VerifyEmailOwnership';
 
 const RootStack = createStackNavigator();
 
@@ -31,6 +32,7 @@ const RootStackNavigator = () => {
       <RootStack.Screen name="RegisterBb" component={RegisterBbScreen} />
       <RootStack.Screen name="RegisterInd" component={RegisterIndScreen} />
       <RootStack.Screen name="RegisterHos" component={RegisterHosScreen} />
+      <RootStack.Screen name="OtpScreen" component={OtpScreen} />
     </RootStack.Navigator>
   );
 };

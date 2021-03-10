@@ -16,7 +16,7 @@ const Fields = (props) => {
           selectionColor={colors.primary}
           underlineColor={colors.grayishblack}
           theme={{colors: {primary: colors.grayishblack}}}
-          style = {styles.formInput}
+          style={styles.formInput}
         />
       </View>
       {!props.inputIsValid && props.inputIsTouched && (
@@ -39,6 +39,7 @@ const styles = StyleSheet.create({
   },
   formInput: {
     backgroundColor: colors.additional2,
+    fontFamily: 'Montserrat-Regular',
   },
   // formInput: {
   //   paddingVertical: 10,

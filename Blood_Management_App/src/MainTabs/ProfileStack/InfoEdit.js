@@ -299,7 +299,7 @@ const InfoEdit = ({navigation}) => {
                   }}
                 />
 
-                <Text style={styles.pickerLabel}>Blood Group</Text>
+                {/* <Text style={styles.pickerLabel}>Blood Group</Text> */}
                 <View style={styles.pickerView}>
                   <Picker
                     mode="dropdown"
@@ -430,9 +430,16 @@ const InfoEdit = ({navigation}) => {
                   blurListener('district');
                   checkValidity(val, 'district');
                 }}>
-                {word[stateindex].districts.map((item, id) => (
-                  <Picker.Item label={item} value={item} key={id} />
-                ))}
+                {word[stateindex] && word[stateindex].districts.length > 0 ? (
+                  word[stateindex].districts.map((item, id) => (
+                    <Picker.Item label={item} value={item} key={id} />
+                  ))
+                ) : (
+                  <Picker.Item
+                    label="Select district"
+                    value="Select district"
+                  />
+                )}
               </Picker>
             </View>
 
@@ -569,7 +576,7 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     fontSize: 14,
     fontFamily: 'Montserrat-Regular',
-    paddingHorizontal: 30,
+    paddingHorizontal: 10,
     color: 'black',
     marginBottom: 10,
     marginTop: 10,

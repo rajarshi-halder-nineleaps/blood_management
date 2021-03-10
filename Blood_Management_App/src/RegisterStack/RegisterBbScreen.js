@@ -2,13 +2,10 @@
 import {
   View,
   Text,
-  TextInput,
   ScrollView,
   StyleSheet,
-  KeyboardAvoidingView,
   TouchableOpacity,
   TouchableWithoutFeedback,
-  SafeAreaView,
   Alert,
 } from 'react-native';
 import {
@@ -18,9 +15,11 @@ import {
   phoneStateSet,
   phoneTouchSet,
   stateCleanup,
+  sendOtp,
   removePhone,
+  setUserVerified,
 } from '../../redux/register/actions';
-import {regUserUp} from '../../redux/auth/actions';
+import {SkypeIndicator} from 'react-native-indicators';
 import React, {useState, useEffect} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import {Picker} from '@react-native-picker/picker';
@@ -31,7 +30,6 @@ import {
   pincodeRegex,
 } from '../../constants/Regexes';
 import colors from '../../constants/Colors';
-import Input from '../../components/Input';
 import * as places from '../../assets/places.json';
 import CheckBox from '@react-native-community/checkbox';
 import Feather from 'react-native-vector-icons/Feather';
@@ -48,7 +46,10 @@ const RegisterBbScreen = ({navigation}) => {
 
   //* cleans up the state on first render.
   useEffect(() => {
+
+    //* SETTING USER TYPE STATE TO FALSE ON FIRST RENDER.
     dispatch(stateCleanup());
+    dispatch(setUserVerified(3));
   }, [dispatch]);
 
   const blurListener = (fieldId) => {
@@ -122,9 +123,10 @@ const RegisterBbScreen = ({navigation}) => {
 
   const sumbitHandler = () => {
     if (regFormState.finalFormState) {
-      console.log('Registration Successful');
-      dispatch(regUserUp({formData: regFormState.inputValues, userType: 3}));
-      //* now we can either edirect to hone screen or show errors (if any).
+      console.log('Registration process started!');
+      // dispatch(regUserUp({formData: regFormState.inputValues, userType: 3}));
+      dispatch(sendOtp(regFormState.inputValues.email, () =>{navigation.navigate('OtpScreen');}));
+      //* now we can either redirect to OTP screen or show errors (if any).
     } else {
       Alert.alert(
         'Invalid Input',
@@ -141,245 +143,264 @@ const RegisterBbScreen = ({navigation}) => {
           <Feather name="chevron-left" color="white" size={30} style={{}} />
         </TouchableOpacity>
       </View>
-      <ScrollView style={styles.container}>
-        <View style={styles.board}>
-          <View style={styles.titleBoard}>
-            <Text style={styles.heading}>Register</Text>
-          </View>
-          <View style={styles.contentBoard}>
-            <Fields
-              label="Name of the institution*"
-              error="Invalid name!"
-              returnKeyType="next"
-              inputIsValid={regFormState.inputValidity.name}
-              inputIsTouched={regFormState.isTouched.name}
-              value={regFormState.inputValues.name}
-              onChangeText={(val) => checkValidity(val, 'name')}
-              onBlur={() => {
-                blurListener('name');
-              }}
-            />
-            <Fields
-              label="Email*"
-              error="Invalid email!"
-              returnKeyType="next"
-              keyboardType="email-address"
-              inputIsValid={regFormState.inputValidity.email}
-              inputIsTouched={regFormState.isTouched.email}
-              value={regFormState.inputValues.email}
-              onChangeText={(val) => checkValidity(val, 'email')}
-              onBlur={() => {
-                blurListener('email');
-              }}
-            />
-
-            {regFormState.inputValues.phone.map((val, idx) => {
-              return (
-                <Fields
-                  label={'Phone #' + (idx + 1) + '*'}
-                  key={idx}
-                  error="Invalid phone!"
-                  returnKeyType="next"
-                  keyboardType="phone-pad"
-                  value={val}
-                  inputIsValid={regFormState.inputValidity.phone[idx]}
-                  inputIsTouched={regFormState.isTouched.phone[idx]}
-                  onChangeText={(newText) => {
-                    dispatch(phoneStateSet(newText, idx));
-                  }}
-                  onBlur={() => {
-                    dispatch(phoneTouchSet(idx));
-                  }}
-                />
-              );
-            })}
-
-            <View style={styles.addPhoneView}>
-              {regFormState.inputValues.phone.length < 5 ? (
-                <TouchableOpacity
-                  style={styles.addPhoneTouch}
-                  onPress={() => {
-                    phoneAdder();
-                  }}>
-                  <Feather name="plus" color="white" size={20} />
-                  <Text style={styles.addPhoneText}>Add new number</Text>
-                </TouchableOpacity>
-              ) : null}
-              {regFormState.inputValues.phone.length > 1 ? (
-                <TouchableOpacity
-                  style={styles.addPhoneTouch}
-                  onPress={() => dispatch(removePhone())}>
-                  <Feather name="x" color={colors.additional2} size={20} />
-                  <Text style={styles.addPhoneText}>Remove Phone</Text>
-                </TouchableOpacity>
-              ) : null}
+      {regFormState.loading ? (
+        <View style={styles.progressBoard}>
+          <SkypeIndicator color={colors.primary} />
+        </View>
+      ) : (
+        <ScrollView style={styles.container}>
+          <View style={styles.board}>
+            <View style={styles.titleBoard}>
+              <Text style={styles.heading}>Register</Text>
             </View>
+            <View style={styles.contentBoard}>
+              <Fields
+                label="Name of the institution*"
+                error="Invalid name!"
+                returnKeyType="next"
+                inputIsValid={regFormState.inputValidity.name}
+                inputIsTouched={regFormState.isTouched.name}
+                value={regFormState.inputValues.name}
+                onChangeText={(val) => checkValidity(val, 'name')}
+                onBlur={() => {
+                  blurListener('name');
+                }}
+              />
+              <Fields
+                label="Email*"
+                error="Invalid email!"
+                returnKeyType="next"
+                keyboardType="email-address"
+                inputIsValid={regFormState.inputValidity.email}
+                inputIsTouched={regFormState.isTouched.email}
+                value={regFormState.inputValues.email}
+                onChangeText={(val) => checkValidity(val, 'email')}
+                onBlur={() => {
+                  blurListener('email');
+                }}
+              />
 
-            <Fields
-              label="Liscence Number*"
-              error="This field is required"
-              returnKeyType="next"
-              inputIsValid={regFormState.inputValidity.license}
-              inputIsTouched={regFormState.isTouched.license}
-              value={regFormState.inputValues.license}
-              onChangeText={(val) => checkValidity(val, 'license')}
-              onBlur={() => {
-                blurListener('license');
-              }}
-            />
-            <Fields
-              label="Registered Address*"
-              error="This field is required"
-              returnKeyType="next"
-              multiline={true}
-              numberOfLines={3}
-              inputIsValid={regFormState.inputValidity.address}
-              inputIsTouched={regFormState.isTouched.address}
-              value={regFormState.inputValues.address}
-              onChangeText={(val) => checkValidity(val, 'address')}
-              onBlur={() => {
-                blurListener('address');
-              }}
-            />
-            {/* <Text style={styles.pickerLabel}>State*</Text> */}
+              {regFormState.inputValues.phone.map((val, idx) => {
+                return (
+                  <Fields
+                    label={'Phone #' + (idx + 1) + '*'}
+                    key={idx}
+                    error="Invalid phone!"
+                    returnKeyType="next"
+                    keyboardType="phone-pad"
+                    value={val}
+                    inputIsValid={regFormState.inputValidity.phone[idx]}
+                    inputIsTouched={regFormState.isTouched.phone[idx]}
+                    onChangeText={(newText) => {
+                      dispatch(phoneStateSet(newText, idx));
+                    }}
+                    onBlur={() => {
+                      dispatch(phoneTouchSet(idx));
+                    }}
+                  />
+                );
+              })}
 
-            <View
-              style={
-                !regFormState.inputValidity.selectedState &&
-                regFormState.isTouched.selectedState
-                  ? styles.pickerViewInvalid
-                  : styles.pickerView
-              }>
-              <Picker
-                style={styles.picker}
-                selectedValue={regFormState.inputValues.selectedState}
-                onValueChange={(val, itemIndex) => {
-                  blurListener('selectedState');
-                  checkValidity(val, 'selectedState');
-                  setdistEnb(true);
-                  setselectedStateindex(itemIndex);
-                }}>
-                {word.map((item, id) => (
-                  <Picker.Item label={item.state} value={item.state} key={id} />
-                ))}
-              </Picker>
-            </View>
-
-            {!regFormState.inputValidity.selectedState &&
-              regFormState.isTouched.selectedState && (
-                <Text style={styles.errorMsg}>Please select your state</Text>
-              )}
-
-            {/* <Text style={styles.pickerLabel}>District*</Text> */}
-
-            <View
-              style={
-                !regFormState.inputValidity.selectedDistrict &&
-                regFormState.isTouched.selectedDistrict
-                  ? styles.pickerViewInvalid
-                  : styles.pickerView
-              }>
-              <Picker
-                enabled={distEnb}
-                selectedValue={regFormState.inputValues.selectedDistrict}
-                onValueChange={(val, itemIndex) => {
-                  blurListener('selectedDistrict');
-                  checkValidity(val, 'selectedDistrict');
-                }}>
-                {word[selectedStateindex].districts.map((item, id) => (
-                  <Picker.Item label={item} value={item} key={id} />
-                ))}
-              </Picker>
-            </View>
-
-            {!regFormState.inputValidity.selectedDistrict &&
-              regFormState.isTouched.selectedDistrict && (
-                <Text style={styles.errorMsg}>Please select your district</Text>
-              )}
-            <Fields
-              label="Pin code*"
-              error="Please enter valid pincode"
-              returnKeyType="next"
-              inputIsValid={regFormState.inputValidity.pincode}
-              inputIsTouched={regFormState.isTouched.pincode}
-              value={regFormState.inputValues.pincode}
-              onChangeText={(val) => checkValidity(val, 'pincode')}
-              onBlur={() => {
-                blurListener('pincode');
-              }}
-            />
-            <Fields
-              secureTextEntry={true}
-              label="Password*"
-              error="Please enter a stronger password"
-              returnKeyType="next"
-              inputIsValid={regFormState.inputValidity.password}
-              inputIsTouched={regFormState.isTouched.password}
-              value={regFormState.inputValues.password}
-              onChangeText={(val) => checkValidity(val, 'password')}
-              onBlur={() => {
-                blurListener('password');
-              }}
-            />
-            <Fields
-              secureTextEntry={true}
-              label="Confirm Password*"
-              error="Password mismatch!"
-              returnKeyType="next"
-              inputIsValid={regFormState.inputValidity.cpassword}
-              inputIsTouched={regFormState.isTouched.cpassword}
-              value={regFormState.inputValues.cpassword}
-              onChangeText={(val) => checkValidity(val, 'cpassword')}
-              onBlur={() => {
-                blurListener('cpassword');
-              }}
-            />
-            <View>
-              <View style={styles.inputView}>
-                <CheckBox
-                  tintColors={{true: colors.primary, false: colors.accent}}
-                  disabled={false}
-                  value={regFormState.inputValues.tnc}
-                  onValueChange={(val) => {
-                    checkValidity(val, 'tnc');
-                    blurListener('tnc');
-                  }}
-                />
-                <Text style={styles.tncText}>Accept Terms and Conditions.</Text>
+              <View style={styles.addPhoneView}>
+                {regFormState.inputValues.phone.length < 5 ? (
+                  <TouchableOpacity
+                    style={styles.addPhoneTouch}
+                    onPress={() => {
+                      phoneAdder();
+                    }}>
+                    <Feather name="plus" color="white" size={20} />
+                    <Text style={styles.addPhoneText}>Add new number</Text>
+                  </TouchableOpacity>
+                ) : null}
+                {regFormState.inputValues.phone.length > 1 ? (
+                  <TouchableOpacity
+                    style={styles.addPhoneTouch}
+                    onPress={() => dispatch(removePhone())}>
+                    <Feather name="x" color={colors.additional2} size={20} />
+                    <Text style={styles.addPhoneText}>Remove Phone</Text>
+                  </TouchableOpacity>
+                ) : null}
               </View>
-              {!regFormState.inputValidity.tnc &&
-                regFormState.isTouched.tnc && (
+
+              <Fields
+                label="Liscence Number*"
+                error="This field is required"
+                returnKeyType="next"
+                inputIsValid={regFormState.inputValidity.license}
+                inputIsTouched={regFormState.isTouched.license}
+                value={regFormState.inputValues.license}
+                onChangeText={(val) => checkValidity(val, 'license')}
+                onBlur={() => {
+                  blurListener('license');
+                }}
+              />
+              <Fields
+                label="Registered Address*"
+                error="This field is required"
+                returnKeyType="next"
+                multiline={true}
+                numberOfLines={3}
+                inputIsValid={regFormState.inputValidity.address}
+                inputIsTouched={regFormState.isTouched.address}
+                value={regFormState.inputValues.address}
+                onChangeText={(val) => checkValidity(val, 'address')}
+                onBlur={() => {
+                  blurListener('address');
+                }}
+              />
+              {/* <Text style={styles.pickerLabel}>State*</Text> */}
+
+              <View
+                style={
+                  !regFormState.inputValidity.selectedState &&
+                  regFormState.isTouched.selectedState
+                    ? styles.pickerViewInvalid
+                    : styles.pickerView
+                }>
+                <Picker
+                  style={styles.picker}
+                  selectedValue={regFormState.inputValues.selectedState}
+                  onValueChange={(val, itemIndex) => {
+                    blurListener('selectedState');
+                    checkValidity(val, 'selectedState');
+                    setdistEnb(true);
+                    setselectedStateindex(itemIndex);
+                  }}>
+                  {word.map((item, id) => (
+                    <Picker.Item
+                      label={item.state}
+                      value={item.state}
+                      key={id}
+                    />
+                  ))}
+                </Picker>
+              </View>
+
+              {!regFormState.inputValidity.selectedState &&
+                regFormState.isTouched.selectedState && (
+                  <Text style={styles.errorMsg}>Please select your state</Text>
+                )}
+
+              {/* <Text style={styles.pickerLabel}>District*</Text> */}
+
+              <View
+                style={
+                  !regFormState.inputValidity.selectedDistrict &&
+                  regFormState.isTouched.selectedDistrict
+                    ? styles.pickerViewInvalid
+                    : styles.pickerView
+                }>
+                <Picker
+                  enabled={distEnb}
+                  selectedValue={regFormState.inputValues.selectedDistrict}
+                  onValueChange={(val, itemIndex) => {
+                    blurListener('selectedDistrict');
+                    checkValidity(val, 'selectedDistrict');
+                  }}>
+                  {word[selectedStateindex].districts.map((item, id) => (
+                    <Picker.Item label={item} value={item} key={id} />
+                  ))}
+                </Picker>
+              </View>
+
+              {!regFormState.inputValidity.selectedDistrict &&
+                regFormState.isTouched.selectedDistrict && (
                   <Text style={styles.errorMsg}>
-                    Please accept our terms and conditions.
+                    Please select your district
                   </Text>
                 )}
-            </View>
-            <View style={styles.btnHolder}>
-              <View style={styles.loginCircle}>
-                <TouchableOpacity
-                  style={styles.loginPress}
-                  onPress={() => sumbitHandler()}>
-                  <Feather name="check" size={25} style={styles.icon} />
-                </TouchableOpacity>
+              <Fields
+                label="Pin code*"
+                error="Please enter valid pincode"
+                returnKeyType="next"
+                inputIsValid={regFormState.inputValidity.pincode}
+                inputIsTouched={regFormState.isTouched.pincode}
+                value={regFormState.inputValues.pincode}
+                onChangeText={(val) => checkValidity(val, 'pincode')}
+                onBlur={() => {
+                  blurListener('pincode');
+                }}
+              />
+              <Fields
+                secureTextEntry={true}
+                label="Password*"
+                error="Please enter a stronger password"
+                returnKeyType="next"
+                inputIsValid={regFormState.inputValidity.password}
+                inputIsTouched={regFormState.isTouched.password}
+                value={regFormState.inputValues.password}
+                onChangeText={(val) => checkValidity(val, 'password')}
+                onBlur={() => {
+                  blurListener('password');
+                }}
+              />
+              <Fields
+                secureTextEntry={true}
+                label="Confirm Password*"
+                error="Password mismatch!"
+                returnKeyType="next"
+                inputIsValid={regFormState.inputValidity.cpassword}
+                inputIsTouched={regFormState.isTouched.cpassword}
+                value={regFormState.inputValues.cpassword}
+                onChangeText={(val) => checkValidity(val, 'cpassword')}
+                onBlur={() => {
+                  blurListener('cpassword');
+                }}
+              />
+              <View>
+                <View style={styles.inputView}>
+                  <CheckBox
+                    tintColors={{true: colors.primary, false: colors.accent}}
+                    disabled={false}
+                    value={regFormState.inputValues.tnc}
+                    onValueChange={(val) => {
+                      checkValidity(val, 'tnc');
+                      blurListener('tnc');
+                    }}
+                  />
+                  <Text style={styles.tncText}>
+                    Accept Terms and Conditions.
+                  </Text>
+                </View>
+                {!regFormState.inputValidity.tnc &&
+                  regFormState.isTouched.tnc && (
+                    <Text style={styles.errorMsg}>
+                      Please accept our terms and conditions.
+                    </Text>
+                  )}
+              </View>
+              <View style={styles.btnHolder}>
+                <View style={styles.loginCircle}>
+                  <TouchableOpacity
+                    style={styles.loginPress}
+                    onPress={() => sumbitHandler()}>
+                    <Feather name="check" size={25} style={styles.icon} />
+                  </TouchableOpacity>
+                </View>
               </View>
             </View>
+            <View style={styles.registerLinkView}>
+              <TouchableWithoutFeedback
+                onPress={() => navigation.navigate('LoginScreen')}>
+                <Text style={styles.registerLink}>
+                  Already have an account?
+                  <Text style={styles.signUpText}> LOG IN</Text>
+                </Text>
+              </TouchableWithoutFeedback>
+            </View>
           </View>
-          <View style={styles.registerLinkView}>
-            <TouchableWithoutFeedback
-              onPress={() => navigation.navigate('LoginScreen')}>
-              <Text style={styles.registerLink}>
-                Already have an account?
-                <Text style={styles.signUpText}> LOG IN</Text>
-              </Text>
-            </TouchableWithoutFeedback>
-          </View>
-        </View>
-      </ScrollView>
+        </ScrollView>
+      )}
     </>
   );
 };
 
 const styles = StyleSheet.create({
+  progressBoard: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
   container: {
     flex: 1,
     backgroundColor: colors.additional2,

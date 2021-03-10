@@ -18,7 +18,7 @@ const RegisterSelectScreen = ({navigation}) => {
           <View style={styles.titleTextBoard}>
             <Text style={styles.heading}>You are ...</Text>
             <Text style={styles.info}>
-              Please choose the type of user u wish to be registered as below:{' '}
+              Please choose the type of user you wish to be registered as below:{' '}
             </Text>
           </View>
         </View>
@@ -79,14 +79,13 @@ const styles = StyleSheet.create({
   heading: {
     color: colors.additional1,
     fontSize: 40,
-    fontFamily: 'sans-serif-light',
+    fontFamily: 'Montserrat-Regular',
   },
   info: {
     color: colors.additional1,
     fontSize: 18,
-    fontFamily: 'qs-light',
+    fontFamily: 'Montserrat-Regular',
     marginVertical: 20,
-    fontFamily: 'sans-serif-light',
   },
   touchBoard: {
     padding: 40,
@@ -115,7 +114,7 @@ const styles = StyleSheet.create({
   },
   userTypeText: {
     color: colors.additional2,
-    fontFamily: 'qs-reg',
+    fontFamily: 'Montserrat-Regular',
   },
 });
 

@@ -15,12 +15,12 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 const SplashScreen = ({navigation}) => {
   const checkFirstLaunch = useCallback(() => {
     AsyncStorage.getItem('alreadyLaunched').then((value) => {
-      if (value == null) {
-        AsyncStorage.setItem('alreadyLaunched', JSON.stringify(true));
-        navigation.navigate('IntroSlider');
-      } else {
-        navigation.navigate('LoginScreen');
-      }
+      // if (value == null) {
+      //   AsyncStorage.setItem('alreadyLaunched', JSON.stringify(true));
+      navigation.navigate('IntroSlider');
+      // } else {
+      //   navigation.navigate('LoginScreen');
+      // }
     });
   }, [navigation]);
 

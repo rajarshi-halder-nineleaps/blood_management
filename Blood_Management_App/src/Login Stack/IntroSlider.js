@@ -52,7 +52,7 @@ const IntroSlider = ({navigation}) => {
 
   const renderNextButton = () => {
     return (
-      <View style={styles.buttonCircle}>
+      <View style={[styles.buttonCircle, {width: 50}]}>
         <Feather
           name="chevron-right"
           size={35}
@@ -66,19 +66,20 @@ const IntroSlider = ({navigation}) => {
   const renderSkipButton = () => {
     return (
       <View style={styles.buttonCircle}>
-        <Feather
+        <Text style={styles.loginText}>LOG IN</Text>
+        {/* <Feather
           name="chevrons-right"
           size={35}
           style={styles.icon}
           color={colors.primary}
-        />
+        /> */}
       </View>
     );
   };
 
   const renderDoneButton = () => {
     return (
-      <View style={styles.buttonCircle}>
+      <View style={[styles.buttonCircle, {width: 50}]}>
         <Feather
           name="check"
           size={35}
@@ -108,11 +109,12 @@ const IntroSlider = ({navigation}) => {
 
 const styles = StyleSheet.create({
   buttonCircle: {
-    width: 50,
+    width: 100,
     height: 50,
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 100,
+    flexDirection: 'row',
   },
   slide: {
     backgroundColor: colors.additional2,
@@ -146,6 +148,11 @@ const styles = StyleSheet.create({
   dotStyle: {
     backgroundColor: colors.accent,
     width: 10,
+  },
+  loginText: {
+    fontFamily: 'Montserrat-Regular',
+    color: colors.primary,
+    fontSize: 18,
   },
 });
 

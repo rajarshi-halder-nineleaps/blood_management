@@ -8,6 +8,8 @@ import {
   CONTACT_FAILURE,
 } from './actionTypes';
 
+//? REGULAR ACTION CREATORS.
+
 export const updateFields = (val, fieldId) => ({
   type: UPDATE_FIELDS,
   val: val,
@@ -30,6 +32,8 @@ export const stateCleanup = () => ({
 });
 
 ///////////////////////////////////////////////////////////////////////
+
+//? ASYNCHRONOUS ACTION CREATORS.
 
 export const makeContact = (userToken, contactData) => {
   return async (dispatch) => {

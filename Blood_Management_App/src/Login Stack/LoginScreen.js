@@ -147,7 +147,7 @@ const LoginScreen = ({navigation}) => {
               onPress={() => navigation.navigate('FindAccount')}>
               <Text
                 style={{
-                  color: colors.darkPrimary,
+                  color: colors.primary,
                   fontFamily: 'Montserrat-Regular',
                 }}>
                 Forgot Password?

@@ -167,7 +167,7 @@ const UserInfo = ({navigation}) => {
                         </Text>
                       </View>
                       <View style={styles.statsInsideView}>
-                        <Text style={styles.statsLabel}>Drives conducted</Text>
+                        <Text style={styles.statsLabel}>Drives organized</Text>
                         <Text style={styles.statsContent}>
                           {profileState.profileData.drivesConducted}
                         </Text>
@@ -182,7 +182,7 @@ const UserInfo = ({navigation}) => {
                         </Text>
                       </View>
                       <View style={styles.statsInsideView}>
-                        <Text style={styles.statsLabel}>Drives conducted</Text>
+                        <Text style={styles.statsLabel}>Drives organized</Text>
                         <Text style={styles.statsContent}>
                           {profileState.profileData.drivesConducted}
                         </Text>
@@ -256,9 +256,8 @@ const UserInfo = ({navigation}) => {
                         <Text style={styles.addressInsideLabel}>Phone:</Text>
                         <View>
                           <View style={styles.addressRightView}>
-                            {/* <Text style={styles.addressContent}>{profileState.profileData.phone}</Text> */}
                             {
-                              //TODO THERE IS SOME ERROR HERE, CHECK IT OUT.
+                              //? THE BUG WITH MULTIPLE PHONE NUMBERS MAPPING OCCURED HERE - NOW FIXED.
                               profileState.profileData.phone.length > 0
                                 ? profileState.profileData.phone.map(
                                     (val, idx) => (

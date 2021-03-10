@@ -90,7 +90,7 @@ const About = ({navigation}) => {
                 </Text>{' '}
                 with redBank , hospitlas can easily view and manage their
                 inventory, blood banks can sell blood to other users and any
-                user can nake a request to all the active donors who are willing
+                user can make a request to all the active donors who are willing
                 to donate their blood to save a life.
               </Text>
             </View>

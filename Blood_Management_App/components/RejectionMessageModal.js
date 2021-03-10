@@ -4,6 +4,7 @@ import {
   Modal,
   StyleSheet,
   Text,
+  TextInput,
   TouchableHighlight,
   View,
   Image,
@@ -14,6 +15,7 @@ import {
 import colors from '../constants/Colors';
 import Fields from './Fields';
 import {useSelector, useDispatch} from 'react-redux';
+// import { TextInput } from 'react-native-gesture-handler';
 
 const RejectionMessageModal = (props) => {
   const authState = useSelector((state) => state.authState);
@@ -36,12 +38,13 @@ const RejectionMessageModal = (props) => {
           />
           <Text style={styles.modalText}>{props.message}</Text>
 
-          <Fields
-            label="*Rejection message (Optional)"
-            multiline={true}
-            numberOfLines={3}
+          <TextInput
+            placeholder="Rejection message (Optional)"
             returnKeyType="next"
             value={rejectionMsg}
+            style={styles.formInput}
+            multiline={true}
+            numberOfLines={2}
             inputIsValid={true}
             inputIsTouched={true}
             onChangeText={(val) => {
@@ -54,10 +57,10 @@ const RejectionMessageModal = (props) => {
               onPress={() => {
                 props.dispatchData.rejectionMessage = rejectionMsg;
                 if (Platform.OS === 'android') {
-                    ToastAndroid.show('Invitation rejected!', ToastAndroid.SHORT)
-                  } else {
-                    AlertIOS.alert('Invitation rejected!');
-                  }
+                  ToastAndroid.show('Invitation rejected!', ToastAndroid.SHORT);
+                } else {
+                  AlertIOS.alert('Invitation rejected!');
+                }
                 props.visibleStateChanger(!props.visibleState);
                 dispatch(
                   props.dispatchable(
@@ -112,13 +115,25 @@ const styles = StyleSheet.create({
     shadowRadius: 3.84,
     elevation: 5,
   },
+  formInput: {
+    paddingVertical: 15,
+    borderRadius: 5,
+    backgroundColor: 'transparent',
+    borderColor: colors.grayishblack,
+    borderWidth: 2,
+    fontSize: 14,
+    fontFamily: 'Montserrat-Regular',
+    paddingHorizontal: 15,
+    color: 'black',
+    marginBottom: 20,
+  },
   touchBoard: {
     flexDirection: 'row',
-    width: '100%',
+    justifyContent: 'center',
   },
   openButton: {
     padding: 10,
-    marginHorizontal: 20,
+    marginHorizontal: 10,
     width: 100,
     borderRadius: 5,
   },

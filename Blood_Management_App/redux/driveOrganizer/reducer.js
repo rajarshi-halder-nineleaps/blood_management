@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import { Alert } from 'react-native';
+import {Alert} from 'react-native';
 
 import {
   UPDATE_FIELDS_ORGANIZER,
@@ -8,11 +8,12 @@ import {
   ORGANIZE_REQ,
   ORGANIZE_SUCCESS,
   ORGANIZE_FAILURE,
-  SET_DATE
+  SET_DATE,
 } from './actionTypes';
 
+//? INITIAL STATE
 const initialState = {
-  start: new Date,
+  start: new Date(),
   inputValues: {
     startDate: new Date(),
     endDate: new Date(),
@@ -49,6 +50,9 @@ const initialState = {
   error: '',
 };
 
+///////////////////////////////////////////////////////////////////////////////////////
+
+//? REDUCER FUNCTION.
 const driveOrganizerReducer = (state = initialState, action) => {
   switch (action.type) {
     case UPDATE_FIELDS_ORGANIZER: {
@@ -76,8 +80,8 @@ const driveOrganizerReducer = (state = initialState, action) => {
     }
 
     case BLUR_FIELDS_ORGANIZER: {
-      const newInputIsTouched = { ...state.isTouched, [action.fieldId]: true };
-      return { ...state, isTouched: newInputIsTouched };
+      const newInputIsTouched = {...state.isTouched, [action.fieldId]: true};
+      return {...state, isTouched: newInputIsTouched};
     }
 
     case STATE_CLEANUP: {
@@ -86,22 +90,22 @@ const driveOrganizerReducer = (state = initialState, action) => {
     }
 
     case ORGANIZE_REQ: {
-      return { ...state, loading: true };
+      return {...state, loading: true};
     }
     case ORGANIZE_SUCCESS: {
       Alert.alert('Success', 'Drive organized successfully');
-      return { ...state, loading: false, error: '' };
+      return {...state, loading: false, error: ''};
     }
     case ORGANIZE_FAILURE: {
       Alert.alert('Error', action.error);
-      return { ...state, loading: false, error: action.error, driveId: '' };
+      return {...state, loading: false, error: action.error, driveId: ''};
     }
     case SET_DATE: {
-      console.log("setting date")
+      console.log('setting date');
       return {
         ...state,
-        start: action.date
-      }
+        start: action.date,
+      };
     }
 
     default:

@@ -8,6 +8,7 @@ import {
   CONTACT_FAILURE,
 } from './actionTypes';
 
+//? INITIAL STATE.
 const initialState = {
   loading: false,
   error: '',
@@ -17,6 +18,7 @@ const initialState = {
   },
 };
 
+//? REDUCER FUNCTION.
 const aboutReducer = (state = initialState, action) => {
   switch (action.type) {
     case UPDATE_FIELDS: {

@@ -1,3 +1,4 @@
+import {Alert} from 'react-native';
 import {
   UPDATE_FIELDS_REG,
   BLUR_FIELDS_REG,
@@ -6,10 +7,20 @@ import {
   PHONE_TOUCH_SET,
   STATE_CLEANUP,
   REMOVE_PHONE,
+  UPDATE_OTP,
+  BLUR_OTP,
+  REQ_VERIFICATION_SUCCESS,
+  REQ_VERIFICATION_FAILURE,
+  REQ_VERIFICATION,
+  SET_VALID_EMAIL,
+  SET_USER_VERIFIED,
+  RESET_OTP_STATE,
 } from './actionTypes';
 import {phoneRegex} from '../../constants/Regexes';
 
 const initialState = {
+  loading: false,
+  error: '',
   inputValues: {
     name: '',
     email: '',
@@ -49,7 +60,13 @@ const initialState = {
     cpassword: false,
     tnc: false,
   },
+  otp: {
+    value: '',
+    validity: false,
+    touched: false,
+  },
   finalFormState: false,
+  userVerified: 0,
 };
 
 const regIndReducer = (state = initialState, action) => {
@@ -166,6 +183,48 @@ const regIndReducer = (state = initialState, action) => {
     case STATE_CLEANUP: {
       console.log('Cleaning state');
       return initialState;
+    }
+
+    case REQ_VERIFICATION: {
+      return {...state, loading: true};
+    }
+
+    case REQ_VERIFICATION_SUCCESS: {
+      return {...state, loading: false};
+    }
+
+    case REQ_VERIFICATION_FAILURE: {
+      const newOtp = {...state.otp};
+      newOtp.validity = false;
+      newOtp.touched = true;
+      Alert.alert('Error', action.error);
+      return {...state, loading: false, error: action.error, otp: newOtp};
+    }
+
+    case UPDATE_OTP: {
+      const newOtp = {...state.otp};
+      newOtp.value = action.val;
+      newOtp.validity = action.validity;
+      return {...state, otp: newOtp};
+    }
+
+    case BLUR_OTP: {
+      const newOtp = {...state.otp};
+      newOtp.touched = true;
+      return {...state, otp: newOtp};
+    }
+
+    case SET_VALID_EMAIL: {
+      return {...state, validEmail: action.validity};
+    }
+
+    case SET_USER_VERIFIED: {
+      console.log('THE USER VERIFIED: ', action.verified);
+      return {...state, userVerified: action.verified};
+    }
+
+    case RESET_OTP_STATE: {
+      return {...state, otp: {...initialState.otp}};
     }
 
     default:
