@@ -1,12 +1,23 @@
 import React from 'react';
-import {View, Text, StyleSheet, TouchableOpcaity} from 'react-native';
+import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
+import {setNotificationStatus} from '../redux/notifications/actions';
 import colors from '../constants/Colors';
 import Feather from 'react-native-vector-icons/Feather';
+import {useSelector, useDispatch} from 'react-redux';
 
 const NotificationItem = ({item}) => {
+  const authState = useSelector((state) => state.authState);
+  const dispatch = useDispatch();
+
   return (
     <>
-      <View
+      <TouchableOpacity
+        disabled={item.status}
+        onPress={() =>
+          dispatch(
+            setNotificationStatus(authState.userToken, item.notification_id),
+          )
+        }
         style={
           item.title === 'Eligibility update'
             ? styles.eligibilityTab
@@ -42,7 +53,7 @@ const NotificationItem = ({item}) => {
             </Text>
           </View>
         </View>
-      </View>
+      </TouchableOpacity>
     </>
   );
 };
@@ -56,6 +67,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     paddingVertical: 10,
+    borderWidth: 0,
   },
   seenTab: {
     backgroundColor: colors.accent,
@@ -65,6 +77,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     paddingVertical: 10,
+    borderWidth: 0,
   },
   eligibilityTab: {
     backgroundColor: colors.moderategray,

@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import React from 'react';
+import React, {useEffect} from 'react';
 import {createMaterialBottomTabNavigator} from '@react-navigation/material-bottom-tabs';
 import colors from '../constants/Colors';
 import Feather from 'react-native-vector-icons/Feather';
@@ -10,10 +10,61 @@ import Notifications from '../src/MainTabs/Notifications';
 import Profile from '../src/MainTabs/ProfileStack/Profile';
 import ProfileStackNavigator from './ProfileNavigator';
 import ServicesStackNavigator from './ServicesNavigator';
+import {useSelector, useDispatch} from 'react-redux';
+import {fetchNotifications} from '../redux/notifications/actions';
+import {LogBox} from 'react-native';
+
+//! if u need to use it, install it first.
+// import BackgroundTimer from 'react-native-background-timer';
 
 const Tab = createMaterialBottomTabNavigator();
 
 const MainNavigator = () => {
+  const notificationsState = useSelector((state) => state.notificationsState);
+  const authState = useSelector((state) => state.authState);
+  const dispatch = useDispatch();
+
+  // todo change if u get a better solution.
+  LogBox.ignoreLogs(['Setting a timer']);
+
+  useEffect(() => {
+    //* 1.
+
+    let timeout;
+    function dispatchNotificationAction() {
+      dispatch(fetchNotifications(authState.userToken));
+      timeout = setTimeout(dispatchNotificationAction, 20000);
+    }
+    dispatchNotificationAction();
+
+    return () => {
+      clearTimeout(timeout);
+    };
+
+    //* 2.
+
+    // dispatch(fetchNotifications(authState.userToken));
+    // const notificationFetcher = setInterval(() => {
+    //   dispatch(fetchNotifications(authState.userToken));
+    // }, 1000 * 60 * 5);
+    // return () => {
+    //   clearInterval(notificationFetcher);
+    // };
+  }, []);
+
+  const newNotificationsLength = notificationsState.notifications.filter(
+    (val) => !val.status,
+  ).length;
+
+  const notificationOptions = {
+    tabBarLabel: 'Notifications',
+    tabBarIcon: ({color}) => <Feather name="bell" color={color} size={20} />,
+  };
+
+  newNotificationsLength > 0
+    ? (notificationOptions.tabBarBadge = newNotificationsLength)
+    : null;
+
   return (
     <Tab.Navigator
       barStyle={{
@@ -63,12 +114,7 @@ const MainNavigator = () => {
       <Tab.Screen
         name=" notiications"
         component={Notifications}
-        options={{
-          tabBarLabel: 'Notifications',
-          tabBarIcon: ({color}) => (
-            <Feather name="bell" color={color} size={20} />
-          ),
-        }}
+        options={notificationOptions}
       />
       <Tab.Screen
         name=" about "

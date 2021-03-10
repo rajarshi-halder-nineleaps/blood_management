@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-import { GETDONORLIST, INVITE_SUCCESS } from './actionTypes';
+import {GETDONORLIST, INVITE_SUCCESS} from './actionTypes';
 import {
   UPDATE_FIELDS_REG,
   STATE_CLEANUP,
@@ -71,7 +71,7 @@ export const getDonorList = (userToken, formData) => {
           bloodGroup: formData.blood_group,
         },
         {
-          headers: { Authorization: 'Bearer ' + userToken },
+          headers: {Authorization: 'Bearer ' + userToken},
         },
       );
       console.log('COMPLETE RESPONSE DATA: ', response.data);
@@ -134,7 +134,7 @@ export const submitinvite = (userToken, formData, array) => {
           bloodGroup: formData.blood_group,
           idList: array,
         },
-        { headers: { Authorization: 'Bearer ' + userToken } },
+        {headers: {Authorization: 'Bearer ' + userToken}},
       );
       console.log('COMPLETE RESPONSE DATA: ', response.data);
 

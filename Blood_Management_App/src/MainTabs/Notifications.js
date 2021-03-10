@@ -10,7 +10,7 @@ import {
   RefreshControl,
 } from 'react-native';
 import {useFocusEffect} from '@react-navigation/native';
-import renderItem from '../../components/NotificationItem';
+import NotificationItem from '../../components/NotificationItem';
 import colors from '../../constants/Colors';
 import {useSelector, useDispatch} from 'react-redux';
 import Feather from 'react-native-vector-icons/Feather';
@@ -88,7 +88,7 @@ const Notifications = ({navigation}) => {
         <FlatList
           style={styles.list}
           data={notificationsState.notifications}
-          renderItem={renderItem}
+          renderItem={({item}) => <NotificationItem item={item} />}
           keyExtractor={(item) => item.notification_id + ''}
           refreshControl={
             <RefreshControl

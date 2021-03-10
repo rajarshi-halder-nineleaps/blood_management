@@ -1,14 +1,10 @@
 /* eslint-disable prettier/prettier */
 import React, {useEffect} from 'react';
 import {NavigationContainer} from '@react-navigation/native';
-
 import MainNavigator from '../navigation/MainNavigator';
 import RootStackNavigator from '../navigation/RootStackNavigator';
-
 import {View, ActivityIndicator, StyleSheet} from 'react-native';
-
 import colors from '../constants/Colors';
-
 import {useSelector, useDispatch} from 'react-redux';
 import {tokenRetriever} from '../redux/auth/actions';
 
@@ -20,8 +16,6 @@ const Config = () => {
   useEffect(() => {
     dispatch(tokenRetriever());
   }, [dispatch]);
-
-  console.log(authState);
 
   return (
     <>

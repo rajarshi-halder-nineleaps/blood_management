@@ -2,6 +2,7 @@ import {
   NOTIFICATIONS_REQ,
   NOTIFICATIONS_SUCCESS,
   NOTIFICATIONS_FAILURE,
+  NOTIFICATION_STATUS_SET,
 } from './actionTypes';
 
 const initialState = {
@@ -30,6 +31,18 @@ const notificationsReducer = (state = initialState, action) => {
         ...state,
         loading: false,
         error: action.error,
+      };
+    }
+
+    case NOTIFICATION_STATUS_SET: {
+      const newNotifications = [...state.notifications];
+      newNotifications.find(
+        (val) => val.notification_id === action.notificationId,
+      ).status = true;
+
+      return {
+        ...state,
+        notifications: newNotifications,
       };
     }
 
