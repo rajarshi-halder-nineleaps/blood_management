@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import {Alert} from 'react-native';
+import {showMessage, hideMessage} from 'react-native-flash-message';
 import {
   PROFILE_REQ,
   PROFILE_SUCCESS,
@@ -43,7 +43,11 @@ const profileReducer = (state = initialState, action) => {
       };
     }
     case PROFILE_FAILURE: {
-      Alert.alert('error', action.error);
+      showMessage({
+        message: 'Error',
+        description: action.error,
+        type: 'danger',
+      });
       return {...state, loading: false, error: action.error};
     }
 

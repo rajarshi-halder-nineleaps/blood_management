@@ -23,6 +23,7 @@ import {
 } from '../../../redux/changePassword/actions';
 import {useDispatch, useSelector} from 'react-redux';
 import {passwordRegex} from '../../../constants/Regexes';
+import {showMessage, hideMessage} from 'react-native-flash-message';
 
 const ConfirmPassword = ({navigation}) => {
   const dispatch = useDispatch();
@@ -53,7 +54,11 @@ const ConfirmPassword = ({navigation}) => {
         ),
       );
     } else {
-      Alert.alert('Invalid Password', 'Please enter your valid password');
+      showMessage({
+        message: 'Invalid password',
+        description: 'Password input is invalid, please try again.',
+        type: 'danger',
+      });
     }
   };
 

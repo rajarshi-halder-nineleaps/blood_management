@@ -1,5 +1,5 @@
 import React from 'react';
-import {StyleSheet, View, Text, Image} from 'react-native';
+import {StyleSheet, View, Text, Image, StatusBar} from 'react-native';
 import AppIntroSlider from 'react-native-app-intro-slider';
 import colors from '../../constants/Colors';
 import Feather from 'react-native-vector-icons/Feather';
@@ -91,19 +91,23 @@ const IntroSlider = ({navigation}) => {
   };
 
   return (
-    <AppIntroSlider
-      data={slides}
-      renderDoneButton={renderDoneButton}
-      renderNextButton={renderNextButton}
-      renderSkipButton={renderSkipButton}
-      renderItem={renderItem}
-      keyExtractor={(item) => item.key + ''}
-      onDone={() => navigation.navigate('LoginScreen')}
-      onSkip={() => navigation.navigate('LoginScreen')}
-      showSkipButton={true}
-      activeDotStyle={styles.activeDotStyle}
-      dotStyle={styles.dotStyle}
-    />
+    <>
+      <StatusBar hidden />
+
+      <AppIntroSlider
+        data={slides}
+        renderDoneButton={renderDoneButton}
+        renderNextButton={renderNextButton}
+        renderSkipButton={renderSkipButton}
+        renderItem={renderItem}
+        keyExtractor={(item) => item.key + ''}
+        onDone={() => navigation.navigate('LoginScreen')}
+        onSkip={() => navigation.navigate('LoginScreen')}
+        showSkipButton={true}
+        activeDotStyle={styles.activeDotStyle}
+        dotStyle={styles.dotStyle}
+      />
+    </>
   );
 };
 

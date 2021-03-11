@@ -1,13 +1,12 @@
 import React, {useState, useEffect} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import Feather from 'react-native-vector-icons/Feather';
-
+import {showMessage, hideMessage} from 'react-native-flash-message';
 import {
   View,
   Text,
   StyleSheet,
   ScrollView,
-  Alert,
   Image,
   ImageBackground,
 } from 'react-native';
@@ -89,32 +88,33 @@ const FindDonors = ({navigation}) => {
             );
             navigation.navigate('Buy Blood List');
           } else {
-            Alert.alert(
-              'Missing Units',
-              'Please input required number of units to continue',
-              [{text: 'Okay'}],
-            );
+            showMessage({
+              message: 'Units required',
+              description:
+                'Please input the number of units required to continue.',
+              type: 'warning',
+            });
           }
         } else {
-          Alert.alert(
-            'Invalid Blood group',
-            'Please select a Blood Component to continue',
-            [{text: 'Okay'}],
-          );
+          showMessage({
+            message: 'Component required',
+            description: 'Please select a blood component to continue.',
+            type: 'warning',
+          });
         }
       } else {
-        Alert.alert(
-          'Invalid Input',
-          'Please select a Blood Group to continue',
-          [{text: 'Okay'}],
-        );
+        showMessage({
+          message: 'Blood group required',
+          description: 'Please select a blood group to continue.',
+          type: 'warning',
+        });
       }
     } else {
-      Alert.alert(
-        'Invalid Input',
-        'Please enter a valid pincode or leave the field empty.',
-        [{text: 'Okay'}],
-      );
+      showMessage({
+        message: 'Invalid pincode',
+        description: 'Please enter a valid pincode or leave the field empty.',
+        type: 'warning',
+      });
     }
   };
 

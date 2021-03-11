@@ -1,5 +1,6 @@
 /* eslint-disable prettier/prettier */
-import {Alert} from 'react-native';
+import {showMessage, hideMessage} from 'react-native-flash-message';
+import colors from '../../constants/Colors';
 import {
   DRIVE_FIND_REQ,
   DRIVE_FIND_FAILURE,
@@ -25,7 +26,11 @@ const upcomingDrivesReducer = (state = initialState, action) => {
     }
     case DRIVE_FIND_FAILURE: {
       console.log('Drive find failure reached reducer.');
-      Alert.alert('Invalid action', action.error);
+      showMessage({
+        message: 'Error',
+        description: action.error,
+        backgroundColor: colors.coolblue,
+      });
       return {...state, error: action.error, loading: false};
     }
     case DRIVE_FIND_SUCCESS: {
@@ -39,10 +44,11 @@ const upcomingDrivesReducer = (state = initialState, action) => {
       };
     }
     case DRIVE_REGISTER_SUCCESS: {
-      Alert.alert(
-        'Success',
-        'You have successsfully registered for this drive!',
-      );
+      showMessage({
+        message: 'Success',
+        description: 'You have successfully registered for this drive',
+        type: 'success',
+      });
       return {...state, loading: false, registerSuccess: true};
     }
 

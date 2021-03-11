@@ -3,14 +3,10 @@ import React, {useState, useEffect} from 'react';
 import {
   View,
   Text,
-  TextInput,
   ScrollView,
   StyleSheet,
-  KeyboardAvoidingView,
   TouchableOpacity,
   TouchableWithoutFeedback,
-  SafeAreaView,
-  Alert,
   Platform,
 } from 'react-native';
 import {
@@ -18,6 +14,7 @@ import {
   blurFields,
   stateCleanup,
 } from '../../redux/registerInd/actions';
+import {showMessage, hideMessage} from 'react-native-flash-message';
 import {SkypeIndicator} from 'react-native-indicators';
 import {setUserVerified, sendOtp} from '../../redux/register/actions';
 import colors from '../../constants/Colors';
@@ -153,11 +150,11 @@ const RegisterBbScreen = ({navigation}) => {
         }),
       );
     } else {
-      Alert.alert(
-        'Invalid Input',
-        'Please check all the inputs before proceeding.',
-        [{text: 'Okay'}],
-      );
+      showMessage({
+        message: 'Invalid Inputs',
+        description: 'Please check all the inputs before proceeding.',
+        type: 'warning',
+      });
     }
   };
 
@@ -173,277 +170,286 @@ const RegisterBbScreen = ({navigation}) => {
           <SkypeIndicator color={colors.primary} />
         </View>
       ) : (
-      <ScrollView style={styles.container}>
-        <View style={styles.board}>
-          <View style={styles.titleBoard}>
-            <Text style={styles.heading}>Register</Text>
-          </View>
-          <View style={styles.contentBoard}>
-            <Fields
-              label="Name*"
-              error="Invalid name!"
-              returnKeyType="next"
-              inputIsValid={regFormState.inputValidity.name}
-              inputIsTouched={regFormState.isTouched.name}
-              value={regFormState.inputValues.name}
-              onChangeText={(val) => checkValidity(val, 'name')}
-              onBlur={() => {
-                blurListener('name');
-              }}
-            />
-
-            <Fields
-              label="Email*"
-              error="Invalid email!"
-              returnKeyType="next"
-              keyboardType="email-address"
-              inputIsValid={regFormState.inputValidity.email}
-              inputIsTouched={regFormState.isTouched.email}
-              value={regFormState.inputValues.email}
-              onChangeText={(val) => checkValidity(val, 'email')}
-              onBlur={() => {
-                blurListener('email');
-              }}
-            />
-
-            {/* <Text style={styles.pickerLabel}>Date of birth*</Text> */}
-            <TouchableOpacity
-              onPress={showDatepicker}
-              style={
-                !regFormState.inputValidity.dob && regFormState.isTouched.dob
-                  ? styles.pickerViewInvalid
-                  : styles.pickerView
-              }>
-              <Text
-                style={{
-                  fontFamily: 'Montserrat-Regular',
-                  fontSize: 15,
-                  paddingVertical: 18,
-                  color: colors.grayishblack,
-                }}>
-                {'Date of birth*:   ' +
-                  regFormState.inputValues.dob.toLocaleDateString()}
-              </Text>
-            </TouchableOpacity>
-            {!regFormState.inputValidity.dob && regFormState.isTouched.dob && (
-              <Text style={styles.errorMsg}>You are not of legal age</Text>
-            )}
-            {show && (
-              <DateTimePicker
-                testID="dateTimePicker"
-                value={regFormState.inputValues.dob}
-                mode={mode}
-                is24Hour={true}
-                display="default"
-                onChange={onChange}
-              />
-            )}
-            {/* <Text style={styles.pickerLabel}>Select blood group*</Text> */}
-
-            <Fields
-              label="Phone*"
-              error="Invalid phone!"
-              returnKeyType="next"
-              keyboardType="phone-pad"
-              onChangeText={(val) => checkValidity(val, 'phone')}
-              onBlur={() => {
-                blurListener('phone');
-              }}
-              inputIsValid={regFormState.inputValidity.phone}
-              inputIsTouched={regFormState.isTouched.phone}
-              value={regFormState.inputValues.phone}
-            />
-
-            <View
-              style={
-                !regFormState.inputValidity.bloodgroup &&
-                regFormState.inputValues.bloodgroup
-                  ? styles.pickerViewInvalid
-                  : styles.pickerView
-              }>
-              <Picker
-                mode="dropdown"
-                iosIcon={<Feather name="arrow-down" style={{color: 'red'}} />}
-                selectedValue={regFormState.inputValues.bloodgroup}
-                style={{
-                  color: 'black',
-                  borderBottomWidth: 0.5,
+        <ScrollView style={styles.container}>
+          <View style={styles.board}>
+            <View style={styles.titleBoard}>
+              <Text style={styles.heading}>Register</Text>
+            </View>
+            <View style={styles.contentBoard}>
+              <Fields
+                label="Name*"
+                error="Invalid name!"
+                returnKeyType="next"
+                inputIsValid={regFormState.inputValidity.name}
+                inputIsTouched={regFormState.isTouched.name}
+                value={regFormState.inputValues.name}
+                onChangeText={(val) => checkValidity(val, 'name')}
+                onBlur={() => {
+                  blurListener('name');
                 }}
-                onValueChange={(selectedVal) => {
-                  checkValidity(selectedVal, 'bloodgroup');
-                  blurListener('bloodgroup');
-                }}>
-                <Picker.Item label="Blood Group" value="0" />
-                <Picker.Item label="B+" value="B+" />
-                <Picker.Item label="A+" value="A+" />
-                <Picker.Item label="B-" value="B-" />
-                <Picker.Item label="A-" value="A-" />
-                <Picker.Item label="O+" value="O+" />
-                <Picker.Item label="O-" value="O-" />
-                <Picker.Item label="AB+" value="AB+" />
-                <Picker.Item label="AB-" value="AB-" />
-              </Picker>
-            </View>
-            {!regFormState.inputValidity.bloodgroup &&
-              regFormState.isTouched.bloodgroup && (
-                <Text style={styles.errorMsg}>
-                  Please select your blood group
+              />
+
+              <Fields
+                label="Email*"
+                error="Invalid email!"
+                returnKeyType="next"
+                keyboardType="email-address"
+                inputIsValid={regFormState.inputValidity.email}
+                inputIsTouched={regFormState.isTouched.email}
+                value={regFormState.inputValues.email}
+                onChangeText={(val) => checkValidity(val, 'email')}
+                onBlur={() => {
+                  blurListener('email');
+                }}
+              />
+
+              {/* <Text style={styles.pickerLabel}>Date of birth*</Text> */}
+              <TouchableOpacity
+                onPress={showDatepicker}
+                style={
+                  !regFormState.inputValidity.dob && regFormState.isTouched.dob
+                    ? styles.pickerViewInvalid
+                    : styles.pickerView
+                }>
+                <Text
+                  style={{
+                    fontFamily: 'Montserrat-Regular',
+                    fontSize: 15,
+                    paddingVertical: 18,
+                    color: colors.grayishblack,
+                  }}>
+                  {'Date of birth*:   ' +
+                    regFormState.inputValues.dob.toLocaleDateString()}
                 </Text>
-              )}
-
-            <Fields
-              label="Current Address*"
-              error="This field is required"
-              returnKeyType="next"
-              multiline={true}
-              numberOfLines={3}
-              inputIsValid={regFormState.inputValidity.address}
-              inputIsTouched={regFormState.isTouched.address}
-              value={regFormState.inputValues.address}
-              onChangeText={(val) => checkValidity(val, 'address')}
-              onBlur={() => {
-                blurListener('address');
-              }}
-            />
-
-            {/* <Text style={styles.pickerLabel}>State*</Text> */}
-            <View
-              style={
-                !regFormState.inputValidity.selectedState &&
-                regFormState.isTouched.selectedState
-                  ? styles.pickerViewInvalid
-                  : styles.pickerView
-              }>
-              <Picker
-                selectedValue={regFormState.inputValues.selectedState}
-                onValueChange={(val, itemIndex) => {
-                  blurListener('selectedState');
-                  checkValidity(val, 'selectedState');
-                  setdistEnb(true), setselectedStateindex(itemIndex);
-                }}>
-                {word.map((item, id) => (
-                  <Picker.Item label={item.state} value={item.state} key={id} />
-                ))}
-              </Picker>
-            </View>
-
-            {!regFormState.inputValidity.selectedState &&
-              regFormState.isTouched.selectedState && (
-                <Text style={styles.errorMsg}>Please select your state</Text>
-              )}
-
-            {/* <Text style={styles.pickerLabel}>District*</Text> */}
-
-            <View
-              style={
-                !regFormState.inputValidity.selectedDistrict &&
-                regFormState.isTouched.selectedDistrict
-                  ? styles.pickerViewInvalid
-                  : styles.pickerView
-              }>
-              <Picker
-                enabled={distEnb}
-                selectedValue={regFormState.inputValues.selectedDistrict}
-                onValueChange={(val, itemIndex) => {
-                  blurListener('selectedDistrict');
-                  checkValidity(val, 'selectedDistrict');
-                }}>
-                {word[selectedStateindex].districts.map((item, id) => (
-                  <Picker.Item label={item} value={item} key={id} />
-                ))}
-              </Picker>
-            </View>
-            {!regFormState.inputValidity.selectedDistrict &&
-              regFormState.isTouched.selectedDistrict && (
-                <Text style={styles.errorMsg}>Please select your district</Text>
-              )}
-
-            <Fields
-              label="Pin code*"
-              error="Please enter valid pincode"
-              keyboardType="number-pad"
-              returnKeyType="next"
-              inputIsValid={regFormState.inputValidity.pincode}
-              inputIsTouched={regFormState.isTouched.pincode}
-              value={regFormState.inputValues.pincode}
-              onChangeText={(val) => checkValidity(val, 'pincode')}
-              onBlur={() => {
-                blurListener('pincode');
-              }}
-            />
-
-            <Fields
-              secureTextEntry={true}
-              label="Password*"
-              error="Please enter a stronger password"
-              returnKeyType="next"
-              inputIsValid={regFormState.inputValidity.password}
-              inputIsTouched={regFormState.isTouched.password}
-              value={regFormState.inputValues.password}
-              onChangeText={(val) => checkValidity(val, 'password')}
-              onBlur={() => {
-                blurListener('password');
-              }}
-            />
-            <Fields
-              secureTextEntry={true}
-              label="Confirm Password*"
-              error="Password mismatch!"
-              returnKeyType="next"
-              inputIsValid={regFormState.inputValidity.cpassword}
-              inputIsTouched={regFormState.isTouched.cpassword}
-              value={regFormState.inputValues.cpassword}
-              onChangeText={(val) => checkValidity(val, 'cpassword')}
-              onBlur={() => {
-                blurListener('cpassword');
-              }}
-            />
-
-            <View>
-              <View style={styles.inputView}>
-                <CheckBox
-                  tintColors={{true: colors.primary, false: colors.accent}}
-                  disabled={false}
-                  value={regFormState.inputValues.tnc}
-                  onValueChange={(val) => {
-                    checkValidity(val, 'tnc');
-                    blurListener('tnc');
-                  }}
+              </TouchableOpacity>
+              {!regFormState.inputValidity.dob &&
+                regFormState.isTouched.dob && (
+                  <Text style={styles.errorMsg}>You are not of legal age</Text>
+                )}
+              {show && (
+                <DateTimePicker
+                  testID="dateTimePicker"
+                  value={regFormState.inputValues.dob}
+                  mode={mode}
+                  is24Hour={true}
+                  display="default"
+                  onChange={onChange}
                 />
-                <Text style={styles.tncText}>Accept Terms and Conditions.</Text>
+              )}
+              {/* <Text style={styles.pickerLabel}>Select blood group*</Text> */}
+
+              <Fields
+                label="Phone*"
+                error="Invalid phone!"
+                returnKeyType="next"
+                keyboardType="phone-pad"
+                onChangeText={(val) => checkValidity(val, 'phone')}
+                onBlur={() => {
+                  blurListener('phone');
+                }}
+                inputIsValid={regFormState.inputValidity.phone}
+                inputIsTouched={regFormState.isTouched.phone}
+                value={regFormState.inputValues.phone}
+              />
+
+              <View
+                style={
+                  !regFormState.inputValidity.bloodgroup &&
+                  regFormState.inputValues.bloodgroup
+                    ? styles.pickerViewInvalid
+                    : styles.pickerView
+                }>
+                <Picker
+                  mode="dropdown"
+                  iosIcon={<Feather name="arrow-down" style={{color: 'red'}} />}
+                  selectedValue={regFormState.inputValues.bloodgroup}
+                  style={{
+                    color: 'black',
+                    borderBottomWidth: 0.5,
+                  }}
+                  onValueChange={(selectedVal) => {
+                    checkValidity(selectedVal, 'bloodgroup');
+                    blurListener('bloodgroup');
+                  }}>
+                  <Picker.Item label="Blood Group" value="0" />
+                  <Picker.Item label="B+" value="B+" />
+                  <Picker.Item label="A+" value="A+" />
+                  <Picker.Item label="B-" value="B-" />
+                  <Picker.Item label="A-" value="A-" />
+                  <Picker.Item label="O+" value="O+" />
+                  <Picker.Item label="O-" value="O-" />
+                  <Picker.Item label="AB+" value="AB+" />
+                  <Picker.Item label="AB-" value="AB-" />
+                </Picker>
               </View>
-              {!regFormState.inputValidity.tnc &&
-                regFormState.isTouched.tnc && (
+              {!regFormState.inputValidity.bloodgroup &&
+                regFormState.isTouched.bloodgroup && (
                   <Text style={styles.errorMsg}>
-                    Please accept our terms and conditions.
+                    Please select your blood group
                   </Text>
                 )}
-            </View>
 
-            <View style={styles.btnHolder}>
-              <View style={styles.loginCircle}>
-                <TouchableOpacity
-                  style={styles.loginPress}
-                  onPress={() => {
-                    sumbitHandler();
+              <Fields
+                label="Current Address*"
+                error="This field is required"
+                returnKeyType="next"
+                multiline={true}
+                numberOfLines={3}
+                inputIsValid={regFormState.inputValidity.address}
+                inputIsTouched={regFormState.isTouched.address}
+                value={regFormState.inputValues.address}
+                onChangeText={(val) => checkValidity(val, 'address')}
+                onBlur={() => {
+                  blurListener('address');
+                }}
+              />
+
+              {/* <Text style={styles.pickerLabel}>State*</Text> */}
+              <View
+                style={
+                  !regFormState.inputValidity.selectedState &&
+                  regFormState.isTouched.selectedState
+                    ? styles.pickerViewInvalid
+                    : styles.pickerView
+                }>
+                <Picker
+                  selectedValue={regFormState.inputValues.selectedState}
+                  onValueChange={(val, itemIndex) => {
+                    blurListener('selectedState');
+                    checkValidity(val, 'selectedState');
+                    setdistEnb(true), setselectedStateindex(itemIndex);
                   }}>
-                  <Feather name="check" size={25} style={styles.icon} />
-                </TouchableOpacity>
+                  {word.map((item, id) => (
+                    <Picker.Item
+                      label={item.state}
+                      value={item.state}
+                      key={id}
+                    />
+                  ))}
+                </Picker>
+              </View>
+
+              {!regFormState.inputValidity.selectedState &&
+                regFormState.isTouched.selectedState && (
+                  <Text style={styles.errorMsg}>Please select your state</Text>
+                )}
+
+              {/* <Text style={styles.pickerLabel}>District*</Text> */}
+
+              <View
+                style={
+                  !regFormState.inputValidity.selectedDistrict &&
+                  regFormState.isTouched.selectedDistrict
+                    ? styles.pickerViewInvalid
+                    : styles.pickerView
+                }>
+                <Picker
+                  enabled={distEnb}
+                  selectedValue={regFormState.inputValues.selectedDistrict}
+                  onValueChange={(val, itemIndex) => {
+                    blurListener('selectedDistrict');
+                    checkValidity(val, 'selectedDistrict');
+                  }}>
+                  {word[selectedStateindex].districts.map((item, id) => (
+                    <Picker.Item label={item} value={item} key={id} />
+                  ))}
+                </Picker>
+              </View>
+              {!regFormState.inputValidity.selectedDistrict &&
+                regFormState.isTouched.selectedDistrict && (
+                  <Text style={styles.errorMsg}>
+                    Please select your district
+                  </Text>
+                )}
+
+              <Fields
+                label="Pin code*"
+                error="Please enter valid pincode"
+                keyboardType="number-pad"
+                returnKeyType="next"
+                inputIsValid={regFormState.inputValidity.pincode}
+                inputIsTouched={regFormState.isTouched.pincode}
+                value={regFormState.inputValues.pincode}
+                onChangeText={(val) => checkValidity(val, 'pincode')}
+                onBlur={() => {
+                  blurListener('pincode');
+                }}
+              />
+
+              <Fields
+                secureTextEntry={true}
+                label="Password*"
+                error="Please enter a stronger password"
+                returnKeyType="next"
+                inputIsValid={regFormState.inputValidity.password}
+                inputIsTouched={regFormState.isTouched.password}
+                value={regFormState.inputValues.password}
+                onChangeText={(val) => checkValidity(val, 'password')}
+                onBlur={() => {
+                  blurListener('password');
+                }}
+              />
+              <Fields
+                secureTextEntry={true}
+                label="Confirm Password*"
+                error="Password mismatch!"
+                returnKeyType="next"
+                inputIsValid={regFormState.inputValidity.cpassword}
+                inputIsTouched={regFormState.isTouched.cpassword}
+                value={regFormState.inputValues.cpassword}
+                onChangeText={(val) => checkValidity(val, 'cpassword')}
+                onBlur={() => {
+                  blurListener('cpassword');
+                }}
+              />
+
+              <View>
+                <View style={styles.inputView}>
+                  <CheckBox
+                    tintColors={{true: colors.primary, false: colors.accent}}
+                    disabled={false}
+                    value={regFormState.inputValues.tnc}
+                    onValueChange={(val) => {
+                      checkValidity(val, 'tnc');
+                      blurListener('tnc');
+                    }}
+                  />
+                  <Text style={styles.tncText}>
+                    Accept Terms and Conditions.
+                  </Text>
+                </View>
+                {!regFormState.inputValidity.tnc &&
+                  regFormState.isTouched.tnc && (
+                    <Text style={styles.errorMsg}>
+                      Please accept our terms and conditions.
+                    </Text>
+                  )}
+              </View>
+
+              <View style={styles.btnHolder}>
+                <View style={styles.loginCircle}>
+                  <TouchableOpacity
+                    style={styles.loginPress}
+                    onPress={() => {
+                      sumbitHandler();
+                    }}>
+                    <Feather name="check" size={25} style={styles.icon} />
+                  </TouchableOpacity>
+                </View>
               </View>
             </View>
           </View>
-        </View>
 
-        <View style={styles.registerLinkView}>
-          <TouchableWithoutFeedback
-            onPress={() => navigation.navigate('LoginScreen')}>
-            <Text style={styles.registerLink}>
-              Already have an account?
-              <Text style={styles.signUpText}> LOG IN</Text>
-            </Text>
-          </TouchableWithoutFeedback>
-        </View>
-      </ScrollView>
+          <View style={styles.registerLinkView}>
+            <TouchableWithoutFeedback
+              onPress={() => navigation.navigate('LoginScreen')}>
+              <Text style={styles.registerLink}>
+                Already have an account?
+                <Text style={styles.signUpText}> LOG IN</Text>
+              </Text>
+            </TouchableWithoutFeedback>
+          </View>
+        </ScrollView>
       )}
     </>
   );

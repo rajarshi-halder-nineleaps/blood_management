@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import {Alert} from 'react-native';
+import {showMessage, hideMessage} from 'react-native-flash-message';
 import {
   UPDATE_FIELDS,
   STATE_CLEANUP,
@@ -38,15 +38,21 @@ const aboutReducer = (state = initialState, action) => {
       return {...state, loading: true};
     }
     case CONTACT_SUCCESS: {
-      Alert.alert(
-        'Success',
-        'Thankyou for the feedback, we will reach out to you soon.',
-      );
+      showMessage({
+        message: 'Success',
+        description:
+          'Thankyou for your feedback, we will reach out to you soon.',
+        type: 'success',
+      });
       console.log('contacted successfully!');
       return {...state, loading: false, error: ''};
     }
     case CONTACT_FAILURE: {
-      Alert.alert('Error', action.error);
+      showMessage({
+        message: 'Error',
+        description: action.error,
+        type: 'error',
+      });
       return {...state, loading: false, error: action.error};
     }
 

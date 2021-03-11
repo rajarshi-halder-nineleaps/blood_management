@@ -1,4 +1,4 @@
-import {Alert} from 'react-native';
+import {showMessage, hideMessage} from 'react-native-flash-message';
 import {
   UPDATE_FIELDS_REG,
   BLUR_FIELDS_REG,
@@ -197,7 +197,11 @@ const regIndReducer = (state = initialState, action) => {
       const newOtp = {...state.otp};
       newOtp.validity = false;
       newOtp.touched = true;
-      Alert.alert('Error', action.error);
+      showMessage({
+        message: 'Error',
+        description: action.error,
+        type: 'danger',
+      });
       return {...state, loading: false, error: action.error, otp: newOtp};
     }
 

@@ -7,12 +7,12 @@ import {
   ScrollView,
   StyleSheet,
   Platform,
-  Alert,
   TouchableOpacity,
   KeyboardAvoidingView,
   ToastAndroid,
   AlertIOS,
 } from 'react-native';
+import {showMessage, hideMessage} from 'react-native-flash-message';
 import {SkypeIndicator} from 'react-native-indicators';
 import colors from '../../constants/Colors';
 import Feather from 'react-native-vector-icons/Feather';
@@ -82,7 +82,11 @@ const Enterotp = ({navigation}) => {
         );
       }
     } else {
-      Alert.alert('Invalid OTP', 'Please enter a valid OTP');
+      showMessage({
+        message: 'Invalid OTP',
+        description: 'Please enter a valid OTP.',
+        type: 'danger',
+      });
     }
   };
 

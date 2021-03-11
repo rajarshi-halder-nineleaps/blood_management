@@ -7,6 +7,7 @@ import {
   Dimensions,
   Image,
   TouchableOpacity,
+  StatusBar,
 } from 'react-native';
 import {SkypeIndicator} from 'react-native-indicators';
 import colors from '../../constants/Colors';
@@ -31,19 +32,22 @@ const SplashScreen = ({navigation}) => {
   }, [checkFirstLaunch]);
 
   return (
-    <SafeAreaView style={styles.container}>
-      <View style={styles.contentBoard}>
-        <Image
-          source={require('../../assets/logonobk.png')}
-          style={styles.image}
-          resizeMode="center"
-        />
-        <Text style={styles.text}>Red Bank</Text>
-      </View>
-      <View style={styles.indicatorBoard}>
-        <SkypeIndicator color={colors.additional2} />
-      </View>
-    </SafeAreaView>
+    <>
+      <StatusBar hidden />
+      <SafeAreaView style={styles.container}>
+        <View style={styles.contentBoard}>
+          <Image
+            source={require('../../assets/logonobk.png')}
+            style={styles.image}
+            resizeMode="center"
+          />
+          <Text style={styles.text}>Red Bank</Text>
+        </View>
+        <View style={styles.indicatorBoard}>
+          <SkypeIndicator color={colors.additional2} />
+        </View>
+      </SafeAreaView>
+    </>
   );
 };
 

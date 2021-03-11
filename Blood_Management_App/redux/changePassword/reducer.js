@@ -1,5 +1,6 @@
 /* eslint-disable prettier/prettier */
-import {Alert, ToastAndroid, Platform, AlertIOS} from 'react-native';
+import {showMessage, hideMessage} from 'react-native-flash-message';
+import {ToastAndroid, Platform, AlertIOS} from 'react-native';
 import {
   UPDATE_FIELDS_CHANGE,
   CHANGE_REQ,
@@ -82,7 +83,11 @@ const changePasswordReducer = (state = initialState, action) => {
     }
 
     case CHANGE_REQ_FAILURE: {
-      Alert.alert('Error', action.error);
+      showMessage({
+        message: 'Error while setting new password',
+        description: action.error,
+        type: 'danger',
+      });
       return {...state, loading: false, error: action.error};
     }
 

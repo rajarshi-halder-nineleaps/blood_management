@@ -38,12 +38,13 @@ const UpcomingDrives = ({navigation, route}) => {
       upcomingDrivesState.loading,
     ],
   );
+
   return (
     <View style={styles.container}>
       {upcomingDrivesState.loading ? (
         <View style={styles.progressBoard}>
-        <SkypeIndicator color={colors.primary} />
-      </View>
+          <SkypeIndicator color={colors.primary} />
+        </View>
       ) : upcomingDrivesState.gotData &&
         upcomingDrivesState.upcomingDrivesList.length === 0 ? (
         <View style={styles.suchEmpty}>

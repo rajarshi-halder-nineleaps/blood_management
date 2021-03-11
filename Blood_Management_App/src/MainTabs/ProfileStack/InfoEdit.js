@@ -14,6 +14,7 @@ import {
 import colors from '../../../constants/Colors';
 import Feather from 'react-native-vector-icons/Feather';
 import Fields from '../../../components/Fields';
+import {showMessage, hideMessage} from 'react-native-flash-message';
 import {useSelector, useDispatch} from 'react-redux';
 import {
   changeDetails,
@@ -159,11 +160,11 @@ const InfoEdit = ({navigation}) => {
         return newFormState;
       });
     } else {
-      Alert.alert(
-        'Maximum limit reached',
-        'You have added the maximum possible phone number fields.',
-        [{text: 'Okay'}],
-      );
+      showMessage({
+        message: 'Maximum limit reached',
+        description: 'You have added the maximum possible phone number fields.',
+        type: 'warning',
+      });
     }
   };
 
@@ -180,11 +181,11 @@ const InfoEdit = ({navigation}) => {
         return newFormState;
       });
     } else {
-      Alert.alert(
-        'Phone nummber required',
-        'A minimum of 1 phone number is required.',
-        [{text: 'Okay'}],
-      );
+      showMessage({
+        message: 'Phone nummber required',
+        description: 'A minimum of 1 phone number is required.',
+        type: 'warning',
+      });
     }
   };
 
@@ -272,10 +273,13 @@ const InfoEdit = ({navigation}) => {
       );
 
       console.log(formState.inputValues);
+    } else {
+      showMessage({
+        message: 'Invalid inputs',
+        description: 'Please check all input fields before proceeding.',
+        type: 'warning',
+      });
     }
-    // else {
-    //   Alert.alert('Invalid Inputs', 'Please check all inputs before saving.');
-    // }
   };
 
   return (

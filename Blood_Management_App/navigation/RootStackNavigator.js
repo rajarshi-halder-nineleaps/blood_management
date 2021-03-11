@@ -13,27 +13,35 @@ import RegisterBbScreen from '../src/RegisterStack/RegisterBbScreen';
 import RegisterHosScreen from '../src/RegisterStack/RegisterHosScreen';
 import RegisterIndScreen from '../src/RegisterStack/RegisterIndScreen';
 import OtpScreen from '../src/RegisterStack/VerifyEmailOwnership';
+import FlashMessage from 'react-native-flash-message';
 
 const RootStack = createStackNavigator();
 
 const RootStackNavigator = () => {
   return (
-    <RootStack.Navigator headerMode="none" initialRouteName="SplashScreen">
-      <RootStack.Screen name="IntroSlider" component={IntroSlider} />
-      <RootStack.Screen name="SplashScreen" component={SplashScreen} />
-      <RootStack.Screen name="LoginScreen" component={LoginScreen} />
-      <RootStack.Screen name="FindAccount" component={findaccount} />
-      <RootStack.Screen name="EnterOTP" component={enterotp} />
-      <RootStack.Screen name="ResetPassword" component={resetpassword} />
-      <RootStack.Screen
-        name="RegisterScreen"
-        component={RegisterSelectScreen}
+    <>
+      <RootStack.Navigator headerMode="none" initialRouteName="SplashScreen">
+        <RootStack.Screen name="IntroSlider" component={IntroSlider} />
+        <RootStack.Screen name="SplashScreen" component={SplashScreen} />
+        <RootStack.Screen name="LoginScreen" component={LoginScreen} />
+        <RootStack.Screen name="FindAccount" component={findaccount} />
+        <RootStack.Screen name="EnterOTP" component={enterotp} />
+        <RootStack.Screen name="ResetPassword" component={resetpassword} />
+        <RootStack.Screen
+          name="RegisterScreen"
+          component={RegisterSelectScreen}
+        />
+        <RootStack.Screen name="RegisterBb" component={RegisterBbScreen} />
+        <RootStack.Screen name="RegisterInd" component={RegisterIndScreen} />
+        <RootStack.Screen name="RegisterHos" component={RegisterHosScreen} />
+        <RootStack.Screen name="OtpScreen" component={OtpScreen} />
+      </RootStack.Navigator>
+      <FlashMessage
+        position="top"
+        textStyle={{fontFamily: 'Montserrat-Regular'}}
+        titleStyle={{fontFamily: 'Montserrat-Bold'}}
       />
-      <RootStack.Screen name="RegisterBb" component={RegisterBbScreen} />
-      <RootStack.Screen name="RegisterInd" component={RegisterIndScreen} />
-      <RootStack.Screen name="RegisterHos" component={RegisterHosScreen} />
-      <RootStack.Screen name="OtpScreen" component={OtpScreen} />
-    </RootStack.Navigator>
+    </>
   );
 };
 

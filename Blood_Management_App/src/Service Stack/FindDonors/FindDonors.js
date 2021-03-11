@@ -2,6 +2,7 @@ import React, {useState, useEffect} from 'react';
 import axios from 'axios';
 import {useDispatch, useSelector} from 'react-redux';
 import Feather from 'react-native-vector-icons/Feather';
+import {showMessage, hideMessage} from 'react-native-flash-message';
 
 import {
   View,
@@ -12,7 +13,6 @@ import {
   Image,
   SafeAreaView,
   ImageBackground,
-  Alert,
 } from 'react-native';
 import {Picker} from '@react-native-picker/picker';
 import {TouchableOpacity} from 'react-native-gesture-handler';
@@ -81,23 +81,25 @@ const FindDonors = ({navigation}) => {
           );
           navigation.navigate('Donor List');
         } else {
-          Alert.alert(
-            'Invalid Input',
-            'Please input Donation Address to continue',
-            [{text: 'Okay'}],
-          );
+          showMessage({
+            message: 'Address of donation required.',
+            description: 'Please enter an address of donation to continue.',
+            type: 'warning',
+          });
         }
       } else {
-        Alert.alert('Invalid Input', 'Please select Blood Group to continue', [
-          {text: 'Okay'},
-        ]);
+        showMessage({
+          message: 'Blood group required.',
+          description: 'Please select a blood group to continue.',
+          type: 'warning',
+        });
       }
     } else {
-      Alert.alert(
-        'Invalid Input',
-        'Please enter a valid pincode or leave the field empty',
-        [{text: 'Okay'}],
-      );
+      showMessage({
+        message: 'Invalid pin code.',
+        description: 'Please enter a valid pincode or leave the field empty',
+        type: 'warning',
+      });
     }
   };
 
