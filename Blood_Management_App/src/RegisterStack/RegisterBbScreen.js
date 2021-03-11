@@ -6,7 +6,6 @@ import {
   StyleSheet,
   TouchableOpacity,
   TouchableWithoutFeedback,
-  Alert,
 } from 'react-native';
 import {
   updateFields,
@@ -22,6 +21,7 @@ import {
 import {SkypeIndicator} from 'react-native-indicators';
 import React, {useState, useEffect} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
+import {showMessage, hideMessage} from 'react-native-flash-message';
 import {Picker} from '@react-native-picker/picker';
 import {
   emailRegex,
@@ -113,11 +113,11 @@ const RegisterBbScreen = ({navigation}) => {
     if (regFormState.inputValues.phone.length < 5) {
       dispatch(addPhoneState());
     } else {
-      Alert.alert(
-        'Maximum limit reached',
-        'You have added the maximum possible phone number fields.',
-        [{text: 'Okay'}],
-      );
+      showMessage({
+        message: 'Maximum phones added',
+        description: 'You have added the maximum possible number of phone fields.',
+        type: 'warning',
+      });
     }
   };
 
@@ -128,11 +128,11 @@ const RegisterBbScreen = ({navigation}) => {
       dispatch(sendOtp(regFormState.inputValues.email, () =>{navigation.navigate('OtpScreen');}));
       //* now we can either redirect to OTP screen or show errors (if any).
     } else {
-      Alert.alert(
-        'Invalid Input',
-        'Please check all the inputs before proceeding.',
-        [{text: 'Okay'}],
-      );
+      showMessage({
+        message: 'Invalid Inputs',
+        description: 'Please check all the inputs before proceeding.',
+        type: 'warning',
+      });
     }
   };
 

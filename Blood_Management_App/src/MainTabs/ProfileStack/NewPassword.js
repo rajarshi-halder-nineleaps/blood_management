@@ -6,11 +6,11 @@ import {
   SafeAreaView,
   StyleSheet,
   ScrollView,
-  Alert,
   TouchableOpacity,
 } from 'react-native';
 import {TextInput} from 'react-native-gesture-handler';
 import colors from '../../../constants/Colors';
+import {showMessage, hideMessage} from 'react-native-flash-message';
 import Feather from 'react-native-vector-icons/Feather';
 import {
   updateFields,
@@ -62,10 +62,11 @@ const NewPassword = ({navigation}) => {
         ),
       );
     } else {
-      Alert.alert(
-        'Invalid Inputs',
-        'Please check all the inputs before proceeding.',
-      );
+      showMessage({
+        message: 'Invalid inputs',
+        description: 'Please check all the inputs before proceeding.',
+        type: 'warning',
+      });
     }
   };
 

@@ -34,12 +34,12 @@ const Notifications = ({navigation}) => {
   //   dispatch(fetchNotifications(authState.userToken));
   // }, [authState.userToken, dispatch]);
 
-  useFocusEffect(
-    React.useCallback(() => {
-      dispatch(fetchNotifications(authState.userToken));
-      console.log('PROFILE RENDERED!');
-    }, [authState.userToken, dispatch]),
-  );
+  // useFocusEffect(
+  //   React.useCallback(() => {
+  //     dispatch(fetchNotifications(authState.userToken));
+  //     console.log('PROFILE RENDERED!');
+  //   }, [authState.userToken, dispatch]),
+  // );
 
   return (
     <View

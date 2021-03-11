@@ -1,15 +1,14 @@
-import React, {useState} from 'react';
+import {showMessage, hideMessage} from 'react-native-flash-message';
 import {
   Text,
   View,
   StyleSheet,
   TouchableOpacity,
-  Alert,
   FlatList,
-  Modal,
   ActivityIndicator,
   Image,
 } from 'react-native';
+import React, {useState} from 'react';
 import {
   setSelected,
   selectAllToggle,
@@ -31,9 +30,11 @@ const DonorList = ({navigation}) => {
       val.selected ? idList.push(val.userId) : null,
     );
     if (idList.length === 0) {
-      Alert.alert('Error', 'Please select users before proceeding', [
-        {text: 'Okay'},
-      ]);
+      showMessage({
+        message: 'Donors not selected.',
+        description: 'Please select at least one donor before proceeding.',
+        type: 'warning',
+      });
     } else {
       dispatch(
         submitinvite(

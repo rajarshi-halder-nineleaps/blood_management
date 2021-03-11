@@ -18,7 +18,7 @@ const AreYouSure = (props) => {
   return (
     // <View style={styles.centeredView}>
     <Modal
-      animationType="slide"
+      animationType="fade"
       transparent={true}
       visible={props.visibleState}
       onRequestClose={() => {}}>

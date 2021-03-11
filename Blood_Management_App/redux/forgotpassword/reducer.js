@@ -1,6 +1,5 @@
 /* eslint-disable prettier/prettier */
-import {Alert} from 'react-native';
-
+import {showMessage, hideMessage} from 'react-native-flash-message';
 import {
   UPDATE_FIELDS_FORGOT,
   FORGOT_REQ,
@@ -60,7 +59,11 @@ const forgotReducer = (state = initialState, action) => {
       return {...state, isTouched: newInputIsTouched};
     }
     case STATE_CLEANUP_FORGOT: {
-      Alert.alert('Success', 'New password set successfully!');
+      showMessage({
+        message: 'Success',
+        description: 'New password set successfully.',
+        type: 'success',
+      });
       console.log('flushing state');
       return initialState;
     }
@@ -87,7 +90,11 @@ const forgotReducer = (state = initialState, action) => {
       return {...state, loading: false, error: '', [action.successReq]: true};
     }
     case FORGOT_REQ_FAILURE: {
-      Alert.alert('Error', action.error);
+      showMessage({
+        message: 'Error',
+        description: action.error,
+        type: 'danger',
+      });
       return {...state, loading: false, error: action.error};
     }
 

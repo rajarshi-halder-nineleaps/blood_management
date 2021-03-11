@@ -1,4 +1,5 @@
-import {Alert} from 'react-native';
+import {showMessage, hideMessage} from 'react-native-flash-message';
+import colors from '../../constants/Colors';
 import {
   UPDATE_FIELDS_REG,
   STATE_CLEANUP,
@@ -136,7 +137,12 @@ const finddonorReducer = (state = initialState, action) => {
     }
 
     case INVITE_SUCCESS: {
-      Alert.alert('Success', 'Invites sent!');
+      showMessage({
+        message: 'Invitations sent',
+        description:
+          'The donors have been invited. Check "My donation requests" to view the status of the invites. ',
+        backgroundColor: colors.coolblue,
+      });
       return {
         ...state,
         success: action.action,

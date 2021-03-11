@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import {Alert} from 'react-native';
+import {showMessage, hideMessage} from 'react-native-flash-message';
 import {
   FETCH_DRIVES_REQ,
   FETCH_DRIVES_SUCCESS,
@@ -24,7 +24,11 @@ const myDrivesReducer = (state = initialState, action) => {
 
     case FETCH_DRIVES_FAILURE: {
       console.log('failure message reached reducer');
-      Alert.alert('error', action.error);
+      showMessage({
+        message: 'Error',
+        description: action.error,
+        type: 'danger',
+      });
       return {
         ...state,
         loading: false,
@@ -54,13 +58,15 @@ const myDrivesReducer = (state = initialState, action) => {
 
     case DRIVE_CANCEL_SUCCESS: {
       console.log('cancelled drive data reached reducer!', action);
-      
-      const cancelledDrive = state.myDrivesData.find(val => val.driveId === action.driveId);
-      const cancelledDriveIdx = state.myDrivesData.findIndex(val => val.driveId === action.driveId);
 
+      const cancelledDrive = state.myDrivesData.find(
+        (val) => val.driveId === action.driveId,
+      );
+      const cancelledDriveIdx = state.myDrivesData.findIndex(
+        (val) => val.driveId === action.driveId,
+      );
 
       cancelledDrive.status = false;
-      
 
       const newDrivesData = [...state.myDrivesData];
       newDrivesData[cancelledDriveIdx] = cancelledDrive;

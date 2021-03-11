@@ -6,7 +6,6 @@ import {
   StyleSheet,
   TouchableOpacity,
   TouchableWithoutFeedback,
-  Alert,
 } from 'react-native';
 import {
   updateFields,
@@ -20,6 +19,7 @@ import {
   setUserVerified,
 } from '../../redux/register/actions';
 import Fields from '../../components/Fields';
+import {showMessage, hideMessage} from 'react-native-flash-message';
 import React, {useState, useEffect} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import {Picker} from '@react-native-picker/picker';
@@ -113,11 +113,11 @@ const RegisterHosScreen = ({navigation}) => {
     if (regFormState.inputValues.phone.length < 5) {
       dispatch(addPhoneState());
     } else {
-      Alert.alert(
-        'Maximum limit reached',
-        'You have added the maximum possible phone number fields.',
-        [{text: 'Okay'}],
-      );
+      showMessage({
+        message: 'Maximum phones added',
+        description: 'You have added the maximum possible number of phone fields.',
+        type: 'warning',
+      });
     }
   };
 
@@ -131,11 +131,11 @@ const RegisterHosScreen = ({navigation}) => {
       );
       //* now we can either redirect to OTP screen or show errors (if any).
     } else {
-      Alert.alert(
-        'Invalid Input',
-        'Please check all the inputs before proceeding.',
-        [{text: 'Okay'}],
-      );
+      showMessage({
+        message: 'Invalid inputs',
+        description: 'Please check all the inputs before proceeding.',
+        type: 'warning',
+      });
     }
   };
 
@@ -263,7 +263,6 @@ const RegisterHosScreen = ({navigation}) => {
                 }>
                 <Picker
                   selectedValue={regFormState.inputValues.selectedState}
-                  itemStyle={{fontSize: 100}}
                   onValueChange={(val, itemIndex) => {
                     blurListener('selectedState');
                     checkValidity(val, 'selectedState');

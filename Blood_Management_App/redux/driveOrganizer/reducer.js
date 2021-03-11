@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import {Alert} from 'react-native';
+import {showMessage, hideMessage} from 'react-native-flash-message';
 
 import {
   UPDATE_FIELDS_ORGANIZER,
@@ -93,11 +93,19 @@ const driveOrganizerReducer = (state = initialState, action) => {
       return {...state, loading: true};
     }
     case ORGANIZE_SUCCESS: {
-      Alert.alert('Success', 'Drive organized successfully');
+      showMessage({
+        message: 'Success',
+        description: 'Drive organized successfully.',
+        type: 'success',
+      });
       return {...state, loading: false, error: ''};
     }
     case ORGANIZE_FAILURE: {
-      Alert.alert('Error', action.error);
+      showMessage({
+        message: 'Error',
+        description: action.error,
+        type: 'error',
+      });
       return {...state, loading: false, error: action.error, driveId: ''};
     }
     case SET_DATE: {

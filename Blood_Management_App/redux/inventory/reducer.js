@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import {Alert} from 'react-native';
+import {showMessage, hideMessage} from 'react-native-flash-message';
 import {
   INV_REQ,
   INV_SUCCESS,
@@ -37,7 +37,11 @@ const inventoryReducer = (state = initialState, action) => {
     }
     case INV_FAILURE: {
       if (action.error) {
-        Alert.alert('Error', action.error);
+        showMessage({
+          message: 'Error.',
+          description: action.error,
+          type: 'success',
+        });
       }
       return {
         ...state,
@@ -71,7 +75,10 @@ const inventoryReducer = (state = initialState, action) => {
     case EDITING_TOGGLE: {
       if (state.editing && action.isUpdate) {
         console.log('alerting');
-        Alert.alert('Updated', 'Inventory updated successfully!');
+        showMessage({
+          message: 'Inventory Updated Successfully.',
+          type: 'success',
+        });
       }
       return {...state, editing: !state.editing};
     }

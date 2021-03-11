@@ -4,20 +4,17 @@ import Feather from 'react-native-vector-icons/Feather';
 import colors from '../../constants/Colors';
 import {useEffect} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
+import {showMessage, hideMessage} from 'react-native-flash-message';
 import {emailRegex, passwordRegex} from '../../constants/Regexes';
-import {TextInput} from 'react-native-gesture-handler';
 //* setting up the actions for auth.
 import {logUserIn} from '../../redux/auth/actions';
 import {
   View,
   Text,
-  SafeAreaView,
   StyleSheet,
   ScrollView,
   Dimensions,
-  Image,
   TouchableOpacity,
-  Alert,
 } from 'react-native';
 import {
   updateFields,
@@ -47,11 +44,11 @@ const LoginScreen = ({navigation}) => {
       // console.log("ok", authState)
       //* the log in and all the checks are now happening via redux thunk. All we have to do now is to redirect the user based on the state.
     } else {
-      Alert.alert(
-        'Invalid inputs',
-        'Please check your inputs before proceeding',
-        [{text: 'Okay'}],
-      );
+      showMessage({
+        message: 'Invalid inputs',
+        description: 'Please check your inputs before proceeding',
+        type: 'warning',
+      });
     }
   };
 
@@ -74,105 +71,71 @@ const LoginScreen = ({navigation}) => {
   };
 
   return (
-    <SafeAreaView style={styles.container}>
-      <ScrollView>
-        <View style={styles.body}>
-          <View style={styles.colorView}>
-            <Text style={styles.titlefont}>Login</Text>
+    <View style={styles.body}>
+      <View style={styles.colorView}>
+        <Text style={styles.titlefont}>{'Welcome \nback'}</Text>
+      </View>
+
+      <ScrollView style={styles.container}>
+        <View style={styles.contentView}>
+          <View style={styles.inputView}>
+            <Fields
+              keyboardType="default"
+              label="Email"
+              error="Invalid email"
+              value={loginFormState.inputValues.email}
+              inputIsValid={loginFormState.inputValidity.email}
+              inputIsTouched={loginFormState.isTouched.email}
+              onChangeText={(val) => checkValidity(val, 'email')}
+              onBlur={() => {
+                blurListener('email');
+              }}
+            />
+
+            <Fields
+              keyboardType="default"
+              label="Password"
+              error="Invalid password"
+              secureTextEntry={true}
+              value={loginFormState.inputValues.password}
+              inputIsValid={loginFormState.inputValidity.password}
+              inputIsTouched={loginFormState.isTouched.password}
+              onChangeText={(val) => checkValidity(val, 'password')}
+              onBlur={() => {
+                blurListener('password');
+              }}
+            />
           </View>
+          <TouchableOpacity
+            style={styles.forgotTouch}
+            onPress={() => navigation.navigate('FindAccount')}>
+            <Text
+              style={{
+                color: colors.primary,
+                fontFamily: 'Montserrat-Regular',
+              }}>
+              Forgot Password?
+            </Text>
+          </TouchableOpacity>
 
-          <View style={styles.contentView}>
-            <View style={styles.inputView}>
-              <Fields
-                keyboardType="default"
-                label="Email"
-                error="Invalid email"
-                value={loginFormState.inputValues.email}
-                inputIsValid={loginFormState.inputValidity.email}
-                inputIsTouched={loginFormState.isTouched.email}
-                onChangeText={(val) => checkValidity(val, 'email')}
-                onBlur={() => {
-                  blurListener('email');
-                }}
-              />
-
-              {/* <TextInput
-                value={loginFormState.inputValues.email}
-                keyboardType="email-address"
-                style={styles.input}
-                placeholder="Email"
-                onChangeText={(val) => checkValidity(val, 'email')}
-                onBlur={() => {
-                  blurListener('email');
-                }}
-              />
-              {!loginFormState.inputValidity.email &&
-                loginFormState.isTouched.email && (
-                  <Text style={styles.errMsg}>Invalid email address!</Text>
-                )}
- */}
-
-              {/* <TextInput
-                value={loginFormState.inputValues.password}
-                keyboardType="default"
-                style={styles.input}
-                placeholder="Password"
-                secureTextEntry={true}
-                onChangeText={(val) => checkValidity(val, 'password')}
-                onBlur={() => {
-                  blurListener('password');
-                }}
-              />
-              {!loginFormState.inputValidity.password &&
-                loginFormState.isTouched.password && (
-                  <Text style={styles.errMsg}>Invalid password!</Text>
-                )} */}
-
-              <Fields
-                keyboardType="default"
-                label="Password"
-                error="Invalid password"
-                secureTextEntry={true}
-                value={loginFormState.inputValues.password}
-                inputIsValid={loginFormState.inputValidity.password}
-                inputIsTouched={loginFormState.isTouched.password}
-                onChangeText={(val) => checkValidity(val, 'password')}
-                onBlur={() => {
-                  blurListener('password');
-                }}
-              />
-            </View>
+          <View style={styles.button}>
             <TouchableOpacity
-              style={styles.forgotTouch}
-              onPress={() => navigation.navigate('FindAccount')}>
-              <Text
-                style={{
-                  color: colors.primary,
-                  fontFamily: 'Montserrat-Regular',
-                }}>
-                Forgot Password?
-              </Text>
-            </TouchableOpacity>
-
-            <View style={styles.button}>
-              <TouchableOpacity
-                style={styles.signIn}
-                onPress={() => onSubmitHandler()}>
-                <Feather name="arrow-right" size={30} style={styles.icon} />
-              </TouchableOpacity>
-            </View>
-
-            <TouchableOpacity
-              style={styles.registerTouch}
-              onPress={() => navigation.navigate('RegisterScreen')}>
-              <Text style={styles.registerOuterText}>
-                New user? <Text style={styles.register}>Register Now</Text>
-              </Text>
+              style={styles.signIn}
+              onPress={() => onSubmitHandler()}>
+              <Feather name="arrow-right" size={30} style={styles.icon} />
             </TouchableOpacity>
           </View>
+
+          <TouchableOpacity
+            style={styles.registerTouch}
+            onPress={() => navigation.navigate('RegisterScreen')}>
+            <Text style={styles.registerOuterText}>
+              New user? <Text style={styles.register}>Register Now</Text>
+            </Text>
+          </TouchableOpacity>
         </View>
       </ScrollView>
-    </SafeAreaView>
+    </View>
   );
 };
 
@@ -182,24 +145,26 @@ const WIDTH = Dimensions.get('window').width;
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
     backgroundColor: colors.additional2,
   },
   colorView: {
     backgroundColor: colors.primary,
     paddingHorizontal: 40,
-    paddingBottom: 10,
-    paddingTop: 80,
+    paddingTop: 100,
+    paddingBottom: 60,
+    justifyContent: 'center',
+    flex: 1,
   },
   contentView: {
-    paddingHorizontal: 40,
-    flex: 1,
+    paddingHorizontal: 20,
+    backgroundColor: colors.additional2,
   },
   body: {
     flex: 1,
+    backgroundColor: colors.green,
   },
   titlefont: {
-    fontSize: 40,
+    fontSize: 30,
     fontFamily: 'Montserrat-Regular',
     color: colors.additional2,
     marginBottom: 20,
@@ -209,7 +174,7 @@ const styles = StyleSheet.create({
   },
   input: {
     paddingVertical: 15,
-    marginVertical: 20,
+    marginVertical: 10,
     borderRadius: 100,
     backgroundColor: colors.accent,
     fontSize: 18,
@@ -220,9 +185,7 @@ const styles = StyleSheet.create({
   errMsg: {
     color: colors.primary,
   },
-  forgotTouch: {
-    marginTop: 20,
-  },
+  forgotTouch: {},
   button: {
     marginTop: 30,
     flexDirection: 'row',
