@@ -7,7 +7,6 @@ import {
   Image,
   TouchableOpacity,
   ImageBackground,
-  Alert,
 } from 'react-native';
 import React, {useState} from 'react';
 import {useSelector, useDispatch} from 'react-redux';

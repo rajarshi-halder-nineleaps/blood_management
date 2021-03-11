@@ -6,15 +6,13 @@ import {
   SafeAreaView,
   ScrollView,
   StyleSheet,
-  Alert,
-  ActivityIndicator,
   TouchableOpacity,
 } from 'react-native';
 import {SkypeIndicator} from 'react-native-indicators';
 import {updateFields, blurFields} from '../../redux/forgotpassword/actions';
 import {useDispatch, useSelector} from 'react-redux';
 import {emailRegex} from '../../constants/Regexes';
-import {TextInput} from 'react-native-gesture-handler';
+import {showMessage, hideMessage} from 'react-native-flash-message';
 import Fields from '../../components/Fields';
 import {postEmail, resetDoneState} from '../../redux/forgotpassword/actions';
 import colors from '../../constants/Colors';
@@ -48,7 +46,11 @@ const Findaccount = ({navigation}) => {
     if (forgotState.inputValidity.email) {
       dispatch(postEmail(forgotState.inputValues.email));
     } else {
-      Alert.alert('Invalid email', 'Please enter a valid email address!');
+      showMessage({
+        message: 'Invalid email',
+        description: 'Please enter a valid email address.',
+        type: 'warning',
+      });
     }
   };
 

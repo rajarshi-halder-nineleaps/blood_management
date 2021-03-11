@@ -73,9 +73,9 @@ const InventoryCard = (props) => {
             style={styles.inventoryInput}
             value={props.cardData.bPosPrice + ''}
             onChangeText={(newVal) => {
-              // if (decimalRegex.test(newVal) || newVal === '') {
+              if (decimalRegex.test(newVal) || newVal === '') {
                 dispatch(updateFields(newVal, props.id, 'bPosPrice'));
-              // }
+              }
             }}
           />
         ) : null}

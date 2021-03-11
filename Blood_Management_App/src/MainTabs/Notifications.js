@@ -6,7 +6,6 @@ import {
   StyleSheet,
   Image,
   TouchableOpacity,
-  ActivityIndicator,
   RefreshControl,
 } from 'react-native';
 import {useFocusEffect} from '@react-navigation/native';
@@ -14,6 +13,7 @@ import NotificationItem from '../../components/NotificationItem';
 import colors from '../../constants/Colors';
 import {useSelector, useDispatch} from 'react-redux';
 import Feather from 'react-native-vector-icons/Feather';
+import {SkypeIndicator} from 'react-native-indicators';
 import {fetchNotifications} from '../../redux/notifications/actions';
 
 const Notifications = ({navigation}) => {
@@ -65,14 +65,7 @@ const Notifications = ({navigation}) => {
       </View>
       {notificationsState.loading ? (
         <View style={styles.progressBoard}>
-          <ActivityIndicator
-            visible={notificationsState.loading}
-            textContent={'Loading...'}
-            textStyle={styles.spinnerTextStyle}
-            animating={true}
-            color={colors.primary}
-            size="large"
-          />
+          <SkypeIndicator color={colors.primary} />
         </View>
       ) : notificationsState.notifications.length === 0 ? (
         <View style={styles.suchEmpty}>

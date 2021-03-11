@@ -6,12 +6,11 @@ import {
   SafeAreaView,
   StyleSheet,
   ScrollView,
-  Alert,
   TouchableOpacity,
 } from 'react-native';
 import {SkypeIndicator} from 'react-native-indicators';
 import Fields from '../../components/Fields';
-import {TextInput} from 'react-native-gesture-handler';
+import {showMessage, hideMessage} from 'react-native-flash-message';
 import colors from '../../constants/Colors';
 import Feather from 'react-native-vector-icons/Feather';
 import {updateFields, blurFields} from '../../redux/forgotpassword/actions';
@@ -64,10 +63,11 @@ const Resetpassword = ({navigation}) => {
         ),
       );
     } else {
-      Alert.alert(
-        'Invalid Inputs',
-        'Please check all the inputs before proceeding.',
-      );
+      showMessage({
+        message: 'Invalid Inputs',
+        description: 'Please check all the inputs before proceeding.',
+        type: 'warning',
+      });
     }
   };
 
@@ -89,7 +89,7 @@ const Resetpassword = ({navigation}) => {
           </View>
           <View style={styles.body}>
             <Text style={styles.titlefontdesc}>Enter a new password</Text>
-            <Text style={{marginTop: 20}}>
+            <Text style={{marginTop: 20, fontFamily: 'Montserrat-Regular'}}>
               Password must be at least 8 characters long and must contain at
               least 1 number, 1 special character, 1 uppercase and 1 lowercase
               alphabet.
@@ -202,13 +202,13 @@ const styles = StyleSheet.create({
   },
   titlefont: {
     fontSize: 40,
-    fontFamily: 'sans-serif-light',
+    fontFamily: 'Montserrat-Regular',
     color: colors.additional2,
     marginBottom: 20,
   },
   titlefontdesc: {
     fontSize: 20,
-    fontWeight: '500',
+    fontFamily: 'Montserrat-Regular',
   },
   input: {
     paddingVertical: 15,
@@ -216,7 +216,7 @@ const styles = StyleSheet.create({
     borderRadius: 100,
     backgroundColor: colors.accent,
     fontSize: 18,
-    fontFamily: 'sans-serif-condensed',
+    fontFamily: 'Montserrat-Regular',
     paddingHorizontal: 30,
     color: 'black',
   },
@@ -239,7 +239,7 @@ const styles = StyleSheet.create({
   },
   textSign: {
     fontSize: 18,
-    fontFamily: 'sans-serif-light',
+    fontFamily: 'Montserrat-Regular',
   },
 });
 

@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "948871218222",
+    "project_id": "redbank-104",
+    "storage_bucket": "redbank-104.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:948871218222:android:dfac621431e28df1b50bbf",
+        "android_client_info": {
+          "package_name": "com.blood_management_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "948871218222-09r4hdg45n84a8lik1b8q854thl7hn7r.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAXE4rMJL22tZSLpycCzouu8AM3dsa60-g"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "948871218222-09r4hdg45n84a8lik1b8q854thl7hn7r.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
