@@ -18,7 +18,10 @@ import {Picker} from '@react-native-picker/picker';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import {pincodeRegex, numbersOnlyRegex} from '../../../constants/Regexes';
 import * as places from '../../../assets/places.json';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import {requestLocationPermission} from '../../../redux/geolocation/actions';
 import colors from '../../../constants/Colors';
+import {UIActivityIndicator} from 'react-native-indicators';
 import {getDonorList} from '../../../redux/finddonors/actions';
 import {
   updateFields,
@@ -30,14 +33,54 @@ import Fields from '../../../components/Fields';
 const FindDonors = ({navigation}) => {
   const dispatch = useDispatch();
   const authState = useSelector((state) => state.authState);
+  const geolocationState = useSelector((state) => state.geolocationState);
   const finddonorFormState = useSelector((state) => state.finddonorFormState);
   const [selectedStateindex, setselectedStateindex] = useState(0);
   const [distEnb, setdistEnb] = useState(false);
   const word = places.states;
+  let watchID;
 
   useEffect(() => {
     dispatch(stateCleanup());
   }, [dispatch]);
+
+  useEffect(() => {
+    const stateIndex = word.findIndex((val) =>
+      val.state.includes(geolocationState.data.state),
+    );
+    if (stateIndex <= 0) {
+      setselectedStateindex(0);
+    } else {
+      setselectedStateindex(stateIndex);
+    }
+
+    setdistEnb(true);
+
+    const newInputValues = {
+      selectedState: geolocationState.data.state,
+      pincode: geolocationState.data.pincode,
+    };
+    const districtIndex = word[stateIndex].districts.findIndex((val) =>
+      val.includes(geolocationState.data.district),
+    );
+
+    if (districtIndex > 0) {
+      newInputValues.selectedDistrict =
+        word[stateIndex].districts[districtIndex];
+    } else {
+      newInputValues.selectedDistrict = word[stateIndex].districts[0];
+    }
+
+    dispatch(updateFields(newInputValues.selectedState, 'state', true));
+    dispatch(updateFields(newInputValues.selectedDistrict, 'district', true));
+    dispatch(updateFields(newInputValues.pincode, 'pincode', true));
+  }, [
+    dispatch,
+    geolocationState.data.district,
+    geolocationState.data.pincode,
+    geolocationState.data.state,
+    word,
+  ]);
 
   const blurListener = (fieldId) => {
     dispatch(blurFields(fieldId));
@@ -69,6 +112,14 @@ const FindDonors = ({navigation}) => {
     }
 
     dispatch(updateFields(val, fieldId, isValid));
+  };
+
+  const getLocation = () => {
+    dispatch(requestLocationPermission(watchID));
+
+    // return () => {
+    //   Geolocation.clearWatch(watchID);
+    // };
   };
 
   const submitHandler = () => {
@@ -161,6 +212,23 @@ const FindDonors = ({navigation}) => {
         <View style={styles.filterInfoBoard}>
           <Text style={styles.filterInfoText}>Optional Filters</Text>
         </View>
+
+        <TouchableOpacity
+          style={styles.locationTouch}
+          onPress={() => getLocation()}>
+          {geolocationState.loading ? (
+            <UIActivityIndicator color={colors.additional2} size={25} />
+          ) : (
+            <>
+              <MaterialIcons
+                name="gps-fixed"
+                color={colors.additional2}
+                size={25}
+              />
+              <Text style={styles.locationText}>Use my current location</Text>
+            </>
+          )}
+        </TouchableOpacity>
 
         {/* <Text style={styles.pickerLabel}>State</Text> */}
         <View style={styles.pickerView}>
@@ -292,6 +360,22 @@ const styles = StyleSheet.create({
     marginVertical: 8,
     marginHorizontal: 16,
     borderRadius: 20,
+  },
+  locationTouch: {
+    backgroundColor: colors.grayishblack,
+    flexDirection: 'row',
+    borderRadius: 5,
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: 13,
+    marginBottom: 10,
+    marginTop: 20,
+  },
+  locationText: {
+    color: colors.additional2,
+    fontFamily: 'Montserrat-Regular',
+    fontSize: 15,
+    marginHorizontal: 10,
   },
   title: {
     fontSize: 25,

@@ -14,13 +14,15 @@ import Firebase from '@react-native-firebase/app';
 import * as options from './android/app/google-services.json';
 import * as secrets from './secrets.json';
 import Geolocation from '@react-native-community/geolocation';
+//TODO REMOVE AFTER IMPLEMENTING IT IN REDUX.
+import axios from 'axios';
 
 const App = () => {
   //TODO SET THEM IN STORE.
 
-  const [currentLongitude, setCurrentLongitude] = useState('...');
-  const [currentLatitude, setCurrentLatitude] = useState('...');
-  const [locationStatus, setLocationStatus] = useState('');
+  // const [currentLongitude, setCurrentLongitude] = useState('...');
+  // const [currentLatitude, setCurrentLatitude] = useState('...');
+  // const [locationStatus, setLocationStatus] = useState('');
 
   //? METHOD TO GET THE FCM TOKEN.
   // const getFCMToken = async () => {
@@ -42,7 +44,7 @@ const App = () => {
       messagingSenderId: secrets.messagingSenderId,
     };
 
-    Firebase.initializeApp(firebaseOptions, 'RedBank24');
+    Firebase.initializeApp(firebaseOptions, 'RedBank36');
     PushNotification.configure({
       onRegister: function (token) {
         console.log('TOKEN:', token);
@@ -83,7 +85,7 @@ const App = () => {
 
   /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-  // //? SETTING UP GEOLOCATION
+  // // //? SETTING UP GEOLOCATION
   // let watchID;
 
   // useEffect(() => {
@@ -128,6 +130,7 @@ const App = () => {
   //       const currentLat = JSON.stringify(position.coords.latitude);
   //       setCurrentLongitude(currentLong);
   //       setCurrentLatitude(currentLat);
+  //       reverseGeoCoding(currentLat, currentLong);
   //     },
   //     (error) => {
   //       setLocationStatus(error.message);
@@ -143,22 +146,15 @@ const App = () => {
   // const subscribeLocationLocation = () => {
   //   watchID = Geolocation.watchPosition(
   //     (position) => {
-  //       //Will give you the location on location change
+  //       //Will give the location on location change
 
   //       setLocationStatus('You are Here');
   //       console.log(position);
-
-  //       //getting the Longitude from the location json
   //       const currentLongitude = JSON.stringify(position.coords.longitude);
-
-  //       //getting the Latitude from the location json
   //       const currentLatitude = JSON.stringify(position.coords.latitude);
-
-  //       //Setting Longitude state
   //       setCurrentLongitude(currentLongitude);
-
-  //       //Setting Latitude state
   //       setCurrentLatitude(currentLatitude);
+  //       reverseGeoCoding(currentLatitude, currentLongitude);
   //     },
   //     (error) => {
   //       setLocationStatus(error.message);
@@ -168,6 +164,34 @@ const App = () => {
   //       maximumAge: 1000,
   //     },
   //   );
+  // };
+
+  // //? NOW, FOR REVERSE GEOCODING,
+
+  // const reverseGeoCoding = async (lat, long) => {
+  //   const response = await axios.get(
+  //     `https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${lat}&longitude=${long}&localityLanguage=en`,
+  //   );
+
+  //   //? extracting state and district froom the reverse geolocation API.
+  //   const state = response.data.localityInfo.administrative[1].name;
+  //   const district = response.data.localityInfo.administrative[2].name.split(
+  //     ' ',
+  //   )[0];
+
+  //   console.log('WORKS');
+
+  //   console.log(state, district);
+
+  //   console.log(response.data);
+
+  //   const geocodingResponse = await axios.get(
+  //     `http://open.mapquestapi.com/geocoding/v1/address?key=q7YsoAGYBnAfH0vhwRLpa6pWGYDgDq5g&location=${district},${state}`,
+  //   );
+
+  //   console.log('WORKS2');
+
+  //   console.log(geocodingResponse.data.results[0].locations[0].postalCode);
   // };
 
   /* <Text style={styles.boldText}>{locationStatus}</Text>

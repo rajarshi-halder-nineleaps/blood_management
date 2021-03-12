@@ -8,20 +8,26 @@ import {
   TouchableOpacity,
   ImageBackground,
 } from 'react-native';
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {useSelector, useDispatch} from 'react-redux';
 import {Picker} from '@react-native-picker/picker';
 import Fields from '../../../components/Fields';
 import Feather from 'react-native-vector-icons/Feather';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import colors from '../../../constants/Colors';
 import * as places from '../../../assets/places.json';
 import {upcomingDrivesSearch} from '../../../redux/upcomingDrives/actions';
 import {pincodeRegex} from '../../../constants/Regexes';
 import {showMessage, hideMessage} from 'react-native-flash-message';
+import {requestLocationPermission} from '../../../redux/geolocation/actions';
+import {UIActivityIndicator} from 'react-native-indicators';
+// import Geolocation from '@react-native-community/geolocation';
 
 const UpcomingDrivesSearch = ({navigation}) => {
   const word = places.states;
   const [selectedStateindex, setselectedStateindex] = useState(0);
+  let watchID;
+
   const [distEnb, setdistEnb] = useState(false);
   const [inputs, setInputs] = useState({
     inputValues: {
@@ -39,6 +45,58 @@ const UpcomingDrivesSearch = ({navigation}) => {
 
   const dispatch = useDispatch();
   const authState = useSelector((state) => state.authState);
+  const geolocationState = useSelector((state) => state.geolocationState);
+
+  useEffect(() => {
+    const stateIndex = word.findIndex((val) =>
+      val.state.includes(geolocationState.data.state),
+    );
+    if (stateIndex <= 0) {
+      setselectedStateindex(0);
+    } else {
+      setselectedStateindex(stateIndex);
+    }
+
+    setdistEnb(true);
+
+    const newInputValues = {
+      selectedState: geolocationState.data.state,
+      pincode: geolocationState.data.pincode,
+    };
+    const districtIndex = word[stateIndex].districts.findIndex((val) =>
+      val.includes(geolocationState.data.district),
+    );
+
+    if (districtIndex > 0) {
+      newInputValues.selectedDistrict =
+        word[stateIndex].districts[districtIndex];
+    } else {
+      newInputValues.selectedDistrict = word[stateIndex].districts[0];
+    }
+
+    setInputs((prevState) => {
+      const newInputValidity = {...prevState.inputValidity, pincode: true};
+
+      return {
+        ...prevState,
+        inputValues: newInputValues,
+        inputValidity: newInputValidity,
+      };
+    });
+  }, [
+    geolocationState.data.district,
+    geolocationState.data.pincode,
+    geolocationState.data.state,
+    word,
+  ]);
+
+  const getLocation = () => {
+    dispatch(requestLocationPermission(watchID));
+
+    // return () => {
+    //   Geolocation.clearWatch(watchID);
+    // };
+  };
 
   const searchSubmitHandler = () => {
     if (inputs.inputValidity.pincode) {
@@ -105,6 +163,29 @@ const UpcomingDrivesSearch = ({navigation}) => {
               <Text style={styles.searchInfoText}>All fields are optional</Text>
             </View>
             {/* <Text style={styles.pickerLabel}>State</Text> */}
+            <TouchableOpacity
+              style={styles.locationTouch}
+              onPress={() => getLocation()}>
+              {geolocationState.loading ? (
+                <UIActivityIndicator color={colors.additional2} size={25} />
+              ) : (
+                <>
+                  <MaterialIcons
+                    name="gps-fixed"
+                    color={colors.additional2}
+                    size={25}
+                  />
+                  <Text style={styles.locationText}>
+                    Use my current location
+                  </Text>
+                </>
+              )}
+            </TouchableOpacity>
+
+            <View style={styles.filterInfoBoard}>
+              <Text style={styles.filterInfoText}> -- OR -- </Text>
+            </View>
+
             <View style={styles.pickerView}>
               <Picker
                 style={styles.picker}
@@ -147,16 +228,27 @@ const UpcomingDrivesSearch = ({navigation}) => {
             />
             <View style={styles.touchBoard}>
               <TouchableOpacity
+                disabled={geolocationState.loading}
                 style={styles.finderTouch}
                 onPress={() => searchSubmitHandler()}>
-                <ImageBackground
-                  style={styles.imgBtnBkg}
-                  source={require('../../../assets/images/invBkg.png')}>
-                  <Feather name="search" color={colors.additional2} size={20} />
+                {!geolocationState.loading ? (
+                  <ImageBackground
+                    style={styles.imgBtnBkg}
+                    source={require('../../../assets/images/invBkg.png')}>
+                    <Feather
+                      name="search"
+                      color={colors.additional2}
+                      size={20}
+                    />
+                    <Text style={styles.finderTouchText}>
+                      Find donation drives
+                    </Text>
+                  </ImageBackground>
+                ) : (
                   <Text style={styles.finderTouchText}>
                     Find donation drives
                   </Text>
-                </ImageBackground>
+                )}
               </TouchableOpacity>
             </View>
           </View>
@@ -186,6 +278,33 @@ const styles = StyleSheet.create({
   searchBoard: {
     paddingVertical: 20,
   },
+  filterInfoBoard: {
+    width: '100%',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginRight: 10,
+  },
+  filterInfoText: {
+    fontFamily: 'Montserrat-Regular',
+    color: colors.primary,
+    fontSize: 18,
+  },
+  locationTouch: {
+    backgroundColor: colors.grayishblack,
+    flexDirection: 'row',
+    borderRadius: 5,
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: 13,
+    marginBottom: 10,
+    marginTop: 20,
+  },
+  locationText: {
+    color: colors.additional2,
+    fontFamily: 'Montserrat-Regular',
+    fontSize: 15,
+    marginHorizontal: 10,
+  },
   pickerLabel: {
     color: colors.grayishblack,
     fontFamily: 'Montserrat-Regular',
@@ -200,6 +319,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontFamily: 'Montserrat-Regular',
     paddingHorizontal: 10,
+    paddingVertical: 1,
     color: 'black',
     marginBottom: 10,
     marginTop: 10,
@@ -221,10 +341,12 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   finderTouch: {
-    backgroundColor: colors.primary,
+    backgroundColor: colors.accent,
     elevation: 5,
     borderRadius: 100,
     overflow: 'hidden',
+    justifyContent: 'center',
+    alignItems: 'center',
     width: 250,
     height: 50,
   },
@@ -244,7 +366,7 @@ const styles = StyleSheet.create({
   },
   searchInfoText: {
     fontFamily: 'Montserrat-Regular',
-    color: colors.primary,
+    color: colors.grayishblack,
     fontSize: 14,
   },
 });

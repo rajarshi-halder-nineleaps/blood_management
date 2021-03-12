@@ -22,6 +22,7 @@ import activedonorReducer from './activedonorrequest/reducer';
 import changePasswordReducer from './changePassword/reducer';
 import purchasesReducer from './purchases/reducer';
 import notificationsReducer from './notifications/reducer';
+import geolocationReducer from './geolocation/reducer';
 
 const rootReducer = combineReducers({
   loginFormState: loginReducer,
@@ -44,6 +45,7 @@ const rootReducer = combineReducers({
   changePasswordState: changePasswordReducer,
   purchasesState: purchasesReducer,
   notificationsState: notificationsReducer,
+  geolocationState: geolocationReducer,
 });
 
 export default rootReducer;
