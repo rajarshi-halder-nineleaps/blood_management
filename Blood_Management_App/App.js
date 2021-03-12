@@ -44,7 +44,7 @@ const App = () => {
       messagingSenderId: secrets.messagingSenderId,
     };
 
-    Firebase.initializeApp(firebaseOptions, 'RedBank36');
+    Firebase.initializeApp(firebaseOptions, 'RedBank38');
     PushNotification.configure({
       onRegister: function (token) {
         console.log('TOKEN:', token);

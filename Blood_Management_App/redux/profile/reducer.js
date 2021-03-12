@@ -1,5 +1,6 @@
 /* eslint-disable prettier/prettier */
 import {showMessage, hideMessage} from 'react-native-flash-message';
+import colors from '../../constants/Colors';
 import {
   PROFILE_REQ,
   PROFILE_SUCCESS,
@@ -8,6 +9,9 @@ import {
   DONOR_STATUS_SUCCESS,
   PROFILE_UPDATE_SUCCESS,
   SET_DATA_SAVED,
+  SET_AVATAR,
+  UPLOAD_PROGRESS,
+  UPLOADING,
 } from './actionTypes';
 
 const initialState = {
@@ -16,6 +20,8 @@ const initialState = {
   error: '',
   loading: false,
   dataSaved: false,
+  uploading: false,
+  uploadProgress: 0,
 };
 
 // userid, name,  bloodgroup, address, email, phone number[s], [dob], photo, [liscence number,option to add more phone numbers]
@@ -48,7 +54,7 @@ const profileReducer = (state = initialState, action) => {
         description: action.error,
         type: 'danger',
       });
-      return {...state, loading: false, error: action.error};
+      return {...state, loading: false, error: action.error, uploading: false};
     }
 
     case DONOR_STATUS_SUCCESS: {
@@ -78,6 +84,27 @@ const profileReducer = (state = initialState, action) => {
         ...state,
         dataSaved: false,
       };
+    }
+
+    case SET_AVATAR: {
+      showMessage({
+        message: 'Looking good in your new avatar.',
+        description: 'Avatar updated successfully!',
+        type: 'success',
+      });
+      const newUserData = {...state.userData};
+      newUserData.profilePicture = action.image;
+      return {...state, userData: newUserData, uploading: false};
+    }
+
+    case UPLOADING: {
+      showMessage({
+        message: 'Uploading ...',
+        description:
+          "Your avatar is being uploaded in the background, please don't disable your interner connection.",
+        backgroundColor: colors.coolblue,
+      });
+      return {...state, uploading: true};
     }
 
     default: {

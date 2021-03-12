@@ -6,21 +6,20 @@ import {
   TouchableOpacity,
   StyleSheet,
   ScrollView,
-  ImageBackground,
   Image,
 } from 'react-native';
-import {SkypeIndicator} from 'react-native-indicators';
-import {logUserOut} from '../../../redux/auth/actions';
+import {SkypeIndicator, UIActivityIndicator} from 'react-native-indicators';
 import {useSelector, useDispatch} from 'react-redux';
 import colors from '../../../constants/Colors';
 import Feather from 'react-native-vector-icons/Feather';
-import AreYouSure from '../../../components/AreYouSure';
 import {getProfileData, setDonorStatus} from '../../../redux/profile/actions';
+import AvatarChangeModal from '../../../components/AvatarChangeModal';
 
 const UserInfo = ({navigation}) => {
   const dispatch = useDispatch();
   const profileState = useSelector((state) => state.profileState);
   const authState = useSelector((state) => state.authState);
+  const [editDp, setEditDp] = useState(false);
 
   useEffect(() => {
     dispatch(getProfileData(authState.userToken));
@@ -37,32 +36,48 @@ const UserInfo = ({navigation}) => {
       ) : (
         <ScrollView style={styles.scroll}>
           <View style={styles.container}>
-            {/* <View style={styles.customHeader}>
-              <TouchableOpacity
-                onPress={() => navigation.goBack()}
-                style={styles.customHeaderBack}>
-                <Feather
-                  name="chevron-left"
-                  color={colors.grayishblack}
-                  size={30}
-                />
-              </TouchableOpacity>
-            </View> */}
             <View style={styles.detailsView}>
               <View style={styles.userInfoView}>
                 <View style={styles.imageView}>
-                  <Image
+                  <View
                     style={
                       profileState.userData.donorStatus === 1
-                        ? styles.donorAvatar
-                        : styles.avatar
-                    }
-                    source={
-                      profileState.userData.profilePicture
-                        ? {uri: profileState.userData.profilePicture}
-                        : require('../../../assets/images/account/nodp.png')
-                    }
-                  />
+                        ? styles.donorRoundView
+                        : styles.roundView
+                    }>
+                    {profileState.uploading ? (
+                      <View style={styles.uploadingView}>
+                        <UIActivityIndicator
+                          color={colors.darkGray}
+                          size={30}
+                        />
+                        <Text style={styles.uploadingText}>
+                          {profileState.uploadProgress} %
+                        </Text>
+                      </View>
+                    ) : (
+                      <>
+                        <Image
+                          style={styles.avatar}
+                          source={
+                            profileState.userData.profilePicture
+                              ? {uri: profileState.userData.profilePicture}
+                              : require('../../../assets/images/account/nodp.png')
+                          }
+                        />
+                        <TouchableOpacity
+                          style={styles.editDp}
+                          onPress={() => setEditDp(true)}>
+                          <Feather
+                            name="edit-3"
+                            color={colors.additional2}
+                            size={25}
+                          />
+                          {/* <Text style={styles.editDpText}>change avatar</Text> */}
+                        </TouchableOpacity>
+                      </>
+                    )}
+                  </View>
                 </View>
 
                 <Text style={styles.userName}>
@@ -326,6 +341,11 @@ const UserInfo = ({navigation}) => {
           </View>
         </ScrollView>
       )}
+      <AvatarChangeModal
+        visibleState={editDp}
+        visibleStateChanger={setEditDp}
+        // dispatchable={checkPassword}
+      />
     </>
   );
 };
@@ -356,18 +376,28 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
   },
   avatar: {
+    width: 170,
+    height: 170,
+  },
+  roundView: {
     borderColor: colors.primary,
     borderWidth: 10,
     borderRadius: 100,
     width: 170,
     height: 170,
+    overflow: 'hidden',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
-  donorAvatar: {
+  donorRoundView: {
     borderColor: colors.green,
     borderWidth: 10,
     borderRadius: 100,
     width: 170,
     height: 170,
+    overflow: 'hidden',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   userName: {
     marginTop: 20,
@@ -436,6 +466,24 @@ const styles = StyleSheet.create({
     color: colors.additional1,
     fontFamily: 'Montserrat-Regular',
     fontSize: 12,
+  },
+  editDp: {
+    backgroundColor: colors.accent,
+    opacity: 0.5,
+    position: 'absolute',
+    width: '100%',
+    left: 0,
+    bottom: 0,
+    padding: 5,
+    elevation: 5,
+    borderRadius: 100,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  editDpText: {
+    fontFamily: 'Montserrat-Regular',
+    fontSize: 100,
+    color: colors.additional2,
   },
   moreDetailsView: {
     paddingVertical: 20,
@@ -514,6 +562,16 @@ const styles = StyleSheet.create({
   logo: {
     width: 50,
     height: 50,
+  },
+  uploadingView: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: '100%',
+    height: '100%',
+  },
+  uploadingText: {
+    fontFamily: 'Montserrat-Regular',
+    color: colors.primary,
   },
 });
 

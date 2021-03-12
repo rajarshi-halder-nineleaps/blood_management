@@ -1,5 +1,7 @@
 /* eslint-disable prettier/prettier */
 import axios from 'axios';
+import storage from '@react-native-firebase/storage';
+import {Platform} from 'react-native';
 import {
   PROFILE_REQ,
   PROFILE_SUCCESS,
@@ -9,9 +11,12 @@ import {
   PROFILE_UPDATE_SUCCESS,
   SET_DATA_SAVED,
   REMOVE_PHONE,
+  SET_AVATAR,
+  UPLOAD_PROGRESS,
+  UPLOADING,
 } from './actionTypes';
 
-export const profileReq = () => ({ type: PROFILE_REQ });
+export const profileReq = () => ({type: PROFILE_REQ});
 
 export const profileSuccess = (profileData) => ({
   type: PROFILE_SUCCESS,
@@ -38,8 +43,25 @@ export const profileUpdateSuccess = (newProfileData) => ({
   newProfileData,
 });
 
-export const setDataSaved = () => ({ type: SET_DATA_SAVED });
+export const setDataSaved = () => ({
+  type: SET_DATA_SAVED,
+});
 
+export const setAvatar = (image) => ({
+  type: SET_AVATAR,
+  image,
+});
+
+export const uploadProgress = (percentage) => ({
+  type: UPLOAD_PROGRESS,
+  percentage,
+});
+
+export const setUploading = () => ({
+  type: UPLOADING,
+});
+
+//? ASYNCHRONOUS ACTION CREATORS.
 ////////////////////////////////////////////////////////////////////////////////////////////////
 
 export const getUserData = (userToken) => {
@@ -50,7 +72,7 @@ export const getUserData = (userToken) => {
       const response = await axios.get(
         'http://192.168.43.217:8080/profile/fetchuserprofile',
         {
-          headers: { Authorization: 'Bearer ' + userToken },
+          headers: {Authorization: 'Bearer ' + userToken},
         },
       );
 
@@ -86,7 +108,7 @@ export const getProfileData = (userToken) => {
       const response = await axios.get(
         'http://192.168.43.217:8080/profile/fetchuserdata',
         {
-          headers: { Authorization: 'Bearer ' + userToken },
+          headers: {Authorization: 'Bearer ' + userToken},
         },
       );
 
@@ -126,7 +148,7 @@ export const changeDetails = (userToken, userType, newDetails) => {
           'http://192.168.43.217:8080/profile/updateindprofile',
           newDetails,
           {
-            headers: { Authorization: 'Bearer ' + userToken },
+            headers: {Authorization: 'Bearer ' + userToken},
           },
         );
       } else if (userType === 2) {
@@ -134,7 +156,7 @@ export const changeDetails = (userToken, userType, newDetails) => {
           'http://192.168.43.217:8080/profile/updatehosprofile',
           newDetails,
           {
-            headers: { Authorization: 'Bearer ' + userToken },
+            headers: {Authorization: 'Bearer ' + userToken},
           },
         );
       } else {
@@ -142,7 +164,7 @@ export const changeDetails = (userToken, userType, newDetails) => {
           'http://192.168.43.217:8080/profile/updatebbprofile',
           newDetails,
           {
-            headers: { Authorization: 'Bearer ' + userToken },
+            headers: {Authorization: 'Bearer ' + userToken},
           },
         );
       }
@@ -177,9 +199,9 @@ export const setDonorStatus = (userToken, newDonorStatus) => {
       // dispatch(profileReq());
       const response = await axios.put(
         'http://192.168.43.217:8080/profile/donorstatus',
-        { donorStatus: newDonorStatus },
+        {donorStatus: newDonorStatus},
         {
-          headers: { Authorization: 'Bearer ' + userToken },
+          headers: {Authorization: 'Bearer ' + userToken},
         },
       );
 
@@ -205,3 +227,107 @@ export const setDonorStatus = (userToken, newDonorStatus) => {
     }
   };
 };
+
+///////////////////////////////////////////////////////////////////////////////////
+
+export const updateAvatar = (userToken, userId, image) => {
+  return async (dispatch) => {
+    dispatch(uploadProgress(0));
+
+    //? SAVE THE IMAGE IN CLOUD AND GET IT'S DOWNLOAD URL, THEN SAVE THAT URL IN THE DB,
+    //? IF RETURN IS SUCCESS, DISPATCH AVATAR CHANGE ACTION.
+    try {
+      const uploadUri =
+        Platform.OS === 'ios' ? image.path.replace('file://', '') : image.path;
+
+      const filename = uploadUri.substring(uploadUri.lastIndexOf('/') + 1);
+
+      dispatch(setUploading());
+
+      //? TRACKING THE UPLOAD PROGRESS.
+      const task = storage().ref(filename).putFile(uploadUri);
+
+      task.on('state_changed', (taskSnapshot) => {
+        dispatch(
+          uploadProgress(
+            Math.round(
+              taskSnapshot.bytesTransferred / taskSnapshot.totalBytes,
+            ) * 100,
+          ),
+        );
+        console.log(
+          `${taskSnapshot.bytesTransferred} transferred out of ${taskSnapshot.totalBytes}`,
+        );
+      });
+
+      // //? UPLOAD COMPLETED SUCCESSFULLY
+      task.then(() => {
+        console.log('Image uploaded to the bucket!');
+
+        //? RETRIEVE THE DOWNLOAD URI HERE AND SAVE IT TO THE DB HERE IF THE UPLOAD WAS SUCCESS
+
+        storage()
+          .ref(filename)
+          .getDownloadURL()
+          .then((downloadURL) => {
+            console.log(downloadURL);
+
+            axios
+              .put(
+                'http://192.168.43.217:8080/profile/setavatar',
+                {avatar: downloadURL},
+                {
+                  headers: {Authorization: 'Bearer ' + userToken},
+                },
+              )
+              .then((response) => {
+                if (response.headers.success) {
+                  //? SETTING IT IN STATE ON SUCCESSFUL DATABASE SAVE.
+                  dispatch(setAvatar(downloadURL));
+                } else if (response.headers.error) {
+                  dispatch(profileFailure(response.headers.error));
+                } else {
+                  dispatch(
+                    profileFailure(
+                      'Something went wrong, please try again later.',
+                    ),
+                  );
+                }
+              })
+              .catch((err) => dispatch(profileFailure(err.message)));
+          });
+
+        // uploadComplete(dispatch, userToken, filename);
+      });
+    } catch (err) {
+      dispatch(profileFailure(err.message));
+      console.log(err.message);
+    }
+  };
+};
+
+//? HELPER FUNCTIONS.
+////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+// const uploadComplete = async (dispatch, userToken, filename) => {
+//   //? SAVING IT TO THE DB.
+
+//   const downloadURL = await storage().ref(filename).getDownloadURL();
+
+//   const response = await axios.put(
+//     'http://192.168.43.217:8080/profile/setavatar',
+//     {avatar: downloadURL},
+//     {
+//       headers: {Authorization: 'Bearer ' + userToken},
+//     },
+//   );
+
+//   if (response.headers.success) {
+//     //? SETTING IT IN STATE ON SUCCESSFUL DATABASE SAVE.
+//     dispatch(setAvatar(downloadURL));
+//   } else if (response.headers.error) {
+//     dispatch(profileFailure(response.headers.error));
+//   } else {
+//     dispatch(profileFailure('Something went wrong, please try again later.'));
+//   }
+// };
