@@ -7,6 +7,7 @@ import {
   Image,
   TouchableOpacity,
   RefreshControl,
+  Animated,
 } from 'react-native';
 import {useFocusEffect} from '@react-navigation/native';
 import NotificationItem from '../../components/NotificationItem';
