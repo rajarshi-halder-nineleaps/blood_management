@@ -5,10 +5,10 @@ import {
   StyleSheet,
   TouchableOpacity,
   FlatList,
-  ActivityIndicator,
   Image,
 } from 'react-native';
 import React, {useState} from 'react';
+import {SkypeIndicator} from 'react-native-indicators';
 import {
   setSelected,
   selectAllToggle,
@@ -50,13 +50,23 @@ const DonorList = ({navigation}) => {
   const renderItem = ({item, index}) => {
     return (
       <View style={styles.outerView}>
-        <View styles={styles.detailsBoard}>
+        <View style={styles.avatarView}>
+          <Image
+            source={
+              item.avatar
+                ? {uri: item.avatar}
+                : require('../../../assets/images/account/nodp.png')
+            }
+            style={styles.avatar}
+          />
+        </View>
+        <View style={styles.detailsBoard}>
           <Text style={styles.label}>
-            Donor Id:{'  '}
+            Id:{'  '}
             <Text style={styles.content}>{item.userId}</Text>
           </Text>
           <Text style={styles.label}>
-            Donor name:{'  '}
+            Name:{'  '}
             <Text style={styles.content}>{item.name}</Text>
           </Text>
         </View>
@@ -74,14 +84,9 @@ const DonorList = ({navigation}) => {
   return (
     <View style={styles.container}>
       {finddonorFormState.loading ? (
-        <ActivityIndicator
-          visible={finddonorFormState.loading}
-          textContent={'Loading...'}
-          textStyle={styles.spinnerTextStyle}
-          animating={true}
-          color={colors.primary}
-          size="large"
-        />
+        <View style={styles.progressBoard}>
+          <SkypeIndicator color={colors.primary} />
+        </View>
       ) : finddonorFormState.list.length === 0 ? (
         <View style={styles.suchEmpty}>
           <Image
@@ -138,6 +143,11 @@ const styles = StyleSheet.create({
   scroll: {
     paddingHorizontal: 20,
   },
+  progressBoard: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
   suchEmpty: {
     flex: 1,
     alignItems: 'center',
@@ -147,6 +157,19 @@ const styles = StyleSheet.create({
   suchEmptyImg: {
     height: 150,
     width: 150,
+  },
+  avatarView: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginRight: 20,
+  },
+  avatar: {
+    width: 50,
+    height: 50,
+    borderRadius: 100,
+    borderWidth: 3,
+    borderColor: colors.primary,
+    marginBottom: 10,
   },
   emptyInfo: {
     color: colors.primary,
@@ -202,13 +225,15 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     paddingHorizontal: 20,
+    paddingTop: 5,
     borderRadius: 5,
   },
   detailsBoard: {
-    padding: 20,
+    flex: 1,
+    paddingHorizontal: 10,
   },
   selectionBoard: {
-    padding: 20,
+    paddingVertical: 20,
   },
   label: {
     fontFamily: 'Montserrat-Bold',

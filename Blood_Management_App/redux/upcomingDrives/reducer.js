@@ -29,7 +29,7 @@ const upcomingDrivesReducer = (state = initialState, action) => {
       showMessage({
         message: 'Error',
         description: action.error,
-        backgroundColor: colors.coolblue,
+        type: 'danger',
       });
       return {...state, error: action.error, loading: false};
     }

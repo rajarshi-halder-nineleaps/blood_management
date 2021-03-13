@@ -6,6 +6,7 @@ import {
   StyleSheet,
   TouchableOpacity,
   ImageBackground,
+  Image,
 } from 'react-native';
 import colors from '../constants/Colors';
 import {useSelector, useDispatch} from 'react-redux';
@@ -97,10 +98,16 @@ const UpcomingDrivesCard = (props) => {
                     </View>
                   </View>
                   <View style={styles.addressInsideView}>
-                    <Text style={styles.addressInsideLabel}>
-                      Organizer Name:
-                    </Text>
-                    <View style={styles.addressRightView}>
+                    <Text style={styles.addressInsideLabel}>Organizer:</Text>
+                    <View style={styles.avatarView}>
+                      <Image
+                        source={
+                          item.avatar
+                            ? {uri: item.avatar}
+                            : require('../assets/images/account/nodp.png')
+                        }
+                        style={styles.avatar}
+                      />
                       <Text style={styles.addressContent}>{item.name}</Text>
                     </View>
                   </View>
@@ -156,14 +163,13 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'flex-start',
-    margin: 10,
-    borderRadius: 5,
     borderColor: colors.accent,
     borderWidth: 0.5,
     overflow: 'hidden',
     backgroundColor: colors.additional2,
     flexDirection: 'row',
     padding: 10,
+    paddingVertical: 15,
   },
   headerDetailsView: {
     flex: 1,
@@ -185,6 +191,19 @@ const styles = StyleSheet.create({
   },
   miniDateTimeContent: {
     fontFamily: 'Montserrat-Regular',
+  },
+  avatarView: {
+    width: '100%',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  avatar: {
+    width: 100,
+    height: 100,
+    borderRadius: 100,
+    borderWidth: 5,
+    borderColor: colors.primary,
+    marginBottom: 10,
   },
   donorListTouch: {
     backgroundColor: colors.grayishblack,
@@ -208,8 +227,8 @@ const styles = StyleSheet.create({
     backgroundColor: colors.additional2,
     marginHorizontal: 10,
     borderRadius: 5,
-    borderColor: colors.accent,
-    borderWidth: 0.5,
+    elevation: 5,
+    marginBottom: 10,
   },
   bodyHeader: {
     backgroundColor: colors.accent,

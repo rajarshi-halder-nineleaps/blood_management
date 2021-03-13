@@ -123,7 +123,7 @@ const MainNavigator = () => {
       {
         //* REMOVE THIS LINE TO MAKE NATIVE STATUS BAR VISIBLE IN MAIN NAVIGATOR SCREENS.
       }
-      <StatusBar hidden />
+      <StatusBar animated backgroundColor={colors.primary} />
       <Tab.Navigator
         barStyle={{
           backgroundColor: colors.primary,

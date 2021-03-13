@@ -87,11 +87,18 @@ const profileReducer = (state = initialState, action) => {
     }
 
     case SET_AVATAR: {
-      showMessage({
-        message: 'Looking good in your new avatar.',
-        description: 'Avatar updated successfully!',
-        type: 'success',
-      });
+      if (action.image === '') {
+        showMessage({
+          message: 'Avatar removed.',
+          description: 'You can set a new avatar anytime.',
+        });
+      } else {
+        showMessage({
+          message: 'Looking good in your new avatar.',
+          description: 'Avatar updated successfully!',
+          type: 'success',
+        });
+      }
       const newUserData = {...state.userData};
       newUserData.profilePicture = action.image;
       return {...state, userData: newUserData, uploading: false};

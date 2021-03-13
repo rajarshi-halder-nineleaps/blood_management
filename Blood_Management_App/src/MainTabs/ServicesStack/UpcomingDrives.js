@@ -99,7 +99,7 @@ const UpcomingDrives = ({navigation, route}) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#eee',
+    backgroundColor: colors.additional2,
   },
   progressBoard: {
     flex: 1,
@@ -127,7 +127,6 @@ const styles = StyleSheet.create({
     fontSize: 10,
   },
   scroll: {
-    paddingHorizontal: 5,
   },
 });
 

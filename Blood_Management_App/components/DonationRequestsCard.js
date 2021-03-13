@@ -26,6 +26,7 @@ import {useTheme} from '@react-navigation/native';
 const DonationRequestsCard = ({item}) => {
   const authState = useSelector((state) => state.authState);
   const dispatch = useDispatch();
+  const profileState = useSelector((state) => state.profileState);
 
   //TODO CHANGE THE UPDATE OBJECTS AS PER NEW ONES FROM BACK END.
 
@@ -154,8 +155,16 @@ const DonationRequestsCard = ({item}) => {
             <View style={styles.detailsView}>
               <View style={styles.addressContentView}>
                 <View style={styles.addressInsideView}>
-                  <Text style={styles.addressInsideLabel}>Recipient name:</Text>
-                  <View style={styles.addressRightView}>
+                  <Text style={styles.addressInsideLabel}>Recipient:</Text>
+                  <View style={styles.avatarView}>
+                    <Image
+                      source={
+                        item.avatar
+                          ? {uri: item.avatar}
+                          : require('../assets/images/account/nodp.png')
+                      }
+                      style={styles.avatar}
+                    />
                     <Text style={styles.addressContent}>
                       {item.recipientName}
                     </Text>
@@ -217,6 +226,25 @@ const DonationRequestsCard = ({item}) => {
                     {item.status === 1 ? 'ACCEPTED' : 'REJECTED'}
                   </Text>
                 </View>
+              ) : profileState.userData.donorStatus === 2 ? (
+                <View>
+                  <Text
+                    style={{
+                      fontFamily: 'Montserrat-Regular',
+                      textAlign: 'center',
+                      marginBottom: 10,
+                    }}>
+                    You cannot accept this invitation because of your recent
+                    donation, you can either wait or reject this invitation.
+                  </Text>
+                  <TouchableOpacity
+                    style={styles.reject}
+                    onPress={() => {
+                      setRusurer(true);
+                    }}>
+                    <Text style={styles.optionsTouchText}>Reject</Text>
+                  </TouchableOpacity>
+                </View>
               ) : (
                 <>
                   <TouchableOpacity
@@ -266,14 +294,13 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'flex-start',
-    margin: 10,
-    borderRadius: 5,
     borderColor: colors.accent,
     borderWidth: 0.5,
     overflow: 'hidden',
     backgroundColor: colors.additional2,
     flexDirection: 'row',
     padding: 10,
+    paddingVertical: 15,
   },
   touch: {
     flex: 1,
@@ -293,6 +320,19 @@ const styles = StyleSheet.create({
   headerDetailsView: {
     flex: 1,
     overflow: 'hidden',
+  },
+  avatarView: {
+    width: '100%',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  avatar: {
+    width: 100,
+    height: 100,
+    borderRadius: 100,
+    borderWidth: 5,
+    borderColor: colors.primary,
+    marginBottom: 10,
   },
   nameView: {},
   nameText: {
@@ -338,8 +378,8 @@ const styles = StyleSheet.create({
     backgroundColor: colors.additional2,
     marginHorizontal: 10,
     borderRadius: 5,
-    borderColor: colors.accent,
-    borderWidth: 0.5,
+    marginBottom: 10,
+    elevation: 5,
   },
   bodyHeader: {
     backgroundColor: colors.accent,
@@ -409,6 +449,8 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     borderRadius: 5,
     marginHorizontal: 10,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   reject: {
     backgroundColor: colors.dutchred,
@@ -416,6 +458,8 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     borderRadius: 5,
     marginHorizontal: 10,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   optionsTouchText: {
     fontFamily: 'Montserrat-Bold',

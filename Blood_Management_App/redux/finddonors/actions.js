@@ -60,16 +60,21 @@ export const getDonorList = (userToken, formData) => {
   return async (dispatch) => {
     dispatch(req());
     console.log('Getting Donor List');
+
+    const reqObj = {
+      address: formData.address,
+      state: formData.state,
+      district: formData.district,
+      pincode: formData.pincode,
+      bloodGroup: formData.blood_group,
+    };
+
+    console.log(reqObj);
+
     try {
       const response = await axios.post(
         'http://192.168.43.217:8080/finddonors/donorslist',
-        {
-          address: formData.address,
-          state: formData.state,
-          district: formData.district,
-          pincode: formData.pincode,
-          bloodGroup: formData.blood_group,
-        },
+        reqObj,
         {
           headers: {Authorization: 'Bearer ' + userToken},
         },

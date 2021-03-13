@@ -41,7 +41,7 @@ const FindDonors = ({navigation}) => {
   let watchID;
 
   useEffect(() => {
-    dispatch(stateCleanup());
+    return () => dispatch(stateCleanup());
   }, [dispatch]);
 
   useEffect(() => {
@@ -90,15 +90,11 @@ const FindDonors = ({navigation}) => {
     console.log(fieldId);
     let isValid = true;
 
-    if (fieldId === 'state' && val === 'Select state') {
-      isValid = false;
-      setdistEnb(false);
-      setselectedStateindex(0);
-    }
+    // if (fieldId === 'state' && val === 'Select state') {
+    //   setdistEnb(false);
+    //   setselectedStateindex(0);
+    // }
 
-    if (fieldId === 'district' && val === 'Select district') {
-      isValid = false;
-    }
     if (fieldId === 'address' && val === '') {
       isValid = false;
     }

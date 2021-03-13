@@ -202,7 +202,9 @@ const MyDrives = ({navigation}) => {
   return (
     <View style={styles.container}>
       {myDrivesState.loading ? (
-        <SkypeIndicator color={colors.primary} />
+        <View style={styles.progressBoard}>
+          <SkypeIndicator color={colors.primary} />
+        </View>
       ) : myDrivesState.myDrivesData.length === 0 ? (
         <View style={styles.suchEmpty}>
           <Image
@@ -250,6 +252,11 @@ const styles = StyleSheet.create({
     width: '100%',
     height: '100%',
   },
+  progressBoard: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
   header: {
     paddingTop: 50,
     padding: 20,
@@ -293,10 +300,9 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     overflow: 'hidden',
+    backgroundColor: colors.additional2,
   },
-  scroll: {
-    paddingHorizontal: 5,
-  },
+  scroll: {},
   suchEmpty: {
     flex: 1,
     alignItems: 'center',
@@ -316,14 +322,13 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'flex-start',
-    margin: 10,
-    borderRadius: 5,
     borderColor: colors.accent,
     borderWidth: 0.5,
     overflow: 'hidden',
     backgroundColor: colors.additional2,
     flexDirection: 'row',
     padding: 10,
+    paddingVertical: 15,
   },
 
   headerDetailsView: {
@@ -372,8 +377,8 @@ const styles = StyleSheet.create({
     backgroundColor: colors.additional2,
     marginHorizontal: 10,
     borderRadius: 5,
-    borderColor: colors.accent,
-    borderWidth: 0.5,
+    elevation: 5,
+    marginBottom: 15,
   },
   bodyHeader: {
     backgroundColor: colors.accent,

@@ -21,6 +21,7 @@ import {pincodeRegex} from '../../../constants/Regexes';
 import {showMessage, hideMessage} from 'react-native-flash-message';
 import {requestLocationPermission} from '../../../redux/geolocation/actions';
 import {UIActivityIndicator} from 'react-native-indicators';
+import {stateCleanup} from '../../../redux/upcomingDrives/actions';
 // import Geolocation from '@react-native-community/geolocation';
 
 const UpcomingDrivesSearch = ({navigation}) => {
@@ -46,6 +47,13 @@ const UpcomingDrivesSearch = ({navigation}) => {
   const dispatch = useDispatch();
   const authState = useSelector((state) => state.authState);
   const geolocationState = useSelector((state) => state.geolocationState);
+  const profileState = useSelector((state) => state.profileState);
+
+  useEffect(() => {
+    return () => {
+      dispatch(stateCleanup());
+    };
+  }, [dispatch]);
 
   useEffect(() => {
     const stateIndex = word.findIndex((val) =>
@@ -160,10 +168,15 @@ const UpcomingDrivesSearch = ({navigation}) => {
                 style={styles.image}
                 resizeMode="center"
               />
-              <Text style={styles.searchInfoText}>All fields are optional</Text>
+              <Text style={styles.searchInfoText}>
+                {profileState.userData.donorStatus === 2
+                  ? 'You are lawfully unauthorized to register for a donation drive because of your recent blood donation.'
+                  : 'All fields are optional'}
+              </Text>
             </View>
             {/* <Text style={styles.pickerLabel}>State</Text> */}
             <TouchableOpacity
+              disabled={profileState.userData.donorStatus === 2}
               style={styles.locationTouch}
               onPress={() => getLocation()}>
               {geolocationState.loading ? (
@@ -189,6 +202,7 @@ const UpcomingDrivesSearch = ({navigation}) => {
             <View style={styles.pickerView}>
               <Picker
                 style={styles.picker}
+                enabled={profileState.userData.donorStatus !== 2}
                 selectedValue={inputs.inputValues.selectedState}
                 onValueChange={(val, itemIndex) => {
                   blurListener('selectedState');
@@ -203,7 +217,7 @@ const UpcomingDrivesSearch = ({navigation}) => {
             </View>
             <View style={styles.pickerView}>
               <Picker
-                enabled={distEnb}
+                enabled={distEnb && profileState.userData.donorStatus !== 2}
                 selectedValue={inputs.inputValues.selectedDistrict}
                 onValueChange={(val, itemIndex) => {
                   checkValidity(val, 'selectedDistrict');
@@ -217,6 +231,7 @@ const UpcomingDrivesSearch = ({navigation}) => {
               label="Pin code"
               error="Please enter valid pincode or leave the field empty"
               returnKeyType="next"
+              disabled={profileState.userData.donorStatus === 2}
               keyboardType="number-pad"
               inputIsValid={inputs.inputValidity.pincode}
               inputIsTouched={inputs.isTouched.pincode}
@@ -228,10 +243,19 @@ const UpcomingDrivesSearch = ({navigation}) => {
             />
             <View style={styles.touchBoard}>
               <TouchableOpacity
-                disabled={geolocationState.loading}
+                disabled={
+                  geolocationState.loading ||
+                  profileState.userData.donorStatus === 2
+                }
                 style={styles.finderTouch}
                 onPress={() => searchSubmitHandler()}>
-                {!geolocationState.loading ? (
+                {profileState.userData.donorStatus === 2 ? (
+                  <Text style={styles.finderTouchText}>
+                    disabled due to your recent donation.
+                  </Text>
+                ) : geolocationState.loading ? (
+                  <Text style={styles.finderTouchText}>Please wait</Text>
+                ) : (
                   <ImageBackground
                     style={styles.imgBtnBkg}
                     source={require('../../../assets/images/invBkg.png')}>
@@ -244,10 +268,6 @@ const UpcomingDrivesSearch = ({navigation}) => {
                       Find donation drives
                     </Text>
                   </ImageBackground>
-                ) : (
-                  <Text style={styles.finderTouchText}>
-                    Find donation drives
-                  </Text>
                 )}
               </TouchableOpacity>
             </View>
@@ -343,11 +363,11 @@ const styles = StyleSheet.create({
   finderTouch: {
     backgroundColor: colors.accent,
     elevation: 5,
+    paddingHorizontal: 20,
     borderRadius: 100,
     overflow: 'hidden',
     justifyContent: 'center',
     alignItems: 'center',
-    width: 250,
     height: 50,
   },
   finderTouchText: {
@@ -355,6 +375,7 @@ const styles = StyleSheet.create({
     paddingLeft: 10,
     fontSize: 15,
     fontFamily: 'Montserrat-Regular',
+    textAlign: 'center',
   },
   imgBtnBkg: {
     width: '100%',

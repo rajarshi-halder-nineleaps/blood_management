@@ -7,6 +7,7 @@ import {
   StyleSheet,
   ScrollView,
   Image,
+  TouchableWithoutFeedback,
 } from 'react-native';
 import {SkypeIndicator, UIActivityIndicator} from 'react-native-indicators';
 import {useSelector, useDispatch} from 'react-redux';
@@ -36,301 +37,320 @@ const UserInfo = ({navigation}) => {
       ) : (
         <ScrollView style={styles.scroll}>
           <View style={styles.container}>
-            <View style={styles.detailsView}>
-              <View style={styles.userInfoView}>
-                <View style={styles.imageView}>
-                  <View
-                    style={
-                      profileState.userData.donorStatus === 1
-                        ? styles.donorRoundView
-                        : styles.roundView
-                    }>
-                    {profileState.uploading ? (
-                      <View style={styles.uploadingView}>
-                        <UIActivityIndicator
-                          color={colors.darkGray}
-                          size={30}
-                        />
-                        <Text style={styles.uploadingText}>
-                          {profileState.uploadProgress} %
-                        </Text>
-                      </View>
-                    ) : (
-                      <>
-                        <Image
-                          style={styles.avatar}
-                          source={
-                            profileState.userData.profilePicture
-                              ? {uri: profileState.userData.profilePicture}
-                              : require('../../../assets/images/account/nodp.png')
-                          }
-                        />
-                        <TouchableOpacity
-                          style={styles.editDp}
-                          onPress={() => setEditDp(true)}>
-                          <Feather
-                            name="edit-3"
-                            color={colors.additional2}
-                            size={25}
+            <View
+              style={styles.detailsView}
+              onPress={() => {
+                console.log('WORKS');
+                setEditDp(false);
+              }}>
+              <>
+                <View style={styles.userInfoView}>
+                  <View style={styles.imageView}>
+                    <View
+                      style={
+                        profileState.userData.donorStatus === 1
+                          ? styles.donorRoundView
+                          : styles.roundView
+                      }>
+                      {profileState.uploading ? (
+                        <View style={styles.uploadingView}>
+                          <UIActivityIndicator
+                            color={colors.darkGray}
+                            size={30}
                           />
-                          {/* <Text style={styles.editDpText}>change avatar</Text> */}
-                        </TouchableOpacity>
-                      </>
-                    )}
-                  </View>
-                </View>
-
-                <Text style={styles.userName}>
-                  {profileState.userData.name}
-                </Text>
-                <Text style={styles.userId}>
-                  User ID: {profileState.userData.userId}
-                </Text>
-                {authState.userType === 1 ? (
-                  <>
-                    <View style={styles.donorStatusView}>
-                      {profileState.userData.donorStatus !== 1 &&
-                      profileState.userData.donorStatus !== 0 ? (
-                        <View style={styles.disabled}>
-                          <Text style={styles.donorStatusTouchText}>
-                            Donor status: Disabled
-                          </Text>
+                          {/* <Text style={styles.uploadingText}>
+                            {profileState.uploadProgress} %
+                          </Text> */}
                         </View>
                       ) : (
-                        <TouchableOpacity
-                          onPress={() => {
-                            let newDonorStatus = 0;
-                            if (profileState.userData.donorStatus === 0) {
-                              newDonorStatus = 1;
-                            } else {
-                              newDonorStatus = 0;
+                        <>
+                          <Image
+                            style={styles.avatar}
+                            source={
+                              profileState.userData.profilePicture
+                                ? {uri: profileState.userData.profilePicture}
+                                : require('../../../assets/images/account/nodp.png')
                             }
-                            dispatch(
-                              setDonorStatus(
-                                authState.userToken,
-                                newDonorStatus,
-                              ),
-                            );
-                          }}
-                          style={
-                            profileState.userData.donorStatus === 0
-                              ? styles.inactive
-                              : styles.active
-                          }>
-                          <Text style={styles.donorStatusTouchText}>
-                            Donor status:{' '}
-                            {profileState.userData.donorStatus === 0
-                              ? 'Inactive'
-                              : 'Active'}
-                          </Text>
-                          <Feather
-                            name="repeat"
-                            color={colors.additional2}
-                            size={17}
                           />
-                        </TouchableOpacity>
+                          <TouchableOpacity
+                            style={styles.editDp}
+                            onPress={() => setEditDp(true)}>
+                            <Feather
+                              name="edit-3"
+                              color={colors.additional2}
+                              size={15}
+                            />
+                            {/* <Text style={styles.editDpText}>change avatar</Text> */}
+                          </TouchableOpacity>
+                        </>
                       )}
                     </View>
-                    <Text style={styles.infoText}>
-                      {profileState.userData.donorStatus === 0
-                        ? 'Click on the above button to upgarde to donor status'
-                        : profileState.userData.donorStatus === 1
-                        ? 'Click on the above button to leave donor status'
-                        : `Eligible for donation in ${Math.floor(
-                            56 -
-                              (new Date().getTime() -
-                                new Date(
-                                  profileState.userData.lastDonationDate.split(
-                                    'T',
-                                  )[0],
-                                ).getTime()) /
-                                (1000 * 60 * 60 * 24),
-                          )} days`}
-                    </Text>
-                  </>
-                ) : null}
-              </View>
-              <View style={styles.moreDetailsView}>
-                <View style={styles.statsView}>
+                  </View>
+
+                  <Text style={styles.userName}>
+                    {profileState.userData.name}
+                  </Text>
+                  <Text style={styles.userId}>
+                    User ID: {profileState.userData.userId}
+                  </Text>
                   {authState.userType === 1 ? (
                     <>
-                      <View style={styles.statsInsideView}>
-                        <Text style={styles.statsLabel}>Total Donations</Text>
-                        <Text style={styles.statsContent}>
-                          {profileState.profileData.donationMade}
-                        </Text>
+                      <View style={styles.donorStatusView}>
+                        {profileState.userData.donorStatus !== 1 &&
+                        profileState.userData.donorStatus !== 0 ? (
+                          <View style={styles.disabled}>
+                            <Text style={styles.donorStatusTouchText}>
+                              Donor status: Disabled
+                            </Text>
+                          </View>
+                        ) : (
+                          <TouchableOpacity
+                            onPress={() => {
+                              let newDonorStatus = 0;
+                              if (profileState.userData.donorStatus === 0) {
+                                newDonorStatus = 1;
+                              } else {
+                                newDonorStatus = 0;
+                              }
+                              dispatch(
+                                setDonorStatus(
+                                  authState.userToken,
+                                  newDonorStatus,
+                                ),
+                              );
+                            }}
+                            style={
+                              profileState.userData.donorStatus === 0
+                                ? styles.inactive
+                                : styles.active
+                            }>
+                            <Text style={styles.donorStatusTouchText}>
+                              Donor status:{' '}
+                              {profileState.userData.donorStatus === 0
+                                ? 'Inactive'
+                                : 'Active'}
+                            </Text>
+                            <Feather
+                              name="repeat"
+                              color={colors.additional2}
+                              size={17}
+                            />
+                          </TouchableOpacity>
+                        )}
                       </View>
-                      <View style={styles.statsInsideView}>
-                        <Text style={styles.statsLabel}>Commitments made</Text>
-                        <Text style={styles.statsContent}>
-                          {profileState.profileData.commitmentMade}
-                        </Text>
-                      </View>
-                      <View style={styles.statsInsideView}>
-                        <Text style={styles.statsLabel}>Drives attended</Text>
-                        <Text style={styles.statsContent}>
-                          {profileState.profileData.drivesAttended}
-                        </Text>
-                      </View>
-                    </>
-                  ) : authState.userType === 2 ? (
-                    <>
-                      <View style={styles.statsInsideView}>
-                        <Text style={styles.statsLabel}>Requests made</Text>
-                        <Text style={styles.statsContent}>
-                          {profileState.profileData.requestMade}
-                        </Text>
-                      </View>
-                      <View style={styles.statsInsideView}>
-                        <Text style={styles.statsLabel}>Drives organized</Text>
-                        <Text style={styles.statsContent}>
-                          {profileState.profileData.drivesConducted}
-                        </Text>
-                      </View>
-                    </>
-                  ) : (
-                    <>
-                      <View style={styles.statsInsideView}>
-                        <Text style={styles.statsLabel}>Requests made</Text>
-                        <Text style={styles.statsContent}>
-                          {profileState.profileData.requestMade}
-                        </Text>
-                      </View>
-                      <View style={styles.statsInsideView}>
-                        <Text style={styles.statsLabel}>Drives organized</Text>
-                        <Text style={styles.statsContent}>
-                          {profileState.profileData.drivesConducted}
-                        </Text>
-                      </View>
-                      <View style={styles.statsInsideView}>
-                        <Text style={styles.statsLabel}>Sales made</Text>
-                        <Text style={styles.statsContent}>
-                          {profileState.profileData.salesMade}
-                        </Text>
-                      </View>
-                    </>
-                  )}
-                </View>
-              </View>
-              <View style={styles.aboutView}>
-                <View style={styles.addressView}>
-                  <View style={styles.editBtnView}>
-                    <Text style={styles.addressLabel}>About:</Text>
-                    <TouchableOpacity
-                      onPress={() => navigation.navigate('infoEdit')}>
-                      <Feather name="edit" color={colors.coolblue} size={19} />
-                    </TouchableOpacity>
-                  </View>
-                  <View style={styles.addressContentView}>
-                    <View style={styles.addressInsideView}>
-                      <Text style={styles.addressInsideLabel}>
-                        Recipient Email:
+                      <Text style={styles.infoText}>
+                        {profileState.userData.donorStatus === 0
+                          ? 'Click on the above button to upgarde to donor status'
+                          : profileState.userData.donorStatus === 1
+                          ? 'Click on the above button to leave donor status'
+                          : `Eligible for donation in ${Math.floor(
+                              56 -
+                                (new Date().getTime() -
+                                  new Date(
+                                    profileState.userData.lastDonationDate.split(
+                                      'T',
+                                    )[0],
+                                  ).getTime()) /
+                                  (1000 * 60 * 60 * 24),
+                            )} days`}
                       </Text>
-                      <View style={styles.addressRightView}>
-                        <Text style={styles.addressContent}>
-                          {profileState.profileData.email}
-                        </Text>
-                      </View>
-                    </View>
-
+                    </>
+                  ) : null}
+                </View>
+                <View style={styles.moreDetailsView}>
+                  <View style={styles.statsView}>
                     {authState.userType === 1 ? (
                       <>
-                        <View style={styles.addressInsideView}>
-                          <Text style={styles.addressInsideLabel}>
-                            Date Of Birth:
+                        <View style={styles.statsInsideView}>
+                          <Text style={styles.statsLabel}>Total Donations</Text>
+                          <Text style={styles.statsContent}>
+                            {profileState.profileData.donationMade}
                           </Text>
-                          <View style={styles.addressRightView}>
-                            <Text style={styles.addressContent}>
-                              {profileState.profileData.dob
-                                ? profileState.profileData.dob.split('T')[0]
-                                : null}
-                            </Text>
-                          </View>
                         </View>
-                        <View style={styles.addressInsideView}>
-                          <Text style={styles.addressInsideLabel}>
-                            Blood Group:
+                        <View style={styles.statsInsideView}>
+                          <Text style={styles.statsLabel}>
+                            Commitments made
                           </Text>
-                          <View style={styles.addressRightView}>
-                            <Text style={styles.addressContent}>
-                              {profileState.profileData.bloodGroup}
-                            </Text>
-                          </View>
+                          <Text style={styles.statsContent}>
+                            {profileState.profileData.commitmentMade}
+                          </Text>
                         </View>
-                        <View style={styles.addressInsideView}>
-                          <Text style={styles.addressInsideLabel}>Phone:</Text>
-                          <View style={styles.addressRightView}>
-                            <Text style={styles.addressContent}>
-                              {profileState.profileData.phone}
-                            </Text>
-                          </View>
+                        <View style={styles.statsInsideView}>
+                          <Text style={styles.statsLabel}>Drives attended</Text>
+                          <Text style={styles.statsContent}>
+                            {profileState.profileData.drivesAttended}
+                          </Text>
+                        </View>
+                      </>
+                    ) : authState.userType === 2 ? (
+                      <>
+                        <View style={styles.statsInsideView}>
+                          <Text style={styles.statsLabel}>Requests made</Text>
+                          <Text style={styles.statsContent}>
+                            {profileState.profileData.requestMade}
+                          </Text>
+                        </View>
+                        <View style={styles.statsInsideView}>
+                          <Text style={styles.statsLabel}>
+                            Drives organized
+                          </Text>
+                          <Text style={styles.statsContent}>
+                            {profileState.profileData.drivesConducted}
+                          </Text>
                         </View>
                       </>
                     ) : (
+                      <>
+                        <View style={styles.statsInsideView}>
+                          <Text style={styles.statsLabel}>Requests made</Text>
+                          <Text style={styles.statsContent}>
+                            {profileState.profileData.requestMade}
+                          </Text>
+                        </View>
+                        <View style={styles.statsInsideView}>
+                          <Text style={styles.statsLabel}>
+                            Drives organized
+                          </Text>
+                          <Text style={styles.statsContent}>
+                            {profileState.profileData.drivesConducted}
+                          </Text>
+                        </View>
+                        <View style={styles.statsInsideView}>
+                          <Text style={styles.statsLabel}>Sales made</Text>
+                          <Text style={styles.statsContent}>
+                            {profileState.profileData.salesMade}
+                          </Text>
+                        </View>
+                      </>
+                    )}
+                  </View>
+                </View>
+                <View style={styles.aboutView}>
+                  <View style={styles.addressView}>
+                    <View style={styles.editBtnView}>
+                      <Text style={styles.addressLabel}>About:</Text>
+                      <TouchableOpacity
+                        onPress={() => navigation.navigate('infoEdit')}>
+                        <Feather
+                          name="edit"
+                          color={colors.coolblue}
+                          size={19}
+                        />
+                      </TouchableOpacity>
+                    </View>
+                    <View style={styles.addressContentView}>
                       <View style={styles.addressInsideView}>
-                        <Text style={styles.addressInsideLabel}>Phone:</Text>
-                        <View>
-                          <View style={styles.addressRightView}>
-                            {
-                              //? THE BUG WITH MULTIPLE PHONE NUMBERS MAPPING OCCURED HERE - NOW FIXED.
-                              profileState.profileData.phone.length > 0
-                                ? profileState.profileData.phone.map(
-                                    (val, idx) => (
-                                      <View
-                                        key={idx}
-                                        style={styles.addressRightView}>
-                                        <Text style={styles.addressContent}>
-                                          {val}
-                                        </Text>
-                                      </View>
-                                    ),
-                                  )
-                                : null
-                            }
-                          </View>
-                          {console.log(profileState.profileData.phone)}
+                        <Text style={styles.addressInsideLabel}>
+                          Recipient Email:
+                        </Text>
+                        <View style={styles.addressRightView}>
+                          <Text style={styles.addressContent}>
+                            {profileState.profileData.email}
+                          </Text>
                         </View>
                       </View>
-                    )}
 
-                    <View style={styles.addressInsideView}>
-                      <Text style={styles.addressInsideLabel}>Address: </Text>
-                      <View style={styles.addressRightView}>
-                        <Text style={styles.addressContent}>
-                          {profileState.profileData.address},{' '}
-                          {profileState.profileData.district}, {'\n'}
-                          {profileState.profileData.state} [
-                          {profileState.profileData.pincode}]
-                        </Text>
+                      {authState.userType === 1 ? (
+                        <>
+                          <View style={styles.addressInsideView}>
+                            <Text style={styles.addressInsideLabel}>
+                              Date Of Birth:
+                            </Text>
+                            <View style={styles.addressRightView}>
+                              <Text style={styles.addressContent}>
+                                {profileState.profileData.dob
+                                  ? profileState.profileData.dob.split('T')[0]
+                                  : null}
+                              </Text>
+                            </View>
+                          </View>
+                          <View style={styles.addressInsideView}>
+                            <Text style={styles.addressInsideLabel}>
+                              Blood Group:
+                            </Text>
+                            <View style={styles.addressRightView}>
+                              <Text style={styles.addressContent}>
+                                {profileState.profileData.bloodGroup}
+                              </Text>
+                            </View>
+                          </View>
+                          <View style={styles.addressInsideView}>
+                            <Text style={styles.addressInsideLabel}>
+                              Phone:
+                            </Text>
+                            <View style={styles.addressRightView}>
+                              <Text style={styles.addressContent}>
+                                {profileState.profileData.phone}
+                              </Text>
+                            </View>
+                          </View>
+                        </>
+                      ) : (
+                        <View style={styles.addressInsideView}>
+                          <Text style={styles.addressInsideLabel}>Phone:</Text>
+                          <View>
+                            <View style={styles.addressRightView}>
+                              {
+                                //? THE BUG WITH MULTIPLE PHONE NUMBERS MAPPING OCCURED HERE - NOW FIXED.
+                                profileState.profileData.phone.length > 0
+                                  ? profileState.profileData.phone.map(
+                                      (val, idx) => (
+                                        <View
+                                          key={idx}
+                                          style={styles.addressRightView}>
+                                          <Text style={styles.addressContent}>
+                                            {val}
+                                          </Text>
+                                        </View>
+                                      ),
+                                    )
+                                  : null
+                              }
+                            </View>
+                            {console.log(profileState.profileData.phone)}
+                          </View>
+                        </View>
+                      )}
+
+                      <View style={styles.addressInsideView}>
+                        <Text style={styles.addressInsideLabel}>Address: </Text>
+                        <View style={styles.addressRightView}>
+                          <Text style={styles.addressContent}>
+                            {profileState.profileData.address},{' '}
+                            {profileState.profileData.district}, {'\n'}
+                            {profileState.profileData.state} [
+                            {profileState.profileData.pincode}]
+                          </Text>
+                        </View>
                       </View>
-                    </View>
-                    <View style={styles.addressInsideView}>
-                      <Text style={styles.addressInsideLabel}>
-                        Registered on:
-                      </Text>
-                      <View style={styles.addressRightView}>
-                        <Text style={styles.addressContent}>
-                          {profileState.profileData.registration_date
-                            ? `${
-                                profileState.profileData.registration_date.split(
-                                  'T',
-                                )[0]
-                              } at ${
-                                profileState.profileData.registration_date
-                                  .split('T')[1]
-                                  .split(':')[0]
-                              }:${
-                                profileState.profileData.registration_date
-                                  .split('T')[1]
-                                  .split(':')[1]
-                              }`
-                            : null}
+                      <View style={styles.addressInsideView}>
+                        <Text style={styles.addressInsideLabel}>
+                          Registered on:
                         </Text>
+                        <View style={styles.addressRightView}>
+                          <Text style={styles.addressContent}>
+                            {profileState.profileData.registration_date
+                              ? `${
+                                  profileState.profileData.registration_date.split(
+                                    'T',
+                                  )[0]
+                                } at ${
+                                  profileState.profileData.registration_date
+                                    .split('T')[1]
+                                    .split(':')[0]
+                                }:${
+                                  profileState.profileData.registration_date
+                                    .split('T')[1]
+                                    .split(':')[1]
+                                }`
+                              : null}
+                          </Text>
+                        </View>
                       </View>
                     </View>
                   </View>
                 </View>
-              </View>
+              </>
             </View>
             <View style={styles.logoView}>
               <Image
@@ -346,10 +366,20 @@ const UserInfo = ({navigation}) => {
         visibleStateChanger={setEditDp}
         // dispatchable={checkPassword}
       />
+      {editDp ? <View style={styles.overlay} /> : null}
     </>
   );
 };
 const styles = StyleSheet.create({
+  overlay: {
+    position: 'absolute',
+    width: '100%',
+    height: '100%',
+    flex: 1,
+    top: 0,
+    left: 0,
+    backgroundColor: 'rgba(102, 102, 102, 0.5)',
+  },
   progressBoard: {
     flex: 1,
     justifyContent: 'center',
@@ -468,8 +498,8 @@ const styles = StyleSheet.create({
     fontSize: 12,
   },
   editDp: {
-    backgroundColor: colors.accent,
-    opacity: 0.5,
+    backgroundColor: colors.grayishblack,
+    opacity: 0.8,
     position: 'absolute',
     width: '100%',
     left: 0,
@@ -527,7 +557,7 @@ const styles = StyleSheet.create({
   },
   addressLabel: {
     fontFamily: 'Montserrat-Bold',
-    fontSize: 22,
+    fontSize: 18,
     color: 'green',
     marginBottom: 20,
   },
@@ -540,7 +570,7 @@ const styles = StyleSheet.create({
   },
   addressInsideLabel: {
     fontFamily: 'Montserrat-Bold',
-    fontSize: 17,
+    fontSize: 14,
     color: '#555',
   },
   addressRightView: {
@@ -552,7 +582,7 @@ const styles = StyleSheet.create({
     fontFamily: 'Montserrat-Regular',
     alignItems: 'flex-end',
     textAlign: 'right',
-    fontSize: 17,
+    fontSize: 14,
   },
   logoView: {
     alignItems: 'center',

@@ -40,142 +40,149 @@ const Profile = ({navigation}) => {
   console.log(profileState.userData.name);
 
   return (
-    <ScrollView style={styles.scroll}>
-      {/* {profileState.loading ? (
-        <View style={styles.progressBoard}>
-          <ActivityIndicator
-            visible={profileState.loading}
-            textContent={'Loading...'}
-            textStyle={styles.spinnerTextStyle}
-            animating={true}
-            color={colors.primary}
-            size="large"
-          />
-        </View>
-      ) : ( */}
-      <View style={styles.container}>
-        <View style={styles.detailsView}>
-          <View style={styles.userInfoView}>
-            <View style={styles.imageView}>
-              <Image
-                style={
-                  profileState.userData.donorStatus === 1
-                    ? styles.donorAvatar
-                    : styles.avatar
-                }
-                source={
-                  profileState.userData.profilePicture
-                    ? {uri: profileState.userData.profilePicture}
-                    : require('../../../assets/images/account/nodp.png')
-                }
-              />
+    <View style={styles.outerBoard}>
+      <ImageBackground
+        source={
+          profileState.userData.profilePicture
+            ? {uri: profileState.userData.profilePicture}
+            : null
+        }
+        style={styles.imageCover}>
+        <ScrollView style={styles.scroll}>
+          <View style={styles.container}>
+            <View style={styles.detailsView}>
+              <View style={styles.userInfoView}>
+                <View style={styles.imageView}>
+                  <Image
+                    style={
+                      profileState.userData.donorStatus === 1
+                        ? styles.donorAvatar
+                        : styles.avatar
+                    }
+                    source={
+                      profileState.userData.profilePicture
+                        ? {uri: profileState.userData.profilePicture}
+                        : require('../../../assets/images/account/nodp.png')
+                    }
+                  />
+                </View>
+
+                <Text style={styles.userName}>
+                  {profileState.userData.name}
+                </Text>
+                <Text style={styles.userId}>
+                  User ID: {profileState.userData.userId}
+                </Text>
+                {authState.userType === 1 ? (
+                  <>
+                    <View style={styles.donorStatusView}>
+                      {profileState.userData.donorStatus !== 1 &&
+                      profileState.userData.donorStatus !== 0 ? (
+                        <View style={styles.disabled}>
+                          <Text style={styles.donorStatusTouchText}>
+                            Donor status: Disabled
+                          </Text>
+                        </View>
+                      ) : (
+                        <TouchableOpacity
+                          onPress={() => {
+                            let newDonorStatus = 0;
+                            if (profileState.userData.donorStatus === 0) {
+                              newDonorStatus = 1;
+                            } else {
+                              newDonorStatus = 0;
+                            }
+                            dispatch(
+                              setDonorStatus(
+                                authState.userToken,
+                                newDonorStatus,
+                              ),
+                            );
+                          }}
+                          style={
+                            profileState.userData.donorStatus === 0
+                              ? styles.inactive
+                              : styles.active
+                          }>
+                          <Text style={styles.donorStatusTouchText}>
+                            Donor status:{' '}
+                            {profileState.userData.donorStatus === 0
+                              ? 'Inactive'
+                              : 'Active'}
+                          </Text>
+                          <Feather
+                            name="repeat"
+                            color={colors.additional2}
+                            size={17}
+                          />
+                        </TouchableOpacity>
+                      )}
+                    </View>
+                    <Text style={styles.infoText}>
+                      {profileState.userData.donorStatus === 0
+                        ? 'Click on the above button to upgarde to donor status'
+                        : profileState.userData.donorStatus === 1
+                        ? 'Click on the above button to leave donor status'
+                        : profileState.userData.lastDonationDate
+                        ? `Eligible for donation in ${Math.floor(
+                            56 -
+                              (new Date().getTime() -
+                                new Date(
+                                  profileState.userData.lastDonationDate.split(
+                                    'T',
+                                  )[0],
+                                ).getTime()) /
+                                (1000 * 60 * 60 * 24),
+                          )} days`
+                        : null}
+                    </Text>
+                  </>
+                ) : null}
+              </View>
             </View>
 
-            <Text style={styles.userName}>{profileState.userData.name}</Text>
-            <Text style={styles.userId}>
-              User ID: {profileState.userData.userId}
-            </Text>
-            {authState.userType === 1 ? (
-              <>
-                <View style={styles.donorStatusView}>
-                  {profileState.userData.donorStatus !== 1 &&
-                  profileState.userData.donorStatus !== 0 ? (
-                    <View style={styles.disabled}>
-                      <Text style={styles.donorStatusTouchText}>
-                        Donor status: Disabled
-                      </Text>
-                    </View>
-                  ) : (
-                    <TouchableOpacity
-                      onPress={() => {
-                        let newDonorStatus = 0;
-                        if (profileState.userData.donorStatus === 0) {
-                          newDonorStatus = 1;
-                        } else {
-                          newDonorStatus = 0;
-                        }
-                        dispatch(
-                          setDonorStatus(authState.userToken, newDonorStatus),
-                        );
-                      }}
-                      style={
-                        profileState.userData.donorStatus === 0
-                          ? styles.inactive
-                          : styles.active
-                      }>
-                      <Text style={styles.donorStatusTouchText}>
-                        Donor status:{' '}
-                        {profileState.userData.donorStatus === 0
-                          ? 'Inactive'
-                          : 'Active'}
-                      </Text>
-                      <Feather
-                        name="repeat"
-                        color={colors.additional2}
-                        size={17}
-                      />
-                    </TouchableOpacity>
-                  )}
-                </View>
-                <Text style={styles.infoText}>
-                  {profileState.userData.donorStatus === 0
-                    ? 'Click on the above button to upgarde to donor status'
-                    : profileState.userData.donorStatus === 1
-                    ? 'Click on the above button to leave donor status'
-                    : profileState.userData.lastDonationDate
-                    ? `Eligible for donation in ${Math.floor(
-                        56 -
-                          (new Date().getTime() -
-                            new Date(
-                              profileState.userData.lastDonationDate.split(
-                                'T',
-                              )[0],
-                            ).getTime()) /
-                            (1000 * 60 * 60 * 24),
-                      )} days`
-                    : null}
-                </Text>
-              </>
-            ) : null}
-          </View>
-        </View>
+            <View style={styles.tabsView}>
+              <View style={styles.tabsInsideView}>
+                <TouchableOpacity
+                  style={styles.touch}
+                  onPress={() => navigation.navigate('userInfo')}>
+                  <Text style={styles.touchText}>User Information</Text>
+                  <Feather name="info" color={colors.primary} size={19} />
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={styles.touch}
+                  onPress={() => navigation.navigate('confirmPassword')}>
+                  <Text style={styles.touchText}>Change Password</Text>
+                  <Feather name="lock" color={colors.primary} size={19} />
+                </TouchableOpacity>
 
-        <View style={styles.tabsView}>
-          <View style={styles.tabsInsideView}>
-            <TouchableOpacity
-              style={styles.touch}
-              onPress={() => navigation.navigate('userInfo')}>
-              <Text style={styles.touchText}>User Information</Text>
-              <Feather name="info" color={colors.primary} size={19} />
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={styles.touch}
-              onPress={() => navigation.navigate('confirmPassword')}>
-              <Text style={styles.touchText}>Change Password</Text>
-              <Feather name="lock" color={colors.primary} size={19} />
-            </TouchableOpacity>
-
-            <TouchableOpacity
-              style={styles.logoutBtn}
-              onPress={() => setRusure(true)}>
-              <View style={styles.logoutInView}>
-                <Text style={styles.logoutText}>Logout</Text>
-                <Feather name="log-out" color={colors.additional2} size={19} />
+                <TouchableOpacity
+                  style={styles.logoutBtn}
+                  onPress={() => setRusure(true)}>
+                  <View style={styles.logoutInView}>
+                    <Text style={styles.logoutText}>Logout</Text>
+                    <Feather
+                      name="log-out"
+                      color={colors.additional2}
+                      size={19}
+                    />
+                  </View>
+                </TouchableOpacity>
               </View>
-            </TouchableOpacity>
+            </View>
           </View>
-        </View>
-      </View>
-      {/* )} */}
-      {rusure ? (
-        <AreYouSure
-          visibleState={rusure}
-          visibleStateChanger={setRusure}
-          dispatchable={logUserOut}
-          message="Are you sure?"
-        />
-      ) : null}
-    </ScrollView>
+          {/* )} */}
+          {rusure ? (
+            <AreYouSure
+              visibleState={rusure}
+              visibleStateChanger={setRusure}
+              dispatchable={logUserOut}
+              message="Are you sure?"
+            />
+          ) : null}
+        </ScrollView>
+      </ImageBackground>
+    </View>
   );
 };
 
@@ -185,12 +192,17 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-  scroll: {
+  outerBoard: {
+    flex: 1,
+    height: '100%',
     backgroundColor: colors.primary,
+  },
+  scroll: {
+    backgroundColor: 'rgba(0,0,0,0.7)',
   },
   container: {
     flex: 1,
-    backgroundColor: colors.primary,
+    backgroundColor: 'transparent',
   },
   detailsView: {
     flex: 2,
@@ -199,6 +211,11 @@ const styles = StyleSheet.create({
   imageView: {
     alignItems: 'center',
     width: '100%',
+  },
+  imageCover: {
+    width: '100%',
+    height: '100%',
+    flex: 1,
   },
   avatar: {
     borderColor: colors.primary,
@@ -281,7 +298,7 @@ const styles = StyleSheet.create({
   },
   tabsView: {
     flex: 1,
-    backgroundColor: colors.primary,
+    backgroundColor: 'transparent',
     padding: 30,
     justifyContent: 'center',
   },

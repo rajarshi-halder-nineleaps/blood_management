@@ -6,16 +6,18 @@ import {
   Text,
   TouchableOpacity,
   View,
+  Pressable,
   Image,
 } from 'react-native';
 import colors from '../constants/Colors';
 import Feather from 'react-native-vector-icons/Feather';
 import {useSelector, useDispatch} from 'react-redux';
 import ImagePicker from 'react-native-image-crop-picker';
-import {updateAvatar} from '../redux/profile/actions';
+import {updateAvatar, removeAvatar} from '../redux/profile/actions';
 
 const AvatarChangeModal = (props) => {
   const authState = useSelector((state) => state.authState);
+  const profileState = useSelector((state) => state.profileState);
   const dispatch = useDispatch();
 
   const takePhotoFromCamera = () => {
@@ -57,36 +59,54 @@ const AvatarChangeModal = (props) => {
       .catch(() => {});
   };
 
+  const removeUserAvatar = () => {
+    dispatch(
+      removeAvatar(authState.userToken, profileState.userData.profilePicture),
+    );
+    props.visibleStateChanger(false);
+  };
+
   return (
     // <View style={styles.centeredView}>
     <Modal
+      animationType="slide"
       transparent={true}
       visible={props.visibleState}
       onRequestClose={() => {
         props.visibleStateChanger(false);
       }}>
-      <View style={styles.centeredView}>
+      <Pressable
+        style={styles.centeredView}
+        onPressOut={() => props.visibleStateChanger(false)}>
         <View style={styles.modalView}>
           <TouchableOpacity
             style={styles.choiceTouch}
             onPress={takePhotoFromCamera}>
             <Text style={styles.choiceText}>Take Photo</Text>
-            <Feather name="aperture" color={colors.additional2} size={25} />
+            <Feather name="aperture" color={colors.grayishblack} size={25} />
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.choiceTouch}
             onPress={choosePhotoFromLibrary}>
             <Text style={styles.choiceText}>Choose from gallery</Text>
-            <Feather name="image" color={colors.additional2} size={25} />
+            <Feather name="image" color={colors.grayishblack} size={25} />
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.choiceTouch}
+            onPress={removeUserAvatar}>
+            <Text style={styles.choiceText}>Remove Avatar</Text>
+            <Feather name="trash" color={colors.grayishblack} size={25} />
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.choiceTouch}
             onPress={() => props.visibleStateChanger(false)}>
-            <Text style={styles.choiceText}>Cancel</Text>
-            <Feather name="x" color={colors.additional2} size={25} />
+            <Text style={[styles.choiceText, {color: colors.dutchred}]}>
+              Cancel
+            </Text>
+            <Feather name="x" color={colors.dutchred} size={25} />
           </TouchableOpacity>
         </View>
-      </View>
+      </Pressable>
     </Modal>
     // </View>
   );
@@ -97,7 +117,6 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'flex-end',
     alignItems: 'center',
-    marginTop: 22,
   },
   image: {
     width: 100,
@@ -107,7 +126,6 @@ const styles = StyleSheet.create({
     width: '100%',
     backgroundColor: colors.additional2,
     borderRadius: 10,
-    padding: 35,
     alignItems: 'center',
     shadowColor: '#000',
     shadowOffset: {
@@ -120,16 +138,16 @@ const styles = StyleSheet.create({
   },
   choiceTouch: {
     flexDirection: 'row',
-    backgroundColor: colors.grayishblack,
-    borderRadius: 5,
+    backgroundColor: colors.additional2,
     width: '100%',
-    padding: 15,
+    padding: 25,
     alignItems: 'center',
     justifyContent: 'space-between',
-    marginVertical: 10,
+    borderBottomColor: colors.accent,
+    borderBottomWidth: 2,
   },
   choiceText: {
-    color: colors.additional2,
+    color: colors.grayishblack,
     fontFamily: 'Montserrat-Regular',
     fontSize: 15,
   },

@@ -30,7 +30,7 @@ const CommitmentsCard = ({item}) => {
           </View>
         </View>
         <View style={styles.headerIndicatorView}>
-          {item.compeleted ? (
+          {item.status ? (
             <View style={styles.yesnoView}>
               <Text style={styles.yes}>COMPLETED</Text>
             </View>
@@ -132,7 +132,7 @@ const CommitmentsCard = ({item}) => {
             </View>
           </View>
           <View style={styles.headerIndicatorView}>
-            {item.compeleted ? (
+            {item.status ? (
               <View style={styles.yesnoView}>
                 <Text style={styles.yes}>COMPLETED</Text>
               </View>
@@ -153,14 +153,13 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'flex-start',
-    margin: 10,
-    borderRadius: 5,
     borderColor: colors.accent,
     borderWidth: 0.5,
     overflow: 'hidden',
     backgroundColor: colors.additional2,
     flexDirection: 'row',
     padding: 10,
+    paddingVertical: 15,
   },
   touch: {
     flex: 1,
@@ -220,8 +219,8 @@ const styles = StyleSheet.create({
     backgroundColor: colors.additional2,
     marginHorizontal: 10,
     borderRadius: 5,
-    borderColor: colors.accent,
-    borderWidth: 0.5,
+    elevation: 5,
+    marginBottom: 10,
   },
   bodyHeader: {
     backgroundColor: colors.accent,

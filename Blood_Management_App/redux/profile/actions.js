@@ -229,6 +229,8 @@ export const setDonorStatus = (userToken, newDonorStatus) => {
 };
 
 ///////////////////////////////////////////////////////////////////////////////////
+//* WE ARE NOT DELETING THE USER'S OLD PICTURE FROM THE DB.
+//* THIS IS DONE SO THAT IN THE FUTURE WE CAN INCLUDE AN OPTION TO MAKE GALLERY FOR PICTURES.
 
 export const updateAvatar = (userToken, userId, image) => {
   return async (dispatch) => {
@@ -303,6 +305,48 @@ export const updateAvatar = (userToken, userId, image) => {
       dispatch(profileFailure(err.message));
       console.log(err.message);
     }
+  };
+};
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+export const removeAvatar = (userToken, avatar) => {
+  return (dispatch) => {
+    let filename = avatar.substring(avatar.lastIndexOf('/') + 1);
+    filename = filename.substring(0, filename.indexOf('?'));
+    console.log(filename);
+
+    storage()
+      .ref(filename)
+      .delete()
+      .then(() => {
+        console.log(
+          `${filename}has been deleted successfully from the bucket.`,
+        );
+
+        axios
+          .put(
+            'http://192.168.43.217:8080/profile/setavatar',
+            {avatar: ''},
+            {
+              headers: {Authorization: 'Bearer ' + userToken},
+            },
+          )
+          .then((response) => {
+            if (response.headers.success) {
+              //? SETTING IT IN STATE ON SUCCESSFUL DATABASE SAVE.
+              dispatch(setAvatar(''));
+            } else if (response.headers.error) {
+              dispatch(profileFailure(response.headers.error));
+            } else {
+              dispatch(
+                profileFailure('Something went wrong, please try again later.'),
+              );
+            }
+          })
+          .catch((err) => dispatch(profileFailure(err.message)));
+      })
+      .catch((err2) => dispatch(profileFailure(err2.message)));
   };
 };
 

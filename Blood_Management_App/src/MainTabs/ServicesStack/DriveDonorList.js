@@ -59,13 +59,16 @@ const DriveDonorList = ({route, navigation}) => {
         <View style={styles.touch}>
           <View style={styles.labelBoard}>
             <Text style={styles.label}>
-              Donor ID :<Text style={styles.content}>{item.userId}</Text>
+              Donor ID: {'  '}
+              <Text style={styles.content}>{item.userId}</Text>
             </Text>
             <Text style={styles.label}>
-              Donor Name :<Text style={styles.content}>{item.name}</Text>
+              Donor Name: {'  '}
+              <Text style={styles.content}>{item.name}</Text>
             </Text>
             <Text style={styles.label}>
-              Blood group :<Text style={styles.content}>{item.bloodGroup}</Text>
+              Blood group: {'  '}
+              <Text style={styles.content}>{item.bloodGroup}</Text>
             </Text>
 
             {route.params.driveStatus &&
@@ -191,12 +194,13 @@ const styles = StyleSheet.create({
   },
   label: {
     padding: 2,
-    color: colors.primary,
+    color: colors.grayishblack,
     fontSize: 14,
     fontFamily: 'Montserrat-Bold',
   },
   content: {
-    color: colors.additional1,
+    color: colors.grayishblack,
+    fontFamily: 'Montserrat-Regular',
   },
   donorListTouch: {
     backgroundColor: colors.primary,
