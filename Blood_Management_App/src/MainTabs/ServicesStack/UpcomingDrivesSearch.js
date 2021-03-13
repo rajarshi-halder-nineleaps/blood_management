@@ -262,6 +262,7 @@ const UpcomingDrivesSearch = ({navigation}) => {
                     <Feather
                       name="search"
                       color={colors.additional2}
+                      style={{paddingLeft: 20}}
                       size={20}
                     />
                     <Text style={styles.finderTouchText}>
@@ -363,7 +364,6 @@ const styles = StyleSheet.create({
   finderTouch: {
     backgroundColor: colors.accent,
     elevation: 5,
-    paddingHorizontal: 20,
     borderRadius: 100,
     overflow: 'hidden',
     justifyContent: 'center',
@@ -372,21 +372,22 @@ const styles = StyleSheet.create({
   },
   finderTouchText: {
     color: colors.additional2,
-    paddingLeft: 10,
     fontSize: 15,
     fontFamily: 'Montserrat-Regular',
+    paddingHorizontal: 20,
     textAlign: 'center',
   },
   imgBtnBkg: {
     width: '100%',
     height: '100%',
     flexDirection: 'row',
-    justifyContent: 'center',
+    justifyContent: 'flex-start',
     alignItems: 'center',
     fontFamily: 'Montserrat-Regular',
   },
   searchInfoText: {
     fontFamily: 'Montserrat-Regular',
+
     color: colors.grayishblack,
     fontSize: 14,
   },

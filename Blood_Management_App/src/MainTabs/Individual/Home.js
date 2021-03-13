@@ -18,6 +18,7 @@ import {useDispatch, useSelector} from 'react-redux';
 import {FlatListSlider} from 'react-native-flatlist-slider';
 import HomeSlider from '../../../components/HomeSlider';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import {setDonorStatus} from "../../../redux/profile/actions";
 import {setDonationEligibilityNotification} from '../../../redux/notifications/actions';
 
 import {fetchCommitments} from '../../../redux/commitments/actions';
