@@ -113,10 +113,7 @@ const RegisterBbScreen = ({navigation}) => {
     }
   }, [
     dispatch,
-    geolocationState.data.address,
-    geolocationState.data.district,
-    geolocationState.data.pincode,
-    geolocationState.data.state,
+    geolocationState,
     word,
   ]);
 
@@ -408,7 +405,9 @@ const RegisterBbScreen = ({navigation}) => {
                   onValueChange={(val, itemIndex) => {
                     blurListener('selectedState');
                     checkValidity(val, 'selectedState');
-                    setdistEnb(true), setselectedStateindex(itemIndex);
+                    setdistEnb(true);
+                    setselectedStateindex(itemIndex);
+                    checkValidity(word[itemIndex].districts[0], 'district');
                   }}>
                   {word.map((item, id) => (
                     <Picker.Item

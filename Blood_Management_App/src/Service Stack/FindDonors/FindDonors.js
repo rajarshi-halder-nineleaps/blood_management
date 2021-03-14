@@ -41,25 +41,28 @@ const FindDonors = ({navigation}) => {
   let watchID;
 
   useEffect(() => {
+    dispatch(stateCleanup());
     return () => dispatch(stateCleanup());
   }, [dispatch]);
 
   useEffect(() => {
+    const newInputValues = {
+      pincode: geolocationState.data.pincode,
+    };
+
     const stateIndex = word.findIndex((val) =>
       val.state.includes(geolocationState.data.state),
     );
     if (stateIndex <= 0) {
       setselectedStateindex(0);
+      newInputValues.selectedState = word[0].state;
     } else {
       setselectedStateindex(stateIndex);
+      newInputValues.selectedState = word[stateIndex].state;
     }
 
     setdistEnb(true);
 
-    const newInputValues = {
-      selectedState: geolocationState.data.state,
-      pincode: geolocationState.data.pincode,
-    };
     const districtIndex = word[stateIndex].districts.findIndex((val) =>
       val.includes(geolocationState.data.district),
     );
@@ -74,13 +77,7 @@ const FindDonors = ({navigation}) => {
     dispatch(updateFields(newInputValues.selectedState, 'state', true));
     dispatch(updateFields(newInputValues.selectedDistrict, 'district', true));
     dispatch(updateFields(newInputValues.pincode, 'pincode', true));
-  }, [
-    dispatch,
-    geolocationState.data.district,
-    geolocationState.data.pincode,
-    geolocationState.data.state,
-    word,
-  ]);
+  }, [dispatch, geolocationState, word]);
 
   const blurListener = (fieldId) => {
     dispatch(blurFields(fieldId));
@@ -236,6 +233,9 @@ const FindDonors = ({navigation}) => {
               checkValidity(val, 'state');
               setdistEnb(true);
               setselectedStateindex(itemIndex);
+              dispatch(
+                updateFields(word[itemIndex].districts[0], 'district', false),
+              );
             }}>
             {word.map((item, id) => (
               <Picker.Item label={item.state} value={item.state} key={id} />

@@ -6,14 +6,16 @@ import {
   TouchableOpacity,
   StyleSheet,
   ScrollView,
-  Alert,
   ToastAndroid,
   Platform,
   AlertIOS,
 } from 'react-native';
 import colors from '../../../constants/Colors';
 import Feather from 'react-native-vector-icons/Feather';
+import {UIActivityIndicator} from 'react-native-indicators';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import Fields from '../../../components/Fields';
+import {requestLocationPermission} from '../../../redux/geolocation/actions';
 import {showMessage, hideMessage} from 'react-native-flash-message';
 import {useSelector, useDispatch} from 'react-redux';
 import {
@@ -25,11 +27,13 @@ import {Picker} from '@react-native-picker/picker';
 import * as places from '../../../assets/places.json';
 import {phoneRegex, pincodeRegex} from '../../../constants/Regexes';
 import PhoneField from '../../../components/PhoneField';
+import {stateCleanup} from '../../../redux/geolocation/actions';
 
 const InfoEdit = ({navigation}) => {
   const word = places.states;
-
+  let watchID;
   const profileState = useSelector((state) => state.profileState);
+  const geolocationState = useSelector((state) => state.geolocationState);
   const authState = useSelector((state) => state.authState);
   const dispatch = useDispatch();
 
@@ -94,6 +98,33 @@ const InfoEdit = ({navigation}) => {
       navigation.navigate('userInfo');
     }
   }, [dispatch, navigation, profileState.dataSaved]);
+
+  useEffect(() => {
+    checkValidity(geolocationState.data.pincode, 'pincode');
+    checkValidity(geolocationState.data.address, 'address');
+
+    const stateIndex = word.findIndex((val) =>
+      val.state.includes(geolocationState.data.state),
+    );
+    if (stateIndex <= 0) {
+      setstateindex(0);
+      checkValidity(word[0].state, 'state');
+    } else {
+      setstateindex(stateIndex);
+      checkValidity(word[stateIndex].state, 'state');
+    }
+
+    setdistEnb(true);
+    const districtIndex = word[stateIndex].districts.findIndex((val) =>
+      val.includes(geolocationState.data.district),
+    );
+
+    if (districtIndex > 0) {
+      checkValidity(word[stateIndex].districts[districtIndex], 'district');
+    } else {
+      checkValidity(word[stateIndex].districts[0], 'district');
+    }
+  }, [dispatch, geolocationState, word]);
 
   //* for regular fields
   const blurListener = (fieldId) => {
@@ -282,6 +313,14 @@ const InfoEdit = ({navigation}) => {
     }
   };
 
+  const getLocation = () => {
+    dispatch(requestLocationPermission(watchID));
+
+    // return () => {
+    //   Geolocation.clearWatch(watchID);
+    // };
+  };
+
   return (
     <>
       <ScrollView style={styles.scroll}>
@@ -374,6 +413,25 @@ const InfoEdit = ({navigation}) => {
                 </View>
               </>
             )}
+
+            <TouchableOpacity
+              style={styles.locationTouch}
+              onPress={() => getLocation()}>
+              {geolocationState.loading ? (
+                <UIActivityIndicator color={colors.additional2} size={25} />
+              ) : (
+                <>
+                  <MaterialIcons
+                    name="gps-fixed"
+                    color={colors.additional2}
+                    size={25}
+                  />
+                  <Text style={styles.locationText}>
+                    Use my current location
+                  </Text>
+                </>
+              )}
+            </TouchableOpacity>
             <Fields
               label="Address"
               error="This field is required"
@@ -406,6 +464,7 @@ const InfoEdit = ({navigation}) => {
                   checkValidity(val, 'state');
                   setdistEnb(true);
                   setstateindex(itemIndex);
+                  checkValidity(word[itemIndex].districts[0], 'district');
                 }}>
                 {word.map((item, id) => (
                   <Picker.Item label={item.state} value={item.state} key={id} />
@@ -511,6 +570,22 @@ const styles = StyleSheet.create({
   scroll: {
     flex: 1,
     backgroundColor: colors.additional2,
+  },
+  locationTouch: {
+    backgroundColor: colors.grayishblack,
+    flexDirection: 'row',
+    borderRadius: 5,
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: 13,
+    marginBottom: 10,
+    marginTop: 20,
+  },
+  locationText: {
+    color: colors.additional2,
+    fontFamily: 'Montserrat-Regular',
+    fontSize: 15,
+    marginHorizontal: 10,
   },
   customHeader: {
     backgroundColor: colors.primary,
