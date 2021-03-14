@@ -139,9 +139,8 @@ const FindDonors = ({navigation}) => {
             navigation.navigate('Buy Blood List');
           } else {
             showMessage({
-              message: 'Units required',
-              description:
-                'Please input the number of units required to continue.',
+              message: 'Invalid Units',
+              description: 'Please check your units field before continuing.',
               type: 'warning',
             });
           }

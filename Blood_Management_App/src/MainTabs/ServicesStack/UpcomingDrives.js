@@ -6,7 +6,6 @@ import {
   Image,
   FlatList,
   RefreshControl,
-  ActivityIndicator,
 } from 'react-native';
 import React, {useState, useEffect} from 'react';
 import {useSelector, useDispatch} from 'react-redux';
@@ -126,8 +125,7 @@ const styles = StyleSheet.create({
     color: colors.primary,
     fontSize: 10,
   },
-  scroll: {
-  },
+  scroll: {},
 });
 
 export default UpcomingDrives;

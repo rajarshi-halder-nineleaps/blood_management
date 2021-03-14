@@ -15,10 +15,11 @@ import {
   stateCleanup,
 } from '../../redux/registerInd/actions';
 import {showMessage, hideMessage} from 'react-native-flash-message';
-import {SkypeIndicator} from 'react-native-indicators';
+import {SkypeIndicator, UIActivityIndicator} from 'react-native-indicators';
 import {setUserVerified, sendOtp} from '../../redux/register/actions';
 import colors from '../../constants/Colors';
-import {regUserUp} from '../../redux/auth/actions';
+import {requestLocationPermission} from '../../redux/geolocation/actions';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import {useDispatch, useSelector} from 'react-redux';
 import {
   emailRegex,
@@ -36,21 +37,88 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 const RegisterBbScreen = ({navigation}) => {
   const [selectedStateindex, setselectedStateindex] = useState(0);
   const [distEnb, setdistEnb] = useState(false);
-
+  const [mode, setMode] = useState('date');
+  const [show, setShow] = useState(false);
   const word = places.states;
+  let watchID;
 
   const dispatch = useDispatch();
   const regFormState = useSelector((state) => state.regIndFormState);
+  const geolocationState = useSelector((state) => state.geolocationState);
+  const otpState = useSelector((state) => state.regFormState);
 
   //* cleans up the state on first render.
   useEffect(() => {
     //* SETTING USER TYPE STATE TO FALSE ON FIRST RENDER.
-    dispatch(stateCleanup());
     dispatch(setUserVerified(1));
+    return () => dispatch(stateCleanup());
   }, [dispatch]);
 
-  const [mode, setMode] = useState('date');
-  const [show, setShow] = useState(false);
+  useEffect(() => {
+    dispatch(updateFields(geolocationState.data.address, 'address', true));
+
+    dispatch(
+      updateFields(
+        geolocationState.data.pincode,
+        'pincode',
+        pincodeRegex.test(String(geolocationState.data.pincode.trim())),
+      ),
+    );
+
+    const stateIndex = word.findIndex((val) =>
+      val.state.includes(geolocationState.data.state),
+    );
+    if (stateIndex <= 0) {
+      setselectedStateindex(0);
+      dispatch(
+        updateFields(
+          word[0].state,
+          'selectedState',
+          geolocationState.data.state !== '' ? true : false,
+        ),
+      );
+    } else {
+      setselectedStateindex(stateIndex);
+      dispatch(
+        updateFields(
+          word[stateIndex].state,
+          'selectedState',
+          geolocationState.data.state !== '' ? true : false,
+        ),
+      );
+    }
+    setdistEnb(true);
+    // dispatch(updateFields(geolocationState.data.state, 'selectedState', true));
+
+    const districtIndex = word[stateIndex].districts.findIndex((val) =>
+      val.includes(geolocationState.data.district),
+    );
+
+    if (districtIndex > 0) {
+      dispatch(
+        updateFields(
+          word[stateIndex].districts[districtIndex],
+          'selectedDistrict',
+          geolocationState.data.district !== '' ? true : false,
+        ),
+      );
+    } else {
+      dispatch(
+        updateFields(
+          word[stateIndex].districts[0],
+          'selectedDistrict',
+          geolocationState.data.district !== '' ? true : false,
+        ),
+      );
+    }
+  }, [
+    dispatch,
+    geolocationState.data.address,
+    geolocationState.data.district,
+    geolocationState.data.pincode,
+    geolocationState.data.state,
+    word,
+  ]);
 
   const onChange = (event, selectedDate) => {
     setShow(Platform.OS === 'ios');
@@ -158,6 +226,10 @@ const RegisterBbScreen = ({navigation}) => {
     }
   };
 
+  const getLocation = () => {
+    dispatch(requestLocationPermission(watchID));
+  };
+
   return (
     <>
       <View style={styles.header}>
@@ -165,7 +237,7 @@ const RegisterBbScreen = ({navigation}) => {
           <Feather name="chevron-left" color="white" size={30} style={{}} />
         </TouchableOpacity>
       </View>
-      {regFormState.loading ? (
+      {otpState.loading ? (
         <View style={styles.progressBoard}>
           <SkypeIndicator color={colors.primary} />
         </View>
@@ -288,6 +360,25 @@ const RegisterBbScreen = ({navigation}) => {
                     Please select your blood group
                   </Text>
                 )}
+
+              <TouchableOpacity
+                style={styles.locationTouch}
+                onPress={() => getLocation()}>
+                {geolocationState.loading ? (
+                  <UIActivityIndicator color={colors.additional2} size={25} />
+                ) : (
+                  <>
+                    <MaterialIcons
+                      name="gps-fixed"
+                      color={colors.additional2}
+                      size={25}
+                    />
+                    <Text style={styles.locationText}>
+                      Use my current location
+                    </Text>
+                  </>
+                )}
+              </TouchableOpacity>
 
               <Fields
                 label="Current Address*"
@@ -480,6 +571,22 @@ const styles = StyleSheet.create({
     color: colors.additional2,
     fontSize: 40,
     fontFamily: 'Montserrat-Regular',
+  },
+  locationTouch: {
+    backgroundColor: colors.grayishblack,
+    flexDirection: 'row',
+    borderRadius: 5,
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: 13,
+    marginBottom: 10,
+    marginTop: 20,
+  },
+  locationText: {
+    color: colors.additional2,
+    fontFamily: 'Montserrat-Regular',
+    fontSize: 15,
+    marginHorizontal: 10,
   },
   contentBoard: {
     paddingHorizontal: 30,

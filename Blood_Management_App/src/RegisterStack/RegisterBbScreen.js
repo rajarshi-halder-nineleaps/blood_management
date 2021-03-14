@@ -18,8 +18,10 @@ import {
   removePhone,
   setUserVerified,
 } from '../../redux/register/actions';
-import {SkypeIndicator} from 'react-native-indicators';
+import {SkypeIndicator, UIActivityIndicator} from 'react-native-indicators';
 import React, {useState, useEffect} from 'react';
+import {requestLocationPermission} from '../../redux/geolocation/actions';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import {useDispatch, useSelector} from 'react-redux';
 import {showMessage, hideMessage} from 'react-native-flash-message';
 import {Picker} from '@react-native-picker/picker';
@@ -38,19 +40,85 @@ import Fields from '../../components/Fields';
 const RegisterBbScreen = ({navigation}) => {
   const [selectedStateindex, setselectedStateindex] = useState(0);
   const [distEnb, setdistEnb] = useState(false);
-
   const word = places.states;
+  let watchID;
 
   const dispatch = useDispatch();
   const regFormState = useSelector((state) => state.regFormState);
+  const geolocationState = useSelector((state) => state.geolocationState);
 
   //* cleans up the state on first render.
   useEffect(() => {
-
     //* SETTING USER TYPE STATE TO FALSE ON FIRST RENDER.
-    dispatch(stateCleanup());
     dispatch(setUserVerified(3));
+    return () => dispatch(stateCleanup());
   }, [dispatch]);
+
+  useEffect(() => {
+    dispatch(updateFields(geolocationState.data.address, 'address', true));
+
+    dispatch(
+      updateFields(
+        geolocationState.data.pincode,
+        'pincode',
+        pincodeRegex.test(String(geolocationState.data.pincode.trim())),
+      ),
+    );
+
+    const stateIndex = word.findIndex((val) =>
+      val.state.includes(geolocationState.data.state),
+    );
+    if (stateIndex <= 0) {
+      setselectedStateindex(0);
+      dispatch(
+        updateFields(
+          word[0].state,
+          'selectedState',
+          geolocationState.data.state !== '' ? true : false,
+        ),
+      );
+    } else {
+      setselectedStateindex(stateIndex);
+      dispatch(
+        updateFields(
+          word[stateIndex].state,
+          'selectedState',
+          geolocationState.data.state !== '' ? true : false,
+        ),
+      );
+    }
+    setdistEnb(true);
+    // dispatch(updateFields(geolocationState.data.state, 'selectedState', true));
+
+    const districtIndex = word[stateIndex].districts.findIndex((val) =>
+      val.includes(geolocationState.data.district),
+    );
+
+    if (districtIndex > 0) {
+      dispatch(
+        updateFields(
+          word[stateIndex].districts[districtIndex],
+          'selectedDistrict',
+          geolocationState.data.district !== '' ? true : false,
+        ),
+      );
+    } else {
+      dispatch(
+        updateFields(
+          word[stateIndex].districts[0],
+          'selectedDistrict',
+          geolocationState.data.district !== '' ? true : false,
+        ),
+      );
+    }
+  }, [
+    dispatch,
+    geolocationState.data.address,
+    geolocationState.data.district,
+    geolocationState.data.pincode,
+    geolocationState.data.state,
+    word,
+  ]);
 
   const blurListener = (fieldId) => {
     dispatch(blurFields(fieldId));
@@ -115,7 +183,8 @@ const RegisterBbScreen = ({navigation}) => {
     } else {
       showMessage({
         message: 'Maximum phones added',
-        description: 'You have added the maximum possible number of phone fields.',
+        description:
+          'You have added the maximum possible number of phone fields.',
         type: 'warning',
       });
     }
@@ -125,7 +194,11 @@ const RegisterBbScreen = ({navigation}) => {
     if (regFormState.finalFormState) {
       console.log('Registration process started!');
       // dispatch(regUserUp({formData: regFormState.inputValues, userType: 3}));
-      dispatch(sendOtp(regFormState.inputValues.email, () =>{navigation.navigate('OtpScreen');}));
+      dispatch(
+        sendOtp(regFormState.inputValues.email, () => {
+          navigation.navigate('OtpScreen');
+        }),
+      );
       //* now we can either redirect to OTP screen or show errors (if any).
     } else {
       showMessage({
@@ -134,6 +207,10 @@ const RegisterBbScreen = ({navigation}) => {
         type: 'warning',
       });
     }
+  };
+
+  const getLocation = () => {
+    dispatch(requestLocationPermission(watchID));
   };
 
   return (
@@ -234,6 +311,26 @@ const RegisterBbScreen = ({navigation}) => {
                   blurListener('license');
                 }}
               />
+
+              <TouchableOpacity
+                style={styles.locationTouch}
+                onPress={() => getLocation()}>
+                {geolocationState.loading ? (
+                  <UIActivityIndicator color={colors.additional2} size={25} />
+                ) : (
+                  <>
+                    <MaterialIcons
+                      name="gps-fixed"
+                      color={colors.additional2}
+                      size={25}
+                    />
+                    <Text style={styles.locationText}>
+                      Use my current location
+                    </Text>
+                  </>
+                )}
+              </TouchableOpacity>
+
               <Fields
                 label="Registered Address*"
                 error="This field is required"
@@ -416,6 +513,22 @@ const styles = StyleSheet.create({
     padding: 30,
     marginBottom: 50,
     backgroundColor: colors.primary,
+  },
+  locationTouch: {
+    backgroundColor: colors.grayishblack,
+    flexDirection: 'row',
+    borderRadius: 5,
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: 13,
+    marginBottom: 10,
+    marginTop: 20,
+  },
+  locationText: {
+    color: colors.additional2,
+    fontFamily: 'Montserrat-Regular',
+    fontSize: 15,
+    marginHorizontal: 10,
   },
   contentBoard: {
     paddingHorizontal: 30,
