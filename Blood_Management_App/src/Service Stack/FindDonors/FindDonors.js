@@ -1,8 +1,8 @@
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import {useDispatch, useSelector} from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import Feather from 'react-native-vector-icons/Feather';
-import {showMessage, hideMessage} from 'react-native-flash-message';
+import { showMessage, hideMessage } from 'react-native-flash-message';
 
 import {
   View,
@@ -14,15 +14,15 @@ import {
   SafeAreaView,
   ImageBackground,
 } from 'react-native';
-import {Picker} from '@react-native-picker/picker';
-import {TouchableOpacity} from 'react-native-gesture-handler';
-import {pincodeRegex, numbersOnlyRegex} from '../../../constants/Regexes';
+import { Picker } from '@react-native-picker/picker';
+import { TouchableOpacity } from 'react-native-gesture-handler';
+import { pincodeRegex, numbersOnlyRegex } from '../../../constants/Regexes';
 import * as places from '../../../assets/places.json';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
-import {requestLocationPermission} from '../../../redux/geolocation/actions';
+import { requestLocationPermission } from '../../../redux/geolocation/actions';
 import colors from '../../../constants/Colors';
-import {UIActivityIndicator} from 'react-native-indicators';
-import {getDonorList} from '../../../redux/finddonors/actions';
+import { UIActivityIndicator } from 'react-native-indicators';
+import { getDonorList } from '../../../redux/finddonors/actions';
 import {
   updateFields,
   stateCleanup,
@@ -30,7 +30,7 @@ import {
 } from '../../../redux/finddonors/actions';
 import Fields from '../../../components/Fields';
 
-const FindDonors = ({navigation}) => {
+const FindDonors = ({ navigation }) => {
   const dispatch = useDispatch();
   const authState = useSelector((state) => state.authState);
   const geolocationState = useSelector((state) => state.geolocationState);
@@ -117,8 +117,13 @@ const FindDonors = ({navigation}) => {
     //   Geolocation.clearWatch(watchID);
     // };
   };
+  const blurAll = () => {
+    blurListener('blood_group');
+    blurListener('address')
+  }
 
   const submitHandler = () => {
+    blurAll();
     console.log(finddonorFormState.inputValues);
     if (finddonorFormState.inputValidity.pincode) {
       if (finddonorFormState.inputValidity.blood_group) {
@@ -149,7 +154,6 @@ const FindDonors = ({navigation}) => {
       });
     }
   };
-
   return (
     <ScrollView style={styles.container}>
       <View>
@@ -159,13 +163,13 @@ const FindDonors = ({navigation}) => {
             style={styles.image}
             resizeMode="center"
           />
-          <Text style={{...styles.searchInfoText}}>
+          <Text style={{ ...styles.searchInfoText }}>
             Please input the required details below
           </Text>
         </View>
       </View>
 
-      <View style={{marginHorizontal: 20}}>
+      <View style={{ marginHorizontal: 20 }}>
         {/* <Text style={styles.pickerLabel}>Blood group</Text> */}
         <View style={styles.pickerView}>
           <Picker
@@ -189,6 +193,10 @@ const FindDonors = ({navigation}) => {
             <Picker.Item label="AB-" value="AB-" />
           </Picker>
         </View>
+        {!finddonorFormState.inputValidity.blood_group &&
+          finddonorFormState.isTouched.blood_group && (
+            <Text style={styles.errorMsg}>Please select blood_group</Text>
+          )}
 
         <Fields
           label="Address of Donation"

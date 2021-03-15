@@ -1,16 +1,17 @@
-import React, {useState} from 'react';
-import {View, Text, FlatList, TouchableOpacity, StyleSheet} from 'react-native';
-import {useDispatch, useSelector} from 'react-redux';
+import React, { useState } from 'react';
+import { View, Text, FlatList, TouchableOpacity, StyleSheet, Image } from 'react-native';
+import { useDispatch, useSelector } from 'react-redux';
 import colors from '../../../constants/Colors';
 import CheckBox from '@react-native-community/checkbox';
 import Feather from 'react-native-vector-icons/Feather';
 import BuyBloodListCard from '../../../components/BuyBloodListCard';
+import { SkypeIndicator } from 'react-native-indicators';
 
-const BuyBloodList = ({navigation}) => {
+const BuyBloodList = ({ navigation }) => {
   const [selectedId, setSelectedId] = useState(null);
   const buybloodFormState = useSelector((state) => state.buybloodFormState);
 
-  const renderItem = ({item}) => {
+  const renderItem = ({ item }) => {
     return (
       <BuyBloodListCard
         item={item}
@@ -29,17 +30,33 @@ const BuyBloodList = ({navigation}) => {
 
   return (
     <View style={styles.container}>
-      <View style={styles.header}>
-        <Text>
-          The below list shows blood banks that meets your search criterion.
+      {buybloodFormState.loading ? (
+        <View style={styles.progressBoard}>
+          <SkypeIndicator color={colors.primary} />
+        </View>
+      ) : buybloodFormState.list.length === 0 ? (
+        <View style={styles.suchEmpty}>
+          <Image
+            style={styles.suchEmptyImg}
+            source={require('../../../assets/images/empty.png')}
+          />
+          <Text style={styles.emptyInfo}>No Bloodbank has available stocks.</Text>
+        </View>
+      ) : (
+        <View>
+          <View style={styles.header}>
+            <Text>
+              The below list shows blood banks that meets your search criterion.
         </Text>
-      </View>
-      <FlatList
-        data={buybloodFormState.list}
-        renderItem={renderItem}
-        keyExtractor={(item) => item.bbId}
-        extraData={selectedId}
-      />
+          </View>
+          <FlatList
+            data={buybloodFormState.list}
+            renderItem={renderItem}
+            keyExtractor={(item) => item.bbId}
+            extraData={selectedId}
+          />
+        </View>
+      )}
     </View>
   );
 };
@@ -67,7 +84,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     marginBottom: 20,
     backgroundColor: colors.primary,
-    fontFamily: 'sans-serif-condensed',
+    fontFamily: 'Montserrat-Bold',
     paddingTop: 10,
     color: 'white',
   },
@@ -99,6 +116,25 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     marginTop: 10,
     justifyContent: 'space-around',
+  },
+  progressBoard: {
+    flex: 1,
+    justifyContent: 'center',
+  },
+  suchEmpty: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: colors.additional2,
+  },
+  suchEmptyImg: {
+    height: 150,
+    width: 150,
+  },
+  emptyInfo: {
+    color: colors.primary,
+    fontSize: 15,
+    fontFamily: 'Montserrat-Bold'
   },
 });
 

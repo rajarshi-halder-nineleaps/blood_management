@@ -1,5 +1,5 @@
 import axios from 'axios';
-import {Alert} from 'react-native';
+import { Alert } from 'react-native';
 import {
   DONORLIST_SUCCESS,
   DONORLIST_REQ,
@@ -61,9 +61,9 @@ export const getactivedonorList = (userToken) => {
     console.log('Getting Active Donor List');
     try {
       const response = await axios.get(
-        'http://192.168.43.217:8080/donationrequests/fetchrequests',
+        'http://10.0.2.2:8080/donationrequests/fetchrequests',
         {
-          headers: {Authorization: 'Bearer ' + userToken},
+          headers: { Authorization: 'Bearer ' + userToken },
         },
       );
       console.log('COMPLETE RESPONSE DATA: ', response.headers);
@@ -94,9 +94,9 @@ export const getdonationdetails = (userToken, donationId) => {
     console.log('Getting Active Donor List');
     try {
       const response = await axios.get(
-        `http://192.168.43.217:8080/donationrequests/fetchdonationdonorlist/${donationId}`,
+        `http://10.0.2.2:8080/donationrequests/fetchdonationdonorlist/${donationId}`,
         {
-          headers: {Authorization: 'Bearer ' + userToken},
+          headers: { Authorization: 'Bearer ' + userToken },
         },
       );
       console.log('COMPLETE RESPONSE DATA: ', response.headers);
@@ -126,12 +126,12 @@ export const expirerequest = (userToken, donationId) => {
     console.log('Expiring Donation');
     try {
       const response = await axios.put(
-        `http://192.168.43.217:8080/donationrequests/expirerequest`,
+        `http://10.0.2.2:8080/donationrequests/expirerequest`,
         {
           donationId: donationId,
         },
         {
-          headers: {Authorization: 'Bearer ' + userToken},
+          headers: { Authorization: 'Bearer ' + userToken },
         },
       );
       console.log('COMPLETE RESPONSE DATA: ', response.headers);
@@ -144,7 +144,7 @@ export const expirerequest = (userToken, donationId) => {
         //? SAVING USER DATA TO ASYNC STORAGE ON SUCCESSFUL LOGIN.
         dispatch(getactivedonorList(userToken));
         Alert.alert('Drive has Expired', 'Drived has been expired', [
-          {text: 'Okay'},
+          { text: 'Okay' },
         ]);
       } else {
         dispatch(expireFailure('Something went wrong!'));
@@ -162,13 +162,13 @@ export const verifydonor = (userToken, userId, donationId) => {
     console.log('Expiring Donation');
     try {
       const response = await axios.put(
-        `http://192.168.43.217:8080/donationrequests/donationdonorverification`,
+        `http://10.0.2.2:8080/donationrequests/donationdonorverification`,
         {
           donationId: donationId,
           userId: userId,
         },
         {
-          headers: {Authorization: 'Bearer ' + userToken},
+          headers: { Authorization: 'Bearer ' + userToken },
         },
       );
       console.log('COMPLETE RESPONSE DATA: ', response.headers);
@@ -180,7 +180,7 @@ export const verifydonor = (userToken, userId, donationId) => {
       } else if (response.headers.success) {
         //? SAVING USER DATA TO ASYNC STORAGE ON SUCCESSFUL LOGIN.
         dispatch(getdonationdetails(userToken, donationId));
-        Alert.alert('Verified', 'User Successfully Verified', [{text: 'Okay'}]);
+        Alert.alert('Verified', 'User Successfully Verified', [{ text: 'Okay' }]);
       } else {
         dispatch(donorListFailure('Something went wrong!'));
         console.log('Failed');
@@ -199,10 +199,10 @@ export const updateRequestList = (userToken, updatedData) => {
       console.log('updating list of invites.');
       dispatch(donorListreq());
       const response = await axios.put(
-        'http://192.168.43.217:8000/activedonorrequest',
+        'http://10.0.2.2:8080:8000/activedonorrequest',
         updatedData,
         {
-          headers: {Authorization: userToken},
+          headers: { Authorization: userToken },
         },
       );
 

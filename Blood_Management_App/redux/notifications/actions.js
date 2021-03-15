@@ -37,9 +37,9 @@ export const fetchNotifications = (userToken) => {
       console.log('Fetching list of notifications.');
       dispatch(notificationReq());
       const response = await axios.get(
-        'http://192.168.43.217:8080/notifications/fetchnotifications',
+        'http://10.0.2.2:8080/notifications/fetchnotifications',
         {
-          headers: {Authorization: 'Bearer ' + userToken},
+          headers: { Authorization: 'Bearer ' + userToken },
         },
       );
 
@@ -74,10 +74,10 @@ export const setNotificationStatus = (userToken, notificationId) => {
       //? HERE, WE WON'T BE NEEDING AN ACTIVITY INDICATOR, but if needed, uncomment the line below.
       // dispatch(notificationReq());
       const response = await axios.put(
-        'http://192.168.43.217:8080/notifications/setstatus',
-        {notificationId},
+        'http://10.0.2.2:8080/notifications/setstatus',
+        { notificationId },
         {
-          headers: {Authorization: 'Bearer ' + userToken},
+          headers: { Authorization: 'Bearer ' + userToken },
         },
       );
 
@@ -111,10 +111,10 @@ export const setDonationEligibilityNotification = (userToken, eligibility) => {
       console.log('Setting donor eligibility.');
       dispatch(notificationReq());
       const response = await axios.post(
-        'http://192.168.43.217:8080/setdonornotification',
-        {eligibility},
+        'http://10.0.2.2:8080/setdonornotification',
+        { eligibility },
         {
-          headers: {Authorization: 'Bearer ' + userToken},
+          headers: { Authorization: 'Bearer ' + userToken },
         },
       );
 

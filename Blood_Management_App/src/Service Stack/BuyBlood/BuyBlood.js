@@ -1,7 +1,7 @@
-import React, {useState, useEffect} from 'react';
-import {useDispatch, useSelector} from 'react-redux';
+import React, { useState, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import Feather from 'react-native-vector-icons/Feather';
-import {showMessage, hideMessage} from 'react-native-flash-message';
+import { showMessage, hideMessage } from 'react-native-flash-message';
 import {
   View,
   Text,
@@ -10,15 +10,15 @@ import {
   Image,
   ImageBackground,
 } from 'react-native';
-import {Picker} from '@react-native-picker/picker';
-import {TouchableOpacity} from 'react-native-gesture-handler';
-import {pincodeRegex, numbersOnlyRegex} from '../../../constants/Regexes';
+import { Picker } from '@react-native-picker/picker';
+import { TouchableOpacity } from 'react-native-gesture-handler';
+import { pincodeRegex, numbersOnlyRegex } from '../../../constants/Regexes';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
-import {UIActivityIndicator} from 'react-native-indicators';
+import { UIActivityIndicator } from 'react-native-indicators';
 import * as places from '../../../assets/places.json';
-import {requestLocationPermission} from '../../../redux/geolocation/actions';
+import { requestLocationPermission } from '../../../redux/geolocation/actions';
 import colors from '../../../constants/Colors';
-import {getBuyBloodList} from '../../../redux/buyblood/actions';
+import { getBuyBloodList } from '../../../redux/buyblood/actions';
 import {
   updateFields,
   stateCleanup,
@@ -27,7 +27,7 @@ import {
 
 import Fields from '../../../components/Fields';
 
-const FindDonors = ({navigation}) => {
+const FindDonors = ({ navigation }) => {
   const dispatch = useDispatch();
   const buybloodFormState = useSelector((state) => state.buybloodFormState);
   const geolocationState = useSelector((state) => state.geolocationState);
@@ -124,7 +124,14 @@ const FindDonors = ({navigation}) => {
     // };
   };
 
+  const blurAll = () => {
+    blurListener("blood_group"),
+      blurListener('component');
+    blurListener("req_units")
+  }
+
   const submitHandler = () => {
+    blurAll()
     console.log(buybloodFormState.inputValues);
     if (buybloodFormState.inputValidity.pincode) {
       if (buybloodFormState.inputValidity.blood_group) {
@@ -168,6 +175,7 @@ const FindDonors = ({navigation}) => {
     }
   };
 
+
   return (
     <ScrollView style={styles.container}>
       {/* <View style={styles.header}>
@@ -184,13 +192,13 @@ const FindDonors = ({navigation}) => {
             style={styles.image}
             resizeMode="center"
           />
-          <Text style={{...styles.searchInfoText}}>
+          <Text style={{ ...styles.searchInfoText }}>
             Please input the required details below
           </Text>
         </View>
       </View>
 
-      <View style={{marginHorizontal: 30}}>
+      <View style={{ marginHorizontal: 30 }}>
         {/* <Text style={styles.pickerLabel}>*Blood group</Text> */}
         <View style={styles.pickerView}>
           <Picker
@@ -214,6 +222,10 @@ const FindDonors = ({navigation}) => {
             <Picker.Item label="AB-" value="AB-" />
           </Picker>
         </View>
+        {!buybloodFormState.inputValidity.blood_group &&
+          buybloodFormState.isTouched.blood_group && (
+            <Text style={styles.errorMsg}>Please select blood_group</Text>
+          )}
 
         {/* <Text style={styles.pickerLabel}>*Component</Text> */}
         <View style={styles.pickerView}>
@@ -233,22 +245,10 @@ const FindDonors = ({navigation}) => {
             <Picker.Item label="Platelet" value="Platelet" />
           </Picker>
         </View>
-        {/* <View style={styles.pickerView}>
-          <Picker
-            style={styles.picker}
-            selectedValue={buybloodFormState.inputValues.req_units}
-            onValueChange={(val, itemIndex) => {
-              blurListener('req_units');
-              checkValidity(val, 'req_units');
-            }}>
-            <Picker.Item label="Select Units" value={0} />
-
-            <Picker.Item label="1" value={1} />
-            <Picker.Item label="2" value={2} />
-            <Picker.Item label="3" value={3} />
-            <Picker.Item label="4" value={4} />
-          </Picker>
-        </View> */}
+        {!buybloodFormState.inputValidity.component &&
+          buybloodFormState.isTouched.component && (
+            <Text style={styles.errorMsg}>Please select component</Text>
+          )}
 
         <Fields
           label="*Units"
