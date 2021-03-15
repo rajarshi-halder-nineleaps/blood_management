@@ -1,21 +1,22 @@
 /* eslint-disable prettier/prettier */
-import React, {useState, useEffect} from 'react';
-import {createMaterialBottomTabNavigator} from '@react-navigation/material-bottom-tabs';
+import React, { useState, useEffect } from 'react';
+import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
 import colors from '../constants/Colors';
 import Feather from 'react-native-vector-icons/Feather';
 
-import {StatusBar, Platform} from 'react-native';
-import {useNetInfo} from '@react-native-community/netinfo';
+import { StatusBar, Platform } from 'react-native';
+import { useNetInfo } from '@react-native-community/netinfo';
 import Home from '../src/MainTabs/Individual/Home';
 import About from '../src/MainTabs/About';
 import Notifications from '../src/MainTabs/Notifications';
 import ProfileStackNavigator from './ProfileNavigator';
 import ServicesStackNavigator from './ServicesNavigator';
-import {useSelector, useDispatch} from 'react-redux';
-import {fetchNotifications} from '../redux/notifications/actions';
-import {LogBox} from 'react-native';
+import { useSelector, useDispatch } from 'react-redux';
+import { fetchNotifications } from '../redux/notifications/actions';
+import { LogBox } from 'react-native';
 import FlashMessage from 'react-native-flash-message';
-import {showMessage, hideMessage} from 'react-native-flash-message';
+import { showMessage, hideMessage } from 'react-native-flash-message';
+import messaging from '@react-native-firebase/messaging';
 
 //! if u need to use this, install it first.
 // import BackgroundTimer from 'react-native-background-timer';
@@ -48,9 +49,8 @@ const MainNavigator = () => {
   ) {
     //* ALSO INCLUDING THE LOGIC TO SET PLURAL (NOTIFICATIONS) IN CASE OF MULTIPLE NEW NOTIFICATIONS.
     showMessage({
-      message: `${newNotificationsLength} new notification${
-        newNotificationsLength === 1 ? null : 's'
-      }.`,
+      message: `${newNotificationsLength} new notification${newNotificationsLength === 1 ? null : 's'
+        }.`,
       type: 'success',
     });
     setOldNotificationsLength(newNotificationsLength);
@@ -60,6 +60,15 @@ const MainNavigator = () => {
 
   //////////////////////////////////////////////////////////////////////////////////////////////////////
 
+  // useEffect(() => {
+  //   messaging()
+  //     .subscribeToTopic(authState.userId)
+  //     .then(() => console.log('Subscribed to userID!'));
+  //   return () =>
+  //     messaging()
+  //       .unsubscribeFromTopic(authState.userId)
+  //       .then(() => console.log('Unsubscribed fom the topic!'));
+  // }, [])
   useEffect(() => {
     console.log('EVER OFFLINE: ' + everOffline);
     if (netInfo.isConnected && everOffline > 1) {
@@ -111,7 +120,7 @@ const MainNavigator = () => {
 
   const notificationOptions = {
     tabBarLabel: 'Notifications',
-    tabBarIcon: ({color}) => <Feather name="bell" color={color} size={20} />,
+    tabBarIcon: ({ color }) => <Feather name="bell" color={color} size={20} />,
   };
 
   if (newNotificationsLength > 0) {
@@ -144,7 +153,7 @@ const MainNavigator = () => {
           component={Home}
           options={{
             tabBarLabel: 'Home',
-            tabBarIcon: ({color}) => (
+            tabBarIcon: ({ color }) => (
               <Feather name="home" color={color} size={20} />
             ),
           }}
@@ -154,7 +163,7 @@ const MainNavigator = () => {
           component={ProfileStackNavigator}
           options={{
             tabBarLabel: 'Profile',
-            tabBarIcon: ({color}) => (
+            tabBarIcon: ({ color }) => (
               <Feather name="user" color={color} size={20} />
             ),
           }}
@@ -164,7 +173,7 @@ const MainNavigator = () => {
           component={ServicesStackNavigator}
           options={{
             tabBarLabel: 'Services',
-            tabBarIcon: ({color}) => (
+            tabBarIcon: ({ color }) => (
               <Feather name="droplet" color={color} size={20} />
             ),
           }}
@@ -179,7 +188,7 @@ const MainNavigator = () => {
           component={About}
           options={{
             tabBarLabel: 'About',
-            tabBarIcon: ({color}) => (
+            tabBarIcon: ({ color }) => (
               <Feather name="info" color={color} size={20} />
             ),
           }}
@@ -187,8 +196,8 @@ const MainNavigator = () => {
       </Tab.Navigator>
       <FlashMessage
         position="top"
-        textStyle={{fontFamily: 'Montserrat-Regular'}}
-        titleStyle={{fontFamily: 'Montserrat-Bold'}}
+        textStyle={{ fontFamily: 'Montserrat-Regular' }}
+        titleStyle={{ fontFamily: 'Montserrat-Bold' }}
       />
     </>
   );

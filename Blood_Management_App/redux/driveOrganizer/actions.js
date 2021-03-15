@@ -70,8 +70,8 @@ export const organizeDriveConfirm = (userToken, newDriveData) => {
       const response = await axios.post(
         'http://10.0.2.2:8080/conductadrive/savedrivedetails',
         {
-          startTimeStamp: null,
-          endTimeStamp: null,
+          startTimeStamp: newDriveData.startDate,
+          endTimeStamp: newDriveData.endDate,
           bloodGroups: newDriveData.bloodgroup,
           address: newDriveData.address,
           state: newDriveData.selectedState,
@@ -90,7 +90,7 @@ export const organizeDriveConfirm = (userToken, newDriveData) => {
         dispatch(organizeSuccess());
       } else if (response.headers.error) {
         console.log('response is error!');
-        dispatch(organizeFailure(response.data.error));
+        dispatch(organizeFailure(response.headers.error));
       } else {
         console.log('outlandish error!');
         dispatch(
