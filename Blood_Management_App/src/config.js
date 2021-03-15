@@ -9,6 +9,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { tokenRetriever } from '../redux/auth/actions';
 import { requestLocationPermission } from '../redux/geolocation/actions';
 import Geolocation from '@react-native-community/geolocation';
+import messaging from '@react-native-firebase/messaging';
 
 const Config = () => {
   const dispatch = useDispatch();
@@ -17,6 +18,7 @@ const Config = () => {
   console.log(authState);
   useEffect(() => {
     dispatch(tokenRetriever());
+
   }, [dispatch]);
 
   /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -24,6 +26,18 @@ const Config = () => {
   // //? SETTING UP GEOLOCATION
   const geolocationState = useSelector((state) => state.geolocationState);
   let watchID;
+  messaging().setBackgroundMessageHandler(async remoteMessage => {
+    console.log('Message handled in the background!', remoteMessage);
+  });
+
+  // messaging()
+  //   .unsubscribeFromTopic('IND06')
+  //   .then(() => console.log('Unsubscribed fom the topic!'));
+  // messaging()
+  //   .unsubscribeFromTopic('BOB05')
+  //   .then(() => console.log('Unsubscribed fom the topic!'));
+
+
 
   useEffect(() => {
     dispatch(requestLocationPermission(watchID));

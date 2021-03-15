@@ -61,7 +61,6 @@ const DriveOrganizer = ({ navigation }) => {
     setstartShow(Platform.OS === 'ios');
     checkValidity(currentDate, 'startDate');
     dispatch(blurListener('startDate'));
-    //dispatch(blurListener('endDate'));
   };
 
   const onChangeend = (event, selectedDate) => {
@@ -69,18 +68,6 @@ const DriveOrganizer = ({ navigation }) => {
     setendShow(Platform.OS === 'ios');
     checkValidity(currentDate, 'endDate');
     dispatch(blurListener('endDate'));
-    // if (selectedDate >= driveOrganizerState.inputValues.startDate) {
-    //   console.log("problem")
-    //   const currentDate = selectedDate || new Date();
-    //   setendShow(Platform.OS === 'ios');
-    //   checkValidity(currentDate, 'startDate')
-    //   dispatch(blurListener('endDate'));
-    // } else {
-    //   const currentDate = selectedDate || new Date();
-    //   setendShow(Platform.OS === 'ios');
-    //   dispatch(updateFields(currentDate, 'endDate', true));
-    //   dispatch(blurListener('endDate'));
-    // }
   };
 
   const showstartMode = (currentMode) => {

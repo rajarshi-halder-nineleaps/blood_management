@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import {showMessage, hideMessage} from 'react-native-flash-message';
+import { showMessage, hideMessage } from 'react-native-flash-message';
 import {
   FETCH_DRIVES_REQ,
   FETCH_DRIVES_SUCCESS,
@@ -19,7 +19,7 @@ const initialState = {
 const myDrivesReducer = (state = initialState, action) => {
   switch (action.type) {
     case FETCH_DRIVES_REQ: {
-      return {...state, loading: true};
+      return { ...state, loading: true };
     }
 
     case FETCH_DRIVES_FAILURE: {
@@ -71,7 +71,7 @@ const myDrivesReducer = (state = initialState, action) => {
       const newDrivesData = [...state.myDrivesData];
       newDrivesData[cancelledDriveIdx] = cancelledDrive;
 
-      return {...state, loading: false, myDrivesData: newDrivesData};
+      return { ...state, loading: false, myDrivesData: newDrivesData };
     }
 
     case DONATION_VERIFICATION: {
@@ -80,7 +80,7 @@ const myDrivesReducer = (state = initialState, action) => {
         (val) => val.useId === action.userId,
       ).donationStatus = true;
 
-      return {...state, loading: false, donorsList: newDonorsList};
+      return { ...state, loading: false, donorsList: newDonorsList };
     }
 
     default:

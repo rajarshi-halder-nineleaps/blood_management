@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import {showMessage, hideMessage} from 'react-native-flash-message';
+import { showMessage, hideMessage } from 'react-native-flash-message';
 
 import {
   UPDATE_FIELDS_ORGANIZER,
@@ -80,8 +80,8 @@ const driveOrganizerReducer = (state = initialState, action) => {
     }
 
     case BLUR_FIELDS_ORGANIZER: {
-      const newInputIsTouched = {...state.isTouched, [action.fieldId]: true};
-      return {...state, isTouched: newInputIsTouched};
+      const newInputIsTouched = { ...state.isTouched, [action.fieldId]: true };
+      return { ...state, isTouched: newInputIsTouched };
     }
 
     case STATE_CLEANUP: {
@@ -90,7 +90,7 @@ const driveOrganizerReducer = (state = initialState, action) => {
     }
 
     case ORGANIZE_REQ: {
-      return {...state, loading: true};
+      return { ...state, loading: true };
     }
     case ORGANIZE_SUCCESS: {
       showMessage({
@@ -98,7 +98,8 @@ const driveOrganizerReducer = (state = initialState, action) => {
         description: 'Drive organized successfully.',
         type: 'success',
       });
-      return {...state, loading: false, error: ''};
+
+      return { ...state, loading: false, error: '' };
     }
     case ORGANIZE_FAILURE: {
       showMessage({
@@ -106,7 +107,8 @@ const driveOrganizerReducer = (state = initialState, action) => {
         description: action.error,
         type: 'error',
       });
-      return {...state, loading: false, error: action.error, driveId: ''};
+
+      return { ...state, loading: false, error: action.error, driveId: '' };
     }
     case SET_DATE: {
       console.log('setting date');
