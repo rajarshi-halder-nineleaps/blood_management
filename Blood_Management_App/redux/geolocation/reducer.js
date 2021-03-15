@@ -52,11 +52,12 @@ const geolocationReducer = (state = initialState, action) => {
     case REVERSE_GEOCODING_SUCCESS: {
       showMessage({
         message: 'Location detected',
-        description: `${action.district}, ${action.state}, [${action.pincode}]`,
+        description: `${action.address}, ${action.district}, ${action.state}, [${action.pincode}]`,
         backgroundColor: colors.coolblue,
       });
 
       const newData = {...state.data};
+      newData.address = action.address;
       newData.state = action.state;
       newData.district = action.district;
       newData.pincode = action.pincode;

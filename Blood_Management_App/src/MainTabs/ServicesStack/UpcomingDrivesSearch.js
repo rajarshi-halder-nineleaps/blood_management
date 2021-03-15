@@ -56,21 +56,23 @@ const UpcomingDrivesSearch = ({navigation}) => {
   }, [dispatch]);
 
   useEffect(() => {
+    const newInputValues = {
+      pincode: geolocationState.data.pincode,
+    };
+
     const stateIndex = word.findIndex((val) =>
       val.state.includes(geolocationState.data.state),
     );
     if (stateIndex <= 0) {
       setselectedStateindex(0);
+      newInputValues.selectedState = word[0].state;
     } else {
       setselectedStateindex(stateIndex);
+      newInputValues.selectedState = word[stateIndex].state;
     }
 
     setdistEnb(true);
 
-    const newInputValues = {
-      selectedState: geolocationState.data.state,
-      pincode: geolocationState.data.pincode,
-    };
     const districtIndex = word[stateIndex].districts.findIndex((val) =>
       val.includes(geolocationState.data.district),
     );
@@ -91,12 +93,7 @@ const UpcomingDrivesSearch = ({navigation}) => {
         inputValidity: newInputValidity,
       };
     });
-  }, [
-    geolocationState.data.district,
-    geolocationState.data.pincode,
-    geolocationState.data.state,
-    word,
-  ]);
+  }, [geolocationState, word]);
 
   const getLocation = () => {
     dispatch(requestLocationPermission(watchID));
@@ -135,6 +132,7 @@ const UpcomingDrivesSearch = ({navigation}) => {
   const checkValidity = (val, fieldId) => {
     setInputs((prevState) => {
       let isValid = true;
+
       const newInputValues = {
         ...prevState.inputValues,
         [fieldId]: val,
@@ -209,6 +207,16 @@ const UpcomingDrivesSearch = ({navigation}) => {
                   checkValidity(val, 'selectedState');
                   setdistEnb(true);
                   setselectedStateindex(itemIndex);
+                  // setInputs((prevState) => {
+                  //   const newInputValues = {...prevState.inputValues};
+                  //   newInputValues.selectedDistrict =
+                  //     word[itemIndex].districts[0];
+                  //   return {...prevState, inputValues: newInputValues};
+                  // });
+                  checkValidity(
+                    word[itemIndex].districts[0],
+                    'selectedDistrict',
+                  );
                 }}>
                 {word.map((item, id) => (
                   <Picker.Item label={item.state} value={item.state} key={id} />

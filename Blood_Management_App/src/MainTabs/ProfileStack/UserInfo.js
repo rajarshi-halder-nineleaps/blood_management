@@ -7,7 +7,6 @@ import {
   StyleSheet,
   ScrollView,
   Image,
-  TouchableWithoutFeedback,
 } from 'react-native';
 import {SkypeIndicator, UIActivityIndicator} from 'react-native-indicators';
 import {useSelector, useDispatch} from 'react-redux';

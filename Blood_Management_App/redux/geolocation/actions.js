@@ -19,8 +19,9 @@ export const LocationFailure = (error) => ({
   error,
 });
 
-export const reverseGeoCodingSuccess = (state, district, pincode) => ({
+export const reverseGeoCodingSuccess = (address, state, district, pincode) => ({
   type: REVERSE_GEOCODING_SUCCESS,
+  address,
   state,
   district,
   pincode,
@@ -126,12 +127,21 @@ export const reverseGeoCoding = (lat, long) => {
       );
 
       //? extracting state and district froom the reverse geolocation API.
+      let address = '';
+      response.data.localityInfo.administrative.map((val, idx) => {
+        if (idx !== 0 && idx !== 1 && idx !== 2) {
+          if (address === '') {
+            address = val.name + address;
+          } else {
+            address = val.name + ', ' + address;
+          }
+        }
+      });
+
       const state = response.data.localityInfo.administrative[1].name;
       const district = response.data.localityInfo.administrative[2].name.split(
         ' ',
       )[0];
-
-      console.log(state, district);
 
       if (state && district) {
         //! UNCOMMENT IT BEFORE DEMO, COMMENTED BECAUSE OF LIMITED REQUESTS PER MONTH.
@@ -146,7 +156,7 @@ export const reverseGeoCoding = (lat, long) => {
         console.log(pincode);
 
         if (pincode) {
-          dispatch(reverseGeoCodingSuccess(state, district, pincode));
+          dispatch(reverseGeoCodingSuccess(address, state, district, pincode));
         } else {
           dispatch(
             LocationFailure(

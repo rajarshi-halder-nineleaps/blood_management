@@ -43,9 +43,14 @@ const DonorRequestDetailsCard = ({ item, onPress }) => {
           {item.donationStatus ?
             <Text style={styles.buttontextverify}>Verified</Text>
             :
-            <TouchableOpacity onPress={onPress}>
-              <Text style={styles.invitebutton}>Verify</Text>
-            </TouchableOpacity>
+            item.acceptance === 2 ?
+              <View>
+                <Text style={[styles.invitebutton, { color: colors.coolblue }]}>Pending</Text>
+              </View>
+              :
+              <TouchableOpacity onPress={onPress}>
+                <Text style={styles.invitebutton}>Verify</Text>
+              </TouchableOpacity>
           }
 
         </View>
@@ -59,10 +64,10 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'flex-start',
-    margin: 10,
-    borderRadius: 5,
+    borderBottomEndRadius: 5,
+    borderBottomStartRadius: 5,
     borderColor: colors.accent,
-    borderWidth: 0.5,
+    borderBottomWidth: 1,
     overflow: 'hidden',
     backgroundColor: colors.additional2,
     flexDirection: 'row',
