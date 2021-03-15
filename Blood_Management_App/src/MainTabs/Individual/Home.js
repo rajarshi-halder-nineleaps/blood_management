@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import React, {useEffect} from 'react';
+import React, { useEffect } from 'react';
 import {
   SafeAreaView,
   ScrollView,
@@ -14,21 +14,21 @@ import {
   FlatList,
 } from 'react-native';
 import colors from '../../../constants/Colors';
-import {useDispatch, useSelector} from 'react-redux';
-import {FlatListSlider} from 'react-native-flatlist-slider';
+import { useDispatch, useSelector } from 'react-redux';
+import { FlatListSlider } from 'react-native-flatlist-slider';
 import HomeSlider from '../../../components/HomeSlider';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import {setDonorStatus} from "../../../redux/profile/actions";
-import {setDonationEligibilityNotification} from '../../../redux/notifications/actions';
+import { setDonorStatus } from "../../../redux/profile/actions";
+import { setDonationEligibilityNotification } from '../../../redux/notifications/actions';
 
-import {fetchCommitments} from '../../../redux/commitments/actions';
-import {getInventory} from '../../../redux/inventory/actions';
-import {fetchSalesData, getToday} from '../../../redux/sales/actions';
-import {PieChart, BarChart, StackedBarChart} from 'react-native-chart-kit';
-import {color} from 'react-native-reanimated';
-import {getUserData} from '../../../redux/profile/actions';
+import { fetchCommitments } from '../../../redux/commitments/actions';
+import { getInventory } from '../../../redux/inventory/actions';
+import { fetchSalesData, getToday } from '../../../redux/sales/actions';
+import { PieChart, BarChart, StackedBarChart } from 'react-native-chart-kit';
+import { color } from 'react-native-reanimated';
+import { getUserData } from '../../../redux/profile/actions';
 
-const Home = ({navigation}) => {
+const Home = ({ navigation }) => {
   const authState = useSelector((state) => state.authState);
   const userType = authState.userType;
   const dispatch = useDispatch();
@@ -58,7 +58,7 @@ const Home = ({navigation}) => {
       const eligible =
         (new Date().getTime() -
           new Date(lastDonationDate.split('T')[0]).getTime()) /
-          (1000 * 60 * 60 * 24) >
+        (1000 * 60 * 60 * 24) >
         56;
       if (eligible) {
         dispatch(setDonorStatus(authState.userToken, 0));
@@ -72,23 +72,23 @@ const Home = ({navigation}) => {
 
   const salesHandler = () => {
     dispatch(fetchSalesData(authState.userToken));
-    navigation.navigate('services', {screen: 'sales'});
+    navigation.navigate('services', { screen: 'sales' });
     navigation.navigate('sales');
   };
 
   const myCommitmentsHandler = () => {
     dispatch(fetchCommitments(authState.userToken));
-    navigation.navigate('services', {screen: 'commitments'});
+    navigation.navigate('services', { screen: 'commitments' });
   };
 
   const inventoryHandler = () => {
     dispatch(getInventory(authState.userToken));
-    navigation.navigate('services', {screen: 'inventory'});
+    navigation.navigate('services', { screen: 'inventory' });
   };
 
   const myDrivesHandler = () => {
     dispatch(getDriveData(authState.userToken));
-    navigation.navigate('services', {screen: 'driveOrganizer'});
+    navigation.navigate('services', { screen: 'driveOrganizer' });
   };
 
   const organizeDriveHandler = () => {
@@ -100,32 +100,25 @@ const Home = ({navigation}) => {
   return (
     <ScrollView style={styles.container}>
       <View style={styles.header}>
-        <View style={{flexDirection: 'row', alignContent: 'center'}}>
-          {userType === 1 ? (
-            <Icon name="user" color={colors.peach} size={30} />
-          ) : null}
-          {userType === 2 ? (
-            <Icon name="ambulance" color={colors.peach} size={30} />
-          ) : null}
-          {userType === 3 ? (
-            <Icon name="university" color={colors.peach} size={30} />
-          ) : null}
-          <View style={{flexDirection: 'column', marginLeft: 10}}>
-            <Text style={styles.name}>{profileState.userData.name}</Text>
-            <Text style={styles.other}>#{profileState.userData.userId}</Text>
-          </View>
+
+
+        <View style={{ flexDirection: 'column', marginLeft: 10 }}>
+          <Text style={styles.name}>Hi,</Text>
+          <Text style={styles.name}>{profileState.userData.name}</Text>
+          <Text style={styles.other}>#{profileState.userData.userId}</Text>
+
         </View>
         {userType === 3 ? (
           <TouchableOpacity
             style={styles.iconview}
             onPress={() => dispatch(getToday(authState.userToken))}>
-            <Icon name="superpowers" color={colors.primary} size={30} />
+            <Icon name="refresh" color={colors.primary} size={30} />
             <Text style={styles.refreshText}>Refresh</Text>
           </TouchableOpacity>
         ) : null}
       </View>
       <View style={styles.donateblood}>
-        <View style={{flexDirection: 'row-reverse', alignItems: 'center'}}>
+        <View style={{ flexDirection: 'row-reverse', alignItems: 'center' }}>
           <Text style={styles.title}>
             {userType === 1 ? 'Donate Blood' : 'Organize Drive'}
           </Text>
@@ -202,7 +195,7 @@ const styles = StyleSheet.create({
     marginLeft: 20,
   },
   name: {
-    fontFamily: 'Montserrat-Regular',
+    fontFamily: 'Montserrat-Bold',
     alignSelf: 'flex-start',
     fontSize: 24,
     color: colors.primary,

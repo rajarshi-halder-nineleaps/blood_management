@@ -1,13 +1,13 @@
 /* eslint-disable prettier/prettier */
-import React, {useState, useEffect} from 'react';
-import {NavigationContainer} from '@react-navigation/native';
+import React, { useState, useEffect } from 'react';
+import { NavigationContainer } from '@react-navigation/native';
 import MainNavigator from '../navigation/MainNavigator';
 import RootStackNavigator from '../navigation/RootStackNavigator';
-import {View, ActivityIndicator, StyleSheet} from 'react-native';
+import { View, ActivityIndicator, StyleSheet } from 'react-native';
 import colors from '../constants/Colors';
-import {useSelector, useDispatch} from 'react-redux';
-import {tokenRetriever} from '../redux/auth/actions';
-import {requestLocationPermission} from '../redux/geolocation/actions';
+import { useSelector, useDispatch } from 'react-redux';
+import { tokenRetriever } from '../redux/auth/actions';
+import { requestLocationPermission } from '../redux/geolocation/actions';
 import Geolocation from '@react-native-community/geolocation';
 
 const Config = () => {

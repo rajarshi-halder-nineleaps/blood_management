@@ -26,6 +26,7 @@ import {
 import { organizeDriveConfirm } from '../../../redux/driveOrganizer/actions';
 import bloodGroupsList from '../../../constants/BloodGroupsList';
 import Fields from '../../../components/Fields';
+import { showMessage, hideMessage } from 'react-native-flash-message';
 
 const DriveOrganizer = ({ navigation }) => {
   const driveOrganizerState = useSelector((state) => state.driveOrganizerState);
@@ -166,22 +167,35 @@ const DriveOrganizer = ({ navigation }) => {
     dispatch(updateFields(val, fieldId, isValid));
   };
 
+  const blurAll = () => {
+    blurListener('bloodgroup');
+    blurListener('startDate');
+    blurListener('endDate');
+    blurListener('selectedState');
+    blurListener('selectedDistrict');
+    blurListener('pincode');
+    blurListener('address')
+
+  }
+
   const submitHandler = () => {
+    blurAll();
     console.log(driveOrganizerState.finalFormState);
     if (driveOrganizerState.finalFormState) {
       setRusure(true);
       console.log('starting request for new drive!');
     } else {
-      Alert.alert(
-        'Invalid Input',
-        'Please check all the inputs before proceeding.',
-        [{ text: 'Okay' }],
-      );
+      showMessage({
+        message: 'Invalid input',
+        description:
+          'Please check all the inputs before proceeding.',
+        type: 'warning',
+      });
     }
   };
 
   return (
-    <ScrollView styke = {styles.scroll}>
+    <ScrollView styke={styles.scroll}>
       <View style={styles.container}>
         <AreYouSure
           visibleState={rusure}
@@ -213,7 +227,7 @@ const DriveOrganizer = ({ navigation }) => {
                   <Text
                     style={{
                       color: colors.additional2,
-                      fontSize: 20,
+                      fontSize: 15,
                       fontFamily: 'Montserrat-Regular',
                     }}>
                     {val}
@@ -411,7 +425,7 @@ const screenWidth = Dimensions.get('window').width;
 const screenHeight = Dimensions.get('window').height;
 
 const styles = StyleSheet.create({
-  scroll:{
+  scroll: {
     backgroundColor: colors.additional2,
   },
   selectedView: {
@@ -432,8 +446,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: '#777',
     borderRadius: 100,
-    width: 60,
-    height: 60,
+    width: 40,
+    height: 40,
     justifyContent: 'center',
   },
   pickerView: {
@@ -461,8 +475,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: colors.primary,
     borderRadius: 100,
-    width: 60,
-    height: 60,
+    width: 40,
+    height: 40,
     justifyContent: 'center',
   },
   container: {
