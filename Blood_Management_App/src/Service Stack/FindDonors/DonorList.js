@@ -1,4 +1,4 @@
-import {showMessage, hideMessage} from 'react-native-flash-message';
+import { showMessage, hideMessage } from 'react-native-flash-message';
 import {
   Text,
   View,
@@ -7,19 +7,19 @@ import {
   FlatList,
   Image,
 } from 'react-native';
-import React, {useState} from 'react';
-import {SkypeIndicator} from 'react-native-indicators';
+import React, { useState } from 'react';
+import { SkypeIndicator } from 'react-native-indicators';
 import {
   setSelected,
   selectAllToggle,
   submitinvite,
   invitesuccess,
 } from '../../../redux/finddonors/actions';
-import {useDispatch, useSelector} from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import colors from '../../../constants/Colors';
 import Feather from 'react-native-vector-icons/Feather';
 
-const DonorList = ({navigation}) => {
+const DonorList = ({ navigation }) => {
   const authState = useSelector((state) => state.authState);
   const finddonorFormState = useSelector((state) => state.finddonorFormState);
   const dispatch = useDispatch();
@@ -47,14 +47,14 @@ const DonorList = ({navigation}) => {
     }
   };
 
-  const renderItem = ({item, index}) => {
+  const renderItem = ({ item, index }) => {
     return (
       <View style={styles.outerView}>
         <View style={styles.avatarView}>
           <Image
             source={
               item.avatar
-                ? {uri: item.avatar}
+                ? { uri: item.avatar }
                 : require('../../../assets/images/account/nodp.png')
             }
             style={styles.avatar}
@@ -174,6 +174,8 @@ const styles = StyleSheet.create({
   emptyInfo: {
     color: colors.primary,
     fontSize: 10,
+    fontFamily: 'Montserrat-Bold',
+    fontSize: 15,
   },
   container: {
     flex: 1,
@@ -188,9 +190,9 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   headerText: {
-    fontFamily: 'Montserrat-Regular',
+    fontFamily: 'Montserrat-Bold',
     color: colors.primary,
-    fontSize: 14,
+    fontSize: 18,
     textAlign: 'center',
   },
   inviterBoard: {

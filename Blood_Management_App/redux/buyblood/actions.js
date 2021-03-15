@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-import {GETDONORLIST} from './actionTypes';
+import { GETDONORLIST } from './actionTypes';
 import {
   UPDATE_FIELDS_REG,
   STATE_CLEANUP,
@@ -50,7 +50,7 @@ export const getBuyBloodList = (object, userToken) => {
     console.log('Getting Donor List');
     try {
       const response = await axios.post(
-        'http://192.168.43.217:8080/buyblood/findbb',
+        'http://10.0.2.2:8080/buyblood/findbb',
         {
           bloodGroup: object.blood_group,
           component: object.component,
@@ -60,7 +60,7 @@ export const getBuyBloodList = (object, userToken) => {
           pincode: object.pincode,
         },
         {
-          headers: {Authorization: 'Bearer ' + userToken},
+          headers: { Authorization: 'Bearer ' + userToken },
         },
       );
       console.log('COMPLETE RESPONSE DATA: ', response.data);
@@ -94,7 +94,7 @@ export const buyit = (
     console.log('login works');
     try {
       const response = await axios.post(
-        'http://192.168.43.217:8080/buyblood/confirmbuy',
+        'http://10.0.2.2:8080/buyblood/confirmbuy',
         {
           sellerId: sellerId,
           date: new Date().toISOString(),
@@ -104,7 +104,7 @@ export const buyit = (
           units: units,
         },
         {
-          headers: {Authorization: 'Bearer ' + userToken},
+          headers: { Authorization: 'Bearer ' + userToken },
         },
       );
       console.log('COMPLETE RESPONSE DATA: ', response.headers);

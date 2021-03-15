@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   View,
   ScrollView,
@@ -17,11 +17,11 @@ import {
   CollapseHeader,
   CollapseBody,
 } from 'accordion-collapse-react-native';
-import {TouchableOpacity} from 'react-native-gesture-handler';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 import AreYouSure from './AreYouSure';
-import {updateRequestList} from '../redux/activedonorrequest/actions';
+import { updateRequestList } from '../redux/activedonorrequest/actions';
 
-const DonorRequestDetailsCard = ({item, onPress}) => {
+const DonorRequestDetailsCard = ({ item, onPress }) => {
   return (
     <>
       <View style={styles.touchboard}>
@@ -36,12 +36,23 @@ const DonorRequestDetailsCard = ({item, onPress}) => {
         <View style={styles.headerDetailsView}>
           <View style={styles.nameView}>
             <Text style={styles.moreinfo}>{item.name}</Text>
+            <Text style={styles.moreinfo}>{item.userId}</Text>
           </View>
         </View>
         <View style={styles.typeView}>
-          <TouchableOpacity onPress={onPress}>
-            <Text style={styles.invitebutton}>Verify</Text>
-          </TouchableOpacity>
+          {item.donationStatus ?
+            <Text style={styles.buttontextverify}>Verified</Text>
+            :
+            item.acceptance === 2 ?
+              <View>
+                <Text style={[styles.invitebutton, { color: colors.coolblue }]}>Pending</Text>
+              </View>
+              :
+              <TouchableOpacity onPress={onPress}>
+                <Text style={styles.invitebutton}>Verify</Text>
+              </TouchableOpacity>
+          }
+
         </View>
       </View>
     </>
@@ -53,10 +64,10 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'flex-start',
-    margin: 10,
-    borderRadius: 5,
+    borderBottomEndRadius: 5,
+    borderBottomStartRadius: 5,
     borderColor: colors.accent,
-    borderWidth: 0.5,
+    borderBottomWidth: 1,
     overflow: 'hidden',
     backgroundColor: colors.additional2,
     flexDirection: 'row',
@@ -69,7 +80,7 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
   },
   typeView: {
-    backgroundColor: colors.moderategray,
+    backgroundColor: colors.primaryTranslucent,
     width: 80,
     alignItems: 'center',
     justifyContent: 'center',
@@ -201,6 +212,11 @@ const styles = StyleSheet.create({
     color: colors.primary,
     fontFamily: 'Montserrat-Regular',
   },
+  buttontextverify: {
+    fontSize: 14,
+    color: colors.green,
+    fontFamily: 'Montserrat-Regular',
+  },
   row: {
     flexDirection: 'row',
     justifyContent: 'center',
@@ -213,8 +229,9 @@ const styles = StyleSheet.create({
     fontSize: 12,
   },
   invitebutton: {
-    color: 'white',
+    color: colors.darkRed,
     fontFamily: 'Montserrat-Bold',
+    fontSize: 14
   },
 });
 

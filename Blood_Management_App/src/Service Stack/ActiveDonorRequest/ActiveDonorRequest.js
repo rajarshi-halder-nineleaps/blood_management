@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, { useEffect } from 'react';
 import {
   View,
   Text,
@@ -12,12 +12,12 @@ import {
 } from 'react-native';
 import colors from '../../../constants/Colors';
 import Feather from 'react-native-vector-icons/Feather';
-import {useDispatch, useSelector} from 'react-redux';
-import {getactivedonorList} from '../../../redux/activedonorrequest/actions';
+import { useDispatch, useSelector } from 'react-redux';
+import { getactivedonorList } from '../../../redux/activedonorrequest/actions';
 import DonorRequestCard from '../../../components/DonorRequestCard';
-import {Colors} from 'react-native/Libraries/NewAppScreen';
+import { Colors } from 'react-native/Libraries/NewAppScreen';
 
-const ActiveDonorRequest = ({navigation}) => {
+const ActiveDonorRequest = ({ navigation }) => {
   const authState = useSelector((state) => state.authState);
   const dispatch = useDispatch();
   const activedonorFormState = useSelector(
@@ -41,13 +41,14 @@ const ActiveDonorRequest = ({navigation}) => {
   }, [authState.userToken, dispatch]);
   //* UPDATES DEPENDENCY ARRAY.
 
-  const renderItem = ({item}) => {
+  const renderItem = ({ item }) => {
     return (
       <DonorRequestCard
         item={item}
         onPress={() =>
           navigation.navigate('DonationRequestList', {
             donationId: item.donationId,
+            status: item.status
           })
         }
       />
