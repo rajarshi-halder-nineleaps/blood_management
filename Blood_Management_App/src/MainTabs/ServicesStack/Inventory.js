@@ -12,6 +12,7 @@ import {
   editingToggle,
   getInventory,
   toggleSecure,
+  stateCleanup,
 } from '../../../redux/inventory/actions';
 import colors from '../../../constants/Colors';
 import {SkypeIndicator} from 'react-native-indicators';
@@ -26,7 +27,8 @@ const Inventory = ({navigation}) => {
   //todo set secure(false) on leaving screen.
   useEffect(() => {
     return () => {
-      dispatch(toggleSecure(false));
+      dispatch(stateCleanup());
+      // dispatch(toggleSecure(false));
     };
   }, [dispatch]);
 

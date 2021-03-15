@@ -225,7 +225,7 @@ const FindDonors = ({navigation}) => {
             />
             <Picker.Item label="Blood" value="Blood" />
             <Picker.Item label="Plasma" value="Plasma" />
-            <Picker.Item label="Platelet" value="Platelet" />
+            <Picker.Item label="Platelets" value="Platelet" />
           </Picker>
         </View>
         {/* <View style={styles.pickerView}>

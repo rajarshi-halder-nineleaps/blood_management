@@ -99,33 +99,6 @@ const InfoEdit = ({navigation}) => {
     }
   }, [dispatch, navigation, profileState.dataSaved]);
 
-  useEffect(() => {
-    checkValidity(geolocationState.data.pincode, 'pincode');
-    checkValidity(geolocationState.data.address, 'address');
-
-    const stateIndex = word.findIndex((val) =>
-      val.state.includes(geolocationState.data.state),
-    );
-    if (stateIndex <= 0) {
-      setstateindex(0);
-      checkValidity(word[0].state, 'state');
-    } else {
-      setstateindex(stateIndex);
-      checkValidity(word[stateIndex].state, 'state');
-    }
-
-    setdistEnb(true);
-    const districtIndex = word[stateIndex].districts.findIndex((val) =>
-      val.includes(geolocationState.data.district),
-    );
-
-    if (districtIndex > 0) {
-      checkValidity(word[stateIndex].districts[districtIndex], 'district');
-    } else {
-      checkValidity(word[stateIndex].districts[0], 'district');
-    }
-  }, [dispatch, geolocationState, word]);
-
   //* for regular fields
   const blurListener = (fieldId) => {
     setFormState((prevState) => {
@@ -137,12 +110,14 @@ const InfoEdit = ({navigation}) => {
   const checkValidity = (val, fieldId) => {
     let isValid = true;
 
-    if (fieldId.includes('phone') && !phoneRegex.test(String(val))) {
+    if (fieldId.includes('phone') && !phoneRegex.test(String(val.trim()))) {
       isValid = false;
     }
 
-    if (fieldId === 'address' && val.trim().length <= 0) {
-      isValid = false;
+    //TODO TRIM.
+    //todo location set from geolocation in info edit.
+    if (fieldId === 'address' && val) {
+      val.length <= 0 ? (isValid = false) : null;
     }
 
     if (fieldId === 'state' && val === 'Select state') {
@@ -315,6 +290,31 @@ const InfoEdit = ({navigation}) => {
 
   const getLocation = () => {
     dispatch(requestLocationPermission(watchID));
+
+    checkValidity(geolocationState.data.pincode, 'pincode');
+    checkValidity(geolocationState.data.address, 'address');
+
+    const stateIndex = word.findIndex((val) =>
+      val.state.includes(geolocationState.data.state),
+    );
+    if (stateIndex <= 0) {
+      setstateindex(0);
+      checkValidity(word[0].state, 'state');
+    } else {
+      setstateindex(stateIndex);
+      checkValidity(word[stateIndex].state, 'state');
+    }
+
+    setdistEnb(true);
+    const districtIndex = word[stateIndex].districts.findIndex((val) =>
+      val.includes(geolocationState.data.district),
+    );
+
+    if (districtIndex > 0) {
+      checkValidity(word[stateIndex].districts[districtIndex], 'district');
+    } else {
+      checkValidity(word[stateIndex].districts[0], 'district');
+    }
 
     // return () => {
     //   Geolocation.clearWatch(watchID);

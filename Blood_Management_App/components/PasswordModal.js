@@ -14,6 +14,7 @@ import {
   TextInput,
 } from 'react-native';
 import colors from '../constants/Colors';
+import {stateCleanup} from '../redux/inventory/actions';
 import Fields from './Fields';
 import {useSelector, useDispatch} from 'react-redux';
 
@@ -57,9 +58,9 @@ const AreYouSure = (props) => {
 
           <TextInput
             style={
-              inventoryState.passwordValidity
-                ? styles.formInput
-                : styles.formInputInvalid
+              !inventoryState.secure && inventoryState.touched
+                ? styles.formInputInvalid
+                : styles.formInput
             }
             placeholder="Password"
             value={passwordVal}
@@ -68,7 +69,7 @@ const AreYouSure = (props) => {
             }}
             secureTextEntry={true}
           />
-          {!inventoryState.passwordValidity && (
+          {!inventoryState.secure && inventoryState.touched && (
             <Text style={styles.errorMsg}>Invalid password!</Text>
           )}
 
@@ -87,6 +88,7 @@ const AreYouSure = (props) => {
               }}
               onPress={() => {
                 setPasswordVal('');
+                dispatch(stateCleanup());
                 props.visibleStateChanger(!props.visibleState);
               }}>
               <Text style={styles.textStyle}>Cancel</Text>

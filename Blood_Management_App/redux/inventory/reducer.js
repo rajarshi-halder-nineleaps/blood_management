@@ -7,6 +7,7 @@ import {
   INV_CHANGE,
   EDITING_TOGGLE,
   TOGGLE_SECURE,
+  STATE_CLEANUP,
 } from './actionTypes';
 
 const initialState = {
@@ -15,20 +16,16 @@ const initialState = {
   loading: false,
   editing: false,
   secure: false,
-  passwordValidity: true,
+  touched: false,
 };
 
 const inventoryReducer = (state = initialState, action) => {
   switch (action.type) {
     case TOGGLE_SECURE: {
-      let newPasswordValidity = false;
-      if (action.newSecure === true) {
-        newPasswordValidity = true;
-      }
       return {
         ...state,
         secure: action.newSecure,
-        passwordValidity: newPasswordValidity,
+        touched: true,
       };
     }
 
@@ -81,6 +78,10 @@ const inventoryReducer = (state = initialState, action) => {
         });
       }
       return {...state, editing: !state.editing};
+    }
+
+    case STATE_CLEANUP: {
+      return initialState;
     }
 
     default: {

@@ -50,7 +50,7 @@ const CommitmentsCard = ({item}) => {
             </Text>
           ) : (
             <Text style={styles.bodyLabel}>
-              DonationId ID : {'  '}
+              Donation ID : {'  '}
               <Text style={styles.bodyContent}>{item.donationId}</Text>
             </Text>
           )}

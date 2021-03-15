@@ -7,13 +7,14 @@ import {
   INV_CHANGE,
   EDITING_TOGGLE,
   TOGGLE_SECURE,
+  STATE_CLEANUP,
 } from './actionTypes';
 
-export const invReq = () => ({ type: INV_REQ });
+export const invReq = () => ({type: INV_REQ});
 
-export const invFailure = (error) => ({ type: INV_FAILURE, error });
+export const invFailure = (error) => ({type: INV_FAILURE, error});
 
-export const invSuccess = (invData) => ({ type: INV_SUCCESS, invData });
+export const invSuccess = (invData) => ({type: INV_SUCCESS, invData});
 
 export const updateFields = (val, compIdx, label) => ({
   type: INV_CHANGE,
@@ -32,6 +33,10 @@ export const toggleSecure = (newSecure) => ({
   newSecure,
 });
 
+export const stateCleanup = () => ({
+  type: STATE_CLEANUP,
+});
+
 // export const invUpdateSuccess = (invData) => ({type: INV_UPDATE, invData});
 
 ////////////////////////////////////////////////////////////////////////////
@@ -44,9 +49,9 @@ export const checkPassword = (userToken, password) => {
 
       const response = await axios.post(
         'http://10.0.2.2:8080/profile/verifycurrentpassword',
-        { currentPassword: password },
+        {currentPassword: password},
         {
-          headers: { Authorization: 'Bearer ' + userToken },
+          headers: {Authorization: 'Bearer ' + userToken},
         },
       );
 
@@ -76,9 +81,12 @@ export const getInventory = (userToken) => {
   return async (dispatch) => {
     try {
       dispatch(invReq());
-      const response = await axios.get('http://10.0.2.2:8080/inventory/receieveinventory', {
-        headers: { Authorization: 'Bearer ' + userToken },
-      });
+      const response = await axios.get(
+        'http://10.0.2.2:8080/inventory/receieveinventory',
+        {
+          headers: {Authorization: 'Bearer ' + userToken},
+        },
+      );
 
       if (response.headers.success) {
         console.log('response is success!');
@@ -116,7 +124,7 @@ export const updateInventory = (userToken, userType, inventory) => {
           'http://10.0.2.2:8080/inventory/updatehosinventory',
           inventory,
           {
-            headers: { Authorization: 'Bearer ' + userToken },
+            headers: {Authorization: 'Bearer ' + userToken},
           },
         );
       } else {
@@ -124,12 +132,10 @@ export const updateInventory = (userToken, userType, inventory) => {
           'http://10.0.2.2:8080/inventory/updatebbinventory',
           inventory,
           {
-            headers: { Authorization: 'Bearer ' + userToken },
+            headers: {Authorization: 'Bearer ' + userToken},
           },
         );
       }
-
-
 
       if (response.headers.success) {
         console.log('response is success!');
