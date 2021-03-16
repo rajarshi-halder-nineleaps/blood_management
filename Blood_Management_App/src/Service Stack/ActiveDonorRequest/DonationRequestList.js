@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
-import { View, Text, FlatList, TouchableOpacity, StyleSheet } from 'react-native';
-import { useDispatch, useSelector } from 'react-redux';
+import React, {useState, useEffect} from 'react';
+import {View, Text, FlatList, TouchableOpacity, StyleSheet} from 'react-native';
+import {useDispatch, useSelector} from 'react-redux';
 import colors from '../../../constants/Colors';
 import CheckBox from '@react-native-community/checkbox';
 import Feather from 'react-native-vector-icons/Feather';
@@ -12,8 +12,8 @@ import {
 //import BuyBloodListCard from '../../../components/BuyBloodListCard'
 import DonorRequestDetailsCard from '../../../components/DonorRequestDetailsCard';
 
-const DonationRequestList = ({ navigation, route }) => {
-  const { donationId, status } = route.params;
+const DonationRequestList = ({navigation, route}) => {
+  const {donationId, status} = route.params;
   const [selectedId, setSelectedId] = useState(null);
   const activedonorFormState = useSelector(
     (state) => state.activedonorFormState,
@@ -25,7 +25,7 @@ const DonationRequestList = ({ navigation, route }) => {
   }, [authState.userToken, dispatch, donationId]);
   //* UPDATES DEPENDENCY ARRAY.
 
-  const renderItem = ({ item }) => {
+  const renderItem = ({item}) => {
     return (
       <DonorRequestDetailsCard
         item={item}
@@ -39,30 +39,23 @@ const DonationRequestList = ({ navigation, route }) => {
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        {status ?
+        {status ? (
           <>
             <Text style={styles.texts}> Update Donation Status </Text>
 
             <TouchableOpacity
               disabled={status ? false : true}
-              style={status ?
-                styles.typeView :
-                styles.typeViewDisabled}
+              style={status ? styles.typeView : styles.typeViewDisabled}
               onPress={() => {
-                dispatch(expirerequest(authState.userToken, donationId))
-                navigation.navigate("Active Donor Request")
-              }
-
-              }>
+                dispatch(expirerequest(authState.userToken, donationId));
+                navigation.navigate('Active Donor Request');
+              }}>
               <Text style={styles.invitebutton}>Expire</Text>
             </TouchableOpacity>
           </>
-          :
+        ) : (
           <Text style={styles.texts}> This Donation request has expired</Text>
-
-
-        }
-
+        )}
       </View>
       <FlatList
         data={activedonorFormState.donorDetailsList}
@@ -99,7 +92,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     paddingVertical: 10,
     backgroundColor: colors.additional2,
-    elevation: 10
+    elevation: 10,
   },
   headertitle: {
     fontSize: 50,
@@ -112,7 +105,7 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
-    backgroundColor: colors.additional2
+    backgroundColor: colors.additional2,
   },
   inputView: {
     paddingHorizontal: 20,
