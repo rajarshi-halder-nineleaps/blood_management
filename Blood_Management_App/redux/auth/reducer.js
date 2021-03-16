@@ -27,9 +27,9 @@ const authReducer = (state = initialState, action) => {
     case REQ_SUCCESS: {
       //* here, we are getting the payload data.
 
-      messaging()
-        .subscribeToTopic(action.userId)
-        .then(() => console.log('Subscribed to userID!'));
+      // messaging()
+      //   .subscribeToTopic(action.userId)
+      //   .then(() => console.log('Subscribed to userID!'));
 
       return {
         ...state,
@@ -61,9 +61,9 @@ const authReducer = (state = initialState, action) => {
     }
     case LOGOUT: {
       const currUserId = state.userId;
-      messaging()
-        .unsubscribeFromTopic(currUserId)
-        .then(() => console.log('Unsubscribed fom the topic!'));
+      // messaging()
+      //   .unsubscribeFromTopic(currUserId)
+      //   .then(() => console.log('Unsubscribed fom the topic!'));
       console.log('logout request at reducer');
       return { ...initialState };
     }

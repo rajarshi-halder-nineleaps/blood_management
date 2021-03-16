@@ -16,7 +16,7 @@ export const fetchPurchasesData = (userToken) => {
     try {
       dispatch(salesReq());
       console.log('making API call');
-      const response = await axios.get('http://10.0.2.2:8080/transactions/fetchpurchaseslist', {
+      const response = await axios.get('http://192.168.43.217:8080/transactions/fetchpurchaseslist', {
         headers: { Authorization: 'Bearer ' + userToken },
       });
 

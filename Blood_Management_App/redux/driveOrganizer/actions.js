@@ -68,7 +68,7 @@ export const organizeDriveConfirm = (userToken, newDriveData) => {
     try {
       dispatch(organizeReq());
       const response = await axios.post(
-        'http://10.0.2.2:8080/conductadrive/savedrivedetails',
+        'http://192.168.43.217:8080/conductadrive/savedrivedetails',
         {
           startTimeStamp: newDriveData.startDate,
           endTimeStamp: newDriveData.endDate,

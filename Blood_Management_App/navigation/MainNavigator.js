@@ -1,22 +1,25 @@
 /* eslint-disable prettier/prettier */
-import React, { useState, useEffect } from 'react';
-import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
+import React, {useState, useEffect} from 'react';
+import {createMaterialBottomTabNavigator} from '@react-navigation/material-bottom-tabs';
 import colors from '../constants/Colors';
 import Feather from 'react-native-vector-icons/Feather';
 
-import { StatusBar, Platform } from 'react-native';
-import { useNetInfo } from '@react-native-community/netinfo';
+import {StatusBar, Platform} from 'react-native';
+import {useNetInfo} from '@react-native-community/netinfo';
 import Home from '../src/MainTabs/Individual/Home';
 import About from '../src/MainTabs/About';
 import Notifications from '../src/MainTabs/Notifications';
 import ProfileStackNavigator from './ProfileNavigator';
 import ServicesStackNavigator from './ServicesNavigator';
-import { useSelector, useDispatch } from 'react-redux';
-import { fetchNotifications } from '../redux/notifications/actions';
-import { LogBox } from 'react-native';
+import {useSelector, useDispatch} from 'react-redux';
+import {fetchNotifications} from '../redux/notifications/actions';
+import {LogBox} from 'react-native';
 import FlashMessage from 'react-native-flash-message';
-import { showMessage, hideMessage } from 'react-native-flash-message';
+import {showMessage, hideMessage} from 'react-native-flash-message';
 import messaging from '@react-native-firebase/messaging';
+import {setDonorStatus} from '../redux/profile/actions';
+import {setDonationEligibilityNotification} from '../redux/notifications/actions';
+import {getUserData} from '../redux/profile/actions';
 
 //! if u need to use this, install it first.
 // import BackgroundTimer from 'react-native-background-timer';
@@ -26,6 +29,7 @@ const Tab = createMaterialBottomTabNavigator();
 const MainNavigator = () => {
   const notificationsState = useSelector((state) => state.notificationsState);
   const authState = useSelector((state) => state.authState);
+  const profileState = useSelector((state) => state.profileState);
   const dispatch = useDispatch();
 
   const [oldNotificationsLength, setOldNotificationsLength] = useState(0);
@@ -49,8 +53,9 @@ const MainNavigator = () => {
   ) {
     //* ALSO INCLUDING THE LOGIC TO SET PLURAL (NOTIFICATIONS) IN CASE OF MULTIPLE NEW NOTIFICATIONS.
     showMessage({
-      message: `${newNotificationsLength} new notification${newNotificationsLength === 1 ? null : 's'
-        }.`,
+      message: `${newNotificationsLength} new notification${
+        newNotificationsLength === 1 ? null : 's'
+      }.`,
       type: 'success',
     });
     setOldNotificationsLength(newNotificationsLength);
@@ -60,15 +65,15 @@ const MainNavigator = () => {
 
   //////////////////////////////////////////////////////////////////////////////////////////////////////
 
-  // useEffect(() => {
-  //   messaging()
-  //     .subscribeToTopic(authState.userId)
-  //     .then(() => console.log('Subscribed to userID!'));
-  //   return () =>
-  //     messaging()
-  //       .unsubscribeFromTopic(authState.userId)
-  //       .then(() => console.log('Unsubscribed fom the topic!'));
-  // }, [])
+  useEffect(() => {
+    messaging()
+      .subscribeToTopic(authState.userId)
+      .then(() => console.log('Subscribed to userID!'));
+    return () =>
+      messaging()
+        .unsubscribeFromTopic(authState.userId)
+        .then(() => console.log('Unsubscribed fom the topic!'));
+  }, []);
   useEffect(() => {
     console.log('EVER OFFLINE: ' + everOffline);
     if (netInfo.isConnected && everOffline > 1) {
@@ -116,11 +121,42 @@ const MainNavigator = () => {
     // };
   }, []);
 
+  useEffect(() => {
+    dispatch(getUserData(authState.userToken));
+    console.log('got user data');
+  }, [dispatch]);
+
+  useEffect(() => {
+    if (
+      authState.userType === 1 &&
+      profileState.userData &&
+      profileState.userData.lastDonationDate &&
+      profileState.userData.donorStatus === 2
+    ) {
+      const lastDonationDate = profileState.userData.lastDonationDate;
+
+      //? CONVERTING MILLISECONDS TO DAYS.
+      //* 56 days is the minimum required number of days between blood donations
+      const eligible =
+        (new Date().getTime() -
+          new Date(lastDonationDate.split('T')[0]).getTime()) /
+          (1000 * 60 * 60 * 24) >
+        56;
+      if (eligible) {
+        dispatch(setDonorStatus(authState.userToken, 0));
+        dispatch(setDonationEligibilityNotification(authState.userType, true));
+        console.log('Changing donor status to: ' + eligible);
+      }
+    }
+    console.log("It's fine if printed once");
+    //! DO NOT CHANGE DEPENDENCY ARRAY HERE OR ANYWHERE IN THE APP.
+  }, [authState.userType, dispatch, profileState.userData.name]);
+
   //////////////////////////////////////////////////////////////////////////////////////////////////////
 
   const notificationOptions = {
     tabBarLabel: 'Notifications',
-    tabBarIcon: ({ color }) => <Feather name="bell" color={color} size={20} />,
+    tabBarIcon: ({color}) => <Feather name="bell" color={color} size={20} />,
   };
 
   if (newNotificationsLength > 0) {
@@ -153,7 +189,7 @@ const MainNavigator = () => {
           component={Home}
           options={{
             tabBarLabel: 'Home',
-            tabBarIcon: ({ color }) => (
+            tabBarIcon: ({color}) => (
               <Feather name="home" color={color} size={20} />
             ),
           }}
@@ -163,7 +199,7 @@ const MainNavigator = () => {
           component={ProfileStackNavigator}
           options={{
             tabBarLabel: 'Profile',
-            tabBarIcon: ({ color }) => (
+            tabBarIcon: ({color}) => (
               <Feather name="user" color={color} size={20} />
             ),
           }}
@@ -173,7 +209,7 @@ const MainNavigator = () => {
           component={ServicesStackNavigator}
           options={{
             tabBarLabel: 'Services',
-            tabBarIcon: ({ color }) => (
+            tabBarIcon: ({color}) => (
               <Feather name="droplet" color={color} size={20} />
             ),
           }}
@@ -188,7 +224,7 @@ const MainNavigator = () => {
           component={About}
           options={{
             tabBarLabel: 'About',
-            tabBarIcon: ({ color }) => (
+            tabBarIcon: ({color}) => (
               <Feather name="info" color={color} size={20} />
             ),
           }}
@@ -196,8 +232,8 @@ const MainNavigator = () => {
       </Tab.Navigator>
       <FlashMessage
         position="top"
-        textStyle={{ fontFamily: 'Montserrat-Regular' }}
-        titleStyle={{ fontFamily: 'Montserrat-Bold' }}
+        textStyle={{fontFamily: 'Montserrat-Regular'}}
+        titleStyle={{fontFamily: 'Montserrat-Bold'}}
       />
     </>
   );

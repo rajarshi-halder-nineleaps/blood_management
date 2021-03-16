@@ -1,94 +1,90 @@
 /* eslint-disable prettier/prettier */
-import React, { useEffect } from 'react';
+import React, {useEffect} from 'react';
 import {
-  SafeAreaView,
   ScrollView,
   View,
   Text,
   Dimensions,
   TouchableOpacity,
   StyleSheet,
-  ToastAndroid,
-  AlertIOS,
   Image,
-  FlatList,
 } from 'react-native';
 import colors from '../../../constants/Colors';
-import { useDispatch, useSelector } from 'react-redux';
-import { FlatListSlider } from 'react-native-flatlist-slider';
+import {useDispatch, useSelector} from 'react-redux';
+import {FlatListSlider} from 'react-native-flatlist-slider';
 import HomeSlider from '../../../components/HomeSlider';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import { setDonorStatus } from "../../../redux/profile/actions";
-import { setDonationEligibilityNotification } from '../../../redux/notifications/actions';
+import {setDonorStatus} from '../../../redux/profile/actions';
+import {setDonationEligibilityNotification} from '../../../redux/notifications/actions';
 
-import { fetchCommitments } from '../../../redux/commitments/actions';
-import { getInventory } from '../../../redux/inventory/actions';
-import { fetchSalesData, getToday } from '../../../redux/sales/actions';
-import { PieChart, BarChart, StackedBarChart } from 'react-native-chart-kit';
-import { color } from 'react-native-reanimated';
-import { getUserData } from '../../../redux/profile/actions';
+import {fetchCommitments} from '../../../redux/commitments/actions';
+import {getInventory} from '../../../redux/inventory/actions';
+import {fetchSalesData, getToday} from '../../../redux/sales/actions';
+import {PieChart, BarChart, StackedBarChart} from 'react-native-chart-kit';
+import {color} from 'react-native-reanimated';
+import {getUserData} from '../../../redux/profile/actions';
 
-const Home = ({ navigation }) => {
+const Home = ({navigation}) => {
   const authState = useSelector((state) => state.authState);
   const userType = authState.userType;
   const dispatch = useDispatch();
   const profileState = useSelector((state) => state.profileState);
   const salesState = useSelector((state) => state.salesState);
 
-  useEffect(() => {
-    dispatch(getUserData(authState.userToken));
-    console.log('got user data');
-  }, [dispatch]);
+  // useEffect(() => {
+  //   dispatch(getUserData(authState.userToken));
+  //   console.log('got user data');
+  // }, [dispatch]);
   useEffect(() => {
     dispatch(getToday(authState.userToken));
     console.log('got user data');
   }, [dispatch]);
 
-  useEffect(() => {
-    if (
-      authState.userType === 1 &&
-      profileState.userData &&
-      profileState.userData.lastDonationDate &&
-      profileState.userData.donorStatus === 2
-    ) {
-      const lastDonationDate = profileState.userData.lastDonationDate;
+  // useEffect(() => {
+  //   if (
+  //     authState.userType === 1 &&
+  //     profileState.userData &&
+  //     profileState.userData.lastDonationDate &&
+  //     profileState.userData.donorStatus === 2
+  //   ) {
+  //     const lastDonationDate = profileState.userData.lastDonationDate;
 
-      //? CONVERTING MILLISECONDS TO DAYS.
-      //* 56 days is the minimum required number of days between blood donations
-      const eligible =
-        (new Date().getTime() -
-          new Date(lastDonationDate.split('T')[0]).getTime()) /
-        (1000 * 60 * 60 * 24) >
-        56;
-      if (eligible) {
-        dispatch(setDonorStatus(authState.userToken, 0));
-        dispatch(setDonationEligibilityNotification(authState.userType, true));
-        console.log('Changing donor status to: ' + eligible);
-      }
-    }
-    console.log("It's fine if printed once");
-    //! DO NOT CHANGE DEPENDENCY ARRAY HERE OR ANYWHERE IN THE APP.
-  }, [authState.userType, dispatch, profileState.userData.name]);
+  //     //? CONVERTING MILLISECONDS TO DAYS.
+  //     //* 56 days is the minimum required number of days between blood donations
+  //     const eligible =
+  //       (new Date().getTime() -
+  //         new Date(lastDonationDate.split('T')[0]).getTime()) /
+  //       (1000 * 60 * 60 * 24) >
+  //       56;
+  //     if (eligible) {
+  //       dispatch(setDonorStatus(authState.userToken, 0));
+  //       dispatch(setDonationEligibilityNotification(authState.userType, true));
+  //       console.log('Changing donor status to: ' + eligible);
+  //     }
+  //   }
+  //   console.log("It's fine if printed once");
+  //   //! DO NOT CHANGE DEPENDENCY ARRAY HERE OR ANYWHERE IN THE APP.
+  // }, [authState.userType, dispatch, profileState.userData.name]);
 
   const salesHandler = () => {
     dispatch(fetchSalesData(authState.userToken));
-    navigation.navigate('services', { screen: 'sales' });
+    navigation.navigate('services', {screen: 'sales'});
     navigation.navigate('sales');
   };
 
   const myCommitmentsHandler = () => {
     dispatch(fetchCommitments(authState.userToken));
-    navigation.navigate('services', { screen: 'commitments' });
+    navigation.navigate('services', {screen: 'commitments'});
   };
 
   const inventoryHandler = () => {
     dispatch(getInventory(authState.userToken));
-    navigation.navigate('services', { screen: 'inventory' });
+    navigation.navigate('services', {screen: 'inventory'});
   };
 
   const myDrivesHandler = () => {
     dispatch(getDriveData(authState.userToken));
-    navigation.navigate('services', { screen: 'driveOrganizer' });
+    navigation.navigate('services', {screen: 'driveOrganizer'});
   };
 
   const organizeDriveHandler = () => {
@@ -100,13 +96,10 @@ const Home = ({ navigation }) => {
   return (
     <ScrollView style={styles.container}>
       <View style={styles.header}>
-
-
-        <View style={{ flexDirection: 'column', marginLeft: 10 }}>
+        <View style={{flexDirection: 'column', marginLeft: 10}}>
           <Text style={styles.name}>Hi,</Text>
           <Text style={styles.name}>{profileState.userData.name}</Text>
           <Text style={styles.other}>#{profileState.userData.userId}</Text>
-
         </View>
         {userType === 3 ? (
           <TouchableOpacity
@@ -118,7 +111,7 @@ const Home = ({ navigation }) => {
         ) : null}
       </View>
       <View style={styles.donateblood}>
-        <View style={{ flexDirection: 'row-reverse', alignItems: 'center' }}>
+        <View style={{flexDirection: 'row-reverse', alignItems: 'center'}}>
           <Text style={styles.title}>
             {userType === 1 ? 'Donate Blood' : 'Organize Drive'}
           </Text>

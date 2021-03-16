@@ -61,7 +61,7 @@ export const getactivedonorList = (userToken) => {
     console.log('Getting Active Donor List');
     try {
       const response = await axios.get(
-        'http://10.0.2.2:8080/donationrequests/fetchrequests',
+        'http://192.168.43.217:8080/donationrequests/fetchrequests',
         {
           headers: { Authorization: 'Bearer ' + userToken },
         },
@@ -94,7 +94,7 @@ export const getdonationdetails = (userToken, donationId) => {
     console.log('Getting Active Donor List');
     try {
       const response = await axios.get(
-        `http://10.0.2.2:8080/donationrequests/fetchdonationdonorlist/${donationId}`,
+        `http://192.168.43.217:8080/donationrequests/fetchdonationdonorlist/${donationId}`,
         {
           headers: { Authorization: 'Bearer ' + userToken },
         },
@@ -126,7 +126,7 @@ export const expirerequest = (userToken, donationId) => {
     console.log('Expiring Donation');
     try {
       const response = await axios.put(
-        `http://10.0.2.2:8080/donationrequests/expirerequest`,
+        `http://192.168.43.217:8080/donationrequests/expirerequest`,
         {
           donationId: donationId,
         },
@@ -162,7 +162,7 @@ export const verifydonor = (userToken, userId, donationId) => {
     console.log('Expiring Donation');
     try {
       const response = await axios.put(
-        `http://10.0.2.2:8080/donationrequests/donationdonorverification`,
+        `http://192.168.43.217:8080/donationrequests/donationdonorverification`,
         {
           donationId: donationId,
           userId: userId,
@@ -199,7 +199,7 @@ export const updateRequestList = (userToken, updatedData) => {
       console.log('updating list of invites.');
       dispatch(donorListreq());
       const response = await axios.put(
-        'http://10.0.2.2:8080:8000/activedonorrequest',
+        'http://192.168.43.217:8080:8000/activedonorrequest',
         updatedData,
         {
           headers: { Authorization: userToken },

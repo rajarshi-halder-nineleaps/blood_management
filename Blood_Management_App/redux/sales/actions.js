@@ -64,7 +64,7 @@ export const fetchSalesData = (userToken) => {
       dispatch(salesReq());
       console.log('making API call');
       const response = await axios.get(
-        'http://10.0.2.2:8080/transactions/fetchsaleslist',
+        'http://192.168.43.217:8080/transactions/fetchsaleslist',
         {
           headers: { Authorization: 'Bearer ' + userToken },
         },
@@ -98,7 +98,7 @@ export const getCurrentMonthAnalytics = (year, userToken) => {
       dispatch(salesReq());
       console.log('making current m API call');
       const response = await axios.get(
-        `http://10.0.2.2:8080/salesanalytics/yearly/${year}/0`,
+        `http://192.168.43.217:8080/salesanalytics/yearly/${year}/0`,
         {
           headers: { Authorization: 'Bearer ' + userToken },
         },
@@ -133,7 +133,7 @@ export const getMonthlyBreakout = (year, month, userToken) => {
       dispatch(salesReq());
       console.log('making current m API call');
       const response = await axios.get(
-        `http://10.0.2.2:8080/salesanalytics/monthly/${year}/${month}/0`,
+        `http://192.168.43.217:8080/salesanalytics/monthly/${year}/${month}/0`,
         {
           headers: { Authorization: 'Bearer ' + userToken },
         },
@@ -172,7 +172,7 @@ export const getStockInfo = (userToken, year, month, type) => {
         dispatch(salesReq());
         console.log('making current m API call');
         const response = await axios.get(
-          `http://10.0.2.2:8080/salesanalytics/yearly/${year}/${type}`,
+          `http://192.168.43.217:8080/salesanalytics/yearly/${year}/${type}`,
           {
             headers: { Authorization: 'Bearer ' + userToken },
           },
@@ -197,7 +197,7 @@ export const getStockInfo = (userToken, year, month, type) => {
         dispatch(salesReq());
         console.log('making current m API call');
         const response = await axios.get(
-          `http://10.0.2.2:8080/salesanalytics/monthly/${year}/${month}/${type}`,
+          `http://192.168.43.217:8080/salesanalytics/monthly/${year}/${month}/${type}`,
           {
             headers: { Authorization: 'Bearer ' + userToken },
           },
@@ -232,7 +232,7 @@ export const getToday = (userToken) => {
       dispatch(salesReq());
       console.log('making current m API call');
       const response = await axios.get(
-        'http:/10.0.2.2:8080/salesanalytics/fetchnow',
+        'http:/192.168.43.217:8080/salesanalytics/fetchnow',
         {
           headers: { Authorization: 'Bearer ' + userToken },
         },
@@ -266,7 +266,7 @@ export const getThisMonth = (month, userToken) => {
       dispatch(salesReq());
       console.log('making current m API call');
       const response = await axios.get(
-        `http://10.0.2.2:8080/salesanalytics/fetchcurrentmonth/${month}`,
+        `http://192.168.43.217:8080/salesanalytics/fetchcurrentmonth/${month}`,
         {
           headers: { Authorization: 'Bearer ' + userToken },
         },

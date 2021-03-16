@@ -52,7 +52,7 @@ export const postCurrentPassword = (userToken, password) => {
 
     try {
       const response = await axios.post(
-        'http://10.0.2.2:8080/profile/verifycurrentpassword',
+        'http://192.168.43.217:8080/profile/verifycurrentpassword',
         { currentPassword: password },
         {
           headers: { Authorization: 'Bearer ' + userToken },
@@ -85,7 +85,7 @@ export const postResetPassword = (userToken, password) => {
 
     try {
       const response = await axios.put(
-        'http://10.0.2.2:8080/profile/changepassword',
+        'http://192.168.43.217:8080/profile/changepassword',
         { newPassword: password },
         {
           headers: { Authorization: 'Bearer ' + userToken },

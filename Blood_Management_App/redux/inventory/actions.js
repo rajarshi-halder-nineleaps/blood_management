@@ -48,7 +48,7 @@ export const checkPassword = (userToken, password) => {
       dispatch(toggleSecure(false));
 
       const response = await axios.post(
-        'http://10.0.2.2:8080/profile/verifycurrentpassword',
+        'http://192.168.43.217:8080/profile/verifycurrentpassword',
         {currentPassword: password},
         {
           headers: {Authorization: 'Bearer ' + userToken},
@@ -82,7 +82,7 @@ export const getInventory = (userToken) => {
     try {
       dispatch(invReq());
       const response = await axios.get(
-        'http://10.0.2.2:8080/inventory/receieveinventory',
+        'http://192.168.43.217:8080/inventory/receieveinventory',
         {
           headers: {Authorization: 'Bearer ' + userToken},
         },
@@ -121,7 +121,7 @@ export const updateInventory = (userToken, userType, inventory) => {
 
       if (userType === 2) {
         response = await axios.put(
-          'http://10.0.2.2:8080/inventory/updatehosinventory',
+          'http://192.168.43.217:8080/inventory/updatehosinventory',
           inventory,
           {
             headers: {Authorization: 'Bearer ' + userToken},
@@ -129,7 +129,7 @@ export const updateInventory = (userToken, userType, inventory) => {
         );
       } else {
         response = await axios.put(
-          'http://10.0.2.2:8080/inventory/updatebbinventory',
+          'http://192.168.43.217:8080/inventory/updatebbinventory',
           inventory,
           {
             headers: {Authorization: 'Bearer ' + userToken},

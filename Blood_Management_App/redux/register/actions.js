@@ -94,7 +94,7 @@ export const sendOtp = (email, otpNavigationHandler) => {
       console.log('sending otp.');
       dispatch(req());
       const response = await axios.post(
-        'http://10.0.2.2:8080/verification/sendotp',
+        'http://192.168.43.217:8080/verification/sendotp',
         { userEmail: email.trim() },
       );
 
@@ -126,7 +126,7 @@ export const verifyOTP = (userEmail, otp, registerUser) => {
       console.log('verifying otp.');
       dispatch(req());
       const response = await axios.post(
-        'http://10.0.2.2:8080/verification/verifyotp',
+        'http://192.168.43.217:8080/verification/verifyotp',
         { userEmail: userEmail.trim(), otp },
       );
 

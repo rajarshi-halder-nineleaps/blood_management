@@ -50,7 +50,7 @@ export const getBuyBloodList = (object, userToken) => {
     console.log('Getting Donor List');
     try {
       const response = await axios.post(
-        'http://10.0.2.2:8080/buyblood/findbb',
+        'http://192.168.43.217:8080/buyblood/findbb',
         {
           bloodGroup: object.blood_group,
           component: object.component,
@@ -94,7 +94,7 @@ export const buyit = (
     console.log('login works');
     try {
       const response = await axios.post(
-        'http://10.0.2.2:8080/buyblood/confirmbuy',
+        'http://192.168.43.217:8080/buyblood/confirmbuy',
         {
           sellerId: sellerId,
           date: new Date().toISOString(),

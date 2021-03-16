@@ -1,13 +1,13 @@
 /* eslint-disable prettier/prettier */
-import React, { useState, useEffect } from 'react';
-import { NavigationContainer } from '@react-navigation/native';
+import React, {useState, useEffect} from 'react';
+import {NavigationContainer} from '@react-navigation/native';
 import MainNavigator from '../navigation/MainNavigator';
 import RootStackNavigator from '../navigation/RootStackNavigator';
-import { View, ActivityIndicator, StyleSheet } from 'react-native';
+import {View, ActivityIndicator, StyleSheet} from 'react-native';
 import colors from '../constants/Colors';
-import { useSelector, useDispatch } from 'react-redux';
-import { tokenRetriever } from '../redux/auth/actions';
-import { requestLocationPermission } from '../redux/geolocation/actions';
+import {useSelector, useDispatch} from 'react-redux';
+import {tokenRetriever} from '../redux/auth/actions';
+import {requestLocationPermission} from '../redux/geolocation/actions';
 import Geolocation from '@react-native-community/geolocation';
 import messaging from '@react-native-firebase/messaging';
 
@@ -18,7 +18,6 @@ const Config = () => {
   console.log(authState);
   useEffect(() => {
     dispatch(tokenRetriever());
-
   }, [dispatch]);
 
   /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -26,7 +25,7 @@ const Config = () => {
   // //? SETTING UP GEOLOCATION
   const geolocationState = useSelector((state) => state.geolocationState);
   let watchID;
-  messaging().setBackgroundMessageHandler(async remoteMessage => {
+  messaging().setBackgroundMessageHandler(async (remoteMessage) => {
     console.log('Message handled in the background!', remoteMessage);
   });
 
@@ -37,14 +36,12 @@ const Config = () => {
   //   .unsubscribeFromTopic('BOB05')
   //   .then(() => console.log('Unsubscribed fom the topic!'));
 
-
-
-  useEffect(() => {
-    dispatch(requestLocationPermission(watchID));
-    return () => {
-      Geolocation.clearWatch(watchID);
-    };
-  }, []);
+  // useEffect(() => {
+  //   dispatch(requestLocationPermission(watchID));
+  //   return () => {
+  //     Geolocation.clearWatch(watchID);
+  //   };
+  // }, []);
 
   return (
     <>

@@ -73,7 +73,7 @@ export const getDonorList = (userToken, formData) => {
 
     try {
       const response = await axios.post(
-        'http://10.0.2.2:8080/finddonors/donorslist',
+        'http://192.168.43.217:8080/finddonors/donorslist',
         reqObj,
         {
           headers: { Authorization: 'Bearer ' + userToken },
@@ -95,7 +95,7 @@ export const getDonorList = (userToken, formData) => {
     }
     // try {
     //   const response = await axios.post(
-    //     'http://10.0.2.2:8080/finddonors/donorslist',
+    //     'http://192.168.43.217:8080/finddonors/donorslist',
     //     {
     //       address: formData.address,
     //       state: formData.state,
@@ -130,7 +130,7 @@ export const submitinvite = (userToken, formData, array) => {
     console.log('Submitting Invites', formData, array);
     try {
       const response = await axios.post(
-        'http://10.0.2.2:8080/finddonors/sendnotification', //API INTEGRATION
+        'http://192.168.43.217:8080/finddonors/sendnotification', //API INTEGRATION
         {
           address: formData.address,
           state: formData.state,
