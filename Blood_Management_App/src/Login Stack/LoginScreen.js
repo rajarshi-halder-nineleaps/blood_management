@@ -2,12 +2,12 @@
 import React from 'react';
 import Feather from 'react-native-vector-icons/Feather';
 import colors from '../../constants/Colors';
-import {useEffect} from 'react';
-import {useDispatch, useSelector} from 'react-redux';
-import {showMessage, hideMessage} from 'react-native-flash-message';
-import {emailRegex, passwordRegex} from '../../constants/Regexes';
+import { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { showMessage, hideMessage } from 'react-native-flash-message';
+import { emailRegex, passwordRegex } from '../../constants/Regexes';
 //* setting up the actions for auth.
-import {logUserIn} from '../../redux/auth/actions';
+import { logUserIn } from '../../redux/auth/actions';
 import {
   View,
   Text,
@@ -23,7 +23,7 @@ import {
 } from '../../redux/login/actions.js';
 import Fields from '../../components/Fields';
 
-const LoginScreen = ({navigation}) => {
+const LoginScreen = ({ navigation }) => {
   const dispatch = useDispatch();
   const loginFormState = useSelector((state) => state.loginFormState);
   const authState = useSelector((state) => state.authState);
@@ -112,7 +112,8 @@ const LoginScreen = ({navigation}) => {
             <Text
               style={{
                 color: colors.primary,
-                fontFamily: 'Montserrat-Regular',
+                fontFamily: 'Montserrat-Bold',
+                fontSize: 18
               }}>
               Forgot Password?
             </Text>
@@ -139,7 +140,7 @@ const LoginScreen = ({navigation}) => {
   );
 };
 
-const {height} = Dimensions.get('screen');
+const { height } = Dimensions.get('screen');
 const height_logo = height * 0.2;
 const WIDTH = Dimensions.get('window').width;
 

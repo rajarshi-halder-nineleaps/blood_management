@@ -1,5 +1,9 @@
 /* eslint-disable prettier/prettier */
+<<<<<<< HEAD
 import React, {useEffect} from 'react';
+=======
+import React, { useEffect, useState } from 'react';
+>>>>>>> ef32599072b8f06cfa923e1cb4cb3f004c76481c
 import {
   ScrollView,
   View,
@@ -8,6 +12,11 @@ import {
   TouchableOpacity,
   StyleSheet,
   Image,
+<<<<<<< HEAD
+=======
+  FlatList,
+  ImageBackground
+>>>>>>> ef32599072b8f06cfa923e1cb4cb3f004c76481c
 } from 'react-native';
 import colors from '../../../constants/Colors';
 import {useDispatch, useSelector} from 'react-redux';
@@ -17,12 +26,22 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import {setDonorStatus} from '../../../redux/profile/actions';
 import {setDonationEligibilityNotification} from '../../../redux/notifications/actions';
 
+<<<<<<< HEAD
 import {fetchCommitments} from '../../../redux/commitments/actions';
 import {getInventory} from '../../../redux/inventory/actions';
 import {fetchSalesData, getToday} from '../../../redux/sales/actions';
 import {PieChart, BarChart, StackedBarChart} from 'react-native-chart-kit';
 import {color} from 'react-native-reanimated';
 import {getUserData} from '../../../redux/profile/actions';
+=======
+import { fetchCommitments } from '../../../redux/commitments/actions';
+import { checkPassword, getInventory } from '../../../redux/inventory/actions';
+import { fetchSalesData, getToday } from '../../../redux/sales/actions';
+import { PieChart, BarChart, StackedBarChart } from 'react-native-chart-kit';
+import { color } from 'react-native-reanimated';
+import { getUserData } from '../../../redux/profile/actions';
+import { Table, TableWrapper, Row, Rows, Col } from 'react-native-table-component';
+>>>>>>> ef32599072b8f06cfa923e1cb4cb3f004c76481c
 
 const Home = ({navigation}) => {
   const authState = useSelector((state) => state.authState);
@@ -66,26 +85,26 @@ const Home = ({navigation}) => {
   //   //! DO NOT CHANGE DEPENDENCY ARRAY HERE OR ANYWHERE IN THE APP.
   // }, [authState.userType, dispatch, profileState.userData.name]);
 
-  const salesHandler = () => {
-    dispatch(fetchSalesData(authState.userToken));
-    navigation.navigate('services', {screen: 'sales'});
-    navigation.navigate('sales');
-  };
+  // const salesHandler = () => {
+  //   dispatch(fetchSalesData(authState.userToken));
+  //   navigation.navigate('services', { screen: 'sales' });
+  //   navigation.navigate('sales');
+  // };
 
-  const myCommitmentsHandler = () => {
-    dispatch(fetchCommitments(authState.userToken));
-    navigation.navigate('services', {screen: 'commitments'});
-  };
+  // const myCommitmentsHandler = () => {
+  //   dispatch(fetchCommitments(authState.userToken));
+  //   navigation.navigate('services', { screen: 'commitments' });
+  // };
 
-  const inventoryHandler = () => {
-    dispatch(getInventory(authState.userToken));
-    navigation.navigate('services', {screen: 'inventory'});
-  };
+  // const inventoryHandler = () => {
+  //   dispatch(getInventory(authState.userToken));
+  //   navigation.navigate('services', { screen: 'inventory' });
+  // };
 
-  const myDrivesHandler = () => {
-    dispatch(getDriveData(authState.userToken));
-    navigation.navigate('services', {screen: 'driveOrganizer'});
-  };
+  // const myDrivesHandler = () => {
+  //   dispatch(getDriveData(authState.userToken));
+  //   navigation.navigate('services', { screen: 'driveOrganizer' });
+  // };
 
   const organizeDriveHandler = () => {
     navigation.navigate('driveOrganizer');
@@ -93,23 +112,177 @@ const Home = ({navigation}) => {
   const upcomingDrivesHandler = () => {
     navigation.navigate('upcomingDrivesSearch');
   };
+
+  const [hour, setHour] = useState(-1)
+  const getHour = () => {
+    const date = new Date();
+    const hour = date.getHours()
+    setHour(hour);
+  }
+
+
+  useEffect(() => {
+    getHour()
+  }, [])
+
+
+
+
+
   return (
     <ScrollView style={styles.container}>
-      <View style={styles.header}>
-        <View style={{flexDirection: 'column', marginLeft: 10}}>
-          <Text style={styles.name}>Hi,</Text>
-          <Text style={styles.name}>{profileState.userData.name}</Text>
-          <Text style={styles.other}>#{profileState.userData.userId}</Text>
+
+      <ImageBackground source={require('../../../assets/images/realpic1.png')} style={{ width: Dimensions.get('screen').width, height: 250 }}
+      >
+        <View style={styles.header}>
+
+
+          <View style={{ flexDirection: 'column', marginLeft: 10 }}>
+            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+              <Image
+                source={require('../../../assets/images/logotransparentbkg.png')}
+                style={styles.logo}
+                resizeMode='stretch'
+
+              />
+              <Text style={styles.logotext}>Red Bank</Text>
+            </View>
+
+
+
+            <Text style={styles.greet}>
+              {hour < 12 ? "Good Morning," : "Good Afternoon,"}
+            </Text>
+            <Text style={styles.name}>{profileState.userData.name}</Text>
+            <Text style={styles.other}>#{profileState.userData.userId}</Text>
+
+          </View>
+          {userType === 3 ? (
+            <TouchableOpacity
+              style={styles.iconview}
+              onPress={() => dispatch(getToday(authState.userToken))}>
+              <Icon name="refresh" color={colors.primary} size={30} />
+              <Text style={styles.refreshText}>Refresh</Text>
+            </TouchableOpacity>
+          ) : null}
         </View>
-        {userType === 3 ? (
-          <TouchableOpacity
-            style={styles.iconview}
-            onPress={() => dispatch(getToday(authState.userToken))}>
-            <Icon name="refresh" color={colors.primary} size={30} />
-            <Text style={styles.refreshText}>Refresh</Text>
-          </TouchableOpacity>
-        ) : null}
+      </ImageBackground>
+
+      <View style={{
+        width: '90%',
+        alignSelf: 'center',
+        top: 220,
+        height: 200,
+        position: 'absolute',
+        backgroundColor: colors.additional2,
+        borderRadius: 10,
+        paddingVertical: 20,
+        elevation: 20,
+
+
+      }}>
+        {userType === 3 ?
+          <>
+            <Text style={styles.sectiontitle}>Today's Stats</Text>
+            <View style={{ flexDirection: 'row', flex: 1, justifyContent: 'center' }}>
+              <View style={{ flexDirection: 'column', alignItems: 'center', paddingHorizontal: 5, justifyContent: 'space-evenly' }}>
+                <Text style={styles.sectionline}>
+                  Units Sold
+          </Text>
+                <Text style={styles.sectionline}>
+                  10{salesState.todaysData.unitsSold}
+                </Text>
+                <Text style={styles.sectionline}>
+                  Units Bought
+           </Text>
+                <Text style={styles.sectionline}>
+                  {salesState.todaysData.unitsBought}
+                </Text>
+              </View>
+              <View style={{ flexDirection: 'column', alignItems: 'center', paddingHorizontal: 5, justifyContent: 'space-evenly' }}>
+                <Text style={styles.sectionline}>
+                  Amount Collected
+          </Text>
+                <Text style={styles.sectionline}>
+                  ₹ {salesState.todaysData.amountCollected &&
+                    salesState.todaysData.amountCollected.toFixed(2)}
+                </Text>
+                <Text style={styles.sectionline}>
+                  Amount Spent
+          </Text>
+                <Text style={styles.sectionline}>
+                  ₹ {salesState.todaysData.amountSpent && salesState.todaysData.amountSpent.toFixed(2)}
+                </Text>
+              </View>
+            </View>
+          </>
+          : null}
+        {userType === 1 ?
+          <>
+            <View style={{ flexDirection: 'row' }}>
+              <View style={styles.statsInsideView}>
+                <Text style={styles.statsLabel}>Total Donations</Text>
+                <Text style={styles.statsContent}>
+                  {profileState.profileData.donationMade}
+                </Text>
+              </View>
+              <View style={styles.statsInsideView}>
+                <Text style={styles.statsLabel}>
+                  Commitments made
+            </Text>
+                <Text style={styles.statsContent}>
+                  {profileState.profileData.commitmentMade}
+                </Text>
+              </View>
+              <View style={styles.statsInsideView}>
+                <Text style={styles.statsLabel}>Drives attended</Text>
+                <Text style={styles.statsContent}>
+                  {profileState.profileData.drivesAttended}
+                </Text>
+              </View>
+            </View>
+
+            <Text style={styles.text}>Donor Status</Text>
+            <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
+              {profileState.userData.donorStatus === 0 ?
+
+                <Icon name="times-circle" color="red" size={30} />
+                :
+                <Icon name="check-circle" color="green" size={30} />
+
+              }
+            </View>
+          </>
+          : null}
+        {userType === 2 ?
+          <>
+            <View style={styles.statsInsideView}>
+              <Text style={styles.statsLabel}>Requests made</Text>
+              <Text style={styles.statsContent}>
+                {profileState.profileData.requestMade}
+              </Text>
+            </View>
+            <View style={styles.statsInsideView}>
+              <Text style={styles.statsLabel}>
+                Drives organized
+            </Text>
+              <Text style={styles.statsContent}>
+                {profileState.profileData.drivesConducted}
+              </Text>
+            </View>
+          </>
+          : null
+        }
+
       </View>
+
+      <View style={{ flex: 1, marginTop: 200 }}>
+        <Text>
+          hi
+        </Text>
+      </View>
+
+      {/* 
       <View style={styles.donateblood}>
         <View style={{flexDirection: 'row-reverse', alignItems: 'center'}}>
           <Text style={styles.title}>
@@ -124,10 +297,10 @@ const Home = ({navigation}) => {
           style={styles.button}>
           <Text style={styles.buttontitle}>Get Started</Text>
         </TouchableOpacity>
-      </View>
+      </View> */}
 
-      <View></View>
-      {userType === 1 ? (
+
+      {/* {userType === 1 ? (
         <>
           <View>
             <Image
@@ -154,16 +327,90 @@ const Home = ({navigation}) => {
             </Text>
           </View>
         </>
-      )}
+      )} */}
     </ScrollView>
   );
 };
 
 const screenWidth = Dimensions.get('window').width;
 const styles = StyleSheet.create({
-  container: {},
+  container: {
+    flex: 1,
+
+  },
+  statsInsideView: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginHorizontal: 5,
+  },
+  statsLabel: {
+    textAlign: 'center',
+    fontFamily: 'Montserrat-Bold',
+    fontSize: 12,
+  },
+  statsContent: {
+    textAlign: 'center',
+    marginTop: 10,
+    fontFamily: 'Montserrat-Bold',
+    fontSize: 20,
+    color: colors.primary,
+  },
+  imageView: {
+    alignItems: 'center',
+    width: '100%',
+  },
+  imageCover: {
+    width: '100%',
+    height: '100%',
+    flex: 1,
+  },
+  avatar: {
+    borderColor: colors.primary,
+    borderWidth: 2,
+    borderRadius: 100,
+    width: 80,
+    height: 80,
+  },
+  donorAvatar: {
+    borderColor: colors.green,
+    borderWidth: 1,
+    borderRadius: 100,
+    width: 80,
+    height: 80,
+  },
+  contentBoard: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: '100%',
+    flex: 1,
+
+  },
+  logotext: {
+    color: colors.primary,
+    fontSize: 20,
+    fontFamily: 'Montserrat-Regular',
+    marginLeft: 10
+  },
+  text: {
+    color: colors.primary,
+    marginTop: 30,
+    alignSelf: 'center',
+    fontSize: 20,
+    fontFamily: 'Montserrat-Bold',
+  },
+  textfont: {
+    color: colors.coolblue,
+    marginTop: 30,
+    alignSelf: 'center',
+    fontSize: 20,
+    fontFamily: 'Montserrat-Bold',
+  },
+  logo: {
+    width: 50,
+    height: 50,
+  },
   header: {
-    backgroundColor: colors.additional2,
+    backgroundColor: 'transparent',
     paddingHorizontal: 30,
     paddingVertical: 40,
     width: '100%',
@@ -188,17 +435,25 @@ const styles = StyleSheet.create({
     marginLeft: 20,
   },
   name: {
-    fontFamily: 'Montserrat-Bold',
+    fontFamily: 'Montserrat-Regular',
     alignSelf: 'flex-start',
     fontSize: 24,
-    color: colors.primary,
+    color: colors.additional2,
+  },
+  greet: {
+    fontFamily: 'Montserrat-Bold',
+    alignSelf: 'flex-start',
+    fontSize: 30,
+    color: colors.additional2,
+    marginTop: 10
   },
   other: {
     fontFamily: 'Montserrat-Regular',
     alignSelf: 'flex-start',
     fontSize: 15,
-    fontWeight: '600',
-    color: colors.dutchred,
+    fontWeight: '100',
+    color: colors.additional2,
+    marginTop: 5
   },
   sectiontitle: {
     fontFamily: 'Montserrat-Regular',
@@ -207,10 +462,11 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   sectionline: {
-    fontFamily: 'Montserrat-Regular',
-    fontSize: 20,
+    fontFamily: 'Montserrat-Bold',
+    fontSize: 18,
     marginLeft: 10,
     marginBottom: 5,
+
   },
   iconview: {
     alignItems: 'center',
@@ -218,6 +474,7 @@ const styles = StyleSheet.create({
   refreshText: {
     fontFamily: 'Montserrat-Regular',
     fontSize: 15,
+    color: colors.primary
   },
   donateblood: {
     flexDirection: 'row',
