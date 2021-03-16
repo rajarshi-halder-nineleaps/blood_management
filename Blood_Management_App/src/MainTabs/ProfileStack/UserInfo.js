@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   View,
   Text,
@@ -8,14 +8,14 @@ import {
   ScrollView,
   Image,
 } from 'react-native';
-import {SkypeIndicator, UIActivityIndicator} from 'react-native-indicators';
-import {useSelector, useDispatch} from 'react-redux';
+import { SkypeIndicator, UIActivityIndicator } from 'react-native-indicators';
+import { useSelector, useDispatch } from 'react-redux';
 import colors from '../../../constants/Colors';
 import Feather from 'react-native-vector-icons/Feather';
-import {getProfileData, setDonorStatus} from '../../../redux/profile/actions';
+import { getProfileData, setDonorStatus } from '../../../redux/profile/actions';
 import AvatarChangeModal from '../../../components/AvatarChangeModal';
 
-const UserInfo = ({navigation}) => {
+const UserInfo = ({ navigation }) => {
   const dispatch = useDispatch();
   const profileState = useSelector((state) => state.profileState);
   const authState = useSelector((state) => state.authState);
@@ -67,7 +67,7 @@ const UserInfo = ({navigation}) => {
                             style={styles.avatar}
                             source={
                               profileState.userData.profilePicture
-                                ? {uri: profileState.userData.profilePicture}
+                                ? { uri: profileState.userData.profilePicture }
                                 : require('../../../assets/images/account/nodp.png')
                             }
                           />
@@ -96,7 +96,7 @@ const UserInfo = ({navigation}) => {
                     <>
                       <View style={styles.donorStatusView}>
                         {profileState.userData.donorStatus !== 1 &&
-                        profileState.userData.donorStatus !== 0 ? (
+                          profileState.userData.donorStatus !== 0 ? (
                           <View style={styles.disabled}>
                             <Text style={styles.donorStatusTouchText}>
                               Donor status: Disabled
@@ -141,16 +141,16 @@ const UserInfo = ({navigation}) => {
                         {profileState.userData.donorStatus === 0
                           ? 'Click on the above button to upgarde to donor status'
                           : profileState.userData.donorStatus === 1
-                          ? 'Click on the above button to leave donor status'
-                          : `Eligible for donation in ${Math.floor(
+                            ? 'Click on the above button to leave donor status'
+                            : `Eligible for donation in ${Math.floor(
                               56 -
-                                (new Date().getTime() -
-                                  new Date(
-                                    profileState.userData.lastDonationDate.split(
-                                      'T',
-                                    )[0],
-                                  ).getTime()) /
-                                  (1000 * 60 * 60 * 24),
+                              (new Date().getTime() -
+                                new Date(
+                                  profileState.userData.lastDonationDate.split(
+                                    'T',
+                                  )[0],
+                                ).getTime()) /
+                              (1000 * 60 * 60 * 24),
                             )} days`}
                       </Text>
                     </>
@@ -293,16 +293,16 @@ const UserInfo = ({navigation}) => {
                                 //? THE BUG WITH MULTIPLE PHONE NUMBERS MAPPING OCCURED HERE - NOW FIXED.
                                 profileState.profileData.phone.length > 0
                                   ? profileState.profileData.phone.map(
-                                      (val, idx) => (
-                                        <View
-                                          key={idx}
-                                          style={styles.addressRightView}>
-                                          <Text style={styles.addressContent}>
-                                            {val}
-                                          </Text>
-                                        </View>
-                                      ),
-                                    )
+                                    (val, idx) => (
+                                      <View
+                                        key={idx}
+                                        style={styles.addressRightView}>
+                                        <Text style={styles.addressContent}>
+                                          {val}
+                                        </Text>
+                                      </View>
+                                    ),
+                                  )
                                   : null
                               }
                             </View>
@@ -329,19 +329,16 @@ const UserInfo = ({navigation}) => {
                         <View style={styles.addressRightView}>
                           <Text style={styles.addressContent}>
                             {profileState.profileData.registration_date
-                              ? `${
-                                  profileState.profileData.registration_date.split(
-                                    'T',
-                                  )[0]
-                                } at ${
-                                  profileState.profileData.registration_date
-                                    .split('T')[1]
-                                    .split(':')[0]
-                                }:${
-                                  profileState.profileData.registration_date
-                                    .split('T')[1]
-                                    .split(':')[1]
-                                }`
+                              ? `${profileState.profileData.registration_date.split(
+                                'T',
+                              )[0]
+                              } at ${profileState.profileData.registration_date
+                                .split('T')[1]
+                                .split(':')[0]
+                              }:${profileState.profileData.registration_date
+                                .split('T')[1]
+                                .split(':')[1]
+                              }`
                               : null}
                           </Text>
                         </View>
@@ -363,7 +360,7 @@ const UserInfo = ({navigation}) => {
       <AvatarChangeModal
         visibleState={editDp}
         visibleStateChanger={setEditDp}
-        // dispatchable={checkPassword}
+      // dispatchable={checkPassword}
       />
       {editDp ? <View style={styles.overlay} /> : null}
     </>
