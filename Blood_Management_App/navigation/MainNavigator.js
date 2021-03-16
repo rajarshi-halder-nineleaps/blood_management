@@ -20,6 +20,7 @@ import messaging from '@react-native-firebase/messaging';
 import {setDonorStatus} from '../redux/profile/actions';
 import {setDonationEligibilityNotification} from '../redux/notifications/actions';
 import {getUserData} from '../redux/profile/actions';
+import {getProfileData} from '../redux/profile/actions';
 
 //! if u need to use this, install it first.
 // import BackgroundTimer from 'react-native-background-timer';
@@ -64,6 +65,12 @@ const MainNavigator = () => {
   }
 
   //////////////////////////////////////////////////////////////////////////////////////////////////////
+
+  useEffect(() => {
+    dispatch(getProfileData(authState.userToken));
+
+    console.log('PROFILE RENDERED!');
+  }, [dispatch]);
 
   useEffect(() => {
     messaging()

@@ -44,10 +44,15 @@ const Services = ({navigation}) => {
   const salesHandler = () => {
     navigation.navigate('sales');
   };
-  var year = new Date().getFullYear();
-  var mon = new Date().getMonth;
+  const year = new Date().getFullYear();
+  let mon = new Date().getMonth() + 1 + '';
+
+  if (mon.length === 1) {
+    mon = '0' + mon;
+  }
   const salesAnalyticsHandler = () => {
     console.log(year);
+    console.log(mon);
     dispatch(getCurrentMonthAnalytics(year, authState.userToken));
     dispatch(getMonthlyBreakout(year, mon, authState.userToken));
     navigation.navigate('salesAnalytics');
@@ -152,7 +157,7 @@ const Services = ({navigation}) => {
               touchHandler={() => salesHandler()}
             />
             <TouchTabs
-              label="Sales Analytics"
+              label="Analytics"
               source={require('../../../assets/images/servicesScreen/analytics.png')}
               touchHandler={() => salesAnalyticsHandler()}
             />

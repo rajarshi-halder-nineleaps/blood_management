@@ -1,14 +1,8 @@
 /* eslint-disable prettier/prettier */
 import React, {useEffect, useState} from 'react';
-import {
-  Text,
-  StyleSheet,
-  View,
-  Alert,
-  Dimensions,
-  ScrollView,
-} from 'react-native';
+import {Text, StyleSheet, View, Dimensions, ScrollView} from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
+import {showMessage, hideMessage} from 'react-native-flash-message';
 import colors from '../../constants/Colors';
 
 import {
@@ -51,27 +45,37 @@ const Stock = ({navigation}) => {
   const [selectedYear, setSelectedYear] = useState('');
   const [month, setMonth] = useState(false);
 
-  const [breakoutMonth, setBreakoutMonth] = useState('All');
-  const [breakoutYear, setBreakoutYear] = useState('2021');
+  let mon = new Date().getMonth() + 1 + '';
+
+  if (mon.length === 1) {
+    mon = '0' + mon;
+  }
+
+  const [breakoutMonth, setBreakoutMonth] = useState(mon);
+  const [breakoutYear, setBreakoutYear] = useState(new Date().getFullYear());
 
   const [type, setType] = useState('1');
 
   useEffect(() => {
     dispatch(
-      getStockInfo(authState.userToken, breakoutYear, breakoutMonth, type),
+      getStockInfo(authState.userToken, new Date().getFullYear(), mon, type),
     );
   }, [dispatch]);
 
   const submitGetInfo = () => {
-    if (breakoutYear == '') {
-      Alert.alert('Select year', 'Please select year to continue', [
-        {text: 'Okay'},
-      ]);
+    if (breakoutYear === '') {
+      showMessage({
+        message: 'Year required',
+        description: 'Please select a year to continue.',
+        type: 'warning',
+      });
     } else {
-      if (breakoutMonth == '') {
-        Alert.alert('Select month', 'Please select monthnto continue', [
-          {text: 'Okay'},
-        ]);
+      if (breakoutMonth === '') {
+        showMessage({
+          message: 'Month required',
+          description: 'Please select a month to continue.',
+          type: 'warning',
+        });
       } else {
         dispatch(
           getStockInfo(authState.userToken, breakoutYear, breakoutMonth, type),
@@ -121,11 +125,10 @@ const Stock = ({navigation}) => {
       svg: {
         fill: randomColor(),
         onPress: () =>
-          Alert.alert(
-            'Details',
-            value.toFixed(0) + ' Units of ' + bloodGroups[index],
-            [{text: 'Okay'}],
-          ),
+          showMessage({
+            message: value.toFixed(0) + ' Units of ' + bloodGroups[index],
+            backgroundColor: colors.coolblue,
+          }),
       },
       key: `pie-${index}`,
     }));
@@ -295,6 +298,7 @@ const styles = StyleSheet.create({
   button: {
     paddingHorizontal: 10,
     paddingVertical: 10,
+    borderRadius: 5,
     backgroundColor: colors.primary,
   },
   button_text: {
