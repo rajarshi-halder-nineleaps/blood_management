@@ -40,7 +40,7 @@ export const upcomingDrivesSearch = (userToken, searchFilters) => {
     try {
       dispatch(driveFindReq());
       const response = await axios.post(
-        'http://192.168.43.217:8080/upcomingdrives/fetchdriveslist',
+        'http://10.0.2.2:8080/upcomingdrives/fetchdriveslist',
         {
           state: searchFilters.selectedState,
           district: searchFilters.selectedDistrict,
@@ -85,7 +85,7 @@ export const registerUserForDrive = (userToken, driveId) => {
       );
       dispatch(driveFindReq());
       const response = await axios.post(
-        'http://192.168.43.217:8080/upcomingdrives/registerfordrive',
+        'http://10.0.2.2:8080/upcomingdrives/registerfordrive',
         { driveId },
         {
           headers: { Authorization: 'Bearer ' + userToken },
