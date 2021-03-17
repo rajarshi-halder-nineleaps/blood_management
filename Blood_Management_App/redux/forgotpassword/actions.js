@@ -53,7 +53,7 @@ export const postEmail = (email) => {
     dispatch(resetDoneState('emailSent'));
     try {
       const response = await axios.post(
-        'http://192.168.43.217:8080/email/sendotp',
+        'http://10.0.2.2:8080/email/sendotp',
         {
           userEmail: email,
         },
@@ -89,7 +89,7 @@ export const postOTP = (email, otp) => {
     dispatch(resetDoneState('otp'));
     try {
       const response = await axios.post(
-        'http://192.168.43.217:8080/email/verifyotp',
+        'http://10.0.2.2:8080/email/verifyotp',
         {
           userEmail: email,
           otp,
@@ -118,7 +118,7 @@ export const postResetPassword = (email, password) => {
     dispatch(forgotReq());
     try {
       const response = await axios.put(
-        'http://192.168.43.217:8080/profile/resetpassword',
+        'http://10.0.2.2:8080/profile/resetpassword',
         {
           userEmail: email,
           newPassword: password,

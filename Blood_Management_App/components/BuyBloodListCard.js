@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import React, {useEffect} from 'react';
+import React, { useEffect } from 'react';
 import {
   View,
   ScrollView,
@@ -16,11 +16,11 @@ import {
   CollapseHeader,
   CollapseBody,
 } from 'accordion-collapse-react-native';
-import {TouchableOpacity} from 'react-native-gesture-handler';
-import {useNavigation} from '@react-navigation/native';
-import {useSelector} from 'react-redux';
+import { TouchableOpacity } from 'react-native-gesture-handler';
+import { useNavigation } from '@react-navigation/native';
+import { useSelector } from 'react-redux';
 
-const BuyBloodListCard = ({item, onPress}) => {
+const BuyBloodListCard = ({ item, onPress }) => {
   const buybloodFormState = useSelector((state) => state.buybloodFormState);
 
   return (
