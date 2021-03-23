@@ -25,7 +25,7 @@ const Commitments = () => {
   }, [authState.userToken, dispatch]);
   const [refreshing, setRefreshing] = useState(false);
 
-  const [active, setActive] = useState(true);
+  const [active, setActive] = useState(false);
 
   const onRefresh = React.useCallback(
     (driveId) => {

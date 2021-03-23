@@ -8,7 +8,7 @@ const initialState = {
   analyticsData: {},
   selectedYear: '',
   selectedMonth: '',
-  currentMonthData: [],
+  currentMonthData: {},
   currentMonthAnalyticsArray: [],
   currentMonthSuccess: false,
   thisMonthData: [],
@@ -16,7 +16,11 @@ const initialState = {
   todaysData: {},
   todayLoading: false,
   breakoutData: [],
-  stockinfo: []
+  stockinfo: [],
+  yeardata: [],
+  monthdata: []
+
+
 
 };
 
@@ -59,10 +63,22 @@ const salesReducer = (state = initialState, action) => {
       };
     }
     case GET_CURRENT_MONTH: {
-      console.log(action.array)
+      console.log(action.array.bloodObject)
+
+      var obj = [
+        {
+          data: action.array.bloodObject,
+          svg: { fill: '#8800cc' },
+        },
+        {
+          data: action.array.plasmaObject,
+          svg: { fill: 'green' },
+        }
+      ]
+
       return {
         ...state,
-        currentMonthData: action.array,
+        yeardata: obj,
         currentMonthSuccess: true,
         //currentMonthAnalyticsArray: action.array.data
       }
@@ -83,9 +99,24 @@ const salesReducer = (state = initialState, action) => {
       }
     }
     case GET_REQUESTED_BREAKOUT: {
+      var obj = [
+        {
+          data: action.array.bloodObject,
+          svg: { fill: '#8800cc' },
+        },
+        {
+          data: action.array.plasmaObject,
+          svg: { fill: 'green' },
+        },
+        {
+          data: action.array.plateletObject,
+          svg: { fill: 'red' },
+        }
+      ]
+
       return {
         ...state,
-        breakoutData: action.array
+        monthdata: obj
       }
     }
     case STOCK_INFO: {

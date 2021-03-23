@@ -1,8 +1,8 @@
 /* eslint-disable prettier/prettier */
-import React, {useEffect, useState} from 'react';
-import {Text, StyleSheet, View, Dimensions, ScrollView} from 'react-native';
-import {showMessage, hideMessage} from 'react-native-flash-message';
-import {useDispatch, useSelector} from 'react-redux';
+import React, { useEffect, useState } from 'react';
+import { Text, StyleSheet, View, Dimensions, ScrollView } from 'react-native';
+import { showMessage, hideMessage } from 'react-native-flash-message';
+import { useDispatch, useSelector } from 'react-redux';
 import colors from '../../constants/Colors';
 
 import {
@@ -12,10 +12,10 @@ import {
   updateYear,
   getMonthlyBreakout,
 } from '../../redux/sales/actions';
-import {Picker} from '@react-native-picker/picker';
-import {TouchableOpacity} from 'react-native-gesture-handler';
+import { Picker } from '@react-native-picker/picker';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 import * as figures from '../../assets/salesanalytics.json';
-import {BarChart, Grid, YAxis, LineChart, XAxis} from 'react-native-svg-charts';
+import { BarChart, Grid, YAxis, LineChart, XAxis } from 'react-native-svg-charts';
 // import {
 //     PieChart,
 //     BarChart,
@@ -26,7 +26,7 @@ import Feather from 'react-native-vector-icons/Feather';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
 //import { Picker } from 'react-native-wheel-pick';
-const Revenue = ({navigation}) => {
+const Revenue = ({ navigation }) => {
   const authState = useSelector((state) => state.authState);
   const salesState = useSelector((state) => state.salesState);
   const dispatch = useDispatch();
@@ -61,7 +61,7 @@ const Revenue = ({navigation}) => {
       }
     }
   };
-  const contentInset = {top: 20, bottom: 20, left: 5, right: 10};
+  const contentInset = { top: 20, bottom: 20, left: 5, right: 10 };
 
   const fill = colors.grayishblack;
   const bloodGroups = ['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'];
@@ -79,7 +79,24 @@ const Revenue = ({navigation}) => {
     'Nov',
     'Dec',
   ];
+  const data1 = [50, 10, 40, 95, 4, 24, 85, 91, 35, 53, 53, 24, 50, 20, 80]
+  const data2 = [87, 66, 69, 92, 40, 61, 16, 62, 20, 93, 54, 47, 89, 44, 18]
 
+  const data = [
+    {
+      data: data1,
+      svg: { fill: '#8800cc' },
+    },
+    {
+      data: data2,
+      svg: { fill: 'green' },
+    },
+    {
+      data: data2,
+      svg: { fill: 'red' },
+    },
+
+  ]
   return (
     <ScrollView style={styles.container}>
       <View style={styles.header}>
@@ -125,9 +142,9 @@ const Revenue = ({navigation}) => {
             width: Dimensions.get('screen').width - 30,
             flexDirection: 'row',
           }}>
-          {salesState && salesState.currentMonthData && (
+          {salesState && salesState.yeardata && (
             <YAxis
-              data={salesState.currentMonthData}
+              data={salesState.yeardata}
               contentInset={contentInset}
               svg={{
                 fill: colors.sapphireblue,
@@ -137,20 +154,21 @@ const Revenue = ({navigation}) => {
               formatLabel={(index) => `₹${index}`}
             />
           )}
-          <View style={{flexDirection: 'column', flex: 1}}>
+          <View style={{ flexDirection: 'column', flex: 1 }}>
+
             <BarChart
-              style={{flex: 1, left: 0, right: 0}}
-              data={salesState.currentMonthData}
-              svg={{fill}}
-              contentInset={{top: 20, bottom: 9, right: 5, left: 5}}>
+              style={{ flex: 1, left: 0, right: 0 }}
+              data={salesState.yeardata}
+              svg={{ fill }}
+              contentInset={{ top: 20, bottom: 9, right: 5, left: 5 }}>
               <Grid />
             </BarChart>
             <XAxis
-              style={{marginHorizontal: 0}}
+              style={{ marginHorizontal: 0 }}
               data={monthList}
               formatLabel={(value, index) => monthList[index]}
-              contentInset={{left: 15, right: 10}}
-              svg={{fontSize: 10, fill: 'black'}}
+              contentInset={{ left: 15, right: 10 }}
+              svg={{ fontSize: 10, fill: 'black' }}
             />
           </View>
         </View>
@@ -160,7 +178,7 @@ const Revenue = ({navigation}) => {
           <View style={styles.secondaryHeader}>
             <Text style={styles.header_text}>Monthly Breakup</Text>
           </View>
-          <View style={{flexDirection: 'row'}}>
+          <View style={{ flexDirection: 'row' }}>
             <View
               style={{
                 borderBottomWidth: 2,
@@ -230,7 +248,7 @@ const Revenue = ({navigation}) => {
               <Text style={styles.button_text}>Go</Text>
             </TouchableOpacity>
           </View>
-          {salesState && salesState.breakoutData && (
+          {salesState && salesState.monthdata && (
             <View
               style={{
                 left: 5,
@@ -240,7 +258,7 @@ const Revenue = ({navigation}) => {
                 flexDirection: 'row',
               }}>
               <YAxis
-                data={salesState.breakoutData}
+                data={salesState.monthdata}
                 contentInset={contentInset}
                 svg={{
                   fill: colors.sapphireblue,
@@ -249,20 +267,21 @@ const Revenue = ({navigation}) => {
                 numberOfTicks={4}
                 formatLabel={(index) => `₹${index}`}
               />
-              <View style={{flexDirection: 'column', flex: 1}}>
+              <View style={{ flexDirection: 'column', flex: 1 }}>
                 <BarChart
-                  style={{flex: 1}}
-                  data={salesState.breakoutData}
-                  svg={{fill}}
-                  contentInset={{top: 20, bottom: 10, right: 10, left: 10}}>
+                  style={{ flex: 1 }}
+                  data={salesState.monthdata}
+                  //data={salesState.breakoutData}
+                  svg={{ fill }}
+                  contentInset={{ top: 20, bottom: 10, right: 10, left: 10 }}>
                   <Grid />
                 </BarChart>
                 <XAxis
-                  style={{marginHorizontal: 0}}
+                  style={{ marginHorizontal: 0 }}
                   data={bloodGroups}
                   formatLabel={(value, index) => bloodGroups[index]}
-                  contentInset={{left: 25, right: 15}}
-                  svg={{fontSize: 10, fill: 'black'}}
+                  contentInset={{ left: 25, right: 15 }}
+                  svg={{ fontSize: 10, fill: 'black' }}
                 />
               </View>
             </View>

@@ -11,11 +11,11 @@ import {
 import colors from '../../../constants/Colors';
 import {useSelector, useDispatch} from 'react-redux';
 import {SkypeIndicator} from 'react-native-indicators';
-import renderItem from '../../../components/SalesCard';
+import SalesCard from '../../../components/SalesCard';
 import Feather from 'react-native-vector-icons/Feather';
 import {fetchSalesData} from '../../../redux/sales/actions';
 
-const Sales = () => {
+const Sales = ({navigation}) => {
   const salesState = useSelector((state) => state.salesState);
   const authState = useSelector((state) => state.authState);
   const dispatch = useDispatch();
@@ -43,7 +43,16 @@ const Sales = () => {
         <FlatList
           style={styles.scroll}
           data={salesState.salesData}
-          renderItem={renderItem}
+          renderItem={({item}) => (
+            <SalesCard
+              saleData={item}
+              invoiceNavigator={() =>
+                navigation.navigate('invoice', {
+                  item,
+                })
+              }
+            />
+          )}
           keyExtractor={(item) => item.salesId}
         />
       )}
@@ -108,10 +117,9 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     overflow: 'hidden',
+    backgroundColor: colors.additional2,
   },
-  scroll: {
-    paddingHorizontal: 20,
-  },
+  scroll: {},
   suchEmpty: {
     flex: 1,
     alignItems: 'center',
