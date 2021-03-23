@@ -108,6 +108,12 @@ const FindDonors = ({ navigation }) => {
     if (fieldId === 'req_units' && (val === 0 || !numbersOnlyRegex.test(val))) {
       isValid = false;
     }
+    if (fieldId === 'reasonOfPurchase' && val === " ") {
+      isValid = false;
+    }
+    if (fieldId === 'location' && val === " ") {
+      isValid = false;
+    }
 
     dispatch(updateFields(val, fieldId, isValid));
   };
@@ -124,6 +130,8 @@ const FindDonors = ({ navigation }) => {
     blurListener("blood_group"),
       blurListener('component');
     blurListener("req_units")
+    blurListener("reasonOfPurchase")
+    blurListener("location")
   }
 
   const submitHandler = () => {
@@ -133,13 +141,32 @@ const FindDonors = ({ navigation }) => {
       if (buybloodFormState.inputValidity.blood_group) {
         if (buybloodFormState.inputValidity.component) {
           if (buybloodFormState.inputValidity.req_units) {
-            dispatch(
-              getBuyBloodList(
-                buybloodFormState.inputValues,
-                authState.userToken,
-              ),
-            );
-            navigation.navigate('Buy Blood List');
+            if (buybloodFormState.inputValidity.reasonOfPurchase) {
+              if (buybloodFormState.inputValidity.location) {
+                dispatch(
+                  getBuyBloodList(
+                    buybloodFormState.inputValues,
+                    authState.userToken,
+                  ),
+                );
+                navigation.navigate('Buy Blood List');
+              } else {
+                showMessage({
+                  message: 'Invalid Location',
+                  description: 'Please a Hospital name',
+                  type: 'warning',
+                });
+              }
+
+
+            } else {
+              showMessage({
+                message: 'Invalid Reason of Purchase',
+                description: 'Please enter a reason for purchase.',
+                type: 'warning',
+              });
+            }
+
           } else {
             showMessage({
               message: 'Invalid Units',
@@ -256,6 +283,32 @@ const FindDonors = ({ navigation }) => {
           onChangeText={(val) => checkValidity(val, 'req_units')}
           onBlur={() => {
             blurListener('req_units');
+          }}
+        />
+
+        <Fields
+          label="*Reason of purchase"
+          error="Invalid input"
+          returnKeyType="next"
+          inputIsValid={buybloodFormState.inputValidity.reasonOfPurchase}
+          inputIsTouched={buybloodFormState.isTouched.reasonOfPurchase}
+          value={buybloodFormState.inputValues.reasonOfPurchase}
+          onChangeText={(val) => checkValidity(val, 'reasonOfPurchase')}
+          onBlur={() => {
+            blurListener('reasonOfPurchase');
+          }}
+        />
+
+        <Fields
+          label="*Location of Transfusion"
+          error="Invalid input"
+          returnKeyType="next"
+          inputIsValid={buybloodFormState.inputValidity.location}
+          inputIsTouched={buybloodFormState.isTouched.location}
+          value={buybloodFormState.inputValues.location}
+          onChangeText={(val) => checkValidity(val, 'location')}
+          onBlur={() => {
+            blurListener('location');
           }}
         />
 

@@ -105,10 +105,10 @@ export const getCurrentMonthAnalytics = (year, userToken) => {
       );
 
       if (response.headers.success) {
-        console.log('Analytics is success!', response.data.datasets[0].data);
+        console.log('Analytics is success!', response.data);
         //* coordinate with backend for fixing prop names.
-        dispatch(currentMonthSuccess(response.data.datasets[0].data));
-        console.log(response.data.datasets);
+        dispatch(currentMonthSuccess(response.data));
+        console.log(response.data);
       } else if (response.headers.error) {
         console.log('response is error!');
         dispatch(salesFailure(response.data.error));
@@ -121,7 +121,7 @@ export const getCurrentMonthAnalytics = (year, userToken) => {
         );
       }
     } catch (err) {
-      console.log('caught Analytics on myDriveData get request: ', err);
+      console.log('caught Analytics on yearly get request: ', err);
       dispatch(salesFailure(err.message));
     }
   };
@@ -141,12 +141,12 @@ export const getMonthlyBreakout = (year, month, userToken) => {
 
       if (response.headers.success) {
         console.log(
-          'Analytics breakout is success!',
-          response.data.datasets[0],
+          'Analytics monthly breakout is success!',
+          response.data,
         );
         //* coordinate with backend for fixing prop names.
-        dispatch(breakoutSuccess(response.data.datasets[0].data));
-        console.log(response.data.datasets);
+        dispatch(breakoutSuccess(response.data));
+        console.log(response.data);
       } else if (response.headers.error) {
         console.log('response is error!');
         dispatch(salesFailure(response.data.error));

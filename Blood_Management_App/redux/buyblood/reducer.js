@@ -21,6 +21,8 @@ const initialState = {
     state: '',
     district: '',
     pincode: '',
+    reasonOfPurchase: '',
+    location: ''
   },
   inputValidity: {
     blood_group: false,
@@ -29,6 +31,8 @@ const initialState = {
     state: false,
     district: false,
     pincode: true,
+    reasonOfPurchase: false,
+    location: false
   },
   isTouched: {
     blood_group: false,
@@ -37,6 +41,8 @@ const initialState = {
     state: false,
     district: false,
     pincode: false,
+    reasonOfPurchase: false,
+    location: false
   },
 };
 
@@ -65,8 +71,8 @@ const buybloodReducer = (state = initialState, action) => {
       };
     }
     case BLUR_FIELDS_REG: {
-      const newInputIsTouched = {...state.isTouched, [action.fieldId]: true};
-      return {...state, isTouched: newInputIsTouched};
+      const newInputIsTouched = { ...state.isTouched, [action.fieldId]: true };
+      return { ...state, isTouched: newInputIsTouched };
     }
     case STATE_CLEANUP: {
       console.log('Cleaning state');

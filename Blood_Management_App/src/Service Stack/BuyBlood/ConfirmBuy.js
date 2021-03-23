@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   View,
   Text,
@@ -9,14 +9,14 @@ import {
   Image,
   Alert,
 } from 'react-native';
-import {useDispatch, useSelector} from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import colors from '../../../constants/Colors';
 import Feather from 'react-native-vector-icons/Feather';
-import {buyit} from '../../../redux/buyblood/actions';
-import {ScrollView} from 'react-native-gesture-handler';
+import { buyit } from '../../../redux/buyblood/actions';
+import { ScrollView } from 'react-native-gesture-handler';
 
-const ConfirmBuy = ({route, navigation}) => {
-  const {sellerId, blood_group, component, units, price} = route.params;
+const ConfirmBuy = ({ route, navigation }) => {
+  const { sellerId, blood_group, component, units, price } = route.params;
   const buybloodFormState = useSelector((state) => state.buybloodFormState);
   const [modalVisible, setModalVisible] = useState(false);
   const dispatch = useDispatch();
@@ -117,9 +117,10 @@ const ConfirmBuy = ({route, navigation}) => {
                       sellerId,
                       blood_group,
                       component,
-                      price,
                       units,
                       authState.userToken,
+                      buybloodFormState.inputValues.reasonOfPurchase,
+                      buybloodFormState.inputValues.location
                     ),
                   );
                   setModalVisible(!modalVisible);

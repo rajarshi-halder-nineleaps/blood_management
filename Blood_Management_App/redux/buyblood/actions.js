@@ -85,9 +85,10 @@ export const buyit = (
   sellerId,
   bloodGroup,
   component,
-  price,
   units,
   userToken,
+  reason,
+  location
 ) => {
   return async (dispatch) => {
     dispatch(req());
@@ -97,11 +98,11 @@ export const buyit = (
         'http://10.0.2.2:8080/buyblood/confirmbuy',
         {
           sellerId: sellerId,
-          date: new Date().toISOString(),
           bloodGroup: bloodGroup,
           component: component,
-          price: price,
           units: units,
+          reason: reason,
+          location: location,
         },
         {
           headers: { Authorization: 'Bearer ' + userToken },
