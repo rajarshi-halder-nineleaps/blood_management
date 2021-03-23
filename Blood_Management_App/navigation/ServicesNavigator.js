@@ -1,8 +1,8 @@
 /* eslint-disable prettier/prettier */
 import React from 'react';
-import { TouchableOpacity, Text } from 'react-native';
+import {TouchableOpacity, Text} from 'react-native';
 import Feather from 'react-native-vector-icons/Feather';
-import { createStackNavigator } from '@react-navigation/stack';
+import {createStackNavigator} from '@react-navigation/stack';
 import colors from '../constants/Colors';
 
 //? Importing the screens
@@ -26,6 +26,7 @@ import MoreInfo from '../src/Service Stack/BuyBlood/MoreInfo';
 import MyPurchases from '../src/Service Stack/MyPurchases/MyPurchases';
 import ActiveDonorRequest from '../src/Service Stack/ActiveDonorRequest/ActiveDonorRequest';
 import DonationRequestList from '../src/Service Stack/ActiveDonorRequest/DonationRequestList';
+import InvoiceScreen from '../src/MainTabs/ServicesStack/InvoiceScreen';
 import SalesAnalyticsNavigator from './SalesAnalyticsNavigator';
 
 const ServicesNavigator = createStackNavigator();
@@ -62,6 +63,23 @@ const ServicesStackNavigator = () => {
         component={DriveDonorList}
         options={{
           headerTitle: 'List of accepted donors',
+          headerTitleStyle: {
+            fontFamily: 'Montserrat-Bold',
+            fontSize: 24,
+            color: colors.additional2,
+          },
+          headerTintColor: colors.additional2,
+          headerStyle: {
+            elevation: 0,
+            backgroundColor: colors.primary,
+          },
+        }}
+      />
+      <ServicesNavigator.Screen
+        name="invoice"
+        component={InvoiceScreen}
+        options={{
+          headerTitle: 'Invoice',
           headerTitleStyle: {
             fontFamily: 'Montserrat-Bold',
             fontSize: 24,
@@ -129,7 +147,7 @@ const ServicesStackNavigator = () => {
         name="commitments"
         component={Commitments}
         options={{
-          headerTitle: 'My Commitments',
+          headerTitle: 'Activity Tracker',
           headerTitleStyle: {
             fontFamily: 'Montserrat-Bold',
             fontSize: 24,

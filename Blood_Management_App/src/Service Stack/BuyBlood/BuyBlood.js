@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import React, {useState, useEffect} from 'react';
+import {useDispatch, useSelector} from 'react-redux';
 import Feather from 'react-native-vector-icons/Feather';
-import { showMessage, hideMessage } from 'react-native-flash-message';
+import {showMessage, hideMessage} from 'react-native-flash-message';
 import {
   View,
   Text,
@@ -10,15 +10,15 @@ import {
   Image,
   ImageBackground,
 } from 'react-native';
-import { Picker } from '@react-native-picker/picker';
-import { TouchableOpacity } from 'react-native-gesture-handler';
-import { pincodeRegex, numbersOnlyRegex } from '../../../constants/Regexes';
+import {Picker} from '@react-native-picker/picker';
+import {TouchableOpacity} from 'react-native-gesture-handler';
+import {pincodeRegex, numbersOnlyRegex} from '../../../constants/Regexes';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
-import { UIActivityIndicator } from 'react-native-indicators';
+import {UIActivityIndicator} from 'react-native-indicators';
 import * as places from '../../../assets/places.json';
-import { requestLocationPermission } from '../../../redux/geolocation/actions';
+import {requestLocationPermission} from '../../../redux/geolocation/actions';
 import colors from '../../../constants/Colors';
-import { getBuyBloodList } from '../../../redux/buyblood/actions';
+import {getBuyBloodList} from '../../../redux/buyblood/actions';
 import {
   updateFields,
   stateCleanup,
@@ -27,7 +27,7 @@ import {
 
 import Fields from '../../../components/Fields';
 
-const FindDonors = ({ navigation }) => {
+const FindDonors = ({navigation}) => {
   const dispatch = useDispatch();
   const buybloodFormState = useSelector((state) => state.buybloodFormState);
   const geolocationState = useSelector((state) => state.geolocationState);
@@ -108,10 +108,10 @@ const FindDonors = ({ navigation }) => {
     if (fieldId === 'req_units' && (val === 0 || !numbersOnlyRegex.test(val))) {
       isValid = false;
     }
-    if (fieldId === 'reasonOfPurchase' && val === " ") {
+    if (fieldId === 'reasonOfPurchase' && val === ' ') {
       isValid = false;
     }
-    if (fieldId === 'location' && val === " ") {
+    if (fieldId === 'location' && val === ' ') {
       isValid = false;
     }
 
@@ -127,15 +127,14 @@ const FindDonors = ({ navigation }) => {
   };
 
   const blurAll = () => {
-    blurListener("blood_group"),
-      blurListener('component');
-    blurListener("req_units")
-    blurListener("reasonOfPurchase")
-    blurListener("location")
-  }
+    blurListener('blood_group'), blurListener('component');
+    blurListener('req_units');
+    blurListener('reasonOfPurchase');
+    blurListener('location');
+  };
 
   const submitHandler = () => {
-    blurAll()
+    blurAll();
     console.log(buybloodFormState.inputValues);
     if (buybloodFormState.inputValidity.pincode) {
       if (buybloodFormState.inputValidity.blood_group) {
@@ -157,8 +156,6 @@ const FindDonors = ({ navigation }) => {
                   type: 'warning',
                 });
               }
-
-
             } else {
               showMessage({
                 message: 'Invalid Reason of Purchase',
@@ -166,7 +163,6 @@ const FindDonors = ({ navigation }) => {
                 type: 'warning',
               });
             }
-
           } else {
             showMessage({
               message: 'Invalid Units',
@@ -197,7 +193,6 @@ const FindDonors = ({ navigation }) => {
     }
   };
 
-
   return (
     <ScrollView style={styles.container}>
       {/* <View style={styles.header}>
@@ -214,13 +209,13 @@ const FindDonors = ({ navigation }) => {
             style={styles.image}
             resizeMode="center"
           />
-          <Text style={{ ...styles.searchInfoText }}>
+          <Text style={{...styles.searchInfoText}}>
             Please input the required details below
           </Text>
         </View>
       </View>
 
-      <View style={{ marginHorizontal: 30 }}>
+      <View style={{marginHorizontal: 30}}>
         {/* <Text style={styles.pickerLabel}>*Blood group</Text> */}
         <View style={styles.pickerView}>
           <Picker
@@ -300,7 +295,9 @@ const FindDonors = ({ navigation }) => {
         />
 
         <Fields
-          label="*Location of Transfusion"
+          label="*Location of Transfusion / Storage"
+          multiline={true}
+          numberOfLines={3}
           error="Invalid input"
           returnKeyType="next"
           inputIsValid={buybloodFormState.inputValidity.location}

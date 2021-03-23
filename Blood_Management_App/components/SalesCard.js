@@ -1,154 +1,206 @@
 /* eslint-disable prettier/prettier */
 import React from 'react';
-import {View, Image, ImageBackground, Text, StyleSheet} from 'react-native';
+import {
+  View,
+  Image,
+  ImageBackground,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+} from 'react-native';
 import colors from '../constants/Colors';
+import {
+  Collapse,
+  CollapseHeader,
+  CollapseBody,
+} from 'accordion-collapse-react-native';
+import Feather from 'react-native-vector-icons/Feather';
 
-const SalesCard = ({item}) => {
+const SalesCard = ({saleData, invoiceNavigator}) => {
+  const item = saleData;
+
+  console.log('OKKKKKK');
+  console.log(item);
+
   return (
-    <View style={styles.card}>
-      <View style={styles.cardView}>
-        <ImageBackground
-          style={styles.imgBkg}
-          source={require('../assets/images/invBkg.png')}>
-          <View style={styles.header}>
-            <View style={styles.titleView}>
-              <Text style={styles.headerText}>TRANSACTION ID :</Text>
-              <View style={styles.idView}>
-                <Text style={styles.headerContent}>{item.salesId}</Text>
-              </View>
+    <>
+      <View>
+        <TouchableOpacity
+          style={styles.touchboard}
+          onPress={() => invoiceNavigator()}>
+          <View style={styles.typeView}>
+            <Text style={styles.headerContent}>{saleData.salesId}</Text>
+          </View>
+          <View style={styles.headerDetailsView}>
+            <View style={styles.nameView}>
+              <Text style={styles.nameText}>{item.buyerName}</Text>
             </View>
-            <View style={styles.buyerView}>
-              <Text style={styles.buyerLabel}>
-                Buyer:{'  '}
-                <Text style={styles.buyerContent}>{item.buyerName}</Text>
-              </Text>
-              <Text style={styles.buyerLabel}>
-                Buyer email:{'  '}
-                <Text style={styles.buyerContent}>{item.buyerEmail}</Text>
-              </Text>
-              <Text style={styles.buyerLabel}>
-                Buyer contact:{'  '}
-                <Text style={styles.buyerContent}>{item.buyerContact}</Text>
-              </Text>
+            <View style={styles.miniAddressView}>
+              <Text style={styles.miniAddressContent}>{item.buyerEmail}</Text>
             </View>
           </View>
-          <View style={styles.contentView}>
-            <View style={styles.detailsView}>
-              <Text style={styles.label}>
-                Sale date:{' '}
-                <Text style={styles.content}>
-                  {item.dateOfTransaction
-                    ? `${item.dateOfTransaction.split('T')[0]}, ${
-                        item.dateOfTransaction.split('T')[1].split(':')[0]
-                      }:${item.dateOfTransaction.split('T')[1].split(':')[1]}`
-                    : null}
-                </Text>
-              </Text>
-              <Text style={styles.label}>
-                Sold blood group:{' '}
-                <Text style={styles.content}>{item.purchasedGroup}</Text>
-              </Text>
-              <Text style={styles.label}>
-                Sold component:{' '}
-                <Text style={styles.content}>{item.purchasedComponent}</Text>
-              </Text>
-              <Text style={styles.label}>
-                Sold quantity:{' '}
-                <Text style={styles.content}>{item.purchasedQuantity} Units</Text>
-              </Text>
-              <Text style={styles.label}>
-                Price per unit:{' '}
-                <Text style={styles.content}>₹ {item.pricePerUnit}</Text>
-              </Text>
-            </View>
-            <View style={styles.billView}>
-              <Text style={styles.billLabel}>Total bill amount: </Text>
-              <Text style={styles.bill}>
-                ₹ {item.pricePerUnit * item.purchasedQuantity}
-              </Text>
+          <View style={styles.headerIndicatorView}>
+            <View style={styles.yesnoView}>
+              <Text
+                style={
+                  styles.pending
+                }>{`${item.purchasedGroup}, ${item.purchasedComponent}`}</Text>
             </View>
           </View>
-        </ImageBackground>
+        </TouchableOpacity>
       </View>
-    </View>
+    </>
   );
 };
 
 const styles = StyleSheet.create({
-  card: {
+  touchboard: {
     flex: 1,
     alignItems: 'center',
-    justifyContent: 'center',
-    elevation: 5,
+    justifyContent: 'flex-start',
+    borderColor: colors.accent,
+    borderWidth: 0.5,
     overflow: 'hidden',
-    margin: 10,
-  },
-  cardView: {
-    flex: 1,
-    width: '100%',
     backgroundColor: colors.additional2,
-    borderRadius: 10,
+    flexDirection: 'row',
+    padding: 10,
+    paddingVertical: 15,
+  },
+  touch: {
+    flex: 1,
+    width: '100%',
+    backgroundColor: 'transparent',
     overflow: 'hidden',
   },
-  imgBkg: {
-    flex: 1,
-    resizeMode: 'cover',
+  typeView: {
+    backgroundColor: colors.grayishblack,
+    width: 80,
+    alignItems: 'center',
     justifyContent: 'center',
-    width: '100%',
-    height: '100%',
+    paddingVertical: 10,
+    borderRadius: 10,
+    marginRight: 30,
+  },
+  headerDetailsView: {
+    flex: 1,
     overflow: 'hidden',
+  },
+  avatarView: {
+    width: '100%',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  avatar: {
+    width: 100,
+    height: 100,
+    borderRadius: 100,
+    borderWidth: 5,
+    borderColor: colors.primary,
+    marginBottom: 10,
+  },
+  nameView: {},
+  nameText: {
+    fontFamily: 'Montserrat-Bold',
+    color: colors.grayishblack,
+  },
+  miniAddressView: {
+    flexDirection: 'row',
+    fontFamily: 'Montserrat-Regular',
+  },
+  miniAddressContent: {
+    fontFamily: 'Montserrat-Re',
+    color: colors.additional1,
+  },
+  headerIndicatorView: {},
+  yesnoView: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    padding: 10,
+    justifyContent: 'flex-end',
   },
 
-  header: {
-    paddingTop: 50,
-    padding: 20,
+  yes: {
+    fontFamily: 'Montserrat-Bold',
+    fontSize: 12,
+    color: 'green',
   },
-  titleView: {
-    flexDirection: 'row',
+  no: {
+    fontFamily: 'Montserrat-Bold',
+    fontSize: 12,
+    color: colors.dutchred,
   },
-  headerText: {
-    color: colors.additional2,
-    fontWeight: 'bold',
-    fontSize: 18,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  idView: {
-    backgroundColor: colors.additional2,
-    alignItems: 'center',
-    justifyContent: 'center',
-    borderRadius: 10,
-    paddingHorizontal: 10,
-    marginLeft: 10,
+  pending: {
+    fontFamily: 'Montserrat-Bold',
+    fontSize: 15,
+    color: colors.coolblue,
   },
   headerContent: {
-    color: colors.primary,
     fontFamily: 'Montserrat-Regular',
-    fontSize: 18,
-  },
-  buyerView: {
-    paddingTop: 10,
-  },
-  buyerLabel: {
     color: colors.additional2,
-    fontFamily: 'Montserrat-Bold',
   },
-  buyerContent: {
-    color: colors.additional2,
-    fontFamily: 'Montserrat-Regular',
-  },
-  contentView: {
+  collBody: {
     backgroundColor: colors.additional2,
-    borderTopLeftRadius: 10,
-    borderTopRightRadius: 10,
-    padding: 20,
+    marginHorizontal: 10,
+    borderRadius: 5,
+    marginBottom: 10,
+    elevation: 5,
   },
-  detailsView: {},
+  bodyHeader: {
+    backgroundColor: colors.accent,
+    padding: 10,
+  },
+  bodyLabel: {
+    fontFamily: 'Montserrat-Bold',
+    color: colors.primary,
+  },
+  bodyContent: {
+    fontFamily: 'Montserrat-Regular',
+    color: colors.primary,
+  },
+  detailsBoard: {
+    padding: 10,
+  },
   label: {
     fontFamily: 'Montserrat-Bold',
   },
   content: {
     fontFamily: 'Montserrat-Regular',
+  },
+  addressView: {
+    paddingVertical: 20,
+  },
+  addressLabel: {
+    fontFamily: 'Montserrat-Bold',
+    fontSize: 18,
+    color: 'green',
+    marginBottom: 10,
+  },
+  addressInsideView: {
+    flexDirection: 'row',
+    borderBottomWidth: 0.5,
+    borderColor: colors.grayishblack,
+    padding: 10,
+    justifyContent: 'space-between',
+  },
+  addressInsideLabel: {
+    fontFamily: 'Montserrat-Bold',
+  },
+  addressRightView: {
+    flex: 1,
+    marginLeft: 10,
+  },
+  addressContent: {
+    fontFamily: 'Montserrat-Regular',
+    alignItems: 'flex-end',
+    textAlign: 'right',
+  },
+  recipientLabel: {
+    fontFamily: 'Montserrat-Regular',
+    color: colors.additional1,
+  },
+  recipientContent: {
+    fontFamily: 'Montserrat-Regular',
+    color: colors.additional1,
   },
   billView: {
     width: '100%',
