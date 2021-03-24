@@ -77,7 +77,7 @@ const ConfirmBuy = ({route, navigation}) => {
             />
           </View>
           <Text style={styles.headerText}>
-            Please check all the details shown below. If there is any mistake
+            Please check all the details shown below. If there is any mistake,
             kindly go back and change it.
           </Text>
         </View>

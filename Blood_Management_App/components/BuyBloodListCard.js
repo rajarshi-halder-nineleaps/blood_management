@@ -97,8 +97,6 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'flex-start',
-    margin: 10,
-    borderRadius: 5,
     borderColor: colors.accent,
     borderWidth: 0.5,
     overflow: 'hidden',
@@ -165,6 +163,7 @@ const styles = StyleSheet.create({
   collBody: {
     backgroundColor: colors.additional2,
     marginHorizontal: 10,
+    elevation: 5,
     borderRadius: 5,
     borderColor: colors.accent,
     borderWidth: 0.5,
