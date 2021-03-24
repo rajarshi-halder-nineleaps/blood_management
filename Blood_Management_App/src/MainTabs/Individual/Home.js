@@ -16,13 +16,6 @@ import {useDispatch, useSelector} from 'react-redux';
 
 import Icon from 'react-native-vector-icons/FontAwesome';
 import {getToday} from '../../../redux/sales/actions';
-import {
-  Table,
-  TableWrapper,
-  Row,
-  Rows,
-  Col,
-} from 'react-native-table-component';
 import FaqCard from '../../../components/Faqcard';
 
 const Home = ({navigation}) => {

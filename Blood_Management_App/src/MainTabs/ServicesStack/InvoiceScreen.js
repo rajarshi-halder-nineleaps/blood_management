@@ -2,22 +2,103 @@
 import React from 'react';
 import {
   View,
-  Image,
-  ImageBackground,
   Text,
   StyleSheet,
   ScrollView,
+  TouchableOpacity,
 } from 'react-native';
 import colors from '../../../constants/Colors';
-import {
-  Collapse,
-  CollapseHeader,
-  CollapseBody,
-} from 'accordion-collapse-react-native';
+// import PDFLib, {PDFDocument, PDFPage} from 'react-native-pdf-lib';
+import {showMessage, hideMessage} from 'react-native-flash-message';
+import RNHTMLtoPDF from 'react-native-html-to-pdf';
 import Feather from 'react-native-vector-icons/Feather';
 
 const SalesCard = ({navigation, route}) => {
   const {item} = route.params;
+  const trnDate = item.dateOfTransaction
+    ? `${item.dateOfTransaction.split('T')[0]}, ${
+        item.dateOfTransaction.split('T')[1].split(':')[0]
+      }:${item.dateOfTransaction.split('T')[1].split(':')[1]}`
+    : null;
+
+  const createPDF = async () => {
+    let options = {
+      html: `<div>
+      <h1>Blood Transaction Invoice</h1>
+      <h4>Transaction ID: ${item.purchaseId}</h5>
+      
+          <br/>  <br/>
+        
+          <h3>Seller details: </h3>
+      <table style = "width: 100%">
+      <tbody>
+        <tr>
+      <td>Seller Name</td>
+      <td>${item.sellerName}</td>
+      </tr>
+      <tr>
+      <td>Seller Email</td>
+      <td>${item.sellerEmail}</td>
+      </tr>
+      <tr>
+      <td>Seller Contact</td>
+      <td>${item.sellerContact}</td>
+      </tr>
+      </tbody>
+      </table>
+        
+        <br/>  <br/>
+      
+        
+        <h3>Transaction details: </h3>
+      <table style = "width: 100%">
+      <tbody>
+        <tr>
+      <td>Transaction date</td>
+      <td>${trnDate}</td>
+      </tr>
+      <tr>
+      <td>Blood group</td>
+      <td>${item.soldGroup}</td>
+      </tr>
+      <tr>
+      <td>Component</td>
+      <td>${item.soldComponent}</td>
+      </tr>
+          <tr>
+      <td>Purpose of purchase</td>
+      <td>${item.reason}</td>
+      </tr>
+          <tr>
+      <td>Location of transfusion / storage</td>
+      <td>${item.location}</td>
+      </tr>
+      <tr>
+      <td>Total units bought</td>
+      <td>${item.soldQuantity}</td>
+      </tr>
+      <tr>
+      <td>Price per unit</td>
+      <td>₹ ${item.pricePerUnit}</td>
+          <tr/>
+      </tbody>
+      </table>
+        <h3>
+          Total bill amount: ₹${item.pricePerUnit * item.soldQuantity}
+        </h3>
+      </div>`,
+      fileName: `REDBANK_INVOICE_${item.purchaseId}`,
+      directory: 'Documents',
+    };
+
+    let file = await RNHTMLtoPDF.convert(options);
+    // console.log(file.filePath);
+    showMessage({
+      message: 'Invoice saved',
+      description: `The invoice has been saved to your device in ${file.filePath}`,
+      backgroundColor: colors.coolblue,
+    });
+  };
 
   return (
     <ScrollView>
@@ -26,7 +107,9 @@ const SalesCard = ({navigation, route}) => {
           <View style={styles.bodyHeader}>
             <Text style={styles.bodyLabel}>
               Transaction ID : {'  '}
-              <Text style={styles.bodyContent}>{item.salesId}</Text>
+              <Text style={styles.bodyContent}>
+                {item.salesId || item.purchaseId}
+              </Text>
             </Text>
           </View>
 
@@ -34,41 +117,41 @@ const SalesCard = ({navigation, route}) => {
             <View style={styles.contentView}>
               <Text style={styles.label}>
                 Transaction Date: {'  '}
-                <Text style={styles.content}>
-                  {item.dateOfTransaction
-                    ? `${item.dateOfTransaction.split('T')[0]}, ${
-                        item.dateOfTransaction.split('T')[1].split(':')[0]
-                      }:${item.dateOfTransaction.split('T')[1].split(':')[1]}`
-                    : null}
-                </Text>
+                <Text style={styles.content}>{trnDate}</Text>
               </Text>
 
               <View style={styles.addressView}>
-                <Text style={styles.addressLabel}>Buyer Details:</Text>
+                <Text style={styles.addressLabel}>
+                  {(item.salesId && 'Buyer') || 'Seller'} Details:
+                </Text>
                 <View style={styles.addressContentView}>
                   <View style={styles.addressInsideView}>
-                    <Text style={styles.addressInsideLabel}>Buyer Name: </Text>
+                    <Text style={styles.addressInsideLabel}>
+                      {(item.salesId && 'Buyer') || 'Seller'} Name:{' '}
+                    </Text>
                     <View style={styles.addressRightView}>
                       <Text style={styles.addressContent}>
-                        {item.buyerName}
-                      </Text>
-                    </View>
-                  </View>
-                  <View style={styles.addressInsideView}>
-                    <Text style={styles.addressInsideLabel}>Buyer Email: </Text>
-                    <View style={styles.addressRightView}>
-                      <Text style={styles.addressContent}>
-                        {item.buyerEmail}
+                        {item.buyerName || item.sellerName}
                       </Text>
                     </View>
                   </View>
                   <View style={styles.addressInsideView}>
                     <Text style={styles.addressInsideLabel}>
-                      Buyer Contact:{' '}
+                      {(item.salesId && 'Buyer') || 'Seller'} Email:{' '}
                     </Text>
                     <View style={styles.addressRightView}>
                       <Text style={styles.addressContent}>
-                        {item.buyerContact}
+                        {item.buyerEmail || item.sellerEmail}
+                      </Text>
+                    </View>
+                  </View>
+                  <View style={styles.addressInsideView}>
+                    <Text style={styles.addressInsideLabel}>
+                      {(item.salesId && 'Buyer') || 'Seller'} Contact:{' '}
+                    </Text>
+                    <View style={styles.addressRightView}>
+                      <Text style={styles.addressContent}>
+                        {item.buyerContact || item.sellerContact}
                       </Text>
                     </View>
                   </View>
@@ -94,20 +177,18 @@ const SalesCard = ({navigation, route}) => {
                 <Text style={styles.addressLabel}>Transaction Details:</Text>
                 <View style={styles.addressContentView}>
                   <View style={styles.addressInsideView}>
-                    <Text style={styles.addressInsideLabel}>Sold group: </Text>
+                    <Text style={styles.addressInsideLabel}>Blood group: </Text>
                     <View style={styles.addressRightView}>
                       <Text style={styles.addressContent}>
-                        {item.purchasedGroup}
+                        {item.purchasedGroup || item.soldGroup}
                       </Text>
                     </View>
                   </View>
                   <View style={styles.addressInsideView}>
-                    <Text style={styles.addressInsideLabel}>
-                      Sold component:{' '}
-                    </Text>
+                    <Text style={styles.addressInsideLabel}>Component: </Text>
                     <View style={styles.addressRightView}>
                       <Text style={styles.addressContent}>
-                        {item.purchasedComponent}
+                        {item.purchasedComponent || item.soldComponent}
                       </Text>
                     </View>
                   </View>
@@ -115,7 +196,7 @@ const SalesCard = ({navigation, route}) => {
                     <Text style={styles.addressInsideLabel}>Sold units: </Text>
                     <View style={styles.addressRightView}>
                       <Text style={styles.addressContent}>
-                        {item.purchasedQuantity}
+                        {item.purchasedQuantity || item.soldQuantity}
                       </Text>
                     </View>
                   </View>
@@ -135,12 +216,24 @@ const SalesCard = ({navigation, route}) => {
             <View style={styles.billView}>
               <Text style={styles.billLabel}>Total bill amount: </Text>
               <Text style={styles.bill}>
-                ₹ {item.pricePerUnit * item.purchasedQuantity}
+                ₹{' '}
+                {item.pricePerUnit *
+                  (item.purchasedQuantity || item.soldQuantity)}
               </Text>
             </View>
           </View>
         </View>
       </View>
+      {item.purchaseId && (
+        <View style={styles.invoiceTouchBoard}>
+          <TouchableOpacity
+            style={styles.invoiceTouch}
+            onPress={() => createPDF()}>
+            <Text style={styles.invoiceText}>Generate Invoice</Text>
+            <Feather name="align-justify" color={colors.additional2} size={17} />
+          </TouchableOpacity>
+        </View>
+      )}
     </ScrollView>
   );
 };
@@ -307,6 +400,25 @@ const styles = StyleSheet.create({
     fontFamily: 'Montserrat-Bold',
     fontSize: 22,
     color: colors.moderategray,
+  },
+  invoiceTouchBoard: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: '100%',
+  },
+  invoiceTouch: {
+    alignItems: 'center',
+    flexDirection: 'row',
+    justifyContent: 'center',
+    backgroundColor: colors.grayishblack,
+    paddingVertical: 20,
+    width: '100%',
+  },
+  invoiceText: {
+    fontFamily: 'Montserrat-Regular',
+    fontSize: 14,
+    color: colors.additional2,
+    marginRight: 10,
   },
 });
 
