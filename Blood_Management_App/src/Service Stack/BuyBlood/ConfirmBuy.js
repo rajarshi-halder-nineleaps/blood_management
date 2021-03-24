@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   View,
   Text,
@@ -9,14 +9,21 @@ import {
   Image,
   Alert,
 } from 'react-native';
-import { useDispatch, useSelector } from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import colors from '../../../constants/Colors';
 import Feather from 'react-native-vector-icons/Feather';
-import { buyit } from '../../../redux/buyblood/actions';
-import { ScrollView } from 'react-native-gesture-handler';
+import {buyit} from '../../../redux/buyblood/actions';
+import {ScrollView} from 'react-native-gesture-handler';
 
-const ConfirmBuy = ({ route, navigation }) => {
-  const { sellerId, blood_group, component, units, price } = route.params;
+const ConfirmBuy = ({route, navigation}) => {
+  const {
+    sellerId,
+    blood_group,
+    component,
+    units,
+    price,
+    sellerDetails,
+  } = route.params;
   const buybloodFormState = useSelector((state) => state.buybloodFormState);
   const [modalVisible, setModalVisible] = useState(false);
   const dispatch = useDispatch();
@@ -78,6 +85,15 @@ const ConfirmBuy = ({ route, navigation }) => {
         <View style={styles.infoBoard}>
           <View style={styles.infobox}>
             <View style={styles.inforow}>
+              <View>
+                <Text style={styles.texts}>Seller datails :</Text>
+              </View>
+              <View style={styles.infoRowView}>
+                <Text style={styles.text}>{sellerDetails}</Text>
+              </View>
+            </View>
+
+            <View style={styles.inforow}>
               <Text style={styles.texts}>Blood Group :</Text>
               <Text style={styles.text}>
                 {buybloodFormState.inputValues.blood_group}
@@ -120,7 +136,7 @@ const ConfirmBuy = ({ route, navigation }) => {
                       units,
                       authState.userToken,
                       buybloodFormState.inputValues.reasonOfPurchase,
-                      buybloodFormState.inputValues.location
+                      buybloodFormState.inputValues.location,
                     ),
                   );
                   setModalVisible(!modalVisible);
@@ -168,15 +184,14 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     paddingVertical: 5,
     alignItems: 'center',
-    alignContent: 'center',
   },
   texts: {
-    fontSize: 20,
+    fontSize: 14,
     fontFamily: 'Montserrat-Bold',
     color: colors.grayishblack,
   },
   text: {
-    fontSize: 20,
+    fontSize: 14,
     fontFamily: 'Montserrat-Regular',
     color: colors.grayishblack,
   },
@@ -191,6 +206,9 @@ const styles = StyleSheet.create({
     padding: 20,
   },
 
+  infoRowView: {
+    // backgroundColor: colors.primary,
+  },
   infobox: {
     padding: 30,
     backgroundColor: '#eee',

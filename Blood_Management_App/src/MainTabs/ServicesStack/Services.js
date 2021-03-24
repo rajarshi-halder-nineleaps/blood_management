@@ -112,7 +112,7 @@ const Services = ({navigation}) => {
           <>
             <View style={styles.row}>
               <TouchTabs
-                label="Activity Tracker"
+                label="My Activities"
                 source={require('../../../assets/images/servicesScreen/commitments.png')}
                 touchHandler={() => myCommitmentsHandler()}
               />

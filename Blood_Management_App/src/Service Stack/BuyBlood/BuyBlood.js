@@ -295,7 +295,7 @@ const FindDonors = ({navigation}) => {
         />
 
         <Fields
-          label="*Location of Transfusion / Storage"
+          label="*Hospital / Clinic name"
           multiline={true}
           numberOfLines={3}
           error="Invalid input"

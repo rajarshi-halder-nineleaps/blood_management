@@ -165,7 +165,7 @@ const SalesCard = ({navigation, route}) => {
                   </View>
                   <View style={styles.addressInsideView}>
                     <Text style={styles.addressInsideLabel}>
-                      Location of transfusion/storage:{' '}
+                      Hosptal / Clinic:{' '}
                     </Text>
                     <View style={styles.addressRightView}>
                       <Text style={styles.addressContent}>{item.location}</Text>
