@@ -147,7 +147,7 @@ const ServicesStackNavigator = () => {
         name="commitments"
         component={Commitments}
         options={{
-          headerTitle: 'Activity Tracker',
+          headerTitle: 'My Activities',
           headerTitleStyle: {
             fontFamily: 'Montserrat-Bold',
             fontSize: 24,

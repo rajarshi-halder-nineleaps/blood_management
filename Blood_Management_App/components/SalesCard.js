@@ -9,18 +9,10 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import colors from '../constants/Colors';
-import {
-  Collapse,
-  CollapseHeader,
-  CollapseBody,
-} from 'accordion-collapse-react-native';
 import Feather from 'react-native-vector-icons/Feather';
 
 const SalesCard = ({saleData, invoiceNavigator}) => {
   const item = saleData;
-
-  console.log('OKKKKKK');
-  console.log(item);
 
   return (
     <>

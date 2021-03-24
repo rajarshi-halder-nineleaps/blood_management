@@ -11,7 +11,6 @@ import {
 import {TextInput} from 'react-native-gesture-handler';
 import colors from '../../../constants/Colors';
 import {showMessage, hideMessage} from 'react-native-flash-message';
-import Feather from 'react-native-vector-icons/Feather';
 import {
   updateFields,
   blurFields,
