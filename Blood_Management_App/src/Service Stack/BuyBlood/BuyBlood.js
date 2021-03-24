@@ -215,7 +215,7 @@ const FindDonors = ({navigation}) => {
         </View>
       </View>
 
-      <View style={{marginHorizontal: 30}}>
+      <View style={{marginHorizontal: 20}}>
         {/* <Text style={styles.pickerLabel}>*Blood group</Text> */}
         <View style={styles.pickerView}>
           <Picker
@@ -285,6 +285,8 @@ const FindDonors = ({navigation}) => {
           label="*Reason of purchase"
           error="Invalid input"
           returnKeyType="next"
+          multiline={true}
+          numberOfLines={3}
           inputIsValid={buybloodFormState.inputValidity.reasonOfPurchase}
           inputIsTouched={buybloodFormState.isTouched.reasonOfPurchase}
           value={buybloodFormState.inputValues.reasonOfPurchase}

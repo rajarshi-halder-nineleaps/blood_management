@@ -14,6 +14,7 @@ import RNHTMLtoPDF from 'react-native-html-to-pdf';
 import Feather from 'react-native-vector-icons/Feather';
 
 const SalesCard = ({navigation, route}) => {
+  const now = new Date().getTime();
   const {item} = route.params;
   const trnDate = item.dateOfTransaction
     ? `${item.dateOfTransaction.split('T')[0]}, ${
@@ -23,71 +24,136 @@ const SalesCard = ({navigation, route}) => {
 
   const createPDF = async () => {
     let options = {
-      html: `<div>
-      <h1>Blood Transaction Invoice</h1>
-      <h4>Transaction ID: ${item.purchaseId}</h5>
+      html: `<!DOCTYPE html>
+      <html>
+      <head>
+      <link rel="preconnect" href="https://fonts.gstatic.com">
+      <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;700&display=swap" rel="stylesheet">
       
-          <br/>  <br/>
-        
-          <h3>Seller details: </h3>
-      <table style = "width: 100%">
-      <tbody>
-        <tr>
-      <td>Seller Name</td>
-      <td>${item.sellerName}</td>
-      </tr>
-      <tr>
-      <td>Seller Email</td>
-      <td>${item.sellerEmail}</td>
-      </tr>
-      <tr>
-      <td>Seller Contact</td>
-      <td>${item.sellerContact}</td>
-      </tr>
-      </tbody>
-      </table>
-        
-        <br/>  <br/>
+      <style>
       
+      *{
+      font-family: 'Quicksand', sans-serif;
+      text-align: left
+      }
+      
+      h1{
+        color: #E94364;
+      }
+      h2{
+        text-decoration: underline;
+      }
+      
+      h3{
+        color: green;
+      }
+      
+      .primary{
+        color: #E94364;
+      }
+      
+      .container{
+        display: flex;
+          flex-direction: column;
+          align-items: center;
+          padding: 50px
+      }
+      
+      .subheadBoard{
+        width: 100%;
+        border-bottom: 2px solid green;
+          margin: 0 0 20px 0;
+      }
+      
+      tr{
+        display: flex;
+          justify-content: space-between;
+      }
+      
+      </style>
+      
+      </head>
+      <body>
+      
+      <div class="container">
+      <img src="https://firebasestorage.googleapis.com/v0/b/redbank-104.appspot.com/o/logotransparentbkg.png?alt=media&token=7a6f228c-0998-4f81-bd25-519cced6e13f" alt="redbankLogo" width="100" height="100">
+        <h1>RedBank</h1>
+        <h2>Blood Transaction Invoice</h2>
+        <h4>Transaction ID: ${item.purchaseId}</h4>
+        <div class="subheadBoard">
+        <h3>Seller details:</h3>
+        </div>
+        <table style="width: 100%;">
+          <tbody>
+            <tr>
+              <td>Seller Name</td>
+              <td>${item.sellerName}</td>
+            </tr>
+            <tr>
+              <td>Seller Email</td>
+              <td>${item.sellerEmail}</td>
+            </tr>
+            <tr>
+              <td>Seller Contact</td>
+              <td>${item.sellerContact}</td>
+            </tr>
+          </tbody>
+        </table><br /><br />
         
-        <h3>Transaction details: </h3>
-      <table style = "width: 100%">
-      <tbody>
-        <tr>
-      <td>Transaction date</td>
-      <td>${trnDate}</td>
-      </tr>
-      <tr>
-      <td>Blood group</td>
-      <td>${item.soldGroup}</td>
-      </tr>
-      <tr>
-      <td>Component</td>
-      <td>${item.soldComponent}</td>
-      </tr>
-          <tr>
-      <td>Purpose of purchase</td>
-      <td>${item.reason}</td>
-      </tr>
-          <tr>
-      <td>Location of transfusion / storage</td>
-      <td>${item.location}</td>
-      </tr>
-      <tr>
-      <td>Total units bought</td>
-      <td>${item.soldQuantity}</td>
-      </tr>
-      <tr>
-      <td>Price per unit</td>
-      <td>₹ ${item.pricePerUnit}</td>
-          <tr/>
-      </tbody>
-      </table>
-        <h3>
-          Total bill amount: ₹${item.pricePerUnit * item.soldQuantity}
-        </h3>
-      </div>`,
-      fileName: `REDBANK_INVOICE_${item.purchaseId}`,
+        
+        <div class="subheadBoard">
+          <h3>Transaction details:</h3>
+        </div>
+        
+        
+        <table style="width: 100%;">
+          <tbody>
+            <tr>
+              <td>Transaction date</td>
+              <td>${trnDate}</td>
+            </tr>
+            <tr>
+              <td>Blood group</td>
+              <td>${item.soldGroup}</td>
+            </tr>
+            <tr>
+              <td>Component</td>
+              <td>${item.soldComponent}</td>
+            </tr>
+            <tr>
+              <td>Purpose of purchase</td>
+              <td>${item.reason}</td>
+            </tr>
+            <tr>
+              <td>Location of transfusion / storage</td>
+              <td>${item.location}</td>
+            </tr>
+            <tr>
+              <td>Total units bought</td>
+              <td>${item.soldQuantity}</td>
+            </tr>
+            <tr>
+              <td>Price per unit</td>
+              <td>₹ ${item.pricePerUnit}</td>
+            </tr>
+          </tbody>
+        </table>
+        
+      
+      <div style="border: 2px solid black;padding:  0 30px;margin: 40px  0">
+      
+        <h3>Total bill amount: <span class="primary">₹${
+          item.pricePerUnit * item.soldQuantity
+        }</span></h3>
+      
+      </div>
+      
+      </div>
+      
+      </body>
+      </html>
+      `,
+      fileName: `REDBANK_INVOICE_${item.purchaseId}_${now}`,
       directory: 'Documents',
     };
 
@@ -230,7 +296,11 @@ const SalesCard = ({navigation, route}) => {
             style={styles.invoiceTouch}
             onPress={() => createPDF()}>
             <Text style={styles.invoiceText}>Generate Invoice</Text>
-            <Feather name="align-justify" color={colors.additional2} size={17} />
+            <Feather
+              name="align-justify"
+              color={colors.additional2}
+              size={17}
+            />
           </TouchableOpacity>
         </View>
       )}
