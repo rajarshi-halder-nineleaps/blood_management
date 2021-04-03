@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   View,
   ScrollView,
@@ -8,21 +8,24 @@ import {
   ImageBackground,
 } from 'react-native';
 import PasswordModal from '../../../components/PasswordModal';
-import {useSelector, useDispatch} from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import TouchTabs from '../../../components/TouchTabs';
 import colors from '../../../constants/Colors';
-import {getDriveData, resetDoneState} from '../../../redux/myDrives/actions';
-import {fetchCommitments} from '../../../redux/commitments/actions';
-import {getInventory, checkPassword} from '../../../redux/inventory/actions';
+import { getDriveData, resetDoneState } from '../../../redux/myDrives/actions';
+import { fetchCommitments } from '../../../redux/commitments/actions';
+import { getInventory, checkPassword } from '../../../redux/inventory/actions';
 import {
   fetchSalesData,
+  getCurrentMonth,
   getCurrentMonthAnalytics,
+  getCurrentMonthRevenue,
   getMonthlyBreakout,
+  monthAnalytics,
 } from '../../../redux/sales/actions';
-import {fetchPurchasesData} from '../../../redux/purchases/actions';
-import {fetchInvitesList} from '../../../redux/invites/actions';
+import { fetchPurchasesData } from '../../../redux/purchases/actions';
+import { fetchInvitesList } from '../../../redux/invites/actions';
 
-const Services = ({navigation}) => {
+const Services = ({ navigation }) => {
   const authState = useSelector((state) => state.authState);
   const dispatch = useDispatch();
 
@@ -54,7 +57,10 @@ const Services = ({navigation}) => {
     console.log(year);
     console.log(mon);
     dispatch(getCurrentMonthAnalytics(year, authState.userToken));
-    dispatch(getMonthlyBreakout(year, mon, authState.userToken));
+    dispatch(monthAnalytics(year, mon, authState.userToken, 0));
+    dispatch(monthAnalytics(year, mon, authState.userToken, 1));
+    dispatch(monthAnalytics(year, mon, authState.userToken, 2));
+    dispatch(monthAnalytics(year, mon, authState.userToken, 3));
     navigation.navigate('salesAnalytics');
   };
 

@@ -11,6 +11,7 @@ import Sales from '../src/MainTabs/ServicesStack/Sales';
 import SalesAnalytics from '../src/MainTabs/ServicesStack/SalesAnalytics';
 import Revenue from '../src/AnalyticsStack/Revenue';
 import Stock from '../src/AnalyticsStack/Stock';
+import Advanced from '../src/AnalyticsStack/Advanced';
 //import salesAnalyticsNavigator from './SalesAnalyticsNavigator'
 const SalesTabs = createMaterialTopTabNavigator();
 
@@ -34,6 +35,17 @@ const SalesAnalyticsNavigator = ({ navigation }) => {
           tabBarLabel: () => (
             <Text style={{ fontFamily: 'Montserrat-Regular' }}>
               Stock
+            </Text>
+          ),
+        }}
+      />
+      <SalesTabs.Screen
+        name="Advanced"
+        component={Advanced}
+        options={{
+          tabBarLabel: () => (
+            <Text style={{ fontFamily: 'Montserrat-Regular' }}>
+              Advanced
             </Text>
           ),
         }}

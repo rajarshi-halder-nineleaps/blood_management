@@ -1,377 +1,230 @@
-/* eslint-disable prettier/prettier */
-import React, { useEffect, useState } from 'react';
-import { Text, StyleSheet, View, Dimensions, ScrollView } from 'react-native';
-import { showMessage, hideMessage } from 'react-native-flash-message';
-import { useDispatch, useSelector } from 'react-redux';
-import colors from '../../constants/Colors';
-
-import {
-  getThisMonth,
-  getCurrentMonthAnalytics,
-  updateMonth,
-  updateYear,
-  getMonthlyBreakout,
-} from '../../redux/sales/actions';
-import { Picker } from '@react-native-picker/picker';
-import { TouchableOpacity } from 'react-native-gesture-handler';
-import * as figures from '../../assets/salesanalytics.json';
-import { BarChart, Grid, YAxis, LineChart, XAxis } from 'react-native-svg-charts';
-// import {
-//     PieChart,
-//     BarChart,
-//     StackedBarChart,
-//     LineChart,
-// } from 'react-native-chart-kit';
-import Feather from 'react-native-vector-icons/Feather';
+import React, { useState } from 'react'
+import { View, Text, StyleSheet, TouchableOpacity, ScrollView } from 'react-native'
+import colors from '../../constants/Colors'
 import Icon from 'react-native-vector-icons/FontAwesome';
-
-//import { Picker } from 'react-native-wheel-pick';
+import { useDispatch, useSelector } from 'react-redux';
+import { BarChart, Grid, YAxis, LineChart, XAxis, PieChart } from 'react-native-svg-charts'
+import { Picker } from '@react-native-picker/picker';
+import { showMessage, hideMessage } from 'react-native-flash-message';
+import { monthAnalytics } from '../../redux/sales/actions';
 const Revenue = ({ navigation }) => {
   const authState = useSelector((state) => state.authState);
   const salesState = useSelector((state) => state.salesState);
   const dispatch = useDispatch();
-  //const data = figures.analytics;
-  const [selectedyearindex, setselectedyearindex] = useState(0);
-  const [list, setlist] = useState([]);
-  const monthdata = salesState.currentMonthData;
-  const [selectedYear, setSelectedYear] = useState('');
-  const [month, setMonth] = useState(false);
-
-  const [breakoutMonth, setBreakoutMonth] = useState('');
-  const [breakoutYear, setBreakoutYear] = useState('');
-
-  const submitMonthlyBreakout = () => {
-    if (breakoutYear === '' || breakoutYear === '0') {
-      showMessage({
-        message: 'Year required',
-        description: 'Please select a year to continue.',
-        type: 'warning',
-      });
-    } else {
-      if (breakoutMonth === '' || breakoutMonth === '00') {
-        showMessage({
-          message: 'Month required',
-          description: 'Please select a month to continue.',
-          type: 'warning',
-        });
-      } else {
-        dispatch(
-          getMonthlyBreakout(breakoutYear, breakoutMonth, authState.userToken),
-        );
-      }
-    }
-  };
-  const contentInset = { top: 20, bottom: 20, left: 5, right: 10 };
-
-  const fill = colors.grayishblack;
-  const bloodGroups = ['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'];
-  const monthList = [
-    'Jan',
-    'Feb',
-    'Mar',
-    'Apr',
-    'May',
-    'Jun',
-    'Jul',
-    'Aug',
-    'Sep',
-    'Oct',
-    'Nov',
-    'Dec',
-  ];
-  const data1 = [50, 10, 40, 95, 4, 24, 85, 91, 35, 53, 53, 24, 50, 20, 80]
   const data2 = [87, 66, 69, 92, 40, 61, 16, 62, 20, 93, 54, 47, 89, 44, 18]
+  const bloodGroups = ['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'];
 
-  const data = [
-    {
-      data: data1,
-      svg: { fill: '#8800cc' },
-    },
-    {
-      data: data2,
-      svg: { fill: 'green' },
-    },
-    {
-      data: data2,
-      svg: { fill: 'red' },
-    },
+  const randomColor = () =>
+    ('#' + ((Math.random() * 0xffffff) << 0).toString(16) + '000000').slice(
+      0,
+      7,
+    );
 
-  ]
+
+
+  const [type, setType] = useState('')
+
+
+  const pieDatablood = salesState.totalPie
+    .filter((value) => value > 0)
+    .map((value, index) => ({
+      value,
+      svg: {
+        fill: randomColor(),
+        onPress: () =>
+          showMessage({
+            message: bloodGroups[index] + ' ' + value.toFixed(0),
+            backgroundColor: colors.coolblue,
+          }),
+      },
+      key: `pie-${index}`,
+    }));
+  const pieDataplasma = salesState.plasmaObjectCurrentMonth
+    .filter((value) => value > 0)
+    .map((value, index) => ({
+      value,
+      svg: {
+        fill: randomColor(),
+        onPress: () =>
+          showMessage({
+            message: bloodGroups[index] + ' ' + value.toFixed(0),
+            backgroundColor: colors.coolblue,
+          }),
+      },
+      key: `pie-${index}`,
+    }));
+
+
+
+  const pieDataplatelet = salesState.plateletObjectCurrentMonth
+    .filter((value) => value > 0)
+    .map((value, index) => ({
+      value,
+      svg: {
+        fill: randomColor(),
+        onPress: () =>
+          showMessage({
+            message: bloodGroups[index] + ' ' + value.toFixed(0),
+            backgroundColor: colors.coolblue,
+          }),
+      },
+      key: `pie-${index}`,
+    }));
+
+  // const data = [50, 10, 40, 95, -4, -24, 85, 91, 35, 53, -53, 24, 50, -20, -80]
+
+  // const randomColor = () => ('#' + ((Math.random() * 0xffffff) << 0).toString(16) + '000000').slice(0, 7)
+
+  // const pieData = data
+  //   .filter((value) => value > 0)
+  //   .map((value, index) => ({
+  //     value,
+  //     svg: {
+  //       fill: randomColor(),
+  //       onPress: () => console.log('press', index),
+  //     },
+  //     key: `pie-${index}`,
+  //   }))
+
+  const yr = new Date().getFullYear();
+  let mon = new Date().getMonth() + 1 + '';
+
+  if (mon.length === 1) {
+    mon = '0' + mon;
+  }
+
+
   return (
     <ScrollView style={styles.container}>
-      <View style={styles.header}>
-        <View
-          style={{
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-            marginHorizontal: 10,
-          }}>
-          <Text style={styles.sectiontitle}> Monthly Revenue</Text>
-          <View
-            style={{
-              borderBottomWidth: 2,
-              borderBottomColor: colors.primary,
-              width: 130,
-            }}>
-            <Picker
-              style={{
-                borderColor: colors.primary,
-                borderWidth: 2,
-                width: 130,
-                height: 20,
-                fontFamily: 'Montserrat-Regular',
-              }}
-              enabled={true}
-              selectedValue={selectedYear}
-              onValueChange={(val, itemIndex) => {
-                setSelectedYear(val);
-                dispatch(getCurrentMonthAnalytics(val, authState.userToken));
-              }}>
-              <Picker.Item label="2021" value="2021" />
-              <Picker.Item label="2022" value="2022" />
-              <Picker.Item label="2023" value="2023" />
-              <Picker.Item label="2024" value="2024" />
-            </Picker>
-          </View>
-        </View>
-        <View
-          style={{
-            left: 5,
-            right: 10,
-            height: 200,
-            width: Dimensions.get('screen').width - 30,
-            flexDirection: 'row',
-          }}>
-          {salesState && salesState.yeardata && (
-            <YAxis
-              data={salesState.yeardata}
-              contentInset={contentInset}
-              svg={{
-                fill: colors.sapphireblue,
-                fontSize: 12,
-              }}
-              numberOfTicks={4}
-              formatLabel={(index) => `₹${index}`}
-            />
-          )}
-          <View style={{ flexDirection: 'column', flex: 1 }}>
-
-            <BarChart
-              style={{ flex: 1, left: 0, right: 0 }}
-              data={salesState.yeardata}
-              svg={{ fill }}
-              contentInset={{ top: 20, bottom: 9, right: 5, left: 5 }}>
-              <Grid />
-            </BarChart>
-            <XAxis
-              style={{ marginHorizontal: 0 }}
-              data={monthList}
-              formatLabel={(value, index) => monthList[index]}
-              contentInset={{ left: 15, right: 10 }}
-              svg={{ fontSize: 10, fill: 'black' }}
-            />
-          </View>
-        </View>
-
-        <View></View>
-        <View>
-          <View style={styles.secondaryHeader}>
-            <Text style={styles.header_text}>Monthly Breakup</Text>
-          </View>
-          <View style={{ flexDirection: 'row' }}>
-            <View
-              style={{
-                borderBottomWidth: 2,
-                borderBottomColor: colors.primary,
-                width: 130,
-                marginHorizontal: 20,
-              }}>
-              <Picker
-                style={{
-                  borderColor: colors.primary,
-                  borderWidth: 2,
-                  width: 130,
-                  height: 20,
-                  paddingBottom: 30,
-                }}
-                enabled={true}
-                selectedValue={breakoutYear}
-                onValueChange={(val, itemIndex) => {
-                  setBreakoutYear(val);
-                }}>
-                <Picker.Item label="Year" value="0" />
-                <Picker.Item label="2020" value="2020" />
-                <Picker.Item label="2021" value="2021" />
-                <Picker.Item label="2022" value="2022" />
-                <Picker.Item label="2023" value="2023" />
-                <Picker.Item label="2024" value="2024" />
-              </Picker>
-            </View>
-            <View
-              style={{
-                borderBottomWidth: 2,
-                borderBottomColor: colors.primary,
-                width: 130,
-                marginHorizontal: 20,
-              }}>
-              <Picker
-                style={{
-                  borderColor: colors.primary,
-                  borderWidth: 2,
-                  width: 130,
-                  height: 20,
-                  paddingBottom: 30,
-                }}
-                enabled={true}
-                selectedValue={breakoutMonth}
-                onValueChange={(val, itemIndex) => {
-                  setBreakoutMonth(val);
-                }}>
-                <Picker.Item label="Month" value="00" />
-                <Picker.Item label="January" value="01" />
-                <Picker.Item label="February" value="02" />
-                <Picker.Item label="March" value="03" />
-                <Picker.Item label="April" value="04" />
-                <Picker.Item label="May" value="05" />
-                <Picker.Item label="June" value="06" />
-                <Picker.Item label="July" value="07" />
-                <Picker.Item label="August" value="08" />
-                <Picker.Item label="September" value="09" />
-                <Picker.Item label="October" value="10" />
-                <Picker.Item label="November" value="11" />
-                <Picker.Item label="December" value="12" />
-              </Picker>
-            </View>
-            <TouchableOpacity
-              onPress={() => submitMonthlyBreakout()}
-              style={styles.button}>
-              <Text style={styles.button_text}>Go</Text>
-            </TouchableOpacity>
-          </View>
-          {salesState && salesState.monthdata && (
-            <View
-              style={{
-                left: 5,
-                right: 10,
-                height: 200,
-                width: Dimensions.get('screen').width - 30,
-                flexDirection: 'row',
-              }}>
-              <YAxis
-                data={salesState.monthdata}
-                contentInset={contentInset}
-                svg={{
-                  fill: colors.sapphireblue,
-                  fontSize: 12,
-                }}
-                numberOfTicks={4}
-                formatLabel={(index) => `₹${index}`}
-              />
-              <View style={{ flexDirection: 'column', flex: 1 }}>
-                <BarChart
-                  style={{ flex: 1 }}
-                  data={salesState.monthdata}
-                  //data={salesState.breakoutData}
-                  svg={{ fill }}
-                  contentInset={{ top: 20, bottom: 10, right: 10, left: 10 }}>
-                  <Grid />
-                </BarChart>
-                <XAxis
-                  style={{ marginHorizontal: 0 }}
-                  data={bloodGroups}
-                  formatLabel={(value, index) => bloodGroups[index]}
-                  contentInset={{ left: 25, right: 15 }}
-                  svg={{ fontSize: 10, fill: 'black' }}
-                />
-              </View>
-            </View>
-          )}
-        </View>
+      <View style={styles.statscard}>
+        <Text style={styles.cardheader}>Current Month Statistics</Text>
+        <Text style={styles.cardtext}>Total Amount Collected :  ₹ {salesState.currentMonthRevenue.totalRevenue} </Text>
+        <Text style={styles.cardtext}>Total Units Sold :  {salesState.currentMonthSold.totalSold} </Text>
       </View>
+
+      <View style={[styles.picker, { marginTop: 10 }]}>
+        <Picker
+          enabled={true}
+          selectedValue={type}
+          onValueChange={(val, itemIndex) => {
+            setType(val);
+            dispatch(monthAnalytics(yr, mon, authState.userToken, type));
+          }}>
+          <Picker.Item label="Select Type" value="Select Type" />
+          <Picker.Item label="Revenue" value={0} />
+          <Picker.Item label="Sold" value={1} />
+          <Picker.Item label="Bought" value={2} />
+          <Picker.Item label="Spent" value={3} />
+        </Picker>
+      </View>
+      <Text style={[styles.cardheader, { marginHorizontal: 10 }]}>Component Wise Breakdown</Text>
+
+      <PieChart style={{ height: 130 }} data={pieDatablood} />
+      {type === 0 ?
+        <Text style={styles.pietitle}>
+          Total Revenue   ₹  {salesState.currentMonthRevenue.totalBlood} </Text>
+        :
+        null
+      }
+      {type === 1 ?
+        <Text style={styles.pietitle}>
+          Total Units {salesState.currentMonthSold.totalBlood} </Text>
+        :
+        null
+      }
+
+      <PieChart style={{ height: 130 }} data={pieDataplasma} />
+      <Text style={styles.pietitle}>Total Plasma {salesState.currentMonthRevenue.totalPlasma} </Text>
+      <PieChart style={{ height: 130 }} data={pieDataplatelet} />
+      <Text style={styles.pietitle}>Total Platelet {salesState.currentMonthRevenue.totalPlatelet} </Text>
+
+
+
+
+
+
+
+      <View style={styles.statscard}>
+        <Text style={styles.cardheader}>Current Year Statistics</Text>
+        <Text style={styles.cardtext}>Amount Collected:  ₹</Text>
+        <Text style={styles.cardtext}>Units Sold:</Text>
+        <Text style={styles.cardtext}>Amount Spent:  ₹</Text>
+        <Text style={styles.cardtext}>Units Bought:</Text>
+      </View>
+      <TouchableOpacity onPress={() => navigation.navigate}  >
+        <View style={[styles.statscard, { flexDirection: 'row', justifyContent: 'space-between' }]}>
+          <Text style={styles.cardtext}>Search by Year</Text>
+          <Icon name="arrow-right" color={colors.primary} size={20} />
+        </View>
+      </TouchableOpacity>
+      <View style={[styles.statscard, { flexDirection: 'row', justifyContent: 'space-between' }]}>
+        <Text style={styles.cardtext}>Search by Year and Month</Text>
+        <Icon name="arrow-right" color={colors.primary} size={20} />
+      </View>
+      {/* <PieChart style={{ height: 200 }} data={pieData} /> */}
     </ScrollView>
-  );
-};
+  )
+}
 
-const screenWidth = Dimensions.get('window').width;
 const styles = StyleSheet.create({
-  container: {},
-  buttontitle: {
-    color: colors.darkPrimary,
-    fontWeight: '800',
+  container: {
+    flex: 1
+  },
+  statscard: {
+    backgroundColor: colors.additional2,
+    marginHorizontal: 10,
+    marginVertical: 10,
+    paddingHorizontal: 15,
+    paddingVertical: 15,
+    borderRadius: 10,
+    elevation: 10,
+    borderColor: colors.additional1,
+    borderWidth: 1
+  },
+  cardheader: {
+    fontSize: 20,
+    fontFamily: 'Montserrat-Bold',
+    marginBottom: 5
+  },
+  cardheader2: {
     fontSize: 20,
     fontFamily: 'Montserrat-Regular',
+    marginBottom: 5
   },
-  searchbox: {
-    marginHorizontal: 20,
-
-    justifyContent: 'space-between',
-  },
-  refreshText: {
-    fontFamily: 'Montserrat-Regular',
-    fontSize: 15,
-  },
-  pickerView: {
-    flex: 1,
-    marginHorizontal: 7,
-    borderRadius: 5,
-    backgroundColor: 'transparent',
-    borderColor: colors.grayishblack,
-    borderWidth: 2,
-    fontSize: 14,
-    fontFamily: 'Montserrat-Regular',
-    paddingHorizontal: 50,
-    color: 'black',
-  },
-  pickerRow: {},
-  iconview: {
-    alignItems: 'center',
-  },
-  box: {
-    backgroundColor: colors.primary,
-    width: 150,
-  },
-  sectiontitle: {
-    fontFamily: 'Montserrat-Regular',
-    fontSize: 25,
-    marginLeft: 5,
-    marginTop: 0,
-  },
-  sectiontext: {
-    fontFamily: 'Montserrat-Regular',
-    fontSize: 20,
-    marginLeft: 10,
-    marginTop: 2,
-  },
-  graphStyle: {},
-  graphView: {
-    marginTop: 10,
-  },
-  header: {
-    backgroundColor: 'white',
-    paddingHorizontal: 0,
-    paddingVertical: 20,
-  },
-  secondaryHeader: {
-    backgroundColor: 'white',
-    marginTop: 10,
-    marginBottom: 10,
-    paddingHorizontal: 20,
-  },
-  header_text: {
-    fontFamily: 'Montserrat-Regular',
+  cardtext: {
     fontSize: 18,
+    fontFamily: 'Montserrat-Regular',
+    marginVertical: 2
+  },
+  picker: {
+    borderWidth: 1,
+    borderColor: colors.dutchred,
+    borderRadius: 10,
+    fontFamily: 'Montserrat-Bold'
+
+  },
+  pietitle: {
+    fontSize: 20,
+    fontFamily: 'Montserrat-Regular',
+    marginBottom: 5,
+    alignSelf: 'center',
+    marginTop: 8
+  },
+  buttontext: {
+    fontSize: 18,
+    fontFamily: 'Montserrat-Regular',
+    color: colors.additional2
   },
   button: {
     paddingHorizontal: 10,
     paddingVertical: 10,
-    borderRadius: 5,
-    backgroundColor: colors.primary,
-  },
-  button_text: {
-    fontFamily: 'Montserrat-Regular',
-    fontSize: 18,
-    color: colors.additional2,
-  },
-});
+    backgroundColor: colors.peach,
+    width: 100, marginVertical: 10,
+    borderRadius: 10,
+    alignSelf: 'flex-end',
+    alignItems: 'center'
 
-export default Revenue;
+  }
+})
+
+export default Revenue
