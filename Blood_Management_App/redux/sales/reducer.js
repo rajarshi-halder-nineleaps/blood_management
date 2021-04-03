@@ -1,5 +1,30 @@
 /* eslint-disable prettier/prettier */
-import { SALES_REQ, SALES_SUCCESS, SALES_FAILURE, UPDATE_YEAR, UPDATE_MONTH, GET_CURRENT_MONTH, GET_THIS_MONTH, SET_TODAY, GET_REQUESTED_BREAKOUT, STOCK_INFO } from './actionTypes';
+import {
+  SALES_REQ,
+  SALES_SUCCESS,
+  SALES_FAILURE,
+  UPDATE_YEAR,
+  UPDATE_MONTH,
+  GET_CURRENT_MONTH,
+  GET_THIS_MONTH,
+  SET_TODAY,
+  GET_REQUESTED_BREAKOUT,
+  STOCK_INFO,
+
+
+  MONTH_BOUGHT_SUCCESS,
+  MONTH_REASON_SUCCESS,
+  MONTH_REVENUE_SUCCESS,
+  MONTH_SOLD_SUCCESS,
+  MONTH_SPENT_SUCCESS,
+
+
+  CURRENT_MONTH_BOUGHT_SUCCESS,
+  CURRENT_MONTH_REASON_SUCCESS,
+  CURRENT_MONTH_REVENUE_SUCCESS,
+  CURRENT_MONTH_SOLD_SUCCESS,
+  CURRENT_MONTH_SPENT_SUCCESS,
+} from './actionTypes';
 
 const initialState = {
   loading: false,
@@ -18,9 +43,31 @@ const initialState = {
   breakoutData: [],
   stockinfo: [],
   yeardata: [],
-  monthdata: []
+  monthdata: [],
 
 
+
+
+  bloodObjectCurrentMonth: [],
+  plasmaObjectCurrentMonth: [],
+  plateletObjectCurrentMonth: [],
+
+  // bloodObjectMonthSold: [],
+  // plasmaObjectMonthSold: [],
+  // plateletObjectMonthSold: [],
+
+
+  currentMonthRevenue: {},
+  currentMonthSold: {},
+  monthRevenue: '',
+
+  totalPie: [],
+  searchedMonthRevenue: {},
+  searchedMonthSold: {},
+  monthSearched: false,
+
+  currentMonth: {},
+  currentMonthSoldStat: {}
 
 };
 
@@ -116,13 +163,89 @@ const salesReducer = (state = initialState, action) => {
 
       return {
         ...state,
-        monthdata: obj
+        monthdata: obj,
+        bloodObjectMonth: action.array.bloodObject,
+        plasmaObjectMonth: action.array.plasmaObject,
+        plateletObjectMonth: action.array.plateletObject
       }
     }
     case STOCK_INFO: {
       return {
         ...state,
         stockinfo: action.array
+      }
+    }
+
+
+
+
+    case CURRENT_MONTH_REVENUE_SUCCESS: {
+      console.log("Revenue Object", action.array)
+      var monthRevenue = action.array.totalBlood + action.array.totalPlasma + action.array.totalPlatelet;
+      var obj1 = {
+        totalRevenue: monthRevenue.toFixed(2),
+        totalBlood: action.array.totalBlood.toFixed(2),
+        totalPlasma: action.array.totalPlasma.toFixed(2),
+        totalPlatelet: action.array.totalPlatelet.toFixed(2),
+      }
+      var total = [action.array.totalBlood, action.array.totalPlasma, action.array.totalPlatelet]
+
+      return {
+        ...state,
+        // currentmonth.totalRevenue :
+        //monthRevenue: monthRevenue
+        currentMonthRevenue: obj1,
+        bloodObjectCurrentMonth: action.array.bloodObject,
+        plasmaObjectCurrentMonth: action.array.plasmaObject,
+        plateletObjectCurrentMonth: action.array.plateletObject,
+        totalPie: total
+
+      }
+    }
+    case CURRENT_MONTH_SOLD_SUCCESS: {
+      console.log("Sold Object", action.array)
+      var monthSold = action.array.totalBlood + action.array.totalPlasma + action.array.totalPlatelet;
+      var obj2 = {
+        totalSold: monthSold.toFixed(0),
+        totalBlood: action.array.totalBlood.toFixed(0),
+        totalPlasma: action.array.totalPlasma.toFixed(0),
+        totalPlatelet: action.array.totalPlatelet.toFixed(0),
+      }
+
+      var obj3 = {
+        bloodObjectCurrentMonth: action.array.bloodObject,
+        plasmaObjectCurrentMonthSold: action.array.plasmaObject,
+        plateletObjectCurrentMonthSold: action.array.plateletObject
+      }
+
+      return {
+        ...state,
+        currentMonthSold: obj2,
+        currentMonthSoldStat: obj3
+
+
+      }
+    }
+    case MONTH_REVENUE_SUCCESS: {
+      console.log("Searched Revenue Object", action.array)
+      var monthRevenue = action.array.totalBlood + action.array.totalPlasma + action.array.totalPlatelet;
+      var obj1 = {
+        totalRevenue: monthRevenue.toFixed(2),
+        totalBlood: action.array.totalBlood.toFixed(2),
+        totalPlasma: action.array.totalPlasma.toFixed(2),
+        totalPlatelet: action.array.totalPlatelet.toFixed(2),
+      }
+
+      return {
+        ...state,
+        // currentmonth.totalRevenue :
+        //monthRevenue: monthRevenue
+        searchedMonthRevenue: obj1,
+        bloodObjectMonth: action.array.bloodObject,
+        plasmaObjectMonth: action.array.plasmaObject,
+        plateletObjectMonth: action.array.plateletObject,
+        monthSearched: true
+
       }
     }
   }
