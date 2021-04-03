@@ -28,12 +28,12 @@ const SalesCard = ({navigation, route}) => {
       <html>
       <head>
       <link rel="preconnect" href="https://fonts.gstatic.com">
-      <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@100;400;700&display=swap" rel="stylesheet">
       
       <style>
       
       *{
-      font-family: 'Quicksand', sans-serif;
+      font-family: 'Montserrat', sans-serif;
       text-align: left
       }
       

@@ -2,7 +2,13 @@
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-import { REQ, REQ_SUCCESS, REQ_FAILURE, LOGOUT } from './actionTypes';
+import {
+  REQ,
+  REQ_SUCCESS,
+  SET_NEW_AUTH_TOKEN,
+  REQ_FAILURE,
+  LOGOUT,
+} from './actionTypes';
 
 //? REGULAR ACTION CREATORS.
 
@@ -10,11 +16,27 @@ export const req = () => ({
   type: REQ,
 });
 
-export const reqSuccess = (userId, userToken, userType) => ({
+export const reqSuccess = (
+  userId,
+  userToken,
+  userType,
+  authTokenExpiry,
+  refreshToken,
+  refreshTokenExpiry,
+) => ({
   type: REQ_SUCCESS,
-  userId: userId,
-  userToken: userToken,
-  userType: userType,
+  userId,
+  userToken,
+  userType,
+  authTokenExpiry,
+  refreshToken,
+  refreshTokenExpiry,
+});
+
+export const setNewAuthToken = (newAuthToken, newAuthTokenExpiry) => ({
+  type: SET_NEW_AUTH_TOKEN,
+  newAuthToken,
+  newAuthTokenExpiry,
 });
 
 export const reqFailure = (error) => ({
@@ -22,7 +44,7 @@ export const reqFailure = (error) => ({
   error: error,
 });
 
-export const logout = () => ({ type: LOGOUT });
+export const logout = () => ({type: LOGOUT});
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -51,6 +73,9 @@ export const logUserIn = (loginData) => {
           userToken: response.data.userToken,
           userId: response.data.userId,
           userType: response.data.userType,
+          authTokenExpiry: response.data.authTokenExpiry,
+          refreshToken: response.data.refreshToken,
+          refreshTokenExpiry: response.data.refreshTokenExpiry,
         });
         await AsyncStorage.setItem('redBankAuthObj', userData);
         console.log('Saved data to async storage!');
@@ -60,6 +85,9 @@ export const logUserIn = (loginData) => {
             response.data.userId,
             response.data.userToken,
             response.data.userType,
+            response.data.authTokenExpiry,
+            response.data.refreshToken,
+            response.data.refreshTokenExpiry,
           ),
         );
       } else {
@@ -157,6 +185,9 @@ export const regUserUp = (regData) => {
           userToken: response.data.userToken,
           userId: response.data.userId,
           userType: response.data.userType,
+          authTokenExpiry: response.data.authTokenExpiry,
+          refreshToken: response.data.refreshToken,
+          refreshTokenExpiry: response.data.refreshTokenExpiry,
         });
         await AsyncStorage.setItem('redBankAuthObj', userData);
         console.log('Saved data to async storage!');
@@ -165,6 +196,9 @@ export const regUserUp = (regData) => {
             response.data.userId,
             response.data.userToken,
             response.data.userType,
+            response.data.authTokenExpiry,
+            response.data.refreshToken,
+            response.data.refreshTokenExpiry,
           ),
         );
       } else {
@@ -176,6 +210,42 @@ export const regUserUp = (regData) => {
       }
     } catch (err) {
       console.log(err.message);
+      dispatch(reqFailure(err.message));
+    }
+  };
+};
+
+//? REFRESHING AUTH TOKEN UPON EXPIRY.
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+export const authTokenRefreshHandler = (expiredAuthToken, refreshToken) => {
+  return async (dispatch) => {
+    dispatch(req());
+    try {
+      const response = await axios.post('http://10.0.2.2:8080/refreshauth', {
+        expiredAuthToken,
+        refreshToken,
+      });
+
+      if (response.headers.success) {
+        console.log('New auth token recieved');
+        dispatch(
+          setNewAuthToken(
+            response.data.newAuthToken,
+            response.data.newAuthTokenExpiry,
+          ),
+        );
+      } else {
+        console.log('refresh token call error 1');
+        dispatch(logUserOut());
+        dispatch(reqFailure(''));
+      }
+    } catch (err) {
+      //? ERROR GETTING THE NEW AUTH TOKEN, SO LOGGING USER OUT AND REDIRECTING TO HOME PAGE.
+
+      dispatch(logUserOut());
+      console.log('token refresher error: ', err.message);
+      //? here, the loginFailure action sets the loading to false automatically.
       dispatch(reqFailure(err.message));
     }
   };
@@ -196,17 +266,24 @@ export const tokenRetriever = () => {
             loggedData.userId,
             loggedData.userToken,
             loggedData.userType,
+            loggedData.authTokenExpiry,
+            loggedData.refreshToken,
+            loggedData.refreshTokenExpiry,
           ),
         );
       } else {
-        //TODO MAKE AN ACTION TO SET LOADING STATE TO FALSE.
-        reqFailure('ok');
+        //? LOGGING USER OUT.
+        console.log('token retriever error 1: ');
+
+        dispatch(logUserOut());
+        dispatch(reqFailure(''));
       }
     } catch (err) {
       //? ERROR RETRIEVING ASYNC STORAGE DATA.
       console.log('token retriever error: ', err.message);
       //? here, the loginFailure action sets the loading to false automatically.
-      dispatch(reqFailure(err.message));
+      dispatch(logUserOut());
+      dispatch(reqFailure(''));
     }
   };
 };
@@ -221,7 +298,7 @@ export const logUserOut = () => {
     dispatch(req());
     try {
       await AsyncStorage.removeItem('redBankAuthObj');
-      dispatch(reqSuccess('', ''));
+      // dispatch(reqSuccess('', ''));
       dispatch(logout());
       console.log('Async Storage emptied!');
     } catch (err) {

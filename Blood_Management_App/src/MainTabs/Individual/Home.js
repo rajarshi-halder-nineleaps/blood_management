@@ -139,13 +139,13 @@ const Home = ({navigation}) => {
           <>
             <View style={{flexDirection: 'row'}}>
               <View style={styles.statsInsideView}>
-                <Text style={styles.statsLabel}>Total Donations</Text>
+                <Text style={styles.statsLabel}>Total donations</Text>
                 <Text style={styles.statsContent}>
                   {profileState.profileData.donationMade}
                 </Text>
               </View>
               <View style={styles.statsInsideView}>
-                <Text style={styles.statsLabel}>Commitments made</Text>
+                <Text style={styles.statsLabel}>Invites accepted</Text>
                 <Text style={styles.statsContent}>
                   {profileState.profileData.commitmentMade}
                 </Text>

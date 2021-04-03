@@ -21,6 +21,7 @@ import {setDonorStatus} from '../redux/profile/actions';
 import {setDonationEligibilityNotification} from '../redux/notifications/actions';
 import {getUserData} from '../redux/profile/actions';
 import {getProfileData} from '../redux/profile/actions';
+import {authTokenRefreshHandler} from '../redux/auth/actions';
 
 //! if u need to use this, install it first.
 // import BackgroundTimer from 'react-native-background-timer';
@@ -35,6 +36,17 @@ const MainNavigator = () => {
 
   const [oldNotificationsLength, setOldNotificationsLength] = useState(0);
   const [everOffline, setEverOffline] = useState(0);
+
+  //* CHECKING IF THE TOKEN HAS EXPIRED OR NOT.
+
+  // TODO at what condition should i run this code.
+
+  // new Date(authState.authTokenExpiry.split('+')[0]).getTime() <
+  // new Date().getTime()
+  //   ? dispatch(
+  //       authTokenRefreshHandler(authState.userToken, authState.refreshToken),
+  //     )
+  //   : null;
 
   //* CHECKING IF USER IS CONNECTED TO THE INTERNET.
   const netInfo = useNetInfo();
@@ -75,7 +87,7 @@ const MainNavigator = () => {
   useEffect(() => {
     messaging()
       .subscribeToTopic(authState.userId)
-      .then(() => console.log('Subscribed to userID!'));
+      .then(() => console.log('Subscribed to notification topics!'));
     return () =>
       messaging()
         .unsubscribeFromTopic(authState.userId)

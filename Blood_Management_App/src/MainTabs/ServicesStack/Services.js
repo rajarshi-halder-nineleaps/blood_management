@@ -98,14 +98,14 @@ const Services = ({navigation}) => {
         </View>
         <View style={styles.row}>
           <TouchTabs
-            label="My Donation Requests"
-            source={require('../../../assets/images/servicesScreen/donorRequests.png')}
-            touchHandler={() => navigation.navigate('Active Donor Request')}
-          />
-          <TouchTabs
             label="My Purchases"
             source={require('../../../assets/images/servicesScreen/purchases.png')}
             touchHandler={() => purchasesHandler()}
+          />
+          <TouchTabs
+            label="My Donation Requests"
+            source={require('../../../assets/images/servicesScreen/donorRequests.png')}
+            touchHandler={() => navigation.navigate('Active Donor Request')}
           />
         </View>
         {userType === 1 ? (
@@ -150,7 +150,7 @@ const Services = ({navigation}) => {
           </>
         )}
         {userType === 3 ? (
-          <>
+          <View style={styles.row}>
             <TouchTabs
               label="My Sales"
               source={require('../../../assets/images/servicesScreen/sales.png')}
@@ -161,7 +161,7 @@ const Services = ({navigation}) => {
               source={require('../../../assets/images/servicesScreen/analytics.png')}
               touchHandler={() => salesAnalyticsHandler()}
             />
-          </>
+          </View>
         ) : null}
       </ScrollView>
     </View>
