@@ -108,7 +108,7 @@ const FindDonors = ({ navigation }) => {
     if (fieldId === 'req_units' && (val === 0 || !numbersOnlyRegex.test(val))) {
       isValid = false;
     }
-    if (fieldId === 'reasonOfPurchase' && val === " ") {
+    if (fieldId === 'reasonOfPurchase' && val === ' ') {
       isValid = false;
     }
     if (fieldId === 'location' && val.trim().length <= 0 && authState.userType === 1) {
@@ -127,15 +127,14 @@ const FindDonors = ({ navigation }) => {
   };
 
   const blurAll = () => {
-    blurListener("blood_group"),
-      blurListener('component');
-    blurListener("req_units")
-    blurListener("reasonOfPurchase")
-    blurListener("location")
-  }
+    blurListener('blood_group'), blurListener('component');
+    blurListener('req_units');
+    blurListener('reasonOfPurchase');
+    blurListener('location');
+  };
 
   const submitHandler = () => {
-    blurAll()
+    blurAll();
     console.log(buybloodFormState.inputValues);
 
     if (buybloodFormState.inputValidity.pincode) {
@@ -158,8 +157,6 @@ const FindDonors = ({ navigation }) => {
                   type: 'warning',
                 });
               }
-
-
             } else {
               showMessage({
                 message: 'Invalid Reason of Purchase',
@@ -167,7 +164,6 @@ const FindDonors = ({ navigation }) => {
                 type: 'warning',
               });
             }
-
           } else {
             showMessage({
               message: 'Invalid Units',
@@ -198,7 +194,6 @@ const FindDonors = ({ navigation }) => {
     }
   };
 
-
   return (
     <ScrollView style={styles.container}>
       {/* <View style={styles.header}>
@@ -221,7 +216,7 @@ const FindDonors = ({ navigation }) => {
         </View>
       </View>
 
-      <View style={{ marginHorizontal: 30 }}>
+      <View style={{ marginHorizontal: 20 }}>
         {/* <Text style={styles.pickerLabel}>*Blood group</Text> */}
         <View style={styles.pickerView}>
           <Picker
@@ -325,7 +320,35 @@ const FindDonors = ({ navigation }) => {
           null
         }
 
+        <Fields
+          label="*Reason of purchase"
+          error="Invalid input"
+          returnKeyType="next"
+          multiline={true}
+          numberOfLines={3}
+          inputIsValid={buybloodFormState.inputValidity.reasonOfPurchase}
+          inputIsTouched={buybloodFormState.isTouched.reasonOfPurchase}
+          value={buybloodFormState.inputValues.reasonOfPurchase}
+          onChangeText={(val) => checkValidity(val, 'reasonOfPurchase')}
+          onBlur={() => {
+            blurListener('reasonOfPurchase');
+          }}
+        />
 
+        <Fields
+          label="*Hospital / Clinic name"
+          multiline={true}
+          numberOfLines={3}
+          error="Invalid input"
+          returnKeyType="next"
+          inputIsValid={buybloodFormState.inputValidity.location}
+          inputIsTouched={buybloodFormState.isTouched.location}
+          value={buybloodFormState.inputValues.location}
+          onChangeText={(val) => checkValidity(val, 'location')}
+          onBlur={() => {
+            blurListener('location');
+          }}
+        />
 
         <View style={styles.filterInfoBoard}>
           <Text style={styles.filterInfoText}>Optional Filters</Text>

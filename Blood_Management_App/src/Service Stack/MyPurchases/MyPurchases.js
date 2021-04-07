@@ -13,11 +13,10 @@ import {
 } from 'react-native';
 import colors from '../../../constants/Colors';
 import {useSelector, useDispatch} from 'react-redux';
-import renderItem from '../../../components/PurchasesCard';
+import PurchasesCard from '../../../components/PurchasesCard';
 import Feather from 'react-native-vector-icons/Feather';
 
-const MyPurchases = () => {
-
+const MyPurchases = ({navigation}) => {
   const purchasesState = useSelector((state) => state.purchasesState);
   console.log(purchasesState.salesData);
 
@@ -44,7 +43,16 @@ const MyPurchases = () => {
         <FlatList
           style={styles.scroll}
           data={purchasesState.salesData}
-          renderItem={renderItem}
+          renderItem={({item}) => (
+            <PurchasesCard
+              purchaseData={item}
+              invoiceNavigator={() =>
+                navigation.navigate('invoice', {
+                  item,
+                })
+              }
+            />
+          )}
           keyExtractor={(item) => item.purchaseId}
         />
       )}
@@ -104,9 +112,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     overflow: 'hidden',
   },
-  scroll: {
-    paddingHorizontal: 20,
-  },
+  scroll: {},
   suchEmpty: {
     flex: 1,
     alignItems: 'center',

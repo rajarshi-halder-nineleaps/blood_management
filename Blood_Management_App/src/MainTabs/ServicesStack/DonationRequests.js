@@ -24,7 +24,8 @@ const DonationRequests = ({navigation}) => {
   const invitesState = useSelector((state) => state.invitesState);
   const dispatch = useDispatch();
 
-  const [active, setActive] = useState(true);
+  //? SHOWS ALL THE DONATION INVITES BY DEFAULT.
+  const [active, setActive] = useState(false);
 
   const [refreshing, setRefreshing] = React.useState(false);
   const onRefresh = React.useCallback(

@@ -129,6 +129,10 @@ android {
         targetCompatibility JavaVersion.VERSION_1_8
     }
 
+    dexOptions {
+      jumboMode = true
+  }
+
     defaultConfig {
         applicationId "com.blood_management_app"
         minSdkVersion rootProject.ext.minSdkVersion

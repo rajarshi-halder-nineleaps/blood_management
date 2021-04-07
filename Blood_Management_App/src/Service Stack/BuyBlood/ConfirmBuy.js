@@ -16,7 +16,14 @@ import { buyit } from '../../../redux/buyblood/actions';
 import { ScrollView } from 'react-native-gesture-handler';
 
 const ConfirmBuy = ({ route, navigation }) => {
-  const { sellerId, blood_group, component, units, price, sellername, address } = route.params;
+  const {
+    sellerId,
+    blood_group,
+    component,
+    units,
+    price,
+    sellerDetails,
+  } = route.params;
   const buybloodFormState = useSelector((state) => state.buybloodFormState);
   const [modalVisible, setModalVisible] = useState(false);
   const dispatch = useDispatch();
@@ -70,7 +77,7 @@ const ConfirmBuy = ({ route, navigation }) => {
             />
           </View>
           <Text style={styles.headerText}>
-            Please check all the details shown below. If there is any mistake
+            Please check all the details shown below. If there is any mistake,
             kindly go back and change it.
           </Text>
           <Text style={styles.headerText}>Booked Blood must be collected within 24 hrs.</Text>
@@ -79,6 +86,15 @@ const ConfirmBuy = ({ route, navigation }) => {
 
         <View style={styles.infoBoard}>
           <View style={styles.infobox}>
+            <View style={styles.inforow}>
+              <View>
+                <Text style={styles.texts}>Seller datails :</Text>
+              </View>
+              <View style={styles.infoRowView}>
+                <Text style={styles.text}>{sellerDetails}</Text>
+              </View>
+            </View>
+
             <View style={styles.inforow}>
               <Text style={styles.texts}>Blood Group :</Text>
               <Text style={styles.text}>
@@ -134,7 +150,7 @@ const ConfirmBuy = ({ route, navigation }) => {
                       units,
                       authState.userToken,
                       buybloodFormState.inputValues.reasonOfPurchase,
-                      buybloodFormState.inputValues.location
+                      buybloodFormState.inputValues.location,
                     ),
                   );
                   setModalVisible(!modalVisible);
@@ -184,15 +200,14 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     paddingVertical: 5,
     alignItems: 'center',
-    alignContent: 'center',
   },
   texts: {
-    fontSize: 20,
+    fontSize: 14,
     fontFamily: 'Montserrat-Bold',
     color: colors.grayishblack,
   },
   text: {
-    fontSize: 20,
+    fontSize: 14,
     fontFamily: 'Montserrat-Regular',
     color: colors.grayishblack,
   },
@@ -207,6 +222,9 @@ const styles = StyleSheet.create({
     padding: 20,
   },
 
+  infoRowView: {
+    // backgroundColor: colors.primary,
+  },
   infobox: {
     padding: 30,
     backgroundColor: '#eee',

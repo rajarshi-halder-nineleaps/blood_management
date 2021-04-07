@@ -38,6 +38,7 @@
     "react-native-flash-message": "^0.1.23",
     "react-native-flatlist-slider": "^1.0.5",
     "react-native-gesture-handler": "^1.9.0",
+    "react-native-html-to-pdf": "^0.9.1",
     "react-native-image-crop-picker": "^0.36.0",
     "react-native-indicators": "^0.17.0",
     "react-native-material-textfield": "^0.16.1",

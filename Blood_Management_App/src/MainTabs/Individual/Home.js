@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import React, { useEffect, useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   ScrollView,
   View,
@@ -12,20 +12,13 @@ import {
   ImageBackground,
 } from 'react-native';
 import colors from '../../../constants/Colors';
-import { useDispatch, useSelector } from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 
 import Icon from 'react-native-vector-icons/FontAwesome';
-import { getToday } from '../../../redux/sales/actions';
-import {
-  Table,
-  TableWrapper,
-  Row,
-  Rows,
-  Col,
-} from 'react-native-table-component';
-import FaqCard from '../../../components/Faqcard'
+import {getToday} from '../../../redux/sales/actions';
+import FaqCard from '../../../components/Faqcard';
 
-const Home = ({ navigation }) => {
+const Home = ({navigation}) => {
   const authState = useSelector((state) => state.authState);
   const userType = authState.userType;
   const dispatch = useDispatch();
@@ -52,10 +45,15 @@ const Home = ({ navigation }) => {
     <ScrollView style={styles.container}>
       <ImageBackground
         source={require('../../../assets/images/realpic1.png')}
-        style={{ width: Dimensions.get('screen').width, height: 300 }}>
+        style={{width: Dimensions.get('screen').width, height: 300}}>
         <View style={styles.header}>
-          <View style={{ flexDirection: 'column', marginLeft: 10 }}>
-            <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 10 }}>
+          <View style={{flexDirection: 'column', marginLeft: 10}}>
+            <View
+              style={{
+                flexDirection: 'row',
+                alignItems: 'center',
+                marginBottom: 10,
+              }}>
               <Image
                 source={require('../../../assets/images/logotransparentbkg.png')}
                 style={styles.logo}
@@ -70,7 +68,6 @@ const Home = ({ navigation }) => {
             <Text style={styles.name}>{profileState.userData.name}</Text>
             <Text style={styles.other}>#{profileState.userData.userId}</Text>
           </View>
-
         </View>
       </ImageBackground>
 
@@ -86,27 +83,25 @@ const Home = ({ navigation }) => {
           paddingVertical: 20,
           elevation: 20,
         }}>
-
         {userType === 3 ? (
           <>
-            <View style={{ flexDirection: 'row', justifyContent: 'space-evenly' }}>
+            <View
+              style={{flexDirection: 'row', justifyContent: 'space-evenly'}}>
               <Text style={styles.sectiontitle}>Today's Stats</Text>
               <TouchableOpacity
                 style={styles.iconview}
                 onPress={() => dispatch(getToday(authState.userToken))}>
                 <Icon name="refresh" color={colors.primary} size={20} />
-
               </TouchableOpacity>
             </View>
             <View
-              style={{ flexDirection: 'row', flex: 1, justifyContent: 'center' }}>
+              style={{flexDirection: 'row', flex: 1, justifyContent: 'center'}}>
               <View
                 style={{
                   flexDirection: 'column',
                   alignItems: 'center',
                   paddingHorizontal: 5,
                   justifyContent: 'space-evenly',
-
                 }}>
                 <Text style={styles.sectiondata}>Units Sold</Text>
                 <Text style={styles.sectionline}>
@@ -142,15 +137,15 @@ const Home = ({ navigation }) => {
         ) : null}
         {userType === 1 ? (
           <>
-            <View style={{ flexDirection: 'row' }}>
+            <View style={{flexDirection: 'row'}}>
               <View style={styles.statsInsideView}>
-                <Text style={styles.statsLabel}>Total Donations</Text>
+                <Text style={styles.statsLabel}>Total donations</Text>
                 <Text style={styles.statsContent}>
                   {profileState.profileData.donationMade}
                 </Text>
               </View>
               <View style={styles.statsInsideView}>
-                <Text style={styles.statsLabel}>Commitments made</Text>
+                <Text style={styles.statsLabel}>Invites accepted</Text>
                 <Text style={styles.statsContent}>
                   {profileState.profileData.commitmentMade}
                 </Text>
@@ -163,20 +158,21 @@ const Home = ({ navigation }) => {
               </View>
             </View>
 
-            <Text style={styles.text}>Donor Status</Text>
-            <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
-              {profileState.userData.donorStatus === 0 ? (
-                <Icon name="times-circle" color="red" size={30} />
-              ) : (
-                <Icon name="check-circle" color="green" size={30} />
-              )}
+            <View style={styles.donorStatusView}>
+              <Text style={styles.text}>Donor Status</Text>
+              <View>
+                {profileState.userData.donorStatus === 0 ? (
+                  <Icon name="times-circle" color="red" size={30} />
+                ) : (
+                  <Icon name="check-circle" color="green" size={30} />
+                )}
+              </View>
             </View>
           </>
         ) : null}
         {userType === 2 ? (
           <>
             <View style={styles.statsInsideView}>
-
               <Text style={styles.statsLabel}>Requests made</Text>
               <Text style={styles.statsContent}>
                 {profileState.profileData.requestMade}
@@ -192,35 +188,28 @@ const Home = ({ navigation }) => {
         ) : null}
       </View>
 
-      <View style={{ flex: 1, marginTop: 150 }}>
-        {/* <Text>hi</Text> */}
-      </View>
+      <View style={{flex: 1, marginTop: 150}}>{/* <Text>hi</Text> */}</View>
 
       <View style={styles.faqview}>
-        <Text style={styles.faqheader}>
-          FAQ
-        </Text>
+        <Text style={styles.faqheader}>FAQ's</Text>
       </View>
-      {userType == 1 ?
+      {userType == 1 ? (
         <View style={styles.faqBody}>
           <FaqCard
             header="When Can I Start Donating?"
-            body="If you are above 18, and have not donated in 3 months, you can donate blood"
+            body="If you are above 18, and have not donated in 3 months, you can donate blood."
           />
           <FaqCard
             header="What should I eat after Donation?"
-            body="High iron rich food is a good choice for food after donation is done"
+            body="High iron rich food is a good choice for food after donation is done."
           />
           <FaqCard
             header="How much blood is taken in one draw?"
             body="Usually 250ml of blood is taken in one draw."
           />
-
         </View>
-        :
-        null
-      }
-      {userType == 2 ?
+      ) : null}
+      {userType == 2 ? (
         <View style={styles.faqBody}>
           <FaqCard
             header="What are the requirements for an organization to host a blood drive? "
@@ -234,13 +223,10 @@ const Home = ({ navigation }) => {
             header="Can I give donors incentives or gifts for participating? "
             body="All donors are required to be truly “volunteer” donors by the FDA, and not be reimbursed for their donation, so any gift or incentive offered must be offered to all participants of a blood drive – donors and volunteers alike. This helps ensure all people are honest about their health history"
           />
-
         </View>
-        :
-        null
-      }
+      ) : null}
 
-      {userType == 3 ?
+      {userType == 3 ? (
         <View style={styles.faqBody}>
           <FaqCard
             header="Can I give donors incentives or gifts for participating? "
@@ -254,14 +240,8 @@ const Home = ({ navigation }) => {
             header="What COVID-19 safety precautions are in place at blood drives? "
             body="Keep distance"
           />
-
         </View>
-        :
-        null
-      }
-
-
-
+      ) : null}
     </ScrollView>
   );
 };
@@ -273,6 +253,10 @@ const styles = StyleSheet.create({
     backgroundColor: colors.primary,
   },
   faqBody: {},
+  donorStatusView: {
+    paddingBottom: 20,
+    alignItems: 'center',
+  },
   faqQuesHeader: {
     fontFamily: 'Montserrat-Bold',
     fontSize: 20,
@@ -290,14 +274,14 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     marginVertical: 5,
     paddingVertical: 10,
-    paddingHorizontal: 20
+    paddingHorizontal: 20,
   },
 
   statsInsideView: {
     alignItems: 'stretch',
     justifyContent: 'center',
     marginHorizontal: 5,
-    flex: 1
+    flex: 1,
   },
   statsLabel: {
     textAlign: 'center',
@@ -381,7 +365,7 @@ const styles = StyleSheet.create({
   faqheader: {
     fontFamily: 'Montserrat-Bold',
     color: colors.additional2,
-    fontSize: 20
+    fontSize: 14,
   },
   image: {
     flex: 1,

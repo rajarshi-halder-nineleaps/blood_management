@@ -1,5 +1,12 @@
 import React, { useState } from 'react';
-import { View, Text, FlatList, TouchableOpacity, StyleSheet, Image } from 'react-native';
+import {
+  View,
+  Text,
+  FlatList,
+  TouchableOpacity,
+  StyleSheet,
+  Image,
+} from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import colors from '../../../constants/Colors';
 import CheckBox from '@react-native-community/checkbox';
@@ -22,8 +29,7 @@ const BuyBloodList = ({ navigation }) => {
             component: buybloodFormState.inputValues.component,
             units: buybloodFormState.inputValues.req_units,
             price: item.price,
-            sellername: item.bbName,
-            address: item.address
+            sellerDetails: `${item.bbName} ${item.address}, ${item.district}, ${item.state} [${item.pincode}]`,
           })
         }
       />
@@ -42,43 +48,33 @@ const BuyBloodList = ({ navigation }) => {
             style={styles.suchEmptyImg}
             source={require('../../../assets/images/empty.png')}
           />
-          <Text style={styles.emptyInfo}>No Bloodbank has available stocks.</Text>
+          <Text style={styles.emptyInfo}>
+            No blood banks found with the given search criterion.
+          </Text>
         </View>
       ) : (
-        <View>
-          <View style={styles.header}>
-            <Text>
-              The below list shows blood banks that meets your search criterion.
-        </Text>
-          </View>
+        <>
           <FlatList
+            style={styles.scroll}
             data={buybloodFormState.list}
             style={{ width: "100%" }}
             renderItem={renderItem}
             keyExtractor={(item) => item.bbId}
             extraData={selectedId}
           />
-        </View>
+        </>
       )}
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-  item: {
-    backgroundColor: '#f9c2ff',
-    padding: 20,
-    marginVertical: 8,
-    paddingHorizontal: 30,
-    marginHorizontal: 20,
-    borderRadius: 20,
-  },
   title: {
     fontSize: 18,
   },
+  scroll: {},
   header: {
     marginBottom: 20,
-
     paddingHorizontal: 30,
     paddingTop: 10,
   },
@@ -92,6 +88,7 @@ const styles = StyleSheet.create({
     color: 'white',
   },
   container: {
+    width: '100%',
     flex: 1,
     backgroundColor: colors.additional2,
     width: "100%"
@@ -138,8 +135,8 @@ const styles = StyleSheet.create({
   },
   emptyInfo: {
     color: colors.primary,
-    fontSize: 15,
-    fontFamily: 'Montserrat-Bold'
+    fontSize: 12,
+    fontFamily: 'Montserrat-Regular',
   },
 });
 
