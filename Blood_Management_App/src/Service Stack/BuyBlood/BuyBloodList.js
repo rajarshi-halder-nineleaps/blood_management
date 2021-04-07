@@ -22,6 +22,8 @@ const BuyBloodList = ({ navigation }) => {
             component: buybloodFormState.inputValues.component,
             units: buybloodFormState.inputValues.req_units,
             price: item.price,
+            sellername: item.bbName,
+            address: item.address
           })
         }
       />
@@ -51,6 +53,7 @@ const BuyBloodList = ({ navigation }) => {
           </View>
           <FlatList
             data={buybloodFormState.list}
+            style={{ width: "100%" }}
             renderItem={renderItem}
             keyExtractor={(item) => item.bbId}
             extraData={selectedId}
@@ -90,6 +93,8 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
+    backgroundColor: colors.additional2,
+    width: "100%"
   },
   inputView: {
     paddingHorizontal: 20,

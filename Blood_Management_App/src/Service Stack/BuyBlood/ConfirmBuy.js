@@ -16,7 +16,7 @@ import { buyit } from '../../../redux/buyblood/actions';
 import { ScrollView } from 'react-native-gesture-handler';
 
 const ConfirmBuy = ({ route, navigation }) => {
-  const { sellerId, blood_group, component, units, price } = route.params;
+  const { sellerId, blood_group, component, units, price, sellername, address } = route.params;
   const buybloodFormState = useSelector((state) => state.buybloodFormState);
   const [modalVisible, setModalVisible] = useState(false);
   const dispatch = useDispatch();
@@ -73,6 +73,8 @@ const ConfirmBuy = ({ route, navigation }) => {
             Please check all the details shown below. If there is any mistake
             kindly go back and change it.
           </Text>
+          <Text style={styles.headerText}>Booked Blood must be collected within 24 hrs.</Text>
+          <Text style={styles.headerText}>Please do carry your ID card for verification</Text>
         </View>
 
         <View style={styles.infoBoard}>
@@ -95,6 +97,18 @@ const ConfirmBuy = ({ route, navigation }) => {
               <Text style={styles.texts}>Units required :</Text>
               <Text style={styles.text}>
                 {buybloodFormState.inputValues.req_units}
+              </Text>
+            </View>
+            <View style={styles.inforow}>
+              <Text style={styles.texts}>Seller Name :</Text>
+              <Text style={styles.text}>
+                {sellername}
+              </Text>
+            </View>
+            <View style={styles.inforow}>
+              <Text style={styles.texts}>Seller Address :</Text>
+              <Text style={styles.text}>
+                {address}
               </Text>
             </View>
             <View
@@ -129,7 +143,9 @@ const ConfirmBuy = ({ route, navigation }) => {
                 <Text style={styles.invitebutton}>Confirm Purchase</Text>
               </TouchableOpacity>
             </View>
+
           </View>
+
         </View>
       </View>
     </ScrollView>
@@ -186,7 +202,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
   },
   infoBoard: {
-    marginTop: 30,
+    marginTop: 10,
     width: '100%',
     padding: 20,
   },

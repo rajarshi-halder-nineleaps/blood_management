@@ -111,7 +111,7 @@ const FindDonors = ({ navigation }) => {
     if (fieldId === 'reasonOfPurchase' && val === " ") {
       isValid = false;
     }
-    if (fieldId === 'location' && val === " ") {
+    if (fieldId === 'location' && val.trim().length <= 0 && authState.userType === 1) {
       isValid = false;
     }
 
@@ -137,12 +137,13 @@ const FindDonors = ({ navigation }) => {
   const submitHandler = () => {
     blurAll()
     console.log(buybloodFormState.inputValues);
+
     if (buybloodFormState.inputValidity.pincode) {
       if (buybloodFormState.inputValidity.blood_group) {
         if (buybloodFormState.inputValidity.component) {
           if (buybloodFormState.inputValidity.req_units) {
             if (buybloodFormState.inputValidity.reasonOfPurchase) {
-              if (buybloodFormState.inputValidity.location) {
+              if (buybloodFormState.inputValidity.location || authState.userType != 1) {
                 dispatch(
                   getBuyBloodList(
                     buybloodFormState.inputValues,
@@ -285,32 +286,46 @@ const FindDonors = ({ navigation }) => {
             blurListener('req_units');
           }}
         />
+        <View style={styles.pickerView}>
+          <Picker
+            style={styles.picker}
+            selectedValue={buybloodFormState.inputValues.reasonOfPurchase}
+            onValueChange={(val, itemIndex) => {
+              blurListener('reasonOfPurchase');
+              checkValidity(val, 'reasonOfPurchase')
+            }}>
+            <Picker.Item
+              label="Select Reason of Purchase"
+              value="Select Reason of Purchase"
+            />
+            <Picker.Item label="Accident" value="Accident" />
+            <Picker.Item label="Surgery" value="Surgery" />
+            <Picker.Item label="Others" value="Others" />
+          </Picker>
+        </View>
+        {!buybloodFormState.inputValidity.reasonOfPurchase &&
+          buybloodFormState.isTouched.reasonOfPurchase && (
+            <Text style={styles.errorMsg}>Please select a Reason Of Purchase</Text>
+          )}
 
-        <Fields
-          label="*Reason of purchase"
-          error="Invalid input"
-          returnKeyType="next"
-          inputIsValid={buybloodFormState.inputValidity.reasonOfPurchase}
-          inputIsTouched={buybloodFormState.isTouched.reasonOfPurchase}
-          value={buybloodFormState.inputValues.reasonOfPurchase}
-          onChangeText={(val) => checkValidity(val, 'reasonOfPurchase')}
-          onBlur={() => {
-            blurListener('reasonOfPurchase');
-          }}
-        />
+        {authState.userType === 1 ?
+          <Fields
+            label="*Location of Transfusion"
+            error="Invalid input"
+            returnKeyType="next"
+            inputIsValid={buybloodFormState.inputValidity.location}
+            inputIsTouched={buybloodFormState.isTouched.location}
+            value={buybloodFormState.inputValues.location}
+            onChangeText={(val) => checkValidity(val, 'location')}
+            onBlur={() => {
+              blurListener('location');
+            }}
+          />
+          :
+          null
+        }
 
-        <Fields
-          label="*Location of Transfusion"
-          error="Invalid input"
-          returnKeyType="next"
-          inputIsValid={buybloodFormState.inputValidity.location}
-          inputIsTouched={buybloodFormState.isTouched.location}
-          value={buybloodFormState.inputValues.location}
-          onChangeText={(val) => checkValidity(val, 'location')}
-          onBlur={() => {
-            blurListener('location');
-          }}
-        />
+
 
         <View style={styles.filterInfoBoard}>
           <Text style={styles.filterInfoText}>Optional Filters</Text>
