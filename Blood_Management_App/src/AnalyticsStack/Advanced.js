@@ -197,11 +197,7 @@ const Advanced = ({ navigation }) => {
             </View>
             {salesState.monthSearched ?
                 <>
-                    <View style={styles.statscard}>
-                        <Text style={styles.cardheader}>Statistics Chart</Text>
-                        <Text style={styles.cardtext}>Total Amount Collected :  ₹ {salesState.searchedMonthRevenue.totalRevenue} </Text>
-                        <Text style={styles.cardtext}>Total Units Sold :  {salesState.searchedMonthRevenue.totalSold} </Text>
-                    </View>
+
                     <Text style={[styles.cardheader, { marginHorizontal: 10 }]}>Component Wise Breakdown</Text>
 
                     <PieChart style={{ height: 130, marginTop: 10 }} data={pieDatablood} />

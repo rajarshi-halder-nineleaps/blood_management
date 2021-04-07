@@ -24,7 +24,7 @@ const SalesAnalyticsNavigator = ({ navigation }) => {
         component={Revenue}
         options={{
           tabBarLabel: () => (
-            <Text style={{ fontFamily: 'Montserrat-Regular' }}>Revenue</Text>
+            <Text style={{ fontFamily: 'Montserrat-Regular' }}>Overview</Text>
           ),
         }}
       />
@@ -34,7 +34,7 @@ const SalesAnalyticsNavigator = ({ navigation }) => {
         options={{
           tabBarLabel: () => (
             <Text style={{ fontFamily: 'Montserrat-Regular' }}>
-              Stock
+              Detailed
             </Text>
           ),
         }}

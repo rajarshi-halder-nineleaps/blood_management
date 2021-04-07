@@ -1,124 +1,32 @@
-/* eslint-disable prettier/prettier */
-import React, {useEffect, useState} from 'react';
-import {Text, StyleSheet, View, Dimensions, ScrollView} from 'react-native';
-import {useDispatch, useSelector} from 'react-redux';
-import {showMessage, hideMessage} from 'react-native-flash-message';
-import colors from '../../constants/Colors';
-
-import {
-  getThisMonth,
-  getCurrentMonthAnalytics,
-  updateMonth,
-  updateYear,
-  getMonthlyBreakout,
-  getStockInfo,
-} from '../../redux/sales/actions';
-import {Picker} from '@react-native-picker/picker';
-import {TouchableOpacity} from 'react-native-gesture-handler';
-import * as figures from '../../assets/salesanalytics.json';
-import {
-  BarChart,
-  Grid,
-  YAxis,
-  LineChart,
-  XAxis,
-  PieChart,
-} from 'react-native-svg-charts';
-// import {
-//     PieChart,
-//     BarChart,
-//     StackedBarChart,
-//     LineChart,
-// } from 'react-native-chart-kit';
-import Feather from 'react-native-vector-icons/Feather';
+import React, { useState } from 'react'
+import { View, Text, StyleSheet, TouchableOpacity, ScrollView, Dimensions } from 'react-native'
+import colors from '../../constants/Colors'
 import Icon from 'react-native-vector-icons/FontAwesome';
-
-//import { Picker } from 'react-native-wheel-pick';
-const Stock = ({navigation}) => {
+import { useDispatch, useSelector } from 'react-redux';
+import { BarChart, Grid, YAxis, LineChart, XAxis, PieChart } from 'react-native-svg-charts'
+import { Picker } from '@react-native-picker/picker';
+import { showMessage, hideMessage } from 'react-native-flash-message';
+import { getCurrentMonthAnalytics, monthAnalytics } from '../../redux/sales/actions';
+const Stock = ({ navigation }) => {
   const authState = useSelector((state) => state.authState);
   const salesState = useSelector((state) => state.salesState);
   const dispatch = useDispatch();
-  //const data = figures.analytics;
-  const [selectedyearindex, setselectedyearindex] = useState(0);
-  const [list, setlist] = useState([]);
-  const monthdata = salesState.currentMonthData;
-  const [selectedYear, setSelectedYear] = useState('');
-  const [month, setMonth] = useState(false);
-
-  let mon = new Date().getMonth() + 1 + '';
-
-  if (mon.length === 1) {
-    mon = '0' + mon;
-  }
-
-  const [breakoutMonth, setBreakoutMonth] = useState(mon);
-  const [breakoutYear, setBreakoutYear] = useState(new Date().getFullYear());
-
-  const [type, setType] = useState('1');
-
-  useEffect(() => {
-    dispatch(
-      getStockInfo(authState.userToken, new Date().getFullYear(), mon, type),
-    );
-  }, [dispatch]);
-
-  const submitGetInfo = () => {
-    if (breakoutYear === '') {
-      showMessage({
-        message: 'Year required',
-        description: 'Please select a year to continue.',
-        type: 'warning',
-      });
-    } else {
-      if (breakoutMonth === '') {
-        showMessage({
-          message: 'Month required',
-          description: 'Please select a month to continue.',
-          type: 'warning',
-        });
-      } else {
-        dispatch(
-          getStockInfo(authState.userToken, breakoutYear, breakoutMonth, type),
-        );
-      }
-    }
-  };
-  const contentInset = {top: 20, bottom: 20, left: 5, right: 10};
-
-  const fill = 'rgb(134, 65, 244)';
+  const data2 = [87, 66, 69, 92, 40, 61, 16, 62, 20, 93, 54, 47, 89, 44, 18]
   const bloodGroups = ['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'];
-  const monthList = [
-    'Jan',
-    'Feb',
-    'Mar',
-    'Apr',
-    'May',
-    'Jun',
-    'Jul',
-    'Aug',
-    'Sep',
-    'Oct',
-    'Nov',
-    'Dec',
-  ];
 
+  const data = [50, 10, 40, 95, -4, -24, 85, 91, 35, 53, -53, 24, 50, -20, -80]
   const randomColor = () =>
     ('#' + ((Math.random() * 0xffffff) << 0).toString(16) + '000000').slice(
       0,
       7,
     );
 
-  const colorOfArray = [
-    '#35FA87',
-    '#A6A565',
-    '#6D15EA',
-    '#B8004A',
-    '#353566',
-    '#E23515',
-    '#B5C722',
-    '#695560',
-  ];
-  const pieData = salesState.stockinfo
+  const monthList = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
+
+  const [type, setType] = useState('')
+
+  const contentInset = { top: 20, bottom: 20, left: 10, right: 10 }
+  const pieDatablood = salesState.totalPie
     .filter((value) => value > 0)
     .map((value, index) => ({
       value,
@@ -126,186 +34,239 @@ const Stock = ({navigation}) => {
         fill: randomColor(),
         onPress: () =>
           showMessage({
-            message: value.toFixed(0) + ' Units of ' + bloodGroups[index],
+            message: bloodGroups[index] + ' ' + value.toFixed(0),
+            backgroundColor: colors.coolblue,
+          }),
+      },
+      key: `pie-${index}`,
+    }));
+  const pieDataplasma = salesState.plasmaObjectCurrentMonth
+    .filter((value) => value > 0)
+    .map((value, index) => ({
+      value,
+      svg: {
+        fill: randomColor(),
+        onPress: () =>
+          showMessage({
+            message: bloodGroups[index] + ' ' + value.toFixed(0),
             backgroundColor: colors.coolblue,
           }),
       },
       key: `pie-${index}`,
     }));
 
-  const lapsList = colorOfArray.map((data) => {
-    return (
-      <View>
-        <Text>{data.time}</Text>
-      </View>
-    );
-  });
-  ///
+
+
+  const pieDataplatelet = salesState.plateletObjectCurrentMonth
+    .filter((value) => value > 0)
+    .map((value, index) => ({
+      value,
+      svg: {
+        fill: randomColor(),
+        onPress: () =>
+          showMessage({
+            message: bloodGroups[index] + ' ' + value.toFixed(0),
+            backgroundColor: colors.coolblue,
+          }),
+      },
+      key: `pie-${index}`,
+    }));
+
+  // const data = [50, 10, 40, 95, -4, -24, 85, 91, 35, 53, -53, 24, 50, -20, -80]
+
+  // const randomColor = () => ('#' + ((Math.random() * 0xffffff) << 0).toString(16) + '000000').slice(0, 7)
+
+  // const pieData = data
+  //   .filter((value) => value > 0)
+  //   .map((value, index) => ({
+  //     value,
+  //     svg: {
+  //       fill: randomColor(),
+  //       onPress: () => console.log('press', index),
+  //     },
+  //     key: `pie-${index}`,
+  //   }))
+  const [selectedComponent, setSelectedComponent] = useState(0)
+
+  const yr = new Date().getFullYear();
+  let mon = new Date().getMonth() + 1 + '';
+
+  if (mon.length === 1) {
+    mon = '0' + mon;
+  }
+  let yearGraphData = salesState.yearBloodObject;
+
+  if (selectedComponent === 0) {
+    yearGraphData = salesState.yearBloodObject
+  } else if (selectedComponent === 1) {
+    yearGraphData = salesState.yearPlasmaObject
+  } else if (selectedComponent === 2) {
+    yearGraphData = salesState.yearPlateletObject
+  }
+
+  var typeOfGraph = salesState.typeOfGraph;
+
+
+
+  const fill = 'rgb(134, 65, 244)'
+
+
   return (
     <ScrollView style={styles.container}>
-      <View style={styles.header}>
-        <View style={{flexDirection: 'column', flex: 1, marginVertical: 30}}>
-          <PieChart style={{height: 300}} data={pieData} />
-        </View>
-        <Text style={styles.sectiontitle}> Select Year & Month</Text>
-        <View style={{flexDirection: 'row'}}>
-          <View style={styles.pickerView}>
-            <Picker
-              style={{
-                borderColor: colors.primary,
-                borderWidth: 2,
-                width: 130,
-                height: 20,
-                paddingBottom: 30,
-              }}
-              enabled={true}
-              selectedValue={breakoutYear}
-              onValueChange={(val, itemIndex) => {
-                setBreakoutYear(val);
-              }}>
-              <Picker.Item label="2021" value="2021" />
-              <Picker.Item label="2022" value="2022" />
-              <Picker.Item label="2023" value="2023" />
-              <Picker.Item label="2024" value="2024" />
-              <Picker.Item label="2025" value="2025" />
-            </Picker>
-          </View>
-          <View style={styles.pickerView}>
-            <Picker
-              style={{}}
-              enabled={true}
-              selectedValue={breakoutMonth}
-              onValueChange={(val, itemIndex) => {
-                setBreakoutMonth(val);
-              }}>
-              <Picker.Item label="All" value="All" />
-              <Picker.Item label="January" value="01" />
-              <Picker.Item label="February" value="02" />
-              <Picker.Item label="March" value="03" />
-              <Picker.Item label="April" value="04" />
-              <Picker.Item label="May" value="05" />
-              <Picker.Item label="June" value="06" />
-              <Picker.Item label="July" value="07" />
-              <Picker.Item label="August" value="08" />
-              <Picker.Item label="September" value="09" />
-              <Picker.Item label="October" value="10" />
-              <Picker.Item label="November" value="11" />
-              <Picker.Item label="December" value="12" />
-            </Picker>
-          </View>
-        </View>
-        <View style={{paddingHorizontal: 5, marginTop: 10}}>
-          <Text style={styles.sectiontitle}>Select Type</Text>
-        </View>
-        <View
-          style={{
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-            marginHorizontal: 10,
-          }}>
-          <View style={styles.pickerView}>
-            <Picker
-              style={{}}
-              enabled={true}
-              selectedValue={type}
-              onValueChange={(val, itemIndex) => {
-                setType(val);
-              }}>
-              <Picker.Item label="Purchases" value="2" />
-              <Picker.Item label="Sales" value="1" />
-            </Picker>
-          </View>
-          <TouchableOpacity
-            onPress={() => submitGetInfo()}
-            style={styles.button}>
-            <Text style={styles.button_text}>Go</Text>
-          </TouchableOpacity>
-        </View>
-
-        <View></View>
+      <View style={{ marginHorizontal: 20, marginTop: 30 }}>
+        <Text style={styles.header}>
+          Current Month
+        </Text>
+        <Text style={styles.stats}>
+          Total :
+          {salesState.typeOf === 0 || salesState.typeOf === 3 ? ' ₹ ' : null}
+          {salesState.currentMonthObj.total}
+        </Text>
+        <Text style={styles.stats}>
+          Blood :
+          {salesState.typeOf === 0 || salesState.typeOf === 3 ? ' ₹ ' : null}
+          {salesState.currentMonthObj.totalBlood}
+        </Text>
+        <Text style={styles.stats}>
+          Plasma :
+          {salesState.typeOf === 0 || salesState.typeOf === 3 ? ' ₹ ' : null}
+          {salesState.currentMonthObj.totalPlasma}
+        </Text>
+        <Text style={styles.stats}>
+          Platelet :
+          {salesState.typeOf === 0 || salesState.typeOf === 3 ? ' ₹ ' : null}
+          {salesState.currentMonthObj.totalPlatelet}
+        </Text>
       </View>
+      <View style={[styles.picker2, { marginTop: 10 }]}>
+        <Picker
+          enabled={true}
+          selectedValue={type}
+          onValueChange={(val, itemIndex) => {
+            setType(val);
+            dispatch(monthAnalytics(yr, mon, authState.userToken, val));
+          }}>
+          <Picker.Item label="Select Type" value="Select Type" />
+          <Picker.Item label="Revenue Collected" value={0} />
+          <Picker.Item label="Units Sold" value={1} />
+          <Picker.Item label="Units Bought" value={2} />
+          <Picker.Item label="Amount Spent" value={3} />
+        </Picker>
+      </View>
+
+
+
+      <Text style={[styles.cardheader, { marginHorizontal: 20, marginTop: 30, marginBottom: 20 }]}>Component & Blood Group Wise Breakdown</Text>
+
+      <PieChart style={{ height: 130 }} data={pieDatablood} />
+      <Text style={styles.pietitle}>Blood</Text>
+      <PieChart style={{ height: 130 }} data={pieDataplasma} />
+      <Text style={styles.pietitle}>Plasma</Text>
+      <PieChart style={{ height: 130 }} data={pieDataplatelet} />
+      <Text style={styles.pietitle}>Platelet</Text>
     </ScrollView>
-  );
-};
+  )
+}
 
-const screenWidth = Dimensions.get('window').width;
 const styles = StyleSheet.create({
-  container: {},
-  buttontitle: {
-    color: colors.darkPrimary,
-    fontWeight: '800',
-    fontSize: 20,
-    fontFamily: 'Montserrat-Regular',
-  },
-  searchbox: {
-    marginHorizontal: 20,
-
-    justifyContent: 'space-between',
-  },
-  refreshText: {
-    fontFamily: 'Montserrat-Regular',
-    fontSize: 15,
-  },
-
-  pickerRow: {},
-  iconview: {
-    alignItems: 'center',
-  },
-  box: {
-    backgroundColor: colors.primary,
-    width: 150,
-  },
-  sectiontitle: {
-    fontFamily: 'Montserrat-Regular',
-    fontSize: 25,
-    marginLeft: 10,
-    marginTop: 0,
-  },
-  sectiontext: {
-    fontFamily: 'Montserrat-Regular',
-    fontSize: 20,
-    marginLeft: 10,
-    marginTop: 2,
-  },
-  graphStyle: {},
-  graphView: {
-    marginTop: 10,
+  container: {
+    flex: 1,
+    backgroundColor: colors.additional2
   },
   header: {
-    backgroundColor: 'white',
-    paddingHorizontal: 0,
-    paddingVertical: 0,
-    flex: 1,
-  },
-  secondaryHeader: {
-    backgroundColor: 'white',
-    marginTop: 10,
-    marginBottom: 10,
-    paddingHorizontal: 20,
-  },
-  header_text: {
-    fontFamily: 'Montserrat-Regular',
-    fontSize: 18,
+    fontFamily: 'Montserrat-Bold',
+    fontSize: 30,
 
-    //ma
   },
-  pickerView: {
+  selected: {
+    borderBottomColor: colors.coolblue,
     borderBottomWidth: 2,
-    borderBottomColor: colors.primary,
-    width: 150,
-    marginHorizontal: 20,
+    marginHorizontal: 5,
+    // backgroundColor: colors.coolblue,
+
+  },
+  notselected: {
+    borderBottomColor: colors.dutchred,
+    borderBottomWidth: 2,
+    marginHorizontal: 5,
+    paddingTop: 5
+    // backgroundColor: colors.peach
+  },
+  stats: {
+    fontFamily: 'Montserrat-Bold',
+    fontSize: 18,
+    marginHorizontal: 10,
+
+  },
+  chartText: {
+    fontFamily: 'Montserrat-Bold',
+    fontSize: 15,
+    marginHorizontal: 5,
+    marginBottom: 10
+  },
+  statscard: {
+    backgroundColor: colors.additional2,
+    marginHorizontal: 10,
+    marginVertical: 10,
+    paddingHorizontal: 15,
+    paddingVertical: 15,
+    borderRadius: 10,
+    elevation: 10,
+    borderColor: colors.additional1,
+    borderWidth: 1
+  },
+  cardheader: {
+    fontSize: 18,
+    fontFamily: 'Montserrat-Bold',
+    marginBottom: 5
+  },
+  cardheader2: {
+    fontSize: 20,
+    fontFamily: 'Montserrat-Regular',
+    marginBottom: 5
+  },
+  cardtext: {
+    fontSize: 18,
+    fontFamily: 'Montserrat-Regular',
+    marginVertical: 2
+  },
+  picker: {
+    borderWidth: 1,
+    borderColor: colors.dutchred,
+    borderRadius: 10,
+    fontFamily: 'Montserrat-Bold'
+
+  },
+  picker2: {
+    borderWidth: 1,
+    borderColor: colors.dutchred,
+
+    fontFamily: 'Montserrat-Bold',
+    marginHorizontal: 20
+
+  },
+  pietitle: {
+    fontSize: 20,
+    fontFamily: 'Montserrat-Regular',
+    marginBottom: 5,
+    alignSelf: 'center',
+    marginTop: 8
+  },
+  buttontext: {
+    fontSize: 18,
+    fontFamily: 'Montserrat-Regular',
+    color: colors.additional2
   },
   button: {
     paddingHorizontal: 10,
     paddingVertical: 10,
-    borderRadius: 5,
-    backgroundColor: colors.primary,
-  },
-  button_text: {
-    fontFamily: 'Montserrat-Regular',
-    fontSize: 18,
-    color: colors.additional2,
-  },
-});
+    backgroundColor: colors.peach,
+    width: 100, marginVertical: 10,
+    borderRadius: 10,
+    alignSelf: 'flex-end',
+    alignItems: 'center'
 
-export default Stock;
+  }
+})
+
+export default Stock

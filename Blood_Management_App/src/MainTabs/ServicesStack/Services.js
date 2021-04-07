@@ -56,11 +56,8 @@ const Services = ({ navigation }) => {
   const salesAnalyticsHandler = () => {
     console.log(year);
     console.log(mon);
-    dispatch(getCurrentMonthAnalytics(year, authState.userToken));
+    dispatch(getCurrentMonthAnalytics(year, authState.userToken, 0));
     dispatch(monthAnalytics(year, mon, authState.userToken, 0));
-    dispatch(monthAnalytics(year, mon, authState.userToken, 1));
-    dispatch(monthAnalytics(year, mon, authState.userToken, 2));
-    dispatch(monthAnalytics(year, mon, authState.userToken, 3));
     navigation.navigate('salesAnalytics');
   };
 

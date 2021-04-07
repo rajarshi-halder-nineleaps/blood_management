@@ -10,7 +10,7 @@ import {
   SET_TODAY,
   GET_REQUESTED_BREAKOUT,
   STOCK_INFO,
-
+  YEAR_SUCCESS,
 
   MONTH_BOUGHT_SUCCESS,
   MONTH_REASON_SUCCESS,
@@ -21,7 +21,7 @@ import {
 
   CURRENT_MONTH_BOUGHT_SUCCESS,
   CURRENT_MONTH_REASON_SUCCESS,
-  CURRENT_MONTH_REVENUE_SUCCESS,
+  CURRENT_MONTH_SUCCESS,
   CURRENT_MONTH_SOLD_SUCCESS,
   CURRENT_MONTH_SPENT_SUCCESS,
 } from './actionTypes';
@@ -51,10 +51,8 @@ const initialState = {
   bloodObjectCurrentMonth: [],
   plasmaObjectCurrentMonth: [],
   plateletObjectCurrentMonth: [],
-
-  // bloodObjectMonthSold: [],
-  // plasmaObjectMonthSold: [],
-  // plateletObjectMonthSold: [],
+  currentMonthObj: {},
+  typeOf: 0,
 
 
   currentMonthRevenue: {},
@@ -67,7 +65,18 @@ const initialState = {
   monthSearched: false,
 
   currentMonth: {},
-  currentMonthSoldStat: {}
+  currentMonthSoldStat: {},
+
+  yearPlasmaObject: [],
+  yearPlateletObject: [],
+  yearBloodObject: [],
+  typeOfGraph: 0,
+  yearBloodTotal: 0,
+  yearPlasmaTotal: 0,
+  yearPlateletTotal: 0,
+  yearTotal: 0
+
+
 
 };
 
@@ -130,11 +139,21 @@ const salesReducer = (state = initialState, action) => {
         //currentMonthAnalyticsArray: action.array.data
       }
     }
-    case GET_THIS_MONTH: {
+    case YEAR_SUCCESS: {
+      console.log(action.typeOf)
+      console.log("year data: ", action.array)
+      var totalall = action.array.totalBlood + action.array.totalPlasma + action.array.totalPlatelet;
+
       return {
         ...state,
-        thisMonthData: action.array,
-        thisMonthSuccess: true
+        yearPlasmaObject: action.array.plasmaObject,
+        yearPlateletObject: action.array.plateletObject,
+        yearBloodObject: action.array.bloodObject,
+        yearBloodTotal: action.array.totalBlood.toFixed(2),
+        yearPlasmaTotal: action.array.totalPlasma.toFixed(2),
+        yearPlateletTotal: action.array.totalPlatelet.toFixed(2),
+        yearTotal: totalall.toFixed(2),
+        typeOfGraph: action.typeOf,
         //currentMonthAnalyticsArray: action.array.data
       }
     }
@@ -179,11 +198,11 @@ const salesReducer = (state = initialState, action) => {
 
 
 
-    case CURRENT_MONTH_REVENUE_SUCCESS: {
-      console.log("Revenue Object", action.array)
+    case CURRENT_MONTH_SUCCESS: {
+      console.log("Revenue Object", action.array, action.typeOf)
       var monthRevenue = action.array.totalBlood + action.array.totalPlasma + action.array.totalPlatelet;
       var obj1 = {
-        totalRevenue: monthRevenue.toFixed(2),
+        total: monthRevenue.toFixed(2),
         totalBlood: action.array.totalBlood.toFixed(2),
         totalPlasma: action.array.totalPlasma.toFixed(2),
         totalPlatelet: action.array.totalPlatelet.toFixed(2),
@@ -194,10 +213,11 @@ const salesReducer = (state = initialState, action) => {
         ...state,
         // currentmonth.totalRevenue :
         //monthRevenue: monthRevenue
-        currentMonthRevenue: obj1,
+        currentMonthObj: obj1,
         bloodObjectCurrentMonth: action.array.bloodObject,
         plasmaObjectCurrentMonth: action.array.plasmaObject,
         plateletObjectCurrentMonth: action.array.plateletObject,
+        typeOf: action.typeOf,
         totalPie: total
 
       }

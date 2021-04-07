@@ -41,11 +41,6 @@ const SalesAnalytics = ({ navigation }) => {
   const [selectedMonth, setSelectedMonth] = useState('');
   const [month, setMonth] = useState(false);
 
-  useEffect(() => {
-    dispatch(
-      getCurrentMonthAnalytics(new Date().getMonth(), authState.userToken),
-    );
-  }, [dispatch]);
 
   const submitMonth = () => {
     if (month) {

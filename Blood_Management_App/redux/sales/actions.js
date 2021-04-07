@@ -13,6 +13,7 @@ import {
   GET_REQUESTED_MONTH,
   GET_REQUESTED_BREAKOUT,
   STOCK_INFO,
+  YEAR_SUCCESS,
 
 
 
@@ -24,7 +25,7 @@ import {
 
   CURRENT_MONTH_BOUGHT_SUCCESS,
   CURRENT_MONTH_REASON_SUCCESS,
-  CURRENT_MONTH_REVENUE_SUCCESS,
+  CURRENT_MONTH_SUCCESS,
   CURRENT_MONTH_SOLD_SUCCESS,
   CURRENT_MONTH_SPENT_SUCCESS,
 
@@ -47,9 +48,10 @@ export const updateYear = (selectedYear) => ({
   selectedYear,
 });
 
-export const currentMonthSuccess = (array) => ({
-  type: GET_CURRENT_MONTH,
+export const YearSuccess = (array, typeOf) => ({
+  type: YEAR_SUCCESS,
   array,
+  typeOf
 });
 
 export const StockInfoSucess = (array) => ({
@@ -101,9 +103,10 @@ export const currentMonthReasonSuccess = (array) => ({
   type: CURRENT_MONTH_REASON_SUCCESS,
   array,
 })
-export const currentMonthRevenueSuccess = (array) => ({
-  type: CURRENT_MONTH_REVENUE_SUCCESS,
+export const currentMonthSuccess = (array, typeOf) => ({
+  type: CURRENT_MONTH_SUCCESS,
   array,
+  typeOf
 })
 export const currentMonthSoldSuccess = (array) => ({
   type: CURRENT_MONTH_SOLD_SUCCESS,
@@ -156,13 +159,13 @@ export const fetchSalesData = (userToken) => {
   };
 };
 
-export const getCurrentMonthAnalytics = (year, userToken) => {
+export const getCurrentMonthAnalytics = (year, userToken, type) => {
   return async (dispatch) => {
     try {
       dispatch(salesReq());
       console.log('making current m API call');
       const response = await axios.get(
-        `http://10.0.2.2:8080/salesanalytics/yearly/${year}/0`,
+        `http://10.0.2.2:8080/salesanalytics/yearly/${year}/${type}/a`,
         {
           headers: { Authorization: 'Bearer ' + userToken },
         },
@@ -171,7 +174,7 @@ export const getCurrentMonthAnalytics = (year, userToken) => {
       if (response.headers.success) {
         console.log('Analytics is success!', response.data);
         //* coordinate with backend for fixing prop names.
-        dispatch(currentMonthSuccess(response.data));
+        dispatch(YearSuccess(response.data, type));
         console.log(response.data);
       } else if (response.headers.error) {
         console.log('response is error!');
@@ -185,7 +188,7 @@ export const getCurrentMonthAnalytics = (year, userToken) => {
         );
       }
     } catch (err) {
-      console.log('caught Analytics on yearly get request: ', err);
+      console.log('caught Analytics on yearly get request year: ', err);
       dispatch(salesFailure(err.message));
     }
   };
@@ -223,7 +226,7 @@ export const monthAnalytics = (year, month, userToken, type) => {
         if (year === yr && mon === month) {
           console.log("current")
 
-          dispatch(currentMonthRevenueSuccess(response.data));
+          dispatch(currentMonthSuccess(response.data, type));
           // if (type === 0) {
           //   dispatch(currentMonthRevenueSuccess(response.data));
           // } else if (type === 1) {
@@ -266,7 +269,7 @@ export const monthAnalytics = (year, month, userToken, type) => {
         );
       }
     } catch (err) {
-      console.log('caught Analytics on myDriveData get request: ', err);
+      console.log('caught Analytics on myDriveData get request month month: ', err);
       dispatch(salesFailure(err.message));
     }
   };
@@ -307,72 +310,72 @@ export const getMonthlyBreakout = (year, month, userToken) => {
         );
       }
     } catch (err) {
-      console.log('caught Analytics on myDriveData get request: ', err);
+      console.log('caught Analytics on myDriveData get requestasdsa: ', err);
       dispatch(salesFailure(err.message));
     }
   };
 };
 
-export const getStockInfo = (userToken, year, month, type) => {
-  return async (dispatch) => {
-    try {
-      if (month === 'All') {
-        dispatch(salesReq());
-        console.log('making current m API call');
-        const response = await axios.get(
-          `http://10.0.2.2:8080/salesanalytics/yearly/${year}/${type}`,
-          {
-            headers: { Authorization: 'Bearer ' + userToken },
-          },
-        );
-        if (response.headers.success) {
-          console.log('Analytics is success!', response.data.datasets[0].data);
-          //* coordinate with backend for fixing prop names.
-          dispatch(StockInfoSucess(response.data.datasets[0].data));
-          console.log(response.data.datasets);
-        } else if (response.headers.error) {
-          console.log('response is error!');
-          dispatch(salesFailure(response.data.error));
-        } else {
-          console.log('outlandish error!');
-          dispatch(
-            salesFailure(
-              "Something's not right! please try again after some time.",
-            ),
-          );
-        }
-      } else {
-        dispatch(salesReq());
-        console.log('making current m API call');
-        const response = await axios.get(
-          `http://10.0.2.2:8080/salesanalytics/monthly/${year}/${month}/${type}`,
-          {
-            headers: { Authorization: 'Bearer ' + userToken },
-          },
-        );
-        if (response.headers.success) {
-          console.log('Analytics is success!', response.data.datasets[0].data);
-          //* coordinate with backend for fixing prop names.
-          dispatch(StockInfoSucess(response.data.datasets[0].data));
-          console.log(response.data.datasets);
-        } else if (response.headers.error) {
-          console.log('response is error!');
-          dispatch(salesFailure(response.data.error));
-        } else {
-          console.log('outlandish error!');
-          dispatch(
-            salesFailure(
-              "Something's not right! please try again after some time.",
-            ),
-          );
-        }
-      }
-    } catch (err) {
-      console.log('caught Analytics on myDriveData get request: ', err);
-      dispatch(salesFailure(err.message));
-    }
-  };
-};
+// export const getStockInfo = (userToken, year, month, type) => {
+//   return async (dispatch) => {
+//     try {
+//       if (month === 'All') {
+//         dispatch(salesReq());
+//         console.log('making current m API call');
+//         const response = await axios.get(
+//           `http://10.0.2.2:8080/salesanalytics/yearly/${year}/${type}`,
+//           {
+//             headers: { Authorization: 'Bearer ' + userToken },
+//           },
+//         );
+//         if (response.headers.success) {
+//           console.log('Analytics is success!', response.data.datasets[0].data);
+//           //* coordinate with backend for fixing prop names.
+//           dispatch(StockInfoSucess(response.data.datasets[0].data));
+//           console.log(response.data.datasets);
+//         } else if (response.headers.error) {
+//           console.log('response is error!');
+//           dispatch(salesFailure(response.data.error));
+//         } else {
+//           console.log('outlandish error!');
+//           dispatch(
+//             salesFailure(
+//               "Something's not right! please try again after some time.",
+//             ),
+//           );
+//         }
+//       } else {
+//         dispatch(salesReq());
+//         console.log('making current m API call');
+//         const response = await axios.get(
+//           `http://10.0.2.2:8080/salesanalytics/monthly/${year}/${month}/${type}`,
+//           {
+//             headers: { Authorization: 'Bearer ' + userToken },
+//           },
+//         );
+//         if (response.headers.success) {
+//           console.log('Analytics is success!', response.data.datasets[0].data);
+//           //* coordinate with backend for fixing prop names.
+//           dispatch(StockInfoSucess(response.data.datasets[0].data));
+//           console.log(response.data.datasets);
+//         } else if (response.headers.error) {
+//           console.log('response is error!');
+//           dispatch(salesFailure(response.data.error));
+//         } else {
+//           console.log('outlandish error!');
+//           dispatch(
+//             salesFailure(
+//               "Something's not right! please try again after some time.",
+//             ),
+//           );
+//         }
+//       }
+//     } catch (err) {
+//       console.log('caught Analytics on myDriveData get requestsdafadsf: ', err);
+//       dispatch(salesFailure(err.message));
+//     }
+//   };
+// };
 
 export const getToday = (userToken) => {
   return async (dispatch) => {
