@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import React, {useState, useEffect} from 'react';
+import {useDispatch, useSelector} from 'react-redux';
 import Feather from 'react-native-vector-icons/Feather';
-import { showMessage, hideMessage } from 'react-native-flash-message';
+import {showMessage, hideMessage} from 'react-native-flash-message';
 import {
   View,
   Text,
@@ -10,15 +10,15 @@ import {
   Image,
   ImageBackground,
 } from 'react-native';
-import { Picker } from '@react-native-picker/picker';
-import { TouchableOpacity } from 'react-native-gesture-handler';
-import { pincodeRegex, numbersOnlyRegex } from '../../../constants/Regexes';
+import {Picker} from '@react-native-picker/picker';
+import {TouchableOpacity} from 'react-native-gesture-handler';
+import {pincodeRegex, numbersOnlyRegex} from '../../../constants/Regexes';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
-import { UIActivityIndicator } from 'react-native-indicators';
+import {UIActivityIndicator} from 'react-native-indicators';
 import * as places from '../../../assets/places.json';
-import { requestLocationPermission } from '../../../redux/geolocation/actions';
+import {requestLocationPermission} from '../../../redux/geolocation/actions';
 import colors from '../../../constants/Colors';
-import { getBuyBloodList } from '../../../redux/buyblood/actions';
+import {getBuyBloodList} from '../../../redux/buyblood/actions';
 import {
   updateFields,
   stateCleanup,
@@ -27,7 +27,7 @@ import {
 
 import Fields from '../../../components/Fields';
 
-const FindDonors = ({ navigation }) => {
+const FindDonors = ({navigation}) => {
   const dispatch = useDispatch();
   const buybloodFormState = useSelector((state) => state.buybloodFormState);
   const geolocationState = useSelector((state) => state.geolocationState);
@@ -111,7 +111,11 @@ const FindDonors = ({ navigation }) => {
     if (fieldId === 'reasonOfPurchase' && val === ' ') {
       isValid = false;
     }
-    if (fieldId === 'location' && val.trim().length <= 0 && authState.userType === 1) {
+    if (
+      fieldId === 'location' &&
+      val.trim().length <= 0 &&
+      authState.userType === 1
+    ) {
       isValid = false;
     }
 
@@ -142,7 +146,10 @@ const FindDonors = ({ navigation }) => {
         if (buybloodFormState.inputValidity.component) {
           if (buybloodFormState.inputValidity.req_units) {
             if (buybloodFormState.inputValidity.reasonOfPurchase) {
-              if (buybloodFormState.inputValidity.location || authState.userType != 1) {
+              if (
+                buybloodFormState.inputValidity.location ||
+                authState.userType != 1
+              ) {
                 dispatch(
                   getBuyBloodList(
                     buybloodFormState.inputValues,
@@ -210,13 +217,13 @@ const FindDonors = ({ navigation }) => {
             style={styles.image}
             resizeMode="center"
           />
-          <Text style={{ ...styles.searchInfoText }}>
+          <Text style={{...styles.searchInfoText}}>
             Please input the required details below
           </Text>
         </View>
       </View>
 
-      <View style={{ marginHorizontal: 20 }}>
+      <View style={{marginHorizontal: 20}}>
         {/* <Text style={styles.pickerLabel}>*Blood group</Text> */}
         <View style={styles.pickerView}>
           <Picker
@@ -287,7 +294,7 @@ const FindDonors = ({ navigation }) => {
             selectedValue={buybloodFormState.inputValues.reasonOfPurchase}
             onValueChange={(val, itemIndex) => {
               blurListener('reasonOfPurchase');
-              checkValidity(val, 'reasonOfPurchase')
+              checkValidity(val, 'reasonOfPurchase');
             }}>
             <Picker.Item
               label="Select Reason of Purchase"
@@ -300,10 +307,12 @@ const FindDonors = ({ navigation }) => {
         </View>
         {!buybloodFormState.inputValidity.reasonOfPurchase &&
           buybloodFormState.isTouched.reasonOfPurchase && (
-            <Text style={styles.errorMsg}>Please select a Reason Of Purchase</Text>
+            <Text style={styles.errorMsg}>
+              Please select a Reason Of Purchase
+            </Text>
           )}
 
-        {authState.userType === 1 ?
+        {authState.userType === 1 ? (
           <Fields
             label="*Location of Transfusion"
             error="Invalid input"
@@ -316,11 +325,9 @@ const FindDonors = ({ navigation }) => {
               blurListener('location');
             }}
           />
-          :
-          null
-        }
+        ) : null}
 
-        <Fields
+        {/* <Fields
           label="*Reason of purchase"
           error="Invalid input"
           returnKeyType="next"
@@ -348,7 +355,7 @@ const FindDonors = ({ navigation }) => {
           onBlur={() => {
             blurListener('location');
           }}
-        />
+        /> */}
 
         <View style={styles.filterInfoBoard}>
           <Text style={styles.filterInfoText}>Optional Filters</Text>

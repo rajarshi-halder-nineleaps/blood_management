@@ -1,7 +1,6 @@
 /* eslint-disable prettier/prettier */
 import React, {useState, useEffect} from 'react';
 import {
-  Alert,
   Modal,
   StyleSheet,
   Text,

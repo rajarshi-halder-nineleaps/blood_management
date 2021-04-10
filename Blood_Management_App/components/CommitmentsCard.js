@@ -59,7 +59,7 @@ const CommitmentsCard = ({item}) => {
         <View style={styles.detailsBoard}>
           <View style={styles.contentView}>
             <Text style={styles.label}>
-              Commitment made on: {'  '}
+               Accepted on: {'  '}
               <Text style={styles.content}>
                 {commitmentTimestamp}
               </Text>

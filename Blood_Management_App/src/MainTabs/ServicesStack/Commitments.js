@@ -51,7 +51,7 @@ const Commitments = () => {
             source={require('../../../assets/images/empty.png')}
           />
           <Text style={styles.emptyInfo}>
-            You don't have any commitments yet.
+            You haven't done any Activities yet.
           </Text>
         </View>
       ) : (

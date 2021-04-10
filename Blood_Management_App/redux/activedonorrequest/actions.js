@@ -1,5 +1,4 @@
 import axios from 'axios';
-import { Alert } from 'react-native';
 import {
   DONORLIST_SUCCESS,
   DONORLIST_REQ,
@@ -12,7 +11,7 @@ import {
   DONOR_DETAILS_LIST_SUCCESS,
   DONOR_DETAILS_LIST_UPDATE,
 } from './actionTypes';
-import { showMessage, hideMessage } from 'react-native-flash-message';
+import {showMessage, hideMessage} from 'react-native-flash-message';
 
 export const donorListreq = () => ({
   type: DONORLIST_REQ,
@@ -64,7 +63,7 @@ export const getactivedonorList = (userToken) => {
       const response = await axios.get(
         'http://10.0.2.2:8080/donationrequests/fetchrequests',
         {
-          headers: { Authorization: 'Bearer ' + userToken },
+          headers: {Authorization: 'Bearer ' + userToken},
         },
       );
       console.log('COMPLETE RESPONSE DATA: ', response.headers);
@@ -97,7 +96,7 @@ export const getdonationdetails = (userToken, donationId) => {
       const response = await axios.get(
         `http://10.0.2.2:8080/donationrequests/fetchdonationdonorlist/${donationId}`,
         {
-          headers: { Authorization: 'Bearer ' + userToken },
+          headers: {Authorization: 'Bearer ' + userToken},
         },
       );
       console.log('COMPLETE RESPONSE DATA: ', response.headers);
@@ -132,7 +131,7 @@ export const expirerequest = (userToken, donationId) => {
           donationId: donationId,
         },
         {
-          headers: { Authorization: 'Bearer ' + userToken },
+          headers: {Authorization: 'Bearer ' + userToken},
         },
       );
       console.log('COMPLETE RESPONSE DATA: ', response.headers);
@@ -144,9 +143,11 @@ export const expirerequest = (userToken, donationId) => {
       } else if (response.headers.success) {
         //? SAVING USER DATA TO ASYNC STORAGE ON SUCCESSFUL LOGIN.
         dispatch(getactivedonorList(userToken));
-        Alert.alert('Drive has Expired', 'Drived has been expired', [
-          { text: 'Okay' },
-        ]);
+        showMessage({
+          message: 'Expired.',
+          description: 'This request has been expired successfully.',
+          type: 'success',
+        });
       } else {
         dispatch(expireFailure('Something went wrong!'));
         console.log('Failed');
@@ -169,7 +170,7 @@ export const verifydonor = (userToken, userId, donationId) => {
           userId: userId,
         },
         {
-          headers: { Authorization: 'Bearer ' + userToken },
+          headers: {Authorization: 'Bearer ' + userToken},
         },
       );
       console.log('COMPLETE RESPONSE DATA: ', response.headers);
@@ -181,7 +182,12 @@ export const verifydonor = (userToken, userId, donationId) => {
       } else if (response.headers.success) {
         //? SAVING USER DATA TO ASYNC STORAGE ON SUCCESSFUL LOGIN.
         dispatch(getdonationdetails(userToken, donationId));
-        Alert.alert('Verified', 'User Successfully Verified', [{ text: 'Okay' }]);
+        showMessage({
+          message: 'Donation verified.',
+          description:
+            'The donation has been verified and donor has been notified.',
+          type: 'success',
+        });
       } else {
         dispatch(donorListFailure('Something went wrong!'));
         console.log('Failed');
@@ -203,7 +209,7 @@ export const updateRequestList = (userToken, updatedData) => {
         'http://10.0.2.2:8080:8000/activedonorrequest',
         updatedData,
         {
-          headers: { Authorization: userToken },
+          headers: {Authorization: userToken},
         },
       );
 

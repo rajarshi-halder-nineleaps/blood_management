@@ -1,6 +1,6 @@
 /* eslint-disable prettier/prettier */
 import axios from 'axios';
-import { exp } from 'react-native-reanimated';
+import {exp} from 'react-native-reanimated';
 import {
   SALES_REQ,
   SALES_SUCCESS,
@@ -14,30 +14,25 @@ import {
   GET_REQUESTED_BREAKOUT,
   STOCK_INFO,
   YEAR_SUCCESS,
-
-
-
   MONTH_BOUGHT_SUCCESS,
   MONTH_REASON_SUCCESS,
   MONTH_REVENUE_SUCCESS,
   MONTH_SOLD_SUCCESS,
   MONTH_SPENT_SUCCESS,
-
   CURRENT_MONTH_BOUGHT_SUCCESS,
   CURRENT_MONTH_REASON_SUCCESS,
   CURRENT_MONTH_SUCCESS,
   CURRENT_MONTH_SOLD_SUCCESS,
   CURRENT_MONTH_SPENT_SUCCESS,
-
 } from './actionTypes';
 
-export const salesReq = () => ({ type: SALES_REQ });
+export const salesReq = () => ({type: SALES_REQ});
 export const salesSuccess = (salesData, analyticsData) => ({
   type: SALES_SUCCESS,
   salesData,
   analyticsData,
 });
-export const salesFailure = (error) => ({ type: SALES_FAILURE, error });
+export const salesFailure = (error) => ({type: SALES_FAILURE, error});
 
 export const updateMonth = (selectedMonth) => ({
   type: UPDATE_MONTH,
@@ -51,7 +46,7 @@ export const updateYear = (selectedYear) => ({
 export const YearSuccess = (array, typeOf) => ({
   type: YEAR_SUCCESS,
   array,
-  typeOf
+  typeOf,
 });
 
 export const StockInfoSucess = (array) => ({
@@ -79,49 +74,47 @@ export const breakoutSuccess = (array) => ({
 export const monthReasonSuccess = (array) => ({
   type: MONTH_REASON_SUCCESS,
   array,
-})
+});
 export const monthRevenueSuccess = (array) => ({
   type: MONTH_REVENUE_SUCCESS,
   array,
-})
+});
 export const monthSoldSuccess = (array) => ({
   type: MONTH_SOLD_SUCCESS,
   array,
-})
+});
 export const monthBoughtSuccess = (array) => ({
   type: MONTH_BOUGHT_SUCCESS,
   array,
-})
+});
 export const monthSpentSuccess = (array) => ({
   type: MONTH_SPENT_SUCCESS,
   array,
-})
+});
 
 ////////////////////////////////////CURRENT MONTH ////////////////////////////////
 
 export const currentMonthReasonSuccess = (array) => ({
   type: CURRENT_MONTH_REASON_SUCCESS,
   array,
-})
+});
 export const currentMonthSuccess = (array, typeOf) => ({
   type: CURRENT_MONTH_SUCCESS,
   array,
-  typeOf
-})
+  typeOf,
+});
 export const currentMonthSoldSuccess = (array) => ({
   type: CURRENT_MONTH_SOLD_SUCCESS,
   array,
-})
+});
 export const currentMonthBoughtSuccess = (array) => ({
   type: CURRENT_MONTH_BOUGHT_SUCCESS,
   array,
-})
+});
 export const currentMonthSpentSuccess = (array) => ({
   type: CURRENT_MONTH_SPENT_SUCCESS,
   array,
-})
-
-
+});
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -133,7 +126,7 @@ export const fetchSalesData = (userToken) => {
       const response = await axios.get(
         'http://10.0.2.2:8080/transactions/fetchsaleslist',
         {
-          headers: { Authorization: 'Bearer ' + userToken },
+          headers: {Authorization: 'Bearer ' + userToken},
         },
       );
 
@@ -167,7 +160,7 @@ export const getCurrentMonthAnalytics = (year, userToken, type) => {
       const response = await axios.get(
         `http://10.0.2.2:8080/salesanalytics/yearly/${year}/${type}/a`,
         {
-          headers: { Authorization: 'Bearer ' + userToken },
+          headers: {Authorization: 'Bearer ' + userToken},
         },
       );
 
@@ -194,8 +187,6 @@ export const getCurrentMonthAnalytics = (year, userToken, type) => {
   };
 };
 
-
-
 export const monthAnalytics = (year, month, userToken, type) => {
   return async (dispatch) => {
     try {
@@ -204,15 +195,12 @@ export const monthAnalytics = (year, month, userToken, type) => {
       const response = await axios.get(
         `http://10.0.2.2:8080/salesanalytics/monthly/${year}/${month}/${type}/month`,
         {
-          headers: { Authorization: 'Bearer ' + userToken },
+          headers: {Authorization: 'Bearer ' + userToken},
         },
       );
 
       if (response.headers.success) {
-        console.log(
-          'Analytics monthly breakout is success!',
-          response.data,
-        );
+        console.log('Analytics monthly breakout is success!', response.data);
 
         //* coordinate with backend for fixing prop names.
 
@@ -224,7 +212,7 @@ export const monthAnalytics = (year, month, userToken, type) => {
         }
 
         if (year === yr && mon === month) {
-          console.log("current")
+          console.log('current');
 
           dispatch(currentMonthSuccess(response.data, type));
           // if (type === 0) {
@@ -239,10 +227,10 @@ export const monthAnalytics = (year, month, userToken, type) => {
           //   dispatch(currentMonthReasonSuccess(response.data));
           // }
         } else {
-          console.log("searched")
+          console.log('searched');
 
           if (type === 0) {
-            console.log("revenue searched")
+            console.log('revenue searched');
 
             dispatch(monthRevenueSuccess(response.data));
           } else if (type === 1) {
@@ -269,14 +257,14 @@ export const monthAnalytics = (year, month, userToken, type) => {
         );
       }
     } catch (err) {
-      console.log('caught Analytics on myDriveData get request month month: ', err);
+      console.log(
+        'caught Analytics on myDriveData get request month month: ',
+        err,
+      );
       dispatch(salesFailure(err.message));
     }
   };
 };
-
-
-
 
 export const getMonthlyBreakout = (year, month, userToken) => {
   return async (dispatch) => {
@@ -286,15 +274,12 @@ export const getMonthlyBreakout = (year, month, userToken) => {
       const response = await axios.get(
         `http://10.0.2.2:8080/salesanalytics/monthly/${year}/${month}/0/revenue`,
         {
-          headers: { Authorization: 'Bearer ' + userToken },
+          headers: {Authorization: 'Bearer ' + userToken},
         },
       );
 
       if (response.headers.success) {
-        console.log(
-          'Analytics monthly breakout is success!',
-          response.data,
-        );
+        console.log('Analytics monthly breakout is success!', response.data);
         //* coordinate with backend for fixing prop names.
         dispatch(breakoutSuccess(response.data));
         console.log(response.data);
@@ -316,67 +301,6 @@ export const getMonthlyBreakout = (year, month, userToken) => {
   };
 };
 
-// export const getStockInfo = (userToken, year, month, type) => {
-//   return async (dispatch) => {
-//     try {
-//       if (month === 'All') {
-//         dispatch(salesReq());
-//         console.log('making current m API call');
-//         const response = await axios.get(
-//           `http://10.0.2.2:8080/salesanalytics/yearly/${year}/${type}`,
-//           {
-//             headers: { Authorization: 'Bearer ' + userToken },
-//           },
-//         );
-//         if (response.headers.success) {
-//           console.log('Analytics is success!', response.data.datasets[0].data);
-//           //* coordinate with backend for fixing prop names.
-//           dispatch(StockInfoSucess(response.data.datasets[0].data));
-//           console.log(response.data.datasets);
-//         } else if (response.headers.error) {
-//           console.log('response is error!');
-//           dispatch(salesFailure(response.data.error));
-//         } else {
-//           console.log('outlandish error!');
-//           dispatch(
-//             salesFailure(
-//               "Something's not right! please try again after some time.",
-//             ),
-//           );
-//         }
-//       } else {
-//         dispatch(salesReq());
-//         console.log('making current m API call');
-//         const response = await axios.get(
-//           `http://10.0.2.2:8080/salesanalytics/monthly/${year}/${month}/${type}`,
-//           {
-//             headers: { Authorization: 'Bearer ' + userToken },
-//           },
-//         );
-//         if (response.headers.success) {
-//           console.log('Analytics is success!', response.data.datasets[0].data);
-//           //* coordinate with backend for fixing prop names.
-//           dispatch(StockInfoSucess(response.data.datasets[0].data));
-//           console.log(response.data.datasets);
-//         } else if (response.headers.error) {
-//           console.log('response is error!');
-//           dispatch(salesFailure(response.data.error));
-//         } else {
-//           console.log('outlandish error!');
-//           dispatch(
-//             salesFailure(
-//               "Something's not right! please try again after some time.",
-//             ),
-//           );
-//         }
-//       }
-//     } catch (err) {
-//       console.log('caught Analytics on myDriveData get requestsdafadsf: ', err);
-//       dispatch(salesFailure(err.message));
-//     }
-//   };
-// };
-
 export const getToday = (userToken) => {
   return async (dispatch) => {
     try {
@@ -385,7 +309,7 @@ export const getToday = (userToken) => {
       const response = await axios.get(
         'http:/10.0.2.2:8080/salesanalytics/fetchnow',
         {
-          headers: { Authorization: 'Bearer ' + userToken },
+          headers: {Authorization: 'Bearer ' + userToken},
         },
       );
 
@@ -419,7 +343,7 @@ export const getThisMonth = (month, userToken) => {
       const response = await axios.get(
         `http://10.0.2.2:8080/salesanalytics/fetchcurrentmonth/${month}`,
         {
-          headers: { Authorization: 'Bearer ' + userToken },
+          headers: {Authorization: 'Bearer ' + userToken},
         },
       );
 

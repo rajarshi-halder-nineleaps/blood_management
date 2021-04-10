@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   View,
   Text,
@@ -7,15 +7,14 @@ import {
   Modal,
   TouchableHighlight,
   Image,
-  Alert,
 } from 'react-native';
-import { useDispatch, useSelector } from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import colors from '../../../constants/Colors';
 import Feather from 'react-native-vector-icons/Feather';
-import { buyit } from '../../../redux/buyblood/actions';
-import { ScrollView } from 'react-native-gesture-handler';
+import {buyit} from '../../../redux/buyblood/actions';
+import {ScrollView} from 'react-native-gesture-handler';
 
-const ConfirmBuy = ({ route, navigation }) => {
+const ConfirmBuy = ({route, navigation}) => {
   const {
     sellerId,
     blood_group,
@@ -45,9 +44,7 @@ const ConfirmBuy = ({ route, navigation }) => {
             animationType="slide"
             transparent={true}
             visible={modalVisible}
-            onRequestClose={() => {
-              Alert.alert('Modal has been closed.');
-            }}>
+            onRequestClose={() => {}}>
             <View style={styles.centeredView}>
               <View style={styles.modalView}>
                 <Text style={styles.modalText}>Purchase Confirmed!</Text>
@@ -80,18 +77,54 @@ const ConfirmBuy = ({ route, navigation }) => {
             Please check all the details shown below. If there is any mistake,
             kindly go back and change it.
           </Text>
-          <Text style={styles.headerText}>Booked Blood must be collected within 24 hrs.</Text>
-          <Text style={styles.headerText}>Please do carry your ID card for verification</Text>
+        </View>
+
+        <View
+          style={[
+            styles.header,
+            {
+              backgroundColor: colors.dutchred,
+              borderRadius: 5,
+              paddingVertical: 20,
+              marginVertical: 20,
+            },
+          ]}>
+          <Text
+            style={[
+              styles.headerText,
+              {color: colors.additional2, fontSize: 14},
+            ]}>
+            Booked Blood must be collected within 24 hrs.
+          </Text>
+          <Text
+            style={[
+              styles.headerText,
+              {color: colors.additional2, fontSize: 14},
+            ]}>
+            Yoy are required to carry any govt. issued ID and medical documents
+            for verification.
+          </Text>
         </View>
 
         <View style={styles.infoBoard}>
           <View style={styles.infobox}>
             <View style={styles.inforow}>
               <View>
-                <Text style={styles.texts}>Seller datails :</Text>
-              </View>
-              <View style={styles.infoRowView}>
-                <Text style={styles.text}>{sellerDetails}</Text>
+                <Text style={styles.texts}>Seller details :</Text>
+                <View style={styles.infoRowView}>
+                  <Text
+                    style={[
+                      styles.text,
+                      {
+                        fontSize: 16,
+                        textAlign: 'center',
+                        fontFamily: 'Montserrat-Bold',
+                        color: colors.primary,
+                      },
+                    ]}>
+                    {sellerDetails}
+                  </Text>
+                </View>
               </View>
             </View>
 
@@ -115,18 +148,14 @@ const ConfirmBuy = ({ route, navigation }) => {
                 {buybloodFormState.inputValues.req_units}
               </Text>
             </View>
-            <View style={styles.inforow}>
+            {/* <View style={styles.inforow}>
               <Text style={styles.texts}>Seller Name :</Text>
-              <Text style={styles.text}>
-                {sellername}
-              </Text>
+              <Text style={styles.text}>{'sellername'}</Text>
             </View>
             <View style={styles.inforow}>
               <Text style={styles.texts}>Seller Address :</Text>
-              <Text style={styles.text}>
-                {address}
-              </Text>
-            </View>
+              <Text style={styles.text}>{'address'}</Text>
+            </View> */}
             <View
               style={{
                 justifyContent: 'center',
@@ -159,9 +188,7 @@ const ConfirmBuy = ({ route, navigation }) => {
                 <Text style={styles.invitebutton}>Confirm Purchase</Text>
               </TouchableOpacity>
             </View>
-
           </View>
-
         </View>
       </View>
     </ScrollView>
@@ -224,6 +251,7 @@ const styles = StyleSheet.create({
 
   infoRowView: {
     // backgroundColor: colors.primary,
+    padding: 20,
   },
   infobox: {
     padding: 30,

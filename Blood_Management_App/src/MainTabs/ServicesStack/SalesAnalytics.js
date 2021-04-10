@@ -1,14 +1,7 @@
 /* eslint-disable prettier/prettier */
-import React, { useEffect, useState } from 'react';
-import {
-  Text,
-  StyleSheet,
-  View,
-  Alert,
-  Dimensions,
-  ScrollView,
-} from 'react-native';
-import { useDispatch, useSelector } from 'react-redux';
+import React, {useEffect, useState} from 'react';
+import {Text, StyleSheet, View, Dimensions, ScrollView} from 'react-native';
+import {useDispatch, useSelector} from 'react-redux';
 import colors from '../../../constants/Colors';
 import font from '../../../';
 import {
@@ -17,10 +10,10 @@ import {
   updateMonth,
   updateYear,
 } from '../../../redux/sales/actions';
-import { Picker } from '@react-native-picker/picker';
-import { TouchableOpacity } from 'react-native-gesture-handler';
+import {Picker} from '@react-native-picker/picker';
+import {TouchableOpacity} from 'react-native-gesture-handler';
 import * as figures from '../../../assets/salesanalytics.json';
-
+import {showMessage, hideMessage} from 'react-native-flash-message';
 import {
   PieChart,
   BarChart,
@@ -30,7 +23,7 @@ import {
 import Feather from 'react-native-vector-icons/Feather';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
-const SalesAnalytics = ({ navigation }) => {
+const SalesAnalytics = ({navigation}) => {
   const authState = useSelector((state) => state.authState);
   const salesState = useSelector((state) => state.salesState);
   const dispatch = useDispatch();
@@ -41,7 +34,6 @@ const SalesAnalytics = ({ navigation }) => {
   const [selectedMonth, setSelectedMonth] = useState('');
   const [month, setMonth] = useState(false);
 
-
   const submitMonth = () => {
     if (month) {
       console.log('ok');
@@ -51,9 +43,11 @@ const SalesAnalytics = ({ navigation }) => {
         // navigation.navigate("infoEdit")
       }
     } else {
-      Alert.alert('Select month', 'Please select monthto continue', [
-        { text: 'Okay' },
-      ]);
+      showMessage({
+        message: 'Month Not Selected',
+        description: 'Please select a month to coontinue. ',
+        type: 'warning',
+      });
     }
   };
 
@@ -208,7 +202,6 @@ const SalesAnalytics = ({ navigation }) => {
           </View>
         </View>
       </View>
-
     </ScrollView>
   );
 };
@@ -274,7 +267,6 @@ const styles = StyleSheet.create({
   },
   secondaryHeader: {
     backgroundColor: 'white',
-    paddingHorizontal: 0,
     marginBottom: 10,
     paddingHorizontal: 20,
   },
@@ -283,16 +275,6 @@ const styles = StyleSheet.create({
     fontSize: 18,
 
     //ma
-  },
-  pickerView: {
-    marginVertical: 5,
-    paddingVertical: 3,
-    borderColor: colors.grayishblack,
-    borderWidth: 1,
-
-    fontFamily: 'Montserrat-Regular',
-    paddingHorizontal: 10,
-    color: 'black',
   },
   button: {
     alignSelf: 'flex-end',
